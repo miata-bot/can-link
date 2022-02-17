@@ -39,7 +39,10 @@ defmodule HaltechLink.MixProject do
       # Dependencies for all targets except :host
       {:nerves_runtime, "~> 0.11.3", targets: @all_targets},
       {:nerves_pack, "~> 0.6.0", targets: @all_targets},
+      {:vintage_net_wizard, "~> 0.2", targets: @all_targets},
 
+      # {:can, github: "tonyrog/can", targets: @all_targets},
+      {:ng_can, github: "johnnyhh/ng_can", targets: @all_targets},
       {:blue_heron, "~> 0.3", path: "/home/connor/workspace/keeplabs/elias/firmware/../hal/../../blue_heron", targets: @all_targets, override: true},
       {:blue_heron_transport_uart, path: "/home/connor/workspace/keeplabs/elias/firmware/../hal/../../blue_heron_transport_uart", targets: @all_targets, override: true},
       {:blue_heron_ti_wl18xx, path: "/home/connor/workspace/keeplabs/elias/firmware/../hal/../../blue_heron_ti_wl18xx", targets: :bbb, override: true},
@@ -49,7 +52,7 @@ defmodule HaltechLink.MixProject do
       # bumps to Nerves systems. Since these include Linux kernel and Erlang
       # version updates, please review their release notes in case
       # changes to your application are needed.
-      {:nerves_system_bbb, "~> 2.12", runtime: false, targets: :bbb}
+      {:nerves_system_bbb_can, github: "ConnorRigby/nerves_system_bbb_can", tag: "v0.2.0", runtime: false, targets: :bbb}
     ]
   end
 

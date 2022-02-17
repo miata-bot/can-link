@@ -8,6 +8,10 @@ config :shoehorn,
   init: [:nerves_runtime, :nerves_pack, :nerves_ssh],
   app: Mix.Project.config()[:app]
 
+config :vintage_net_wizard,
+  ssid: "haltech-link",
+  dns_name: "hello_wifi.config"
+
 # Nerves Runtime can enumerate hardware devices and send notifications via
 # SystemRegistry. This slows down startup and not many programs make use of
 # this feature.
@@ -45,8 +49,7 @@ if keys == [],
     """)
 
 config :nerves_ssh,
-  authorized_keys: Enum.map(keys, &File.read!/1),
-  user_passwords: [{"connor", "Gizmos123"}]
+  authorized_keys: Enum.map(keys, &File.read!/1)
 
 # Configure the network using vintage_net
 # See https://github.com/nerves-networking/vintage_net for more information
@@ -59,15 +62,7 @@ config :vintage_net,
        type: VintageNetEthernet,
        ipv4: %{method: :dhcp}
      }},
-    {"wlan0", %{type: VintageNetWiFi, vintage_net_wifi: %{
-      networks: [
-        %{
-          key_mgmt: :wpa_psk,
-          ssid: "HamburgerHelper",
-          psk: "Gizmos123",
-        }
-      ]
-    }}}
+    {"wlan0", %{type: VintageNetWiFi}}
   ]
 
 config :mdns_lite,
@@ -76,7 +71,10 @@ config :mdns_lite,
   # is "nerves-<4 digit serial#>.local".  mdns_lite also advertises
   # "nerves.local" for convenience. If more than one Nerves device is on the
   # network, delete "nerves" from the list.
-
+  dns_bridge_enabled: true,
+  dns_bridge_ip: {127, 0, 0, 53},
+  dns_bridge_port: 53,
+  dns_bridge_recursive: true,
   host: [:hostname, "haltech-link"],
   ttl: 120,
 

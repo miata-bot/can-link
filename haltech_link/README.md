@@ -1,5 +1,28 @@
 # HaltechLink
 
+## rememberme
+
+```
+57  cmd("/sbin/ip link set can1 up type can bitrate 125000")
+58  cmd("cansend can1q 500#1E.10.10")
+59  cmd("cansend can1 500#1E.10.10")
+60  cmd("cansend can1 500#1E.69.10")
+61  cmd("cansend can1 500#1E.69.69.69")
+62  cmd("cansend can1 420#1E.69.69.69")
+63  {:ok, can_port} = Ng.Can.start_link
+64  Ng.Can.open(can_port, "can1", sndbuf: 1024, rcvbuf: 106496)
+65  <<id::size(32)>> = <<1,2,3,4>>
+66  frame = {id, <<1,2,3,4,5,6,7,8>>}
+67  Ng.Can.write(can_port, frame)
+68  Ng.Can.await_read(can_port)
+69  flush
+70  Ng.Can.await_read(can_port)
+71  flush
+72  Ng.Can.await_read(can_port)
+73  flush
+74  Ng.Can.await_read(can_port)
+```
+
 **TODO: Add description**
 
 ## Targets
