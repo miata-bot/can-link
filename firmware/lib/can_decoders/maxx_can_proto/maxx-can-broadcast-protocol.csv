@@ -1,0 +1,105 @@
+CAN ID,Offset,Name,Unit,Scale,Type,Rate,Firmware,Comment,Name,Version
+0x520,0,RPM,rpm,1,int16,50Hz,1.67 and newer,,FAST1,1.2
+0x520,2,Throttle position/pedal,%,"0,1",int16,50Hz,1.67 and newer,,FAST1,1.2
+0x520,4,MAP,kPa,"0,1",int16,50Hz,1.67 and newer,,FAST1,1.2
+0x520,6,Lambda,,"0,001",int16,50Hz,1.67 and newer,Average lambda,FAST1,1.2
+0x521,0,Lambda A,,"0,001",int16,50Hz,1.67 and newer,Lambda cylinder bank A,FAST2,1.2
+0x521,2,Lambda B,,"0,001",int16,50Hz,1.67 and newer,Lambda cylinder bank B,FAST2,1.2
+0x521,4,Ignition angle,BTDC,"0,1",int16,50Hz,1.67 and newer,,FAST2,1.2
+0x521,6,Ignition cut,%,1,int16,50Hz,1.67 and newer,Percent of ignition event being cut (for rev-limit etc),FAST2,1.2
+0x522,0,Fuel pulsewidth primary,ms,"0,01",int16,50Hz,1.67 and newer,,FAST3,1.2
+0x522,2,Fuel duty primary,%,"0,1",int16,50Hz,1.67 and newer,Can be over 100%.,FAST3,1.2
+0x522,4,Fuel cut,%,1,int16,50Hz,1.67 and newer,Percent of fuel event being cut (for rev-limit etc),FAST3,1.2
+0x522,6,Vehicle Speed,km/h,"0,1",int16,50Hz,1.67 and newer,Speed signal for display purpose,FAST3,1.2
+0x523,0,Undriven wheels avg spd,km/h,"0,1",int16,50Hz,1.67 and newer,Zero when traction ctrl. system not used,FAST4,1.2
+0x523,2,Driven wheels avg spd,km/h,"0,1",int16,50Hz,1.67 and newer,Zero when traction ctrl. system not used,FAST4,1.2
+0x523,4,Wheel slip,%,"0,1",int16,50Hz,1.67 and newer,Zero when traction ctrl. system not used,FAST4,1.2
+0x523,6,Target slip,%,"0,1",int16,50Hz,1.67 and newer,Zero when traction ctrl. system not used,FAST4,1.2
+0x524,0,Traction Ctrl Power limit,%,"0,1",int16,50Hz,1.67 and newer,Zero when traction ctrl. system not used,FAST5,1.2
+0x524,2,Lambda corr A,%,"0,1",int16,50Hz,1.67 and newer,Short term lambda-correction applied to bank A cylinders,FAST5,1.2
+0x524,4,Lambda corr B,%,"0,1",int16,50Hz,1.67 and newer,Short term lambda-correction applied to bank B cylinders,FAST5,1.2
+0x524,6,Firmware version,,"0,001",int16,50Hz,1.67 and newer,Current ECU firmware version,FAST5,1.2
+0x530,0,Battery voltage,V,"0,01",int16,10Hz,1.67 and newer,,SLOW1,1.2
+0x530,2,Baro pressure,kPa,"0,1",int16,10Hz,1.67 and newer,,SLOW1,1.2
+0x530,4,Intake air temp,°C,"0,1",int16,10Hz,1.67 and newer,,SLOW1,1.2
+0x530,6,Coolant temp,°C,"0,1",int16,10Hz,1.67 and newer,,SLOW1,1.2
+0x531,0,Total fuel trim,%,"0,1",int16,10Hz,1.67 and newer,"Total amount of adjustment applied to the fuel pulse, excluding acceleration enrichment",SLOW2,1.2
+0x531,2,Ethanol concentration,%,"0,1",int16,10Hz,1.67 and newer,"Outputs 85% when no sensor is used, or in case of a sensor error.",SLOW2,1.2
+0x531,4,Total ignition comp,deg,"0,1",int16,10Hz,1.67 and newer,Total amount of adjustment applied to the ignition angle (in degrees),SLOW2,1.2
+0x531,6,EGT 1,°C,1,int16,10Hz,1.67 and newer,"Exhaust gas temperature. All values are sent, even for unconfigured sensors",SLOW2,1.2
+0x532,0,EGT 2,°C,1,int16,10Hz,1.67 and newer,,SLOW3,1.2
+0x532,2,EGT 3,°C,1,int16,10Hz,1.67 and newer,,SLOW3,1.2
+0x532,4,EGT 4,°C,1,int16,10Hz,1.67 and newer,,SLOW3,1.2
+0x532,6,EGT 5,°C,1,int16,10Hz,1.67 and newer,,SLOW3,1.2
+0x533,0,EGT 6,°C,1,int16,10Hz,1.67 and newer,,SLOW4,1.2
+0x533,2,EGT 7,°C,1,int16,10Hz,1.67 and newer,,SLOW4,1.2
+0x533,4,EGT 8,°C,1,int16,10Hz,1.67 and newer,,SLOW4,1.2
+0x533,6,EGT Highest,°C,1,int16,10Hz,1.67 and newer,,SLOW4,1.2
+0x534,0,EGT Difference,°C,1,int16,10Hz,1.67 and newer,Difference between the highest and lowest EGT sensor.,SLOW5,1.2
+0x534,2,CPU temp,°C,1,int16,10Hz,1.67 and newer,ECU temperature.,SLOW5,1.2
+0x534,4,Error code count,,1,int16,10Hz,1.67 and newer,The number of current active error codes.,SLOW5,1.2
+0x534,6,Lost sync count,,1,int16,10Hz,1.67 and newer,Number of times the ECU has detected errors in the engine position sensors.,SLOW5,1.2
+0x535,0,User analog input 1,user,"0,1",int16,10Hz,1.79 and newer,,SLOW6,1.2
+0x535,2,User analog input 2,user,"0,1",int16,10Hz,1.79 and newer,,SLOW6,1.2
+0x535,4,User analog input 3,user,"0,1",int16,10Hz,1.79 and newer,,SLOW6,1.2
+0x535,6,User analog input 4,user,"0,1",int16,10Hz,1.79 and newer,,SLOW6,1.2
+0x536,0,Gear,,1,int16,10Hz,1.79 and newer,Calculated manual transmission gear or commanded gear,SLOW7,1.2
+0x536,2,Boost solenoid duty,%,"0,1",int16,10Hz,1.79 and newer,,SLOW7,1.2
+0x536,4,Oil pressure,kPa,"0,1",int16,10Hz,1.135 and newer,Updated (V1.2 did not transmit anything here),SLOW7,1.3
+0x536,6,Oil temp,°C,"0,1",int16,10Hz,1.135 and newer,Updated (V1.2 did not transmit anything here),SLOW7,1.3
+0x537,0,Fuel Pressure 1,kPa,"0,1",int16,10Hz,1.135 and newer,,SLOW8,1.3
+0x537,2,Wastegate pressure,kPa,"0,1",int16,10Hz,1.135 and newer,,SLOW8,1.3
+0x537,4,Coolant pressure,kPa,"0,1",int16,10Hz,1.135 and newer,,SLOW8,1.3
+0x537,6,Boost target,kPa,"0,1",int16,10Hz,1.135 and newer,,SLOW8,1.3
+0x538,0,User channel 1,user,"0,1",int16,10Hz,1.135 and newer,User selectable source sensor in MTune.,SLOW9,1.3
+0x538,2,User channel 2,user,"0,1",int16,10Hz,1.135 and newer,User selectable source sensor in MTune.,SLOW9,1.3
+0x538,4,User channel 3,user,"0,1",int16,10Hz,1.135 and newer,User selectable source sensor in MTune.,SLOW9,1.3
+0x538,6,User channel 4,user,"0,1",int16,10Hz,1.135 and newer,User selectable source sensor in MTune.,SLOW9,1.3
+0x539,0,User channel 5,user,"0,1",int16,10Hz,1.135 and newer,User selectable source sensor in MTune.,SLOW10,1.3
+0x539,2,User channel 6,user,"0,1",int16,10Hz,1.135 and newer,User selectable source sensor in MTune.,SLOW10,1.3
+0x539,4,User channel 7,user,"0,1",int16,10Hz,1.135 and newer,User selectable source sensor in MTune.,SLOW10,1.3
+0x539,6,User channel 8,user,"0,1",int16,10Hz,1.135 and newer,User selectable source sensor in MTune.,SLOW10,1.3
+0x525,0,User channel 9,user,"0,1",int16,50Hz,1.135 and newer,User selectable source sensor in MTune.,FAST6,1.3
+0x525,2,User channel 10,user,"0,1",int16,50Hz,1.135 and newer,User selectable source sensor in MTune.,FAST6,1.3
+0x525,4,User channel 11,user,"0,1",int16,50Hz,1.135 and newer,User selectable source sensor in MTune.,FAST6,1.3
+0x525,6,User channel 12,user,"0,1",int16,50Hz,1.135 and newer,User selectable source sensor in MTune.,FAST6,1.3
+0x526,0:0,Shiftcut active,,,int8,50Hz,1.135 and newer,,FAST7,1.3
+0x526,0:1,Rev-limit active,,,,50Hz,1.135 and newer,,FAST7,1.3
+0x526,0:2,Anti-lag active,,,,50Hz,1.135 and newer,,FAST7,1.3
+0x526,0:3,Launch control active,,,,50Hz,1.135 and newer,,FAST7,1.3
+0x526,0:4,Traction power limiter active,,,,50Hz,1.135 and newer,,FAST7,1.3
+0x526,0:5,Throttle blip active,,,,50Hz,1.135 and newer,,FAST7,1.3
+0x526,0:6,AC/idle up active,,,,50Hz,1.135 and newer,,FAST7,1.3
+0x526,0:7,Knock detected,,,,50Hz,1.135 and newer,Visible for 250msec after a detected knock.,FAST7,1.3
+0x526,1:0,Brake pedal active,,,int8,50Hz,1.135 and newer,,FAST7,1.3
+0x526,1:1,Clutch pedal active,,,,50Hz,1.135 and newer,,FAST7,1.3
+0x526,1:2,Speed limit active,,,,50Hz,1.135 and newer,,FAST7,1.3
+0x526,1:3,GP limiter active,,,,50Hz,1.135 and newer,,FAST7,1.3
+0x526,1:4,User cut active,,,,50Hz,1.135 and newer,,FAST7,1.3
+0x526,1:5,ECU is logging,,,,50Hz,1.135 and newer,,FAST7,1.3
+0x526,1:6,Nitrous active,,,,50Hz,1.135 and newer,,FAST7,1.3
+0x526,1:7,SPARE,,,,50Hz,1.135 and newer,Reserved for future usage,FAST7,1.3
+0x526,2,SPARE,,,int16,50Hz,1.135 and newer,Reserved for future usage,FAST7,1.3
+0x526,4,Rev-limit RPM,rpm,1,int16,50Hz,1.135 and newer,,FAST7,1.3
+0x526,6,SPARE,rpm,1,int16,50Hz,1.135 and newer,Reserved for future usage,FAST7,1.3
+0x527,0,Acceleration Forward,G,"0,01",int16,50Hz,1.135 and newer,,FAST8,1.3
+0x527,2,Acceleration Right,G,"0,01",int16,50Hz,1.135 and newer,,FAST8,1.3
+0x527,4,Acceleration Up,G,"0,01",int16,50Hz,1.135 and newer,,FAST8,1.3
+0x527,6,Lambda target,,"0,001",int16,50Hz,1.135 and newer,,FAST8,1.3
+0x528,0,Knocklevel All peak,,1,int16,50Hz,1.135 and newer,,FAST9,1.3
+0x528,2,Knock correction,deg,"0,1",int16,50Hz,1.135 and newer,,FAST9,1.3
+0x528,4,Knock count,,1,int16,50Hz,1.135 and newer,,FAST9,1.3
+0x528,6,Last knock cylinder,,1,int16,50Hz,1.135 and newer,,FAST9,1.3
+0x540,0,Active boost table,,1,int8,10Hz,1.135 and newer,,SLOW11,1.3
+0x540,1,Active Tune selector,,1,int8,10Hz,1.135 and newer,,SLOW11,1.3
+0x540,2,Virtual fuel tank,L,"0,1",int16,10Hz,1.135 and newer,,SLOW11,1.3
+0x540,4,Transmission temp,°C,"0,1",int16,10Hz,1.135 and newer,,SLOW11,1.3
+0x540,6,Differential temp,°C,"0,1",int16,10Hz,1.135 and newer,,SLOW11,1.3
+0x541,0,VVT intake cam 1 position,deg,"0,1",int16,10Hz,1.135 and newer,,SLOW12,1.3
+0x541,2,VVT exhaust cam 1 position,deg,"0,1",int16,10Hz,1.135 and newer,,SLOW12,1.3
+0x541,4,VVT intake cam 2 position,deg,"0,1",int16,10Hz,1.135 and newer,,SLOW12,1.3
+0x541,6,VVT exhaust cam 2 position,deg,"0,1",int16,10Hz,1.135 and newer,,SLOW12,1.3
+0x542,0,VVT intake cam target position,deg,"0,1",int16,10Hz,1.135 and newer,,SLOW13,1.3
+0x542,2,VVT exhaust cam target position,deg,"0,1",int16,10Hz,1.135 and newer,,SLOW13,1.3
+0x542,4,SPARE,,"0,1",int16,10Hz,1.135 and newer,Reserved for future usage,SLOW13,1.3
+0x542,6,SPARE,,"0,1",int16,10Hz,1.135 and newer,Reserved for future usage,SLOW13,1.3

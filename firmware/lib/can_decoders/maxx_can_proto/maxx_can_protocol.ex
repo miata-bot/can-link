@@ -1,0 +1,3 @@
+defmodule MaxxCANProtocol do
+
+end

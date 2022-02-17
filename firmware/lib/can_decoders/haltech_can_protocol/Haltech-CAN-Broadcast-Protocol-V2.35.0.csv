@@ -1,0 +1,160 @@
+"CAN I.D.","Rate (Hz)","Direction","Message Position","Sign","Channel","Units","Conversion from Raw"
+0x360,50,TX,0 - 1,Unsigned,RPM,RPM,y = x
+,,,2 - 3,Unsigned,Manifold Pressure,kPa (Abs),y = x/10
+,,,4 - 5,Unsigned,Throttle Position,%,y = x/10
+,,,6 - 7,Unsigned,Coolant Pressure,kPa,y = x/10 - 101.3
+0x361,50,TX,0 - 1,Unsigned,Fuel Pressure,kPa,y = x/10 - 101.3
+,,,2 - 3,Unsigned,Oil Pressure,kPa,y = x/10 - 101.3
+,,,4 - 5,Unsigned,Engine Demand,%,y = x/10
+,,,6 - 7,Unsigned,Wastegate Pressure,kPa,y = x/10 - 101.3
+0x362,50,TX,0 - 1,Unsigned,Injection Stage 1 Duty Cycle,%,y = x/10
+,,,2 - 3,Unsigned,Injection Stage 2 Duty Cycle,%,y = x/10
+,,,4 - 5,Signed,Ignition Angle (Leading),°,y = x/10
+0x363,20,TX,0 - 1,Signed,Wheel Slip,km/h,y = x/10
+,,,2 - 3,Signed,Wheel Diff,km/h,y = x/10
+0x368,20,TX,0 - 1,Unsigned,Wideband Sensor 1,λ,y = x/1000
+,,,2 - 3,Unsigned,Wideband Sensor 2,λ,y = x/1000
+,,,4 - 5,Unsigned,Wideband Sensor 3,λ,y = x/1000
+,,,6 - 7,Unsigned,Wideband Sensor 4,λ,y = x/1000
+0x369,20,TX,0 - 1,Unsigned,Trigger System Error Count,raw,y = x
+,,,2 - 3,Unsigned,Trigger Counter,raw,y = x
+,,,6 - 7,Unsigned,Trigger Sync Level,raw,y = x
+0x36A,20,TX,0 - 1,Unsigned,Knock Level 1,dB,y = x/100
+,,,2 - 3,Unsigned,Knock Level 2,dB,y = x/100
+0x36B,20,TX,0 - 1,Unsigned,Brake Pressure,kPa,y = x - 101.3
+,,,2 - 3,Unsigned,NOS Pressure Sensor 1,kPa,y = x*11/50 - 101.3
+,,,4 - 5,Unsigned,Turbo Speed Sensor 1,RPM,y = x*10
+,,,6 - 7,Signed,Lateral G,m/s2,y = x/10
+0x36C,20,TX,0 - 1,Unsigned,Wheel Speed Front Left,km/h,y = x/10
+,,,2 - 3,Unsigned,Wheel Speed Front Right,km/h,y = x/10
+,,,4 - 5,Unsigned,Wheel Speed Rear Left,km/h,y = x/10
+,,,6 - 7,Unsigned,Wheel Speed Rear Right,km/h,y = x/10
+0x36D,20,TX,4 - 5,Signed,Exhaust Cam Angle 1,°,y = x/10
+,,,6 - 7,Signed,Exhaust Cam Angle 2,°,y = x/10
+0x36E,20,TX,0 - 1,Unsigned,Engine Limiting Active,raw,"y := 0=Off,1=On"
+,,,2 - 3,Signed,Launch Control Ignition Retard,°,y = x/10
+,,,4 - 5,Signed,Launch Control Fuel Enrich,%,y = x/10
+,,,6 - 7,Signed,Longitudinal G,m/s2,y = x/10
+0x36F,20,TX,0 - 1,Unsigned,Generic Output 1 Duty Cycle,%,y = x/10
+,,,2 - 3,Unsigned,Boost Control Output,%,y = x/10
+0x370,20,TX,0 - 1,Unsigned,Vehicle Speed,km/h,y = x/10
+,,,4 - 5,Signed,Intake Cam Angle 1,°,y = x/10
+,,,6 - 7,Signed,Intake Cam Angle 2,°,y = x/10
+0x371,10,TX,0 - 1,Unsigned,Fuel Flow,cc/min,y = x
+,,,2 - 3,Unsigned,Fuel Flow Return,cc/min,y = x
+0x372,10,TX,0 - 1,Unsiged,Battery Voltage,Volts,y = x/10
+,,,4 - 5,Unsigned,Target Boost Level,kPa,y = x/10
+,,,6 - 7,Unsigned,Barometric Pressure,kPa (Abs),y = x/10
+0x373,10,TX,0 - 1,Unsigned,EGT Sensor 1,K,y = x/10
+,,,2 - 3,Unsigned,EGT Sensor 2,K,y = x/10
+,,,4 - 5,Unsigned,EGT Sensor 3,K,y = x/10
+,,,6 - 7,Unsigned,EGT Sensor 4,K,y = x/10
+0x374,10,TX,0 - 1,Unsigned,EGT Sensor 5,K,y = x/10
+,,,2 - 3,Unsigned,EGT Sensor 6,K,y = x/10
+,,,4 - 5,Unsigned,EGT Sensor 7,K,y = x/10
+,,,6 - 7,Unsigned,EGT Sensor 8,K,y = x/10
+0x375,10,TX,0 - 1,Unsigned,EGT Sensor 9,K,y = x/10
+,,,2 - 3,Unsigned,EGT Sensor 10,K,y = x/10
+,,,4 - 5,Unsigned,EGT Sensor 11,K,y = x/10
+,,,6 - 7,Unsigned,EGT Sensor 12,K,y = x/10
+0x376,10,TX,0 - 1,Unsigned,Ambient Air Temperature,K,y = x/10
+,,,2 - 3,Signed,Relative Humidity,%,y = x/10
+,,,4 - 5,Unsigned,Specific Humidity,ppm,y = x*100
+,,,6 - 7,Unsigned,Absolute Humidity,g/m3,y = x/10
+0x3E0,5,TX,0 - 1,Unsigned,Coolant Temperature,K,y = x/10
+,,,2 - 3,Unsigned,Air Temperature,K,y = x/10
+,,,4 - 5,Unsigned,Fuel Temperature,K,y = x/10
+,,,6 - 7,Unsigned,Oil Temperature,K,y = x/10
+0x3E1,5,TX,0 - 1,Unsigned,Gearbox Oil Temperature,K,y = x/10
+,,,2 - 3,Unsigned,Diff Oil Temperature,K,y = x/10
+,,,4 - 5,Unsigned,Fuel Composition,%,y = x/10
+0x3E2,5,TX,0 - 1,Unsigned,Fuel Level,L,y = x/10
+0x3E3,5,TX,0 - 1,Signed,Fuel Trim Short Term Bank 1,%,y = x/10
+,,,2 - 3,Signed,Fuel Trim Short Term Bank 2,%,y = x/10
+,,,4 - 5,Signed,Fuel Trim Long Term Bank 1,%,y = x/10
+,,,6 - 7,Signed,Fuel Trim Long Term Bank 2,%,y = x/10
+0x3E4,5,TX,1:7,Unsigned,Neutral Switch,enum,"y := 0=Off,1=On"
+,,,1:6,Unsigned,Reverse Switch,enum,"y := 0=Off,1=On"
+,,,1:5,Unsigned,Gear Switch,enum,"y := 0=Off,1=On"
+,,,1:4,Unsigned,Decel Cut Active,enum,"y := 0=Off,1=On"
+,,,1:3,Unsigned,Transient Throttle Active,enum,"y := 0=Off,1=On"
+,,,1:2,Unsigned,Brake Pedal Switch,enum,"y := 0=Off,1=On"
+,,,1:1,Unsigned,Clutch Switch,enum,"y := 0=Off,1=On"
+,,,1:0,Unsigned,Oil Pressure Light,enum,"y := 0=Off,1=On"
+,,,2:7,Unsigned,Launch Control Active,enum,"y := 0=Off,1=On"
+,,,2:6,Unsigned,Launch Control Switch,enum,"y := 0=Off,1=On"
+,,,2:5,Unsigned,Aux RPM Limiter Active,enum,"y := 0=Off,1=On"
+,,,2:3,Unsigned,Flat Shift Switch,enum,"y := 0=Off,1=On"
+,,,2:1,Unsigned,Torque Reduction Active,enum,"y := 0=Off,1=On"
+,,,3:7,Unsigned,Traction Control Active,enum,"y := 0=Off,1=On"
+,,,3:6,Unsigned,Traction Control Enabled,enum,"y := 0=Off,1=On"
+,,,3:5,Unsigned,Air Con Request,enum,"y := 0=Off,1=On"
+,,,3:4,Unsigned,Air Con Output,enum,"y := 0=Off,1=On"
+,,,3:3,Unsigned,Themo-fan 4 On,enum,"y := 0=Off,1=On"
+,,,3:2,Unsigned,Thermo-fan 3 On,enum,"y := 0=Off,1=On"
+,,,3:1,Unsigned,Thermo-fan 2 On,enum,"y := 0=Off,1=On"
+,,,3:0,Unsigned,Themo-fan 1 On,enum,"y := 0=Off,1=On"
+,,,4,Signed,Rotary Trim Pot 1,raw,y = x
+,,,5,Signed,Rotary Trim Pot 2,raw,y = x
+,,,6,Signed,Rotary Trim Pot 3,raw,y = x
+,,,7:7,Unsigned,Check Engine Light,enum,"y := 0=Off,1=On"
+,,,7:6,Unsigned,Battery Light Active,enum,"y := 0=Off,1=On"
+0x3E5,50,TX,0,Unsigned,Ignition Switch,enum,"y := 0=Off,1=On"
+,,,1,Unsigned,Turbo Timer - Time Remaining,s,y = x
+,,,2,Unsigned,Turbo Timer - Engine Time Remaining,s,y = x
+,,,4 - 5,Signed,Steering Wheel Angle,°,y = x/10
+,,,6 - 7,Unsigned,Driveshaft RPM,RPM,y = x
+0x3E6,20,TX,0 - 1,Unsigned,NOS Pressure Sensor 2,kPa,y = x*11/50 - 101.3
+,,,2 - 3,Unsigned,NOS Pressure Sensor 3,kPa,y = x*11/50 - 101.3
+,,,4 - 5,Unsigned,NOS Pressure Sensor 4,kPa,y = x*11/50 - 101.3
+,,,6 - 7,Unsigned,Turbo Speed Sensor 2,RPM,y = x*10
+0x3E7,20,TX,0 - 1,Unsigned,Generic Sensor 1,%,y = x/10
+,,,2 - 3,Unsigned,Generic Sensor 2,%,y = x/10
+,,,4 - 5,Unsigned,Generic Sensor 3,%,y = x/10
+,,,6 - 7,Unsigned,Generic Sensor 4,%,y = x/10
+0x3E8,20,TX,0 - 1,Unsigned,Generic Sensor 5,%,y = x/10
+,,,2 - 3,Unsigned,Generic Sensor 6,%,y = x/10
+,,,4 - 5,Unsigned,Generic Sensor 7,%,y = x/10
+,,,6 - 7,Unsigned,Generic Sensor 8,%,y = x/10
+0x3E9,20,TX,0 - 1,Unsigned,Generic Sensor 9,%,y = x/10
+,,,2 - 3,Unsigned,Generic Sensor 10,%,y = x/10
+,,,4 - 5,Unsigned,Target Lambda,λ,y = x/1000
+,,,6:7,Unsigned,Nitrous Stage 1 Output State,enum,"y := 0=Off,1=On"
+,,,6:6,Unsigned,Nitrous Stage 2 Output State,enum,"y := 0=Off,1=On"
+,,,6:5,Unsigned,Nitrous Stage 3 Output State,enum,"y := 0=Off,1=On"
+,,,6:4,Unsigned,Nitrous Stage 4 Output State,enum,"y := 0=Off,1=On"
+,,,6:3,Unsigned,Nitrous Stage 5 Output State,enum,"y := 0=Off,1=On"
+,,,6:2,Unsigned,Nitrous Stage 6 Output State,enum,"y := 0=Off,1=On"
+,,,7,Signed,Torque Management Knob,raw,y = x
+0x3EA,50,TX,0 - 1,Unsigned,Gearbox Line Pressure,kPa,y = x/10 - 101.3
+,,,2 - 3,Unsigned,Injection Stage 3 Duty Cycle,%,y = x/10
+,,,4 - 5,Unsigned,Injection Stage 4 Duty Cycle,%,y = x/10
+,,,6 - 7,Unsigned,Crank Case Pressure,kPa,y = x/10 - 101.3
+0x3EB,50,TX,0 - 3,Unsigned,Race Timer,ms,y = x
+,,,4 - 5,Signed,Ignition Angle Bank 1,°,y = x/10
+,,,6 - 7,Signed,Ignition Angle Bank 2,°,y = x/10
+0x3EC,50,TX,0 - 1,Signed,Torque Management Driveshaft,RPM,y = x
+,,,2 - 3,Signed,Torque Management Driveshaft RPM Target Error,RPM,y = x
+,,,4 - 5,Signed,Torque Management Driveshaft RPM Target Error Ignition Correction,°,y = x/10
+,,,6 - 7,Signed,Torque Management Driveshaft RPM Timed Ignition Correction,°,y = x/10
+0x3ED,50,TX,0 - 1,Signed,Torque Management Combined Ignition Correction,°,y = x/10
+0x3EE,20,TX,0 - 1,Unsigned,Wideband Sensor 5,λ,y = x/1000
+,,,2 - 3,Unsigned,Wideband Sensor 6,λ,y = x/1000
+,,,4 - 5,Unsigned,Wideband Sensor 7,λ,y = x/1000
+,,,6 - 7,Unsigned,Wideband Sensor 8,λ,y = x/1000
+0x3EF,20,TX,0 - 1,Unsigned,Wideband Sensor 9,λ,y = x/1000
+,,,2 - 3,Unsigned,Wideband Sensor 10,λ,y = x/1000
+,,,4 - 5,Unsigned,Wideband Sensor 11,λ,y = x/1000
+,,,6 - 7,Unsigned,Wideband Sensor 12,λ,y = x/1000
+0x470,20,TX,0 - 1,Unsigned,Wideband Overall,λ,y = x/1000
+,,,2 - 3,Unsigned,Wideband Bank 1,λ,y = x/1000
+,,,4 - 5,Unsigned,Wideband Bank 2,λ,y = x/1000
+,,,6,Signed,Gear Selector Position,enum,"y := 0=Neutral, -1=Reverse, -2=Park, -3=Unknown, -4=Drive, -5=Sport, -6=Manual, -7=Low, -8=Overdrive"
+,,,7,Signed,Gear - Can be combined with selector pos,enum,"y := -1=Reverse, 0=Neutral, 1=1st, 2=2nd, 3=3rd, 4=4th, 5=5th, 6=6th"
+0x471,50,TX,0 - 1,Signed,Injector Pressure Differential,kPa,y = x/10
+,,,2 - 3,Unsigned,Accelerator Pedal Position,%,y = x/10
+0x472,20,TX,0 - 1,Unsigned,Cruise Control Target Speed,km/h,y = x/10
+,,,2 - 3,Unsigned,Cruise Control Last Target Speed,km/h,y = x/10
+,,,4 - 5,Signed,Cruise Control Speed Error,km/h,y = x/10
+,,,6:7 - 6:4,Unsigned,Cruise Control Controller State,enum,"y := 0=Disabled, 1=Inactive, 2=Cruising, 3=Accelerating, 4=Decelerating"
+,,,6:3 - 7:0,Unsigned,Cruise Control Input State,enum,"y := 0=Unused, 1=Disable, 2=Enable, 3=Enable/Disable, 4=Cancel, 8=Set, 12=Set/Cancel, 16=Resume, 20=Resume/Cancel, 32=Accel, 64=Decel, 76=Set/Coast/Cancel, 84=Resume/Coast/Cancel, 128=Increment, 168=Set/Accel/+, 176=Resume/Accel/+, 256=Decrement, 328=Set/Coast/-, 336=Resume/Coast/-, 512=Rest Position"
