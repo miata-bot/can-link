@@ -32,9 +32,11 @@ defmodule HaltechLink.MixProject do
     [
       # Dependencies for all targets
       {:nerves, "~> 1.7.4", runtime: false},
+      {:nimble_csv, "~> 1.2", runtime: false},
       {:shoehorn, "~> 0.7.0"},
       {:ring_logger, "~> 0.8.1"},
       {:toolshed, "~> 0.2.13"},
+      {:gen_stage, "~> 1.1"},
 
       # Dependencies for all targets except :host
       {:nerves_runtime, "~> 0.11.3", targets: @all_targets},
@@ -42,9 +44,10 @@ defmodule HaltechLink.MixProject do
       {:vintage_net_wizard, "~> 0.2", targets: @all_targets},
 
       # {:can, github: "tonyrog/can", targets: @all_targets},
-      {:ng_can, github: "johnnyhh/ng_can", targets: @all_targets},
+      {:ng_can, path: "../ng_can", targets: @all_targets},
       {:blue_heron, "~> 0.3", path: "/home/connor/workspace/keeplabs/elias/firmware/../hal/../../blue_heron", targets: @all_targets, override: true},
-      {:blue_heron_transport_uart, path: "/home/connor/workspace/keeplabs/elias/firmware/../hal/../../blue_heron_transport_uart", targets: @all_targets, override: true},
+      {:blue_heron_transport_uart,
+       path: "/home/connor/workspace/keeplabs/elias/firmware/../hal/../../blue_heron_transport_uart", targets: @all_targets, override: true},
       {:blue_heron_ti_wl18xx, path: "/home/connor/workspace/keeplabs/elias/firmware/../hal/../../blue_heron_ti_wl18xx", targets: :bbb, override: true},
 
       # Dependencies for specific targets

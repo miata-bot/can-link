@@ -1,0 +1,300 @@
+group,offset,total offset,size,signed,name,function,units,multiply,divide,add,ms2
+ 0, 0, 0, 2, -, seconds, Seconds ECU has been on, s, 1, 1, 0, Y
+ 0, 2, 2, 2, -, pw1, Main pulsewidth bank 1, ms, 1, 1000, 0, Y
+ 0, 4, 4, 2, -, pw2, Main pulsewidth bank 2, ms, 1, 1000, 0, Y
+ 0, 6, 6, 2, -, rpm, Engine RPM, RPM, 1, 1, 0, Y
+ 1, 0, 8, 2, Y, adv_deg, Final ignition spark advance, deg BTDC, 1, 10, 0, Y
+ 1, 2, 10, 1, -, squirt, Bitfield of batch fire injector events, -, 1, 1, 0, Y
+ 1, 3, 11, 1, -, engine, Bitfield of engine status, -, 1, 1, 0, Y
+ 1, 4, 12, 1, -, afrtgt1, Bank 1 AFR target, AFR, 1, 10, 0, Y
+ 1, 5, 13, 1, -, afrtgt2, Bank 2 AFR targer, AFR, 1, 10, 0, Y
+ 1, 6, 14, 1, -, wbo2_en1, not used, -, 1, 1, 0, Y
+ 1, 7, 15, 1, -, wbo2_en2, not used, -, 1, 1, 0, Y
+ 2, 0, 16, 2, Y, baro, Barometric pressure, kPa, 1, 10, 0, Y
+ 2, 2, 18, 2, Y, map, Manifold air pressure, kPa, 1, 10, 0, Y
+ 2, 4, 20, 2, Y, mat, Manifold air temperature, deg F, 1, 10, 0, Y
+ 2, 6, 22, 2, Y, clt, Coolant temperature, deg F, 1, 10, 0, Y
+ 3, 0, 24, 2, Y, tps, Throttle position, %, 1, 10, 0, Y
+ 3, 2, 26, 2, Y, batt, Battery voltage, V, 1, 10, 0, Y
+ 3, 4, 28, 2, Y, afr1_old, AFR1 (Deprecated on MS3), AFR, 1, 10, 0, Y
+ 3, 6, 30, 2, Y, afr2_old, AFR2 (Deprecated on MS3), AFR, 1, 10, 0, Y
+ 4, 0, 32, 2, Y, knock, Indication of knock input, %, 1, 10, 0, Y
+ 4, 2, 34, 2, Y, egocor1, EGO bank 1 correction, %, 1, 10, 0, Y
+ 4, 4, 36, 2, Y, egocor2, EGO bank2 correction, %, 1, 10, 0, Y
+ 4, 6, 38, 2, Y, aircor, Air density correction, %, 1, 10, 0, Y
+ 5, 0, 40, 2, Y, warmcor, Warmup correction, %, 1, 10, 0, Y
+ 5, 2, 42, 2, Y, tpsaccel, TPS-based acceleration, %, 1, 10, 0, Y
+ 5, 4, 44, 2, Y, tpsfuelcut, TPS-based fuel cut, %, 1, 10, 0, Y
+ 5, 6, 46, 2, Y, barocor, Barometric fuel correction, %, 1, 10, 0, Y
+ 6, 0, 48, 2, Y, totalcor, Total fuel correction, %, 1, 10, 0, Y
+ 6, 2, 50, 2, Y, ve1, VE value table/bank 1, %, 1, 10, 0, Y
+ 6, 4, 52, 2, Y, ve2, VE value table/bank 2, %, 1, 10, 0, Y
+ 6, 6, 54, 2, Y, iacstep, Stepper idle step number or PWM idle value duty, step duty%, 1 392, 1 1000, 0 0, Y
+ 7, 0, 56, 2, Y, cold_adv_deg, Cold advance, deg, 1, 10, 0, Y
+ 7, 2, 58, 2, Y, TPSdot, Rate of change of TPS, %/s, 1, 10, 0, Y
+ 7, 4, 60, 2, Y, MAPdot, Rate of change of MAP, kPa/s, 1, 1, 0, Y
+ 7, 6, 62, 2, Y, RPMdot, Rate of change of RPM, RPM/s, 10, 1, 0, Y
+ 8, 0, 64, 2, Y, MAFload, Synthetic 'load' from MAF, %, 1, 10, 0, Y
+ 8, 2, 66, 2, Y, fuelload, 'Load' used for fuel table lookup e.g. equals MAP in Speed-Density, %, 1, 10, 0, Y
+ 8, 4, 68, 2, Y, fuelcor, Adjustment to fuel from Flex, %, 1, 10, 0, Y
+ 8, 6, 70, 2, Y, MAF, Mass Air Flow (Scaling depend on range 650g/s shown), g/s, 1, 100, 0, Y
+ 9, 0, 72, 2, Y, egoV1, Voltage from O2#1 (Deprecated on MS3), V, 1, 100, 0, Y
+ 9, 2, 74, 2, Y, egoV2, Voltage from O2#2 (Deprecated on MS3), V, 1, 100, 0, Y
+ 9, 4, 76, 2, -, dwell, Main ignition dwell, ms, 1, 10, 0, Y
+ 9, 6, 78, 2, -, dwell_trl, Trailing ignition dwell, ms, 1, 10, 0, Y
+10, 0, 80, 1, -, status1, ECU status bitfield, -, 1, 1, 0, Y
+10, 1, 81, 1, -, status2, ECU status bitfield, -, 1, 1, 0, Y
+10, 2, 82, 1, -, status3, ECU status bitfield, -, 1, 1, 0, Y
+10, 3, 83, 1, -, status4, Not typically used, -, 1, 1, 0, Y
+10, 4, 84, 2, Y, status5, Not typically used, -, 1, 1, 0, Y
+10, 6, 86, 1, -, status6, ECU status bitfield, -, 1, 1, 0, -
+10, 7, 87, 1, -, status7, ECU status bitfield, -, 1, 1, 0, -
+11, 0, 88, 2, Y, fuelload2, 'Load' used for fuelling on modified table, %, 1, 10, 0, Y
+11, 2, 90, 2, Y, ignload, 'Load' used for ignition table lookup, %, 1, 10, 0, Y
+11, 4, 92, 2, Y, ignload2, 'Load' used for modifier ignition table lookup, %, 1, 10, 0, Y
+11, 6, 94, 2, Y, airtemp, Estimated intake air temperature, deg F, 1, 10, 0, Y
+12, 0, 96, 4, Y, wallfuel1, Calculated volume of fuel on intake walls from EAE (in injector pulsewidth units), us, 1, 100, 0, Y
+12, 4, 100, 4, Y, wallfuel2, Second channel of same, us, 1, 100, 0, Y
+13, 0, 104, 2, Y, sensors1, Generic sensor input 1 (gpioadc0 on MS2), -, 1, 10, 0, Y
+13, 2, 106, 2, Y, sensors2, Generic sensor input 2 (gpioadc1 on MS2), -, 1, 10, 0, Y
+13, 4, 108, 2, Y, sensors3, Generic sensor input 3 (gpioadc2 on MS2), -, 1, 10, 0, Y
+13, 6, 110, 2, Y, sensors4, Generic sensor input 4 (gpioadc3 on MS2), -, 1, 10, 0, Y
+14, 0, 112, 2, Y, sensors5, Generic sensor input 5 (gpioadc4 on MS2), -, 1, 10, 0, Y
+14, 2, 114, 2, Y, sensors6, Generic sensor input 6 (gpioadc5 on MS2), -, 1, 10, 0, Y
+14, 4, 116, 2, Y, sensors7, Generic sensor input 7 (gpioadc6 on MS2), -, 1, 10, 0, Y
+14, 6, 118, 2, Y, sensors8, Generic sensor input 8 (gpioadc7 on MS2), -, 1, 10, 0, Y
+15, 0, 120, 2, Y, sensors9, Generic sensor input 9 (adc6 on MS2), -, 1, 10, 0, Y
+15, 2, 122, 2, Y, sensors10, Generic sensor input 10 (adc7 on MS2), -, 1, 10, 0, Y
+15, 4, 124, 2, Y, sensors11, Generic sensor input 11, -, 1, 10, 0, -
+15, 6, 126, 2, Y, sensors12, Generic sensor input 12, -, 1, 10, 0, -
+16, 0, 128, 2, Y, sensors13, Generic sensor input 13, -, 1, 10, 0, -
+16, 2, 130, 2, Y, sensors14, Generic sensor input 14, -, 1, 10, 0, -
+16, 4, 132, 2, Y, sensors15, Generic sensor input 15, -, 1, 10, 0, -
+16, 6, 134, 2, Y, sensors16, Generic sensor input 16, -, 1, 10, 0, -
+17, 0, 136, 2, Y, boost_targ_1, Target boost - channel 1, kPa, 1, 10, 0, Y
+17, 2, 138, 2, Y, boost_targ_2, Target boost - channel 2, kPa, 1, 10, 0, -
+17, 4, 140, 1, -, boostduty, Duty cycle on boost solenoid 1, %, 1, 1, 0, Y
+17, 5, 141, 1, -, boostduty2, Duty cycle on boost solenoid 2, %, 1, 1, 0, -
+17, 6, 142, 2, Y, maf_volts, MAF voltage (synthesised for frequency MAFs), V, 1, 1000, 0, Y
+18, 0, 144, 2, Y, pwseq1, Sequential Pulsewidth for cyl#1, ms, 1, 1000, 0, Y
+18, 2, 146, 2, Y, pwseq2, Sequential Pulsewidth for cyl#2, ms, 1, 1000, 0, Y
+18, 4, 148, 2, Y, pwseq3, Sequential Pulsewidth for cyl#3, ms, 1, 1000, 0, Y
+18, 6, 150, 2, Y, pwseq4, Sequential Pulsewidth for cyl#4, ms, 1, 1000, 0, Y
+19, 0, 152, 2, Y, pwseq5, Sequential Pulsewidth for cyl#5, ms, 1, 1000, 0, -
+19, 2, 154, 2, Y, pwseq6, Sequential Pulsewidth for cyl#6, ms, 1, 1000, 0, -
+19, 4, 156, 2, Y, pwseq7, Sequential Pulsewidth for cyl#7, ms, 1, 1000, 0, -
+19, 6, 158, 2, Y, pwseq8, Sequential Pulsewidth for cyl#8, ms, 1, 1000, 0, -
+20, 0, 160, 2, Y, pwseq9, Sequential Pulsewidth for cyl#9, ms, 1, 1000, 0, -
+20, 2, 162, 2, Y, pwseq10, Sequential Pulsewidth for cyl#10, ms, 1, 1000, 0, -
+20, 4, 164, 2, Y, pwseq11, Sequential Pulsewidth for cyl#11, ms, 1, 1000, 0, -
+20, 6, 166, 2, Y, pwseq12, Sequential Pulsewidth for cyl#12, ms, 1, 1000, 0, -
+21, 0, 168, 2, Y, pwseq13, Sequential Pulsewidth for cyl#13, ms, 1, 1000, 0, -
+21, 2, 170, 2, Y, pwseq14, Sequential Pulsewidth for cyl#14, ms, 1, 1000, 0, -
+21, 4, 172, 2, Y, pwseq15, Sequential Pulsewidth for cyl#15, ms, 1, 1000, 0, -
+21, 6, 174, 2, Y, pwseq16, Sequential Pulsewidth for cyl#16, ms, 1, 1000, 0, -
+22, 0, 176, 2, Y, egt1,  EGT  1, deg F, 1, 10, 0, -
+22, 2, 178, 2, Y, egt2,  EGT  2, deg F, 1, 10, 0, -
+22, 4, 180, 2, Y, egt3,  EGT  3, deg F, 1, 10, 0, -
+22, 6, 182, 2, Y, egt4,  EGT  4, deg F, 1, 10, 0, -
+23, 0, 184, 2, Y, egt5,  EGT  5, deg F, 1, 10, 0, -
+23, 2, 186, 2, Y, egt6,  EGT  6, deg F, 1, 10, 0, -
+23, 4, 188, 2, Y, egt7,  EGT  7, deg F, 1, 10, 0, -
+23, 6, 190, 2, Y, egt8,  EGT  8, deg F, 1, 10, 0, -
+24, 0, 192, 2, Y, egt9,  EGT  9, deg F, 1, 10, 0, -
+24, 2, 194, 2, Y, egt10, EGT 10, deg F, 1, 10, 0, -
+24, 4, 196, 2, Y, egt11, EGT 11, deg F, 1, 10, 0, -
+24, 6, 198, 2, Y, egt12, EGT 12, deg F, 1, 10, 0, -
+25, 0, 200, 2, Y, egt13, EGT 13, deg F, 1, 10, 0, -
+25, 2, 202, 2, Y, egt14, EGT 14, deg F, 1, 10, 0, -
+25, 4, 204, 2, Y, egt15, EGT 15, deg F, 1, 10, 0, -
+25, 6, 206, 2, Y, egt16, EGT 16, deg F, 1, 10, 0, -
+26, 0, 208, 1, -, nitrous1_duty, Duty cycle to nitrous solenoid 1, %, 1, 1, 0, -
+26, 1, 209, 1, -, nitrous2_duty, Duty cycle to nitrous solenoid 2, %, 1, 1, 0, -
+26, 2, 210, 2, -, nitrous_timer_out, Timer used internally for nitrous system, s, 1, 1000, 0, -
+26, 4, 212, 2, Y, n2o_addfuel, Fuel pulsewidth added due to nitrous system, ms, 1, 1000, 0, Y
+26, 6, 214, 2, Y, n2o_retard, Timing retard due to nitrous system, deg, 1, 10, 0, Y
+27, 0, 216, 2, Y, canpwmin1, PWM period 1 from remote board, -, 1, 1, 0, Y
+27, 2, 218, 2, Y, canpwmin2, PWM period 2 from remote board, -, 1, 1, 0, Y
+27, 4, 220, 2, Y, canpwmin3, PWM period 3 from remote board, -, 1, 1, 0, Y
+27, 6, 222, 2, Y, canpwmin4, PWM period 4 from remote board, -, 1, 1, 0, Y
+28, 0, 224, 2, -, cl_idle_targ_rpm, Closed-loop idle target RPM, RPM, 1, 1, 0, Y
+28, 2, 226, 2, Y, tpsadc, ADC count from TPS, -, 1, 1, 0, Y
+28, 4, 228, 2, Y, eaeload, 'Load' used for EAE calc, %, 1, 10, 0, Y
+28, 6, 230, 2, Y, afrload, 'Load' used for AFR table lookups, %, 1, 10, 0, Y
+29, 0, 232, 2, -, EAEfcor1, Fuel correction from EAE - channel 1, %, 1, 10, 0, Y
+29, 2, 234, 2, -, EAEfcor2, Fuel correction from EAE - channel 2, %, 1, 10, 0, Y
+29, 4, 236, 2, Y, VSS1dot, Rate of change of VSS1, ms-2, 1, 10, 0, -
+29, 6, 238, 2, Y, VSS2dot, Rate of change of VSS2, ms-2, 1, 10, 0, -
+30, 0, 240, 2, Y, accelx, External accelerometer X, ms-2, 1, 1000, 0, -
+30, 2, 242, 2, Y, accely, External accelerometer Y, ms-2, 1, 1000, 0, -
+30, 4, 244, 2, Y, accelz, External accelerometer Z, ms-2, 1, 1000, 0, -
+30, 6, 246, 1, -, stream_level, Volume level on audio input, -, 1, 1, 0, -
+30, 7, 247, 1, -, water_duty, Duty cycle to water injection solenoid, %, 1, 1, 0, -
+31, 0, 248, 1, -, AFR1,  AFR cyl#1 , AFR, 1, 10, 0, -
+31, 1, 249, 1, -, AFR2,  AFR cyl#2 , AFR, 1, 10, 0, -
+31, 2, 250, 1, -, AFR3,  AFR cyl#3 , AFR, 1, 10, 0, -
+31, 3, 251, 1, -, AFR4,  AFR cyl#4 , AFR, 1, 10, 0, -
+31, 4, 252, 1, -, AFR5,  AFR cyl#5 , AFR, 1, 10, 0, -
+31, 5, 253, 1, -, AFR6,  AFR cyl#6 , AFR, 1, 10, 0, -
+31, 6, 254, 1, -, AFR7,  AFR cyl#7 , AFR, 1, 10, 0, -
+31, 7, 255, 1, -, AFR8,  AFR cyl#8 , AFR, 1, 10, 0, -
+32, 0, 256, 1, -, AFR9,  AFR cyl#9 , AFR, 1, 10, 0, -
+32, 1, 257, 1, -, AFR10, AFR cyl#10, AFR, 1, 10, 0, -
+32, 2, 258, 1, -, AFR11, AFR cyl#11, AFR, 1, 10, 0, -
+32, 3, 259, 1, -, AFR12, AFR cyl#12, AFR, 1, 10, 0, -
+32, 4, 260, 1, -, AFR13, AFR cyl#13, AFR, 1, 10, 0, -
+32, 5, 261, 1, -, AFR14, AFR cyl#14, AFR, 1, 10, 0, -
+32, 6, 262, 1, -, AFR15, AFR cyl#15, AFR, 1, 10, 0, -
+32, 7, 263, 1, -, AFR16, AFR cyl#16, AFR, 1, 10, 0, -
+33, 0, 264, 1, -, duty_pwm, 1 Generic PWM duty 1, %, 1, 1, 0, -
+33, 1, 265, 1, -, duty_pwm, 2 Generic PWM duty 2, %, 1, 1, 0, -
+33, 2, 266, 1, -, duty_pwm, 3 Generic PWM duty 3, %, 1, 1, 0, -
+33, 3, 267, 1, -, duty_pwm, 4 Generic PWM duty 4, %, 1, 1, 0, -
+33, 4, 268, 1, -, duty_pwm, 5 Generic PWM duty 5, %, 1, 1, 0, -
+33, 5, 269, 1, -, duty_pwm, 6 Generic PWM duty 6, %, 1, 1, 0, -
+33, 6, 270, 1, Y, gear, Current gear selected, -, 1, 1, 0, -
+33, 7, 271, 1, -, status8, Engine status bitfield, -, 1, 1, 0, -
+34, 0, 272, 2, Y, EGOv1,  Voltage from O2 cyl#1,  V, 489, 100000, 0, -
+34, 2, 274, 2, Y, EGOv2,  Voltage from O2 cyl#2,  V, 489, 100000, 0, -
+34, 4, 276, 2, Y, EGOv3,  Voltage from O2 cyl#3,  V, 489, 100000, 0, -
+34, 6, 278, 2, Y, EGOv4,  Voltage from O2 cyl#4,  V, 489, 100000, 0, -
+35, 0, 280, 2, Y, EGOv5,  Voltage from O2 cyl#5,  V, 489, 100000, 0, -
+35, 2, 282, 2, Y, EGOv6,  Voltage from O2 cyl#6,  V, 489, 100000, 0, -
+35, 4, 284, 2, Y, EGOv7,  Voltage from O2 cyl#7,  V, 489, 100000, 0, -
+35, 6, 286, 2, Y, EGOv8,  Voltage from O2 cyl#8,  V, 489, 100000, 0, -
+36, 0, 288, 2, Y, EGOv9,  Voltage from O2 cyl#9,  V, 489, 100000, 0, -
+36, 2, 290, 2, Y, EGOv10, Voltage from O2 cyl#10, V, 489, 100000, 0, -
+36, 4, 292, 2, Y, EGOv11, Voltage from O2 cyl#11, V, 489, 100000, 0, -
+36, 6, 294, 2, Y, EGOv12, Voltage from O2 cyl#12, V, 489, 100000, 0, -
+37, 0, 296, 2, Y, EGOv13, Voltage from O2 cyl#13, V, 489, 100000, 0, -
+37, 2, 298, 2, Y, EGOv14, Voltage from O2 cyl#14, V, 489, 100000, 0, -
+37, 4, 300, 2, Y, EGOv15, Voltage from O2 cyl#15, V, 489, 100000, 0, -
+37, 6, 302, 2, Y, EGOv16, Voltage from O2 cyl#16, V, 489, 100000, 0, -
+38, 0, 304, 2, Y, EGOcor1,  EGO correction cyl#1,  %, 1, 10, 0, -
+38, 2, 306, 2, Y, EGOcor2,  EGO correction cyl#2,  %, 1, 10, 0, -
+38, 4, 308, 2, Y, EGOcor3,  EGO correction cyl#3,  %, 1, 10, 0, -
+38, 6, 310, 2, Y, EGOcor4,  EGO correction cyl#4,  %, 1, 10, 0, -
+39, 0, 312, 2, Y, EGOcor5,  EGO correction cyl#5,  %, 1, 10, 0, -
+39, 2, 314, 2, Y, EGOcor6,  EGO correction cyl#6,  %, 1, 10, 0, -
+39, 4, 316, 2, Y, EGOcor7,  EGO correction cyl#7,  %, 1, 10, 0, -
+39, 6, 318, 2, Y, EGOcor8,  EGO correction cyl#8,  %, 1, 10, 0, -
+40, 0, 320, 2, Y, EGOcor9,  EGO correction cyl#9,  %, 1, 10, 0, -
+40, 2, 322, 2, Y, EGOcor10, EGO correction cyl#10, %, 1, 10, 0, -
+40, 4, 324, 2, Y, EGOcor11, EGO correction cyl#11, %, 1, 10, 0, -
+40, 6, 326, 2, Y, EGOcor12, EGO correction cyl#12, %, 1, 10, 0, -
+41, 0, 328, 2, Y, EGOcor13, EGO correction cyl#13, %, 1, 10, 0, -
+41, 2, 330, 2, Y, EGOcor14, EGO correction cyl#14, %, 1, 10, 0, -
+41, 4, 332, 2, Y, EGOcor15, EGO correction cyl#15, %, 1, 10, 0, -
+41, 6, 334, 2, Y, EGOcor16, EGO correction cyl#16, %, 1, 10, 0, -
+42, 0, 336, 2, -, VSS1, Vehicle Speed 1, ms-1, 1, 10, 0, -
+42, 2, 338, 2, -, VSS2, Vehicle Speed 2, ms-1, 1, 10, 0, -
+42, 4, 340, 2, -, VSS3, Vehicle Speed 3, ms-1, 1, 10, 0, -
+42, 6, 342, 2, -, VSS4, Vehicle Speed 4, ms-1, 1, 10, 0, -
+43, 0, 344, 1, -, synccnt, Sync-loss counter, -, 1, 1, 0, Y
+43, 1, 345, 1, -, syncreason, Sync-loss reason code, -, 1, 1, 0, Y
+43, 2, 346, 2, -, sd_filenum, SDcard file number, -, 1, 1, 0, -
+43, 4, 348, 1, -, sd_error, SDcard error number, -, 1, 1, 0, -
+43, 5, 349, 1, -, sd_phase, SDcard internal code, -, 1, 1, 0, -
+43, 6, 350, 1, -, sd_status, SDcard status bitfield, -, 1, 1, 0, -
+43, 7, 351, 1, Y, timing_err, Calculated error in ignition timing, %, 1, 1, 0, Y
+44, 0, 352, 2, Y, vvt_ang1, VVT actual angle 1, deg, 1, 10, 0, -
+44, 2, 354, 2, Y, vvt_ang2, VVT actual angle 2, deg, 1, 10, 0, -
+44, 4, 356, 2, Y, vvt_ang3, VVT actual angle 3, deg, 1, 10, 0, -
+44, 6, 358, 2, Y, vvt_ang4, VVT actual angle 4, deg, 1, 10, 0, -
+45, 0, 360, 2, Y, vvt_target1, VVT target angle 1, deg, 1, 10, 0, -
+45, 2, 362, 2, Y, vvt_target2, VVT target angle 2, deg, 1, 10, 0, -
+45, 4, 364, 2, Y, vvt_target3, VVT target angle 3, deg, 1, 10, 0, -
+45, 6, 366, 2, Y, vvt_target4, VVT target angle 4, deg, 1, 10, 0, -
+46, 0, 368, 1, -, vvt_duty1, VVT solenoid 1 duty cycle, %, 392, 1000, 0, -
+46, 1, 369, 1, -, vvt_duty2, VVT solenoid 2 duty cycle, %, 392, 1000, 0, -
+46, 2, 370, 1, -, vvt_duty3, VVT solenoid 3 duty cycle, %, 392, 1000, 0, -
+46, 3, 371, 1, -, vvt_duty4, VVT solenoid 4 duty cycle, %, 392, 1000, 0, -
+46, 4, 372, 2, Y, inj_timing_pri, Injection Timing Angle (primary) deg, BTDC, 1, 10, 0, Y
+46, 6, 374, 2, Y, inj_timing_sec, Injection Timing Angle (secondary) deg, BTDC, 1, 10, 0, Y
+47, 0, 376, 2, Y, fuel_pct, Ethanol content of fuel from Flex sensor, %, 1, 10, 0, Y
+47, 2, 378, 2, Y, tps_accel, TPSdot based accel, %, 1, 10, 0, -
+47, 4, 380, 2, -, SS1, Shaft speed 1, RPM, 10, 1, 0, -
+47, 6, 382, 2, -, SS2, Shaft speed 2, RPM, 10, 1, 0, -
+48, 0, 384, 1, -, knock_cyl1,  Knock % cyl #1, %, 4, 10, 0, -
+48, 1, 385, 1, -, knock_cyl2,  Knock % cyl #2, %, 4, 10, 0, -
+48, 2, 386, 1, -, knock_cyl3,  Knock % cyl #3, %, 4, 10, 0, -
+48, 3, 387, 1, -, knock_cyl4,  Knock % cyl #4, %, 4, 10, 0, -
+48, 4, 388, 1, -, knock_cyl5,  Knock % cyl #5, %, 4, 10, 0, -
+48, 5, 389, 1, -, knock_cyl6,  Knock % cyl #6, %, 4, 10, 0, -
+48, 6, 390, 1, -, knock_cyl7,  Knock % cyl #7, %, 4, 10, 0, -
+48, 7, 391, 1, -, knock_cyl8,  Knock % cyl #8, %, 4, 10, 0, -
+49, 0, 392, 1, -, knock_cyl9,  Knock % cyl #9, %, 4, 10, 0, -
+49, 1, 393, 1, -, knock_cyl10, Knock % cyl #10, %, 4, 10, 0, -
+49, 2, 394, 1, -, knock_cyl11, Knock % cyl #11, %, 4, 10, 0, -
+49, 3, 395, 1, -, knock_cyl12, Knock % cyl #12, %, 4, 10, 0, -
+49, 4, 396, 1, -, knock_cyl13, Knock % cyl #13, %, 4, 10, 0, -
+49, 5, 397, 1, -, knock_cyl14, Knock % cyl #14, %, 4, 10, 0, -
+49, 6, 398, 1, -, knock_cyl15, Knock % cyl #15, %, 4, 10, 0, -
+49, 7, 399, 1, -, knock_cyl16, Knock % cyl #16, %, 4, 10, 0, -
+50, 0, 400, 2, Y, map_accel, MAPdot based accel, %, 1, 10, 0, -
+50, 2, 402, 2, Y, total_accel, Total accel, %, 1, 10, 0, -
+50, 5, 404, 2, -, launch_timer, Timer for timed-launch retard, s, 1, 1000, 0, -
+50, 6, 406, 2, Y, launch_retard, Launch retard, deg, 1, 10, 0, -
+51, 0, 408, 1, -, porta, CPU portA bitfield, -, 1, 1, 0, Y
+51, 1, 409, 1, -, portb, CPU portB bitfield, -, 1, 1, 0, Y
+51, 2, 410, 1, -, porteh, CPU portE/portH bitfield, -, 1, 1, 0, Y
+51, 3, 411, 1, -, portk, CPU portK bitfield, -, 1, 1, 0, -
+51, 4, 412, 1, -, portmj, CPU portM/portJ bitfield, -, 1, 1, 0, Y
+51, 5, 413, 1, -, portp, CPU portP bitfield, -, 1, 1, 0, -
+51, 6, 414, 1, -, portt, CPU portT bitfield, -, 1, 1, 0, Y
+51, 7, 415, 1, -, cel_errorcode, CEL error code, -, 1, 1, 0, -
+52, 0, 416, 1, -, canin1, CAN input 1 bitfield (CAN port 1 on MS2),  -, 1, 1, 0, Y
+52, 1, 417, 1, -, canin2, CAN input 2 bitfield (CAN port 2 on MS2),  -, 1, 1, 0, Y
+52, 2, 418, 1, -, canout, CAN output 1 bitfield (CAN port 3 on MS2), -, 1, 1, 0, Y
+52, 3, 419, 1, -, knk_rtd, Knock retard, deg, 1, 10, 0, Y
+52, 4, 420, 2, -, fuelflow, Average fuel flow, cc/min, 1, 1, 0, -
+52, 6, 422, 2, -, fuelcons, Average fuel consumption, l/km, 1, 1, 0, -
+53, 0, 424, 2, Y, fuel_press1, Fuel pressure 1, kPa, 1, 10, 0, -
+53, 2, 426, 2, Y, fuel_press2, Fuel pressure 2, kPa, 1, 10, 0, -
+53, 4, 428, 2, Y, fuel_temp1, Fuel temperature 1, deg F, 1, 10, 0, -
+53, 6, 430, 2, Y, fuel_temp2, Fuel temperature 2, deg F, 1, 10, 0, -
+54, 0, 432, 2, Y, batt_cur, Battery current (alternator system), A, 1, 10, 0, -
+54, 2, 434, 2, -, cel_status, CEL status bitfield, -, 1, 1, 0, -
+54, 4, 436, 1, -, fp_duty, Fuel pump output duty, %, 392, 1000, 0, -
+54, 5, 437, 1, -, alt_duty, Alternator field output duty, %, 1, 1, 0, -
+54, 6, 438, 1, -, load_duty, Alternator measured load-sense duty, %, 1, 1, 0, -
+54, 7, 439, 1, -, alt_targv, Alternator target voltage, V, 1, 10, 0, -
+55, 0, 440, 2, -, looptime, Main code loop execution time, us, 1, 1, 0, Y
+55, 2, 442, 2, -, fueltemp_cor, Fuel temperature correction, %, 1, 10, 0, -
+55, 4, 444, 2, -, fuelpress_cor, Fuel pressure correction, %, 1, 10, 0, -
+55, 6, 446, 1, Y, ltt_cor, Long term trim correction, %, 1, 10, 0, -
+55, 7, 447, 1, -, sp1, Unused, -,-,-,-,-
+56, 0, 448, 2, Y, tc_retard, Traction control retard, deg, 1, 10, 0, -
+56, 2, 450, 2, Y, cel_retard, CEL retard, deg, 1, 10, 0, -
+56, 4, 452, 2, Y, fc_retard, Fuel-cut (overrun) retard, deg, 1, 10, 0, -
+56, 6, 454, 2, Y, als_addfuel, ALS added fuel, ms, 1, 1000, 0, -
+57, 0, 456, 2, Y, base_advance, Base timing from tables, deg, 1, 10, 0, Y
+57, 2, 458, 2, Y, idle_cor_advance, Idle correction advance, deg, 1, 10, 0, Y
+57, 4, 460, 2, Y, mat_retard, MAT retard, deg, 1, 10, 0, Y
+57, 6, 462, 2, Y, flex_advance, Flex advance, deg, 1, 10, 0, Y
+58, 0, 464, 2, Y, adv1, Timing lookup from table 1, deg, 1, 10, 0, Y
+58, 2, 466, 2, Y, adv2, Timing lookup from table 2, deg, 1, 10, 0, Y
+58, 4, 468, 2, Y, adv3, Timing lookup from table 3, deg, 1, 10, 0, Y
+58, 6, 470, 2, Y, adv4, Timing lookup from table 4, deg, 1, 10, 0, -
+59, 0, 472, 2, Y, revlim_retard, Revlimiter 'soft' retard, deg, 1, 10, 0, Y
+59, 2, 474, 2, Y, als_timing, ALS timing change, deg, 1, 10, 0, -
+59, 4, 476, 2, Y, ext_advance, External advance (e.g. trans), deg, 1, 10, 0, Y
+59, 6, 478, 2, Y, deadtime1, Injector deadtime in use (#1), ms, 1, 1000, 0, Y
+60, 0, 480, 2, Y, launch_timing, Launch control timing, deg, 1, 10, 0, -
+60, 2, 482, 2, Y, step3_timing, 3-step timing, deg, 1, 10, 0, -
+60, 4, 484, 2, Y, vsslaunch_retard, Wheel-speed based launch retard, deg, 1, 10, 0, -
+60, 6, 486, 2, -, cel_status2, CEL status 2, -, 1, 1, 0, -
+61, 0, 488, 1, Y, gps_latdeg, External GPS latitude deg, deg, 1, 1, 0, -
+61, 1, 489, 1, -, gps_latmin, GPS latitude minutes, min, 1, 1, 0, -
+61, 2, 490, 2, -, gps_latmmin, GPS latitude milli-minutes, mmin, 1, 1, 0, -
+61, 4, 492, 1, -, gps_londeg, GPS longitude degree, deg, 1, 1, 0, -
+61, 5, 493, 1, -, gps_lonmin, GPS longitude minute, min, 1, 1, 0, -
+61, 6, 494, 2, -, gps_lonmmin, GPS longitude milli-minutes, mmin, 1, 1, 0, -
+62, 0, 496, 1, -, gps_outstatus, GPS status byte (bit 0 = E/W), -, 1, 1, 0, -
+62, 1, 497, 1, Y, gps_altk, GPS altitude km, km, 1, 1, 0, -
+62, 2, 498, 2, -, gps_altm, GPS altitude m, m, 1, 1, 0, -
+62, 4, 500, 2, -, gps_speed, GPS speed, ms-1, 1, 10, 0, -
+62, 6, 502, 2, -, gps_course, GPS course, deg, 1, 10, 0, -
+63, 0, 504, 1, -, generic_pid_duty, 1 Generic closed-loop duty 1, %, 392, 1000, 0, -
+63, 1, 505, 1, -, generic_pid_duty, 2 Generic closed-loop duty 2, %, 392, 1000, 0, -
+63, 2, 506, 6, -, -, Unused, -, -, -, -, -

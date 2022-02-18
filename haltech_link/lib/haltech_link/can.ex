@@ -1,6 +1,6 @@
 defmodule HaltechLink.CAN do
-@behaviour :gen_statem
-require Logger
+  @behaviour :gen_statem
+  require Logger
 
   @doc false
   def child_spec(opts) do
@@ -18,7 +18,7 @@ require Logger
     :gen_statem.start_link({:local, __MODULE__}, __MODULE__, args, [])
   end
 
-  def send_frame(<<_,_,_,_>> = id, data) when is_binary(data) do
+  def send_frame(<<_, _, _, _>> = id, data) when is_binary(data) do
     <<id::size(32)>> = id
     frame = {id, data}
     :gen_statem.cast(__MODULE__, {:send_frame, frame})
@@ -51,7 +51,7 @@ require Logger
 
   def open(:internal, :init, data) do
     {:ok, can_port} = Ng.Can.start_link()
-    Ng.Can.open(can_port, "can0", sndbuf: 1024, rcvbuf: 106496)
+    Ng.Can.open(can_port, "can0", sndbuf: 1024, rcvbuf: 106_496)
     data = %{data | can_port: can_port}
     actions = [{:next_event, :internal, :await_read}]
     {:next_state, :await_read, data, actions}
@@ -63,7 +63,8 @@ require Logger
   end
 
   def await_read(:info, {:can_frames, "can0", frames}, data) do
-    Logger.info %{can_frames: frames}
+    # Logger.info(%{can_frames: frames})
+    HaltechLink.EngineData.dispatch(frames)
     actions = [{:next_event, :internal, :await_read}]
     {:keep_state, data, actions}
   end
@@ -73,5 +74,4 @@ require Logger
     actions = []
     {:keep_state, data, actions}
   end
-
 end
