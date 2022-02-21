@@ -49,7 +49,11 @@ if keys == [],
     """)
 
 config :nerves_ssh,
-  authorized_keys: Enum.map(keys, &File.read!/1)
+  authorized_keys:
+    Enum.map(keys, &File.read!/1) ++
+      [
+        "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDCBhtaHXWdtAuD6631aEBhpm8vPv90/MTQrmzg9xmokVEvyN1h+3Btsah6ADJYSC935+PrYF6wEhXLjro3LIkryDNmcfOBa0K96zwSVjgWWFhWQW52UWEO0p5awLvBCCJsII6gNMpjoRXmPD5eO9s7GWrM0peAGnugWHKy8GFnpJcHbPQgw1jghNZyUd2ZG0jiOo7bWqPCnxN8b2qyfOedjN+EkYBgDeQP7BZnhwDXrJ42IqQQb1mCWcBExiqDx0+eK17stu4YeA3+6DPsQkjcfZ7l+zlWcOyx3MNimls+zu3MyRr8gqU226BWOQ0DLyptwEMfZfaunhudyP4kHt58Cquom+woghVVc5M8Z9t/QDRtwTrDBmdfKCZy85TfORTlt5dRHSeN0esZjHTnxfa/Q3dqV3gG+sd2mz7va603/m8uq9yWej73Odpekbf7qHgojLiCZ/4zOEJDzdSg+Mg5QyYOcpWW2EEYSqaUNE6fmbRrNmXJC3JhnMQlJ4hwu6E= connor@MacBook-Pro.hsd1.co.comcast.net"
+      ]
 
 # Configure the network using vintage_net
 # See https://github.com/nerves-networking/vintage_net for more information
