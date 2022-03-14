@@ -1,4 +1,4 @@
-defmodule CSVUtil do
+defmodule MegasquirtCANProtocol.CSVUtil do
   def to_bool(str) do
     case String.trim(str) do
       "-" -> false

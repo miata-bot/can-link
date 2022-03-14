@@ -1,5 +1,5 @@
 defmodule MegasquirtCANProtocol do
-  import CSVUtil
+  import MegasquirtCANProtocol.CSVUtil
 
   specs =
     File.stream!("ms-can-proto.csv")

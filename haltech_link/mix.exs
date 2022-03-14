@@ -38,6 +38,7 @@ defmodule HaltechLink.MixProject do
       {:toolshed, "~> 0.2.13"},
       {:gen_stage, "~> 1.1"},
       {:extty, "~> 0.2.1"},
+      {:decompilerl, "~> 0.0.1", only: :dev},
 
       # Dependencies for all targets except :host
       {:nerves_runtime, "~> 0.11.3", targets: @all_targets},
