@@ -1,4 +1,4 @@
-# HaltechLink
+# CANLink
 
 ## rememberme
 cmd("/sbin/ip link set can0 up type can bitrate 100000")

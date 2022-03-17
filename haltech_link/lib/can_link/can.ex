@@ -1,4 +1,4 @@
-defmodule HaltechLink.CAN do
+defmodule CANLink.CAN do
   @behaviour :gen_statem
   require Logger
 
@@ -66,7 +66,7 @@ defmodule HaltechLink.CAN do
 
   def await_read(:info, {:can_frames, "can0", frames}, data) do
     # Logger.info(%{can_frames: frames})
-    HaltechLink.EngineData.dispatch(frames)
+    CANLink.EngineData.dispatch(frames)
     actions = [{:next_event, :internal, :await_read}]
     {:keep_state, data, actions}
   end

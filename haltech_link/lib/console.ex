@@ -1,4 +1,4 @@
-defmodule HaltechLink.Console do
+defmodule CANLink.Console do
   use GenServer
 
   def start_link(args) do

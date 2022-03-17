@@ -1,4 +1,4 @@
-defmodule HaltechLink.RGB do
+defmodule CANLink.RGB do
   use GenServer
   require Logger
 

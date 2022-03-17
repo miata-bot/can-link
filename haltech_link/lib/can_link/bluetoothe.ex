@@ -1,4 +1,4 @@
-defmodule HaltechLink.Bluetooth do
+defmodule CANLink.Bluetooth do
   @behaviour :gen_statem
   require Logger
 

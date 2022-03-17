@@ -1,4 +1,4 @@
-defmodule HaltechLink.EngineData do
+defmodule CANLink.EngineData do
   use GenServer
   require Logger
 
@@ -21,7 +21,7 @@ defmodule HaltechLink.EngineData do
 
     if(old_state[:throttle_position] != state[:throttle_position]) do
       tps = round(state[:throttle_position] || 0.0)
-      HaltechLink.RGB.set_color(tps, 0, 0)
+      CANLink.RGB.set_color(tps, 0, 0)
     end
 
     # Logger.info(%{tps: tps})

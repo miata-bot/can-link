@@ -1,6 +1,6 @@
-defmodule HaltechLink do
+defmodule CANLink do
   @moduledoc """
-  Documentation for HaltechLink.
+  Documentation for CANLink.
   """
 
   @doc """
@@ -8,7 +8,7 @@ defmodule HaltechLink do
 
   ## Examples
 
-      iex> HaltechLink.hello
+      iex> CANLink.hello
       :world
 
   """

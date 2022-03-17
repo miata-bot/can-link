@@ -1,4 +1,4 @@
-defmodule HaltechLink.Button do
+defmodule CANLink.Button do
   use GenServer
   require Logger
 

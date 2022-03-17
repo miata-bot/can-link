@@ -1,4 +1,4 @@
-defmodule HaltechLink.Application do
+defmodule CANLink.Application do
   # See https://hexdocs.pm/elixir/Application.html
   # for more information on OTP Applications
   @moduledoc false
@@ -13,14 +13,14 @@ defmodule HaltechLink.Application do
   def start(_type, _args) do
     # See https://hexdocs.pm/elixir/Supervisor.html
     # for other strategies and supported options
-    opts = [strategy: :one_for_one, name: HaltechLink.Supervisor]
+    opts = [strategy: :one_for_one, name: CANLink.Supervisor]
 
     children =
       [
-        HaltechLink.EngineData
+        CANLink.EngineData
         # Children for all targets
-        # Starts a worker by calling: HaltechLink.Worker.start_link(arg)
-        # {HaltechLink.Worker, arg},
+        # Starts a worker by calling: CANLink.Worker.start_link(arg)
+        # {CANLink.Worker, arg},
       ] ++ children(target())
 
     Supervisor.start_link(children, opts)
@@ -30,25 +30,25 @@ defmodule HaltechLink.Application do
   def children(:host) do
     [
       # Children that only run on the host
-      # Starts a worker by calling: HaltechLink.Worker.start_link(arg)
-      # {HaltechLink.Worker, arg},
-      {HaltechLink.RGB, [tty: "/dev/cu.usbserial-110"]}
+      # Starts a worker by calling: CANLink.Worker.start_link(arg)
+      # {CANLink.Worker, arg},
+      {CANLink.RGB, [tty: "/dev/cu.usbserial-110"]}
     ]
   end
 
   def children(_target) do
     # maybe_start_wifi_wizard()
-    gpio_pin = Application.get_env(:haltech_link, :button_pin, 68)
+    gpio_pin = Application.get_env(:can_link, :button_pin, 68)
 
     [
-      {HaltechLink.CAN, []},
-      {HaltechLink.Button, gpio_pin},
-      {HaltechLink.RGB, [tty: "ttyUSB0"]}
+      {CANLink.CAN, []},
+      {CANLink.Button, gpio_pin},
+      {CANLink.RGB, [tty: "ttyUSB0"]}
     ]
   end
 
   def target() do
-    Application.get_env(:haltech_link, :target)
+    Application.get_env(:can_link, :target)
   end
 
   def maybe_start_wifi_wizard() do

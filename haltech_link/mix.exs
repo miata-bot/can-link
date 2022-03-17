@@ -1,7 +1,7 @@
-defmodule HaltechLink.MixProject do
+defmodule CANLink.MixProject do
   use Mix.Project
 
-  @app :haltech_link
+  @app :can_link
   @version "0.1.0"
   @all_targets [:bbb]
 
@@ -22,7 +22,7 @@ defmodule HaltechLink.MixProject do
   # Run "mix help compile.app" to learn about applications.
   def application do
     [
-      mod: {HaltechLink.Application, []},
+      mod: {CANLink.Application, []},
       extra_applications: [:logger, :runtime_tools]
     ]
   end
