@@ -38,6 +38,8 @@ defmodule HaltechLink.MixProject do
       {:toolshed, "~> 0.2.13"},
       {:gen_stage, "~> 1.1"},
       {:extty, "~> 0.2.1"},
+      {:circuits_uart, "~> 1.4"},
+      {:circuits_gpio, "~> 1.0", targets: @all_targets},
       {:decompilerl, "~> 0.0.1", only: :dev},
 
       # Dependencies for all targets except :host
@@ -47,10 +49,10 @@ defmodule HaltechLink.MixProject do
 
       # {:can, github: "tonyrog/can", targets: @all_targets},
       {:ng_can, path: "../ng_can", targets: @all_targets},
-      {:blue_heron, "~> 0.3", path: "/home/connor/workspace/keeplabs/elias/firmware/../hal/../../blue_heron", targets: @all_targets, override: true},
-      {:blue_heron_transport_uart,
-       path: "/home/connor/workspace/keeplabs/elias/firmware/../hal/../../blue_heron_transport_uart", targets: @all_targets, override: true},
-      {:blue_heron_ti_wl18xx, path: "/home/connor/workspace/keeplabs/elias/firmware/../hal/../../blue_heron_ti_wl18xx", targets: :bbb, override: true},
+      # {:blue_heron, "~> 0.3", path: "/home/connor/workspace/keeplabs/elias/firmware/../hal/../../blue_heron", targets: @all_targets, override: true},
+      # {:blue_heron_transport_uart,
+      #  path: "/home/connor/workspace/keeplabs/elias/firmware/../hal/../../blue_heron_transport_uart", targets: @all_targets, override: true},
+      # {:blue_heron_ti_wl18xx, path: "/home/connor/workspace/keeplabs/elias/firmware/../hal/../../blue_heron_ti_wl18xx", targets: :bbb, override: true},
 
       # Dependencies for specific targets
       # NOTE: It's generally low risk and recommended to follow minor version

@@ -33,6 +33,8 @@ defmodule HaltechLink.CAN do
   def init(_args) do
     data = %{can_port: nil}
     actions = [{:next_event, :internal, :init}]
+    :os.cmd('ip link set can0 up type can bitrate 1000000')
+    # :os.cmd('ip link set can0 up')
     {:ok, :reset, data, actions}
   end
 
@@ -42,16 +44,16 @@ defmodule HaltechLink.CAN do
   end
 
   def reset(:internal, :init, data) do
-    _ = :os.cmd('ip link set can0 down')
-    _ = Process.sleep(100)
-    _ = :os.cmd('/sbin/ip link set can0 up type can bitrate 125000')
+    # _ = :os.cmd('ip link set can0 down')
+    # _ = Process.sleep(100)
+    # _ = :os.cmd('/sbin/ip link set can0 up type can bitrate 125000')
     actions = [{:next_event, :internal, :init}]
     {:next_state, :open, data, actions}
   end
 
   def open(:internal, :init, data) do
     {:ok, can_port} = Ng.Can.start_link()
-    Ng.Can.open(can_port, "can0", sndbuf: 1024, rcvbuf: 106_496)
+    Ng.Can.open(can_port, "can0")
     data = %{data | can_port: can_port}
     actions = [{:next_event, :internal, :await_read}]
     {:next_state, :await_read, data, actions}

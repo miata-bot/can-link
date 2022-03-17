@@ -97,9 +97,10 @@ defmodule Ng.Can do
   end
 
   def handle_call({:open, interface, args}, {from_pid, _}, state) do
-    :os.cmd('ip link set #{interface} type can bitrate 500000 triple-sampling on restart-ms 100')
-    :os.cmd 'ip link set #{interface} up type can'
-    :os.cmd 'ifconfig #{interface} txqueuelen 1000'
+    # :os.cmd('ip link set #{interface} type can bitrate 1000000 triple-sampling on restart-ms 100')
+    # # :os.cmd('ip link set #{interface} type can bitrate 500000 triple-sampling on restart-ms 100')
+    # :os.cmd 'ip link set #{interface} up type can'
+    # :os.cmd 'ifconfig #{interface} txqueuelen 1000'
     response = call_port(state, :open,
                          {interface, args[:rcvbuf] || @default_bufsize,
                            args[:sndbuf] || @default_bufsize

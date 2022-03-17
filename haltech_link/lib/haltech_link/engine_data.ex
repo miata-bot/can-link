@@ -16,18 +16,26 @@ defmodule HaltechLink.EngineData do
   end
 
   @impl GenServer
-  def handle_cast({:dispatch, frames}, state) do
-    state = Enum.reduce(frames, state, &handle_frame/2)
+  def handle_cast({:dispatch, frames}, old_state) do
+    state = Enum.reduce(frames, old_state, &handle_frame/2)
+
+    if(old_state[:throttle_position] != state[:throttle_position]) do
+      tps = round(state[:throttle_position] || 0.0)
+      HaltechLink.RGB.set_color(tps, 0, 0)
+    end
+
+    # Logger.info(%{tps: tps})
     {:noreply, state}
   end
 
   def handle_frame({id, frame}, state) do
     try do
-      data = MegasquirtCANProtocol.parse_frame!(id, frame)
+      # data = MegasquirtCANProtocol.parse_frame!(id, frame)
+      data = HaltechCANProtocol.parse_frame!(id, frame)
       Map.merge(state, Map.new(data))
     catch
       _, _ ->
-        Logger.error("Dropped frame: #{inspect(frame)}")
+        # Logger.error("Dropped frame: #{inspect(frame)}")
         state
     end
   end

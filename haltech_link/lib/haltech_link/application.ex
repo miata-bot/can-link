@@ -32,6 +32,7 @@ defmodule HaltechLink.Application do
       # Children that only run on the host
       # Starts a worker by calling: HaltechLink.Worker.start_link(arg)
       # {HaltechLink.Worker, arg},
+      {HaltechLink.RGB, [tty: "/dev/cu.usbserial-110"]}
     ]
   end
 
@@ -40,8 +41,9 @@ defmodule HaltechLink.Application do
     gpio_pin = Application.get_env(:haltech_link, :button_pin, 68)
 
     [
-      # {HaltechLink.CAN, []},
-      {HaltechLink.Button, gpio_pin}
+      {HaltechLink.CAN, []},
+      {HaltechLink.Button, gpio_pin},
+      {HaltechLink.RGB, [tty: "ttyUSB0"]}
     ]
   end
 
