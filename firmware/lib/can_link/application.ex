@@ -43,7 +43,7 @@ defmodule CANLink.Application do
     [
       {CANLink.CAN, []},
       {CANLink.Button, gpio_pin},
-      {CANLink.RGB, [tty: "ttyUSB0"]}
+      # {CANLink.RGB, [tty: "ttyUSB0"]}
     ]
   end
 
