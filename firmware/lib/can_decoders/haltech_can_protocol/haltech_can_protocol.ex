@@ -31,7 +31,6 @@ defmodule HaltechCANProtocol do
 
   @doc "Compiled fun"
   Enum.each(parsed, fn {canid, data} ->
-    IO.inspect(hd(data))
     compile_parser(canid, data)
   end)
 end

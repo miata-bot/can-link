@@ -45,7 +45,14 @@ if keys == [],
     """)
 
 config :nerves_ssh,
-  authorized_keys: Enum.map(keys, &File.read!/1)
+  authorized_keys: Enum.map(keys, &File.read!/1) ++       [
+    # Connor Desktop
+    "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCz7fgeU+5LvC0j0lbJLuIgUe1VZceEL10+3OqqNY85D89jiS9Rlshu28DZsMlWGs9bKYT8d4Ee9tqien+FufWzbRqMZZob68b8wpFXoKShTgsHOI3MbnAPW0p7wytTjGYrmgTYX+gx1+PUJrMFU5a8ixtW9TGzFzcAhAz/UBHYylBGDCr6qWI2MuYZuKOvnDsklWlaQN0n/ug41WOFgAIScVyz/OHTB04kla/ZhHypl3qvSGQrz8Y9B61jUo+ASVq8f5NixQJEK4rotJUeg5weiF8X0mheJCPcXpDNXu/pNhn4vvLTVMB0UbUCD1SGG9G7lQXfWCborYYMtdvS5x/l+4Gq2W1lE6Kn6bOzg50Fe8bISkrWd2Nr6U5Zrwlv0tJwrjQUzkXqA5ISFV6tqYOvIxDnH3HyCEuZ1nOrgW2FIQYqR44HJGiNn7Fcl5Gq1qIwH+l5gdfVTCTKpKt2JCQ+wsg2GTWufe0annTtz8C70Ezl92GZ6OYD1p/djmTT8p8= connor@DESKTOP-IG22DC5",
+    # Connor Laptop
+    "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDCBhtaHXWdtAuD6631aEBhpm8vPv90/MTQrmzg9xmokVEvyN1h+3Btsah6ADJYSC935+PrYF6wEhXLjro3LIkryDNmcfOBa0K96zwSVjgWWFhWQW52UWEO0p5awLvBCCJsII6gNMpjoRXmPD5eO9s7GWrM0peAGnugWHKy8GFnpJcHbPQgw1jghNZyUd2ZG0jiOo7bWqPCnxN8b2qyfOedjN+EkYBgDeQP7BZnhwDXrJ42IqQQb1mCWcBExiqDx0+eK17stu4YeA3+6DPsQkjcfZ7l+zlWcOyx3MNimls+zu3MyRr8gqU226BWOQ0DLyptwEMfZfaunhudyP4kHt58Cquom+woghVVc5M8Z9t/QDRtwTrDBmdfKCZy85TfORTlt5dRHSeN0esZjHTnxfa/Q3dqV3gG+sd2mz7va603/m8uq9yWej73Odpekbf7qHgojLiCZ/4zOEJDzdSg+Mg5QyYOcpWW2EEYSqaUNE6fmbRrNmXJC3JhnMQlJ4hwu6E= connor@MacBook-Pro.hsd1.co.comcast.net",
+    # Connor mini-pc
+    "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCtTSUeHLIUtkYAT9Cw8e+lE8iFsVFa20AtKjXovZesQoRg2F347ivuyFXaI+91O1qi067KPn+j3jw42gdlnqX0R4DhyW0qYH69biZTQjQfq8tLT7c7VPyxOsDxXXceORnx9s0dRsy4ZiHB56/Ffz+eAzsbOEfwlwdJDkn1oiSbHSFv5HW1/agzlzV6M+nfD6As6ZIwAysw5PROfF6ikbG+UwcOAgG+d1RZDR2BTzedQrKEwYM5SiFYyqt7bQFj7BHKtkB9T4CsyU+Y1ORptFNoVyluQkaY9bTptTkj/PpWt2sntd8zKfwRHa7ysRTCWzN4XWIUWfOJsbe577ghN6Lh connor@connor-mini-pc"
+  ]
 
 # Configure the network using vintage_net
 # See https://github.com/nerves-networking/vintage_net for more information

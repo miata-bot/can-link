@@ -8,9 +8,11 @@ defmodule CANLink.Application do
   require Logger
 
   @ifname "wlan0"
+  @app :can_link
 
   @impl true
   def start(_type, _args) do
+    maybe_start_distribution()
     # See https://hexdocs.pm/elixir/Supervisor.html
     # for other strategies and supported options
     opts = [strategy: :one_for_one, name: CANLink.Supervisor]
@@ -43,12 +45,31 @@ defmodule CANLink.Application do
     [
       {CANLink.CAN, []},
       {CANLink.Button, gpio_pin},
+      {CANLink.Radio, [spi_bus_name: "spidev1.0", irq_pin: 49, encrypt_key: <<161, 156, 95, 234, 11, 63, 65, 0, 72, 57, 168, 102, 210, 235, 14, 22>>]},
       # {CANLink.RGB, [tty: "ttyUSB0"]}
     ]
   end
 
   def target() do
     Application.get_env(:can_link, :target)
+  end
+
+  def maybe_start_distribution() do
+    _ = :os.cmd('epmd -daemon')
+    {:ok, hostname} = :inet.gethostname()
+
+    case Node.start(:"#{@app}@#{hostname}.local") do
+      {:ok, _pid} ->
+        Node.set_cookie(:KFUYVQEXKNOEJXOBANFE)
+        Logger.info("Distribution started at #{@app}@#{hostname}.local")
+
+      {:error, {:already_started, _}} ->
+        Node.set_cookie(:KFUYVQEXKNOEJXOBANFE)
+        Logger.info("Distribution started at #{@app}@#{hostname}.local")
+
+      _error ->
+        Logger.error("Failed to start distribution")
+    end
   end
 
   def maybe_start_wifi_wizard() do
@@ -65,7 +86,7 @@ defmodule CANLink.Application do
       # WiFi wizard on startup. Comment/remove the function below
       # if you want a more typical experience skipping the wizard
       # after it has been configured once.
-      # VintageNetWizard.run_wizard(on_exit: {__MODULE__, :on_wizard_exit, []})
+      VintageNetWizard.run_wizard(on_exit: {__MODULE__, :on_wizard_exit, []})
       false
     else
       :no_wifi ->
@@ -86,7 +107,7 @@ defmodule CANLink.Application do
   end
 
   def has_networks?() do
-    VintageNet.get_configuration(@ifname).vintage_net_wifi.networks != []
+    VintageNet.get_configuration(@ifname)[:vintage_net_wifi][:networks] != []
   end
 
   defp info_message(status) do

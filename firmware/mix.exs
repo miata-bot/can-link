@@ -39,11 +39,11 @@ defmodule CANLink.MixProject do
       {:gen_stage, "~> 1.1"},
       {:extty, "~> 0.2.1"},
       {:circuits_uart, "~> 1.4"},
-      {:decompilerl, "~> 0.0.1", only: :dev},
+      {:decompilerl, github: "aerosol/decompilerl", only: :dev, targets: :host},
       {:circuits_gpio, "~> 1.0", targets: @all_targets, override: true},
       {:circuits_spi, "~> 1.3", targets: @all_targets, override: true},
-      {:rf69, github: "connorrigby/elixir-rf69", targets: @all_targets},
-      # {:rf69, path: "../elixir-rf69", targets: @all_targets},
+      # {:rf69, github: "connorrigby/elixir-rf69", targets: @all_targets},
+      {:rf69, path: "../elixir-rf69", targets: @all_targets},
 
       # Dependencies for all targets except :host
       {:nerves_runtime, "~> 0.11.3", targets: @all_targets},
