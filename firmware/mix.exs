@@ -44,6 +44,7 @@ defmodule CANLink.MixProject do
       {:circuits_spi, "~> 1.3", targets: @all_targets, override: true},
       # {:rf69, github: "connorrigby/elixir-rf69", targets: @all_targets},
       {:rf69, path: "../elixir-rf69", targets: @all_targets},
+      {:gpsd, path: "../elixir-gpsd", targets: @all_targets},
 
       # Dependencies for all targets except :host
       {:nerves_runtime, "~> 0.11.3", targets: @all_targets},

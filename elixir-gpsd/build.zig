@@ -23,51 +23,7 @@ pub fn build(b: *std.build.Builder) void {
     erlcmd.linkLibC();
     erlcmd.addCSourceFile("src/erlcmd.c", &c_flags);
 
-    const lua = b.addStaticLibrary("lua", null);
-    lua.addIncludeDir("lua-5.3.4/src");
-    lua.linkLibC();
-
-    const lua_c_files = [_][]const u8{
-        "lapi.c",
-        "lauxlib.c",
-        "lbaselib.c",
-        "lbitlib.c",
-        "lcode.c",
-        "lcorolib.c",
-        "lctype.c",
-        "ldblib.c",
-        "ldebug.c",
-        "ldo.c",
-        "ldump.c",
-        "lfunc.c",
-        "lgc.c",
-        "linit.c",
-        "liolib.c",
-        "llex.c",
-        "lmathlib.c",
-        "lmem.c",
-        "loadlib.c",
-        "lobject.c",
-        "lopcodes.c",
-        "loslib.c",
-        "lparser.c",
-        "lstate.c",
-        "lstring.c",
-        "lstrlib.c",
-        "ltable.c",
-        "ltablib.c",
-        "ltm.c",
-        "lundump.c",
-        "lutf8lib.c",
-        "lvm.c",
-        "lzio.c",
-    };
-
-    inline for (lua_c_files) |c_file| {
-        lua.addCSourceFile("lua-5.3.6/src/" ++ c_file, &c_flags);
-    }
-
-    const exe = b.addExecutable("canscript", "src/main.zig");
+    const exe = b.addExecutable("gpsd_port", "src/main.zig");
     exe.setTarget(target);
     exe.setBuildMode(mode);
     exe.linkLibC();
@@ -77,8 +33,8 @@ pub fn build(b: *std.build.Builder) void {
     exe.addIncludeDir("/home/connor/.asdf/installs/erlang/24.0.3/usr/include/");
     exe.linkLibrary(erlcmd);
 
-    exe.addIncludeDir("lua-5.3.6/src");
-    exe.linkLibrary(lua);
+    exe.linkSystemLibrary("libgps");
+    exe.linkSystemLibrary("m");
 
     const run_cmd = exe.run();
     run_cmd.step.dependOn(b.getInstallStep());

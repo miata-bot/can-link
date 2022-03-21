@@ -2,7 +2,6 @@
 /nerves_system_bbb_can
 /o
 .elixir_ls
-zig-cache
-zig-out
 elixir-rf69
 /RFM69
+zig*
