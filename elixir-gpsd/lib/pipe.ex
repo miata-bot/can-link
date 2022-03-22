@@ -20,14 +20,18 @@ defmodule GPSd.Pipe do
         :binary
       ])
 
-    {:ok, %{port: port, controlling_process: pid}}
+    {:ok, %{port: port, controlling_process: pid, buffer: <<>>}}
+  end
+
+  def handle_info({_, {:data, {:noeol, line}}}, state) do
+    {:noreply, %{state | buffer: state.buffer <> line}}
   end
 
   def handle_info({_, {:data, {:eol, line}}}, state) do
-    with {:ok, data} <- Jason.decode(line),
+    with {:ok, data} <- Jason.decode(state.buffer <> line),
          {:ok, message} <- decode_message(data) do
       send(state.controlling_process, message)
-      {:noreply, state}
+      {:noreply, %{state | buffer: <<>>}}
     else
       _error ->
         {:noreply, state}

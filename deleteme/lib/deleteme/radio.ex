@@ -23,7 +23,7 @@ defmodule Radio do
 
     case RF69.start_link(state.args) do
       {:ok, radio} ->
-        Process.send_after(self(), :start_send, 5000)
+        # Process.send_after(self(), :start_send, 5000)
         {:noreply, %{state | radio: radio}}
 
       error ->
@@ -36,6 +36,11 @@ defmodule Radio do
     paylod =  :crypto.strong_rand_bytes(16)
     RF69.send(state.radio, 1, false, paylod)
     Process.send_after(self(), :start_send, 5000)
+    {:noreply, state}
+  end
+
+  def handle_info(%{payload: <<lat::float-64, lon::float-64>>}, state) do
+    Logger.info(%{lattitude: lat, longitude: lon})
     {:noreply, state}
   end
 

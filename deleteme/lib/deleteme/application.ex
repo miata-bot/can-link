@@ -32,6 +32,7 @@ defmodule Deleteme.Application do
 
   def children(_target) do
     [
+      Radio
       # Children for all targets except host
       # Starts a worker by calling: Deleteme.Worker.start_link(arg)
       # {Deleteme.Worker, arg},
