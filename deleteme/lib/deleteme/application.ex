@@ -13,6 +13,7 @@ defmodule Deleteme.Application do
 
     children =
       [
+        {Phoenix.PubSub, name: Deleteme.PubSub}
         # Children for all targets
         # Starts a worker by calling: Deleteme.Worker.start_link(arg)
         # {Deleteme.Worker, arg},
@@ -32,7 +33,8 @@ defmodule Deleteme.Application do
 
   def children(_target) do
     [
-      Radio
+      Radio,
+      {Deleteme.Bluetooth, []},
       # Children for all targets except host
       # Starts a worker by calling: Deleteme.Worker.start_link(arg)
       # {Deleteme.Worker, arg},

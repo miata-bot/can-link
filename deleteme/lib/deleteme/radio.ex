@@ -10,12 +10,16 @@ defmodule Radio do
     GenServer.cast(__MODULE__, {:send, node_id, pkt})
   end
 
+  def location() do
+    GenServer.call(__MODULE__, :get_location)
+  end
+
   def init(_args) do
     send(self(), :init_radio)
     args = [spi_bus_name: "spidev0.0", irq_pin: 25, node_id: 2,
     # encrypt_key: <<161, 156, 95, 234, 11, 63, 65, 0, 72, 57, 168, 102, 210, 235, 14, 22>>
     ]
-    {:ok, %{radio: nil, args: args}}
+    {:ok, %{radio: nil, args: args, lat: 0, lon: 0}}
   end
 
   def handle_info(:init_radio, state) do
@@ -40,8 +44,9 @@ defmodule Radio do
   end
 
   def handle_info(%{payload: <<lat::float-64, lon::float-64>>}, state) do
-    Logger.info(%{lattitude: lat, longitude: lon})
-    {:noreply, state}
+    # Logger.info(%{lattitude: lat, longitude: lon})
+    Phoenix.PubSub.broadcast(Deleteme.PubSub, "location", %{topic: "location", payload: %{location: %{lattitude: lat, longitude: lon}}})
+    {:noreply, %{state | lat: lat, lon: lon}}
   end
 
   def handle_info(packet, state) do
@@ -52,5 +57,9 @@ defmodule Radio do
   def handle_cast({:send, node_id, pkt}, state) do
     RF69.send(state.radio, node_id, false, pkt)
     {:noreply, state}
+  end
+
+  def handle_call(:get_location, _from, state) do
+    {:reply, {state.lat, state.lon}, state}
   end
 end

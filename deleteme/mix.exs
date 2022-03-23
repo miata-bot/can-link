@@ -41,6 +41,10 @@ defmodule Deleteme.MixProject do
       # Dependencies for all targets except :host
       {:nerves_runtime, "~> 0.11.6", targets: @all_targets},
       {:nerves_pack, "~> 0.6.0", targets: @all_targets},
+      {:phoenix_pubsub, "~> 2.0"},
+
+      {:blue_heron, path: "/home/connor/workspace/blue-heron/blue_heron", override: true},
+      {:blue_heron_transport_uart, path: "/home/connor/workspace/blue-heron/blue_heron_transport_uart", override: true},
 
       # Dependencies for specific targets
       # NOTE: It's generally low risk and recommended to follow minor version
