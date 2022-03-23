@@ -14,7 +14,7 @@ defmodule Deleteme.Bluetooth do
 
   defmodule LocationService do
     alias BlueHeron.GATT.{Characteristic, Characteristic.Descriptor, Service}
-
+require Logger
     def service do
       Service.new(%{
         id: __MODULE__,
@@ -35,19 +35,24 @@ defmodule Deleteme.Bluetooth do
     def write(_, _), do: "error"
 
     def read(:location) do
+      Logger.info "read"
       {lat, lon} = Radio.location()
       <<lat::little-float-64, lon::little-float-64>>
     end
 
     def subscribe(:location) do
+      Logger.info("subscribe");
       Phoenix.PubSub.subscribe(Deleteme.PubSub, "location")
     end
 
     def unsubscribe(:location) do
+      Logger.info("unsubscribe");
+
       Phoenix.PubSub.unsubscribe(Deleteme.PubSub, "location")
     end
 
     def notify(%{location: %{lattitude: lat, longitude: lon}}) do
+      Logger.info "notify"
       <<lat::little-float-64, lon::little-float-64>>
     end
   end
