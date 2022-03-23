@@ -19,6 +19,7 @@ defmodule CANLink.Application do
 
     children =
       [
+        {Phoenix.PubSub, name: CANLink.PubSub},
         CANLink.EngineData
         # Children for all targets
         # Starts a worker by calling: CANLink.Worker.start_link(arg)
@@ -39,17 +40,22 @@ defmodule CANLink.Application do
   end
 
   def children(_target) do
-    :os.cmd 'gpsd /dev/ttyS1 --nowait'
+    :os.cmd('killall -9 gpsd')
+    :os.cmd('gpsd /dev/ttyS1 --nowait')
     # maybe_start_wifi_wizard()
     gpio_pin = Application.get_env(:can_link, :button_pin, 68)
 
     [
       {CANLink.CAN, []},
       {CANLink.Button, gpio_pin},
-      {CANLink.Radio, [spi_bus_name: "spidev1.0", irq_pin: 49,
-      #  encrypt_key: <<161, 156, 95, 234, 11, 63, 65, 0, 72, 57, 168, 102, 210, 235, 14, 22>>
+      {CANLink.Radio,
+       [
+         spi_bus_name: "spidev1.0",
+         irq_pin: 49
+         #  encrypt_key: <<161, 156, 95, 234, 11, 63, 65, 0, 72, 57, 168, 102, 210, 235, 14, 22>>
        ]},
       {CANLink.GPS, []},
+      {CANLink.BLE, [port: "ttyS3", enable: 28]}
       # {CANLink.RGB, [tty: "ttyUSB0"]}
     ]
   end

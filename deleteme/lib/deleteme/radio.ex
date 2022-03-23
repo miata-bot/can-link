@@ -43,8 +43,8 @@ defmodule Radio do
     {:noreply, state}
   end
 
-  def handle_info(%{payload: <<lat::float-64, lon::float-64>>}, state) do
-    # Logger.info(%{lattitude: lat, longitude: lon})
+  def handle_info(%{payload: <<lat::float-little-64, lon::float-little-64>>}, state) do
+    Logger.info(%{lattitude: lat, longitude: lon})
     Phoenix.PubSub.broadcast(Deleteme.PubSub, "location", %{topic: "location", payload: %{location: %{lattitude: lat, longitude: lon}}})
     {:noreply, %{state | lat: lat, lon: lon}}
   end

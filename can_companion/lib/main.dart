@@ -1,5 +1,10 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
-import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
+import 'package:flutter_blue_plus/flutter_blue_plus.dart';
+import 'package:flutter_map/flutter_map.dart';
+import 'package:latlong2/latlong.dart';
+import 'dart:typed_data';
 
 void main() {
   runApp(MyApp());
@@ -48,29 +53,111 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
-  final flutterReactiveBle = FlutterReactiveBle();
+  FlutterBluePlus flutterBlue = FlutterBluePlus.instance;
+  BluetoothDevice? device = null;
+  BluetoothCharacteristic? characteristic = null;
+  double lat = 0.0;
+  double lon = 0.0;
 
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-      flutterReactiveBle.scanForDevices(withServices: []).listen((device) {
-        print("found device");
-        print(device);
-      }, onError: (error) {
-        print("error" + error.toString());
+  IconData buttonIcon = Icons.bluetooth;
+
+  bool scanning = false;
+
+  void _setLatLon(event) {
+    if (event.length == 16) {
+      print("sub event: ");
+      var a = Uint8List.fromList(event);
+      setState(() {
+        lat = ByteData.sublistView(a).getFloat64(0, Endian.little);
+        lon = ByteData.sublistView(a).getFloat64(8, Endian.little);
+        print(lat);
+        print(lon);
       });
+    } else {
+      print("unknown payload data");
+      print(event.toString());
+    }
+  }
+
+  void _disconnectDevice() {
+    if (device == null) return;
+    print("disconnecting");
+
+    device?.disconnect();
+    flutterBlue.stopScan();
+
+    setState(() {
+      scanning = false;
+      device = null;
+      characteristic = null;
     });
+  }
+
+  void _connectDevice() {
+    print("connecting");
+
+    if (device == null) return;
+    device?.connect(timeout: Duration(seconds: 10)).then((value) {
+      print("connected");
+      device?.discoverServices().then((services) {
+        for (BluetoothService service in services) {
+          for (BluetoothCharacteristic char in service.characteristics) {
+            if (char.uuid == Guid("1899b193-de16-de23-4ebd-a5447327b12f")) {
+              characteristic = char;
+              setState(() {
+                buttonIcon = Icons.bluetooth_connected;
+              });
+              char.setNotifyValue(true);
+              char.value.listen((event) {
+                _setLatLon(event);
+              });
+            } else {
+              print("wrong char");
+            }
+          }
+        }
+
+        services.forEach((element) {
+          print(element.toString());
+        });
+      }, onError: (error) {
+        print("failed to discover services");
+        print(error.toString());
+      });
+    }, onError: (error) {
+      print("failed to connect");
+      print(error.toString());
+    });
+  }
+
+  void _toggleScan() {
+    if (device != null) return;
+    if (characteristic != null) return;
+
+    print("starting scan");
+
+    if (!scanning) {
+      print("starting scan");
+      flutterBlue.startScan(timeout: Duration(seconds: 5));
+    } else {
+      print("stopping scan");
+      flutterBlue.stopScan();
+    }
+    setState(() {
+      scanning = !scanning;
+      if (scanning) {
+        buttonIcon = Icons.bluetooth_searching;
+      } else {
+        buttonIcon = Icons.bluetooth;
+      }
+    });
+    return;
   }
 
   @override
   Widget build(BuildContext context) {
     // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
+    // by the _toggleScan method above.
     //
     // The Flutter framework has been optimized to make rerunning build methods
     // fast, so that you can just rebuild anything that needs updating rather
@@ -101,486 +188,76 @@ class _MyHomePageState extends State<MyHomePage> {
           // horizontal).
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Text(
-              'You have pushed the button this many times:',
-            ),
-            // StreamBuilder(
-            //     stream: flutterReactiveBle.scanForDevices(
-            //         withServices: [],
-            //         scanMode: ScanMode.lowLatency,
-            //         requireLocationServicesEnabled: false),
-            //     initialData: [],
-            //     builder: (ctx, snapshot) {
-            //       if (snapshot.hasError) {
-            //         return new Text("Error!");
-            //       } else if (snapshot.data == null) {
-            //         return new Text("no data");
-            //       }
-            //       var data = snapshot.data as DiscoveredDevice;
-            //       if (data.name == 'rp-080c') {
-            //         print(data.name);
-            //         print(data.id);
-            //         return Text(data.id + data.name);
-            //       } else {
-            //         return Text("waiting");
-            //       }
-            //     }),
+            ButtonBar(alignment: MainAxisAlignment.start, children: [
+              TextButton(onPressed: _connectDevice, child: Text("Connect")),
+              TextButton(
+                  onPressed: _disconnectDevice, child: Text("Disconnect"))
+            ]),
             StreamBuilder(
-              stream: flutterReactiveBle.connectToAdvertisingDevice(
-                  id: "AA:AA:AA:AA:AA:AA",
-                  withServices: [],
-                  prescanDuration: Duration(seconds: 5)),
-              builder: (context, snapshot) {
-                if (snapshot.data.runtimeType != ConnectionStateUpdate) {
-                  print("non data");
-                  print(snapshot.data);
-                  flutterReactiveBle.scanForDevices(withServices: [
-                    // Uuid.parse("7513F64B-7077-2005-F0F1-1F8664DD00FB")
-                  ]).listen((device) {
-                    print("found device");
-                    print(device);
-                  }, onError: (error) {
-                    print("error" + error.toString());
-                  });
+                stream: flutterBlue.scanResults,
+                builder: (context, snapshot) {
+                  if (snapshot.data == null) {
+                    return Text("scan first");
+                  }
+                  for (ScanResult r in snapshot.data as List<ScanResult>) {
+                    if (r.device.id == DeviceIdentifier("98:84:E3:E0:D9:03")) {
+                      // flutterBlue.stopScan();
+                      device = r.device;
+                      // scanning = false;
+                      // buttonIcon = Icons.bluetooth;
+                      return Text("Found device: ${r.device.name}");
+                    } else {
+                      print(" nop ${r.device.id} ${r.device.name}");
+                    }
+                  }
 
-                  return Text("oops");
-                }
-
-                var update = snapshot.data as ConnectionStateUpdate;
-                if (update.connectionState == DeviceConnectionState.connected) {
-                  print("connected");
-                  final characteristic = QualifiedCharacteristic(
-                      serviceId:
-                          Uuid.parse("7513F64B-7077-2005-F0F1-1F8664DD00FB"),
-                      characteristicId:
-                          Uuid.parse("1899B193-DE16-DE23-4EBD-A5447327B12F"),
-                      deviceId: update.deviceId);
-                  flutterReactiveBle
-                      .subscribeToCharacteristic(characteristic)
-                      .listen((data) {
-                    // code to handle incoming data
-                    print("data" + data.toString());
-                  }, onError: (dynamic error) {
-                    // code to handle errors
-                    print("error" + error.toString());
-                  });
-                  return Text("ok");
-
-                  // return StreamBuilder(
-                  //     stream: flutterReactiveBle
-                  //         .discoverServices(update.deviceId)
-                  //         .asStream(),
-                  //     builder: (context, snapshot) {
-                  //       print("discover services");
-                  //       final characteristic = QualifiedCharacteristic(
-                  //           serviceId: Uuid.parse(
-                  //               "7513F64B-7077-2005-F0F1-1F8664DD00FB"),
-                  //           characteristicId: Uuid.parse(
-                  //               "1899B193-DE16-DE23-4EBD-A5447327B12F"),
-                  //           deviceId: update.deviceId);
-                  //       return StreamBuilder(
-                  //         stream: flutterReactiveBle
-                  //             .subscribeToCharacteristic(characteristic),
-                  //         builder: (context, snapshot) {
-                  //           print(snapshot);
-                  //           return Text("subscrubed");
-                  //         },
-                  //       );
-                  //     });
-                } else {
-                  return Text("waiting for connectin");
-                }
-              },
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
-            ),
+                  if (device != null) {
+                    return Text("Connected");
+                  } else {
+                    return Text("Scanning...");
+                  }
+                }),
+            Container(
+              width: 600,
+              height: 400,
+              child: FlutterMap(
+                key: UniqueKey(),
+                options: MapOptions(
+                  center: LatLng(lat, lon),
+                  zoom: 17.6,
+                ),
+                layers: [
+                  TileLayerOptions(
+                      urlTemplate:
+                          'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+                      subdomains: ['a', 'b', 'c']),
+                  MarkerLayerOptions(
+                    markers: [
+                      Marker(
+                        width: 80.0,
+                        height: 80.0,
+                        point: LatLng(39.918912845, -105.052755576),
+                        builder: (ctx) => Container(
+                          child: Icon(
+                            Icons.car_repair,
+                            color: Colors.red,
+                            size: 30.0,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            )
           ],
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+          onPressed: _toggleScan,
+          tooltip: 'Start/Stop Scan',
+          child: Icon(
+              buttonIcon)), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }
-
-// import 'package:flutter/material.dart';
-// import 'package:flutter_map/flutter_map.dart';
-// import 'package:latlong2/latlong.dart';
-// import 'dart:developer';
-
-// void main() {
-//   runApp(TestApp());
-// }
-
-// class TestApp extends StatefulWidget {
-//   @override
-//   _TestAppState createState() => _TestAppState();
-// }
-
-// class _TestAppState extends State<TestApp> {
-//   @override
-//   void initState() {
-//     super.initState();
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return MaterialApp(
-//       home: Scaffold(
-//         body: Center(
-//           child: Container(
-//             width: 600,
-//             height: 600,
-//             child: FlutterMap(
-//               options: MapOptions(
-//                 center: LatLng(39.918912845, -105.052755576),
-//                 zoom: 17.5,
-//               ),
-//               layers: [
-//                 TileLayerOptions(
-//                     urlTemplate:
-//                         'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-//                     subdomains: ['a', 'b', 'c']),
-//                 MarkerLayerOptions(
-//                   markers: [
-//                     Marker(
-//                       width: 80.0,
-//                       height: 80.0,
-//                       point: LatLng(39.918912845, -105.052755576),
-//                       builder: (ctx) => Container(
-//                         child: Icon(
-//                           Icons.car_repair,
-//                           color: Colors.red,
-//                           size: 30.0,
-//                         ),
-//                       ),
-//                     ),
-//                   ],
-//                 ),
-//               ],
-//             ),
-//           ),
-//         ),
-//       ),
-//     );
-//   }
-// }
-
-// Copyright 2017, Paul DeMarco.
-// All rights reserved. Use of this source code is governed by a
-// BSD-style license that can be found in the LICENSE file.
-
-// import 'dart:async';
-// import 'dart:math';
-
-// import 'package:flutter/material.dart';
-// import 'package:flutter_blue_plus/flutter_blue_plus.dart';
-// import 'widgets.dart';
-// import 'dart:developer' as developer;
-
-// void main() {
-//   runApp(FlutterBlueApp());
-// }
-
-// class FlutterBlueApp extends StatelessWidget {
-//   @override
-//   Widget build(BuildContext context) {
-//     return MaterialApp(
-//       color: Colors.lightBlue,
-//       home: StreamBuilder<BluetoothState>(
-//           stream: FlutterBluePlus.instance.state,
-//           initialData: BluetoothState.unknown,
-//           builder: (c, snapshot) {
-//             final state = snapshot.data;
-//             if (state == BluetoothState.on) {
-//               return FindDevicesScreen();
-//             }
-//             return BluetoothOffScreen(state: state);
-//           }),
-//     );
-//   }
-// }
-
-// class BluetoothOffScreen extends StatelessWidget {
-//   const BluetoothOffScreen({Key? key, this.state}) : super(key: key);
-
-//   final BluetoothState? state;
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       backgroundColor: Colors.lightBlue,
-//       body: Center(
-//         child: Column(
-//           mainAxisSize: MainAxisSize.min,
-//           children: <Widget>[
-//             Icon(
-//               Icons.bluetooth_disabled,
-//               size: 200.0,
-//               color: Colors.white54,
-//             ),
-//             Text(
-//               'Bluetooth Adapter is ${state != null ? state.toString().substring(15) : 'not available'}.',
-//               style: Theme.of(context)
-//                   .primaryTextTheme
-//                   .subtitle1
-//                   ?.copyWith(color: Colors.white),
-//             ),
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-// }
-
-// class FindDevicesScreen extends StatelessWidget {
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         title: Text('Find Devices'),
-//       ),
-//       body: RefreshIndicator(
-//         onRefresh: () =>
-//             FlutterBluePlus.instance.startScan(timeout: Duration(seconds: 4)),
-//         child: SingleChildScrollView(
-//           child: Column(
-//             children: <Widget>[
-//               StreamBuilder<List<BluetoothDevice>>(
-//                 stream: Stream.periodic(Duration(seconds: 2))
-//                     .asyncMap((_) => FlutterBluePlus.instance.connectedDevices),
-//                 initialData: [],
-//                 builder: (c, snapshot) => Column(
-//                   children: snapshot.data!
-//                       .map((d) => ListTile(
-//                             title: Text(d.name),
-//                             subtitle: Text(d.id.toString()),
-//                             trailing: StreamBuilder<BluetoothDeviceState>(
-//                               stream: d.state,
-//                               initialData: BluetoothDeviceState.disconnected,
-//                               builder: (c, snapshot) {
-//                                 if (snapshot.data ==
-//                                     BluetoothDeviceState.connected) {
-//                                   return RaisedButton(
-//                                     child: Text('OPEN'),
-//                                     onPressed: () => Navigator.of(context).push(
-//                                         MaterialPageRoute(
-//                                             builder: (context) =>
-//                                                 DeviceScreen(device: d))),
-//                                   );
-//                                 }
-//                                 return Text(snapshot.data.toString());
-//                               },
-//                             ),
-//                           ))
-//                       .toList(),
-//                 ),
-//               ),
-//               StreamBuilder<List<ScanResult>>(
-//                 stream: FlutterBluePlus.instance.scanResults,
-//                 initialData: [],
-//                 builder: (c, snapshot) => Column(
-//                   children: snapshot.data!
-//                       .map(
-//                         (r) => ScanResultTile(
-//                           result: r,
-//                           onTap: () => Navigator.of(context)
-//                               .push(MaterialPageRoute(builder: (context) {
-//                             r.device.connect();
-//                             return DeviceScreen(device: r.device);
-//                           })),
-//                         ),
-//                       )
-//                       .toList(),
-//                 ),
-//               ),
-//             ],
-//           ),
-//         ),
-//       ),
-//       floatingActionButton: StreamBuilder<bool>(
-//         stream: FlutterBluePlus.instance.isScanning,
-//         initialData: false,
-//         builder: (c, snapshot) {
-//           if (snapshot.data!) {
-//             return FloatingActionButton(
-//               child: Icon(Icons.stop),
-//               onPressed: () => FlutterBluePlus.instance.stopScan(),
-//               backgroundColor: Colors.red,
-//             );
-//           } else {
-//             return FloatingActionButton(
-//                 child: Icon(Icons.search),
-//                 onPressed: () => FlutterBluePlus.instance
-//                     .startScan(timeout: Duration(seconds: 4)));
-//           }
-//         },
-//       ),
-//     );
-//   }
-// }
-
-// class _DeviceScreenState extends State<DeviceScreen> {
-//   @override
-//   Widget build(BuildContext context) {
-//     return Container(color: const Color(0xFFFFE306));
-//   }
-// }
-
-// class DeviceScreen extends StatefulWidget {
-//   const DeviceScreen({Key? key, required this.device}) : super(key: key);
-//   final BluetoothDevice device;
-
-//   @override
-//   State<DeviceScreen> createState() => _DeviceScreenState();
-
-//   Widget _buildServiceTiles(List<BluetoothService> services) {
-//     developer.log("HELP ME");
-//     services.forEach((element) {
-//       developer.log(element.toString());
-//     });
-//     var service = services.firstWhere(
-//         (element) => element.uuid == "00002a28-0000-1000-8000-00805f9b34fb");
-
-//     return Container(
-//       width: 600,
-//       height: 600,
-//       child: FlutterMap(
-//         options: MapOptions(
-//           center: LatLng(39.918912845, -105.052755576),
-//           zoom: 17.5,
-//         ),
-//         layers: [
-//           TileLayerOptions(
-//               urlTemplate: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-//               subdomains: ['a', 'b', 'c']),
-//           MarkerLayerOptions(
-//             markers: [
-//               Marker(
-//                 width: 80.0,
-//                 height: 80.0,
-//                 point: LatLng(39.918912845, -105.052755576),
-//                 builder: (ctx) => Container(
-//                   child: Icon(
-//                     Icons.car_repair,
-//                     color: Colors.red,
-//                     size: 30.0,
-//                   ),
-//                 ),
-//               ),
-//             ],
-//           ),
-//         ],
-//       ),
-//     );
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         title: Text(device.name),
-//         actions: <Widget>[
-//           StreamBuilder<BluetoothDeviceState>(
-//             stream: device.state,
-//             initialData: BluetoothDeviceState.connecting,
-//             builder: (c, snapshot) {
-//               VoidCallback? onPressed;
-//               String text;
-//               switch (snapshot.data) {
-//                 case BluetoothDeviceState.connected:
-//                   onPressed = () => device.disconnect();
-//                   text = 'DISCONNECT';
-//                   break;
-//                 case BluetoothDeviceState.disconnected:
-//                   onPressed = () => device.connect();
-//                   text = 'CONNECT';
-//                   break;
-//                 default:
-//                   onPressed = null;
-//                   text = snapshot.data.toString().substring(21).toUpperCase();
-//                   break;
-//               }
-//               return FlatButton(
-//                   onPressed: onPressed,
-//                   child: Text(
-//                     text,
-//                     style: Theme.of(context)
-//                         .primaryTextTheme
-//                         .button
-//                         ?.copyWith(color: Colors.white),
-//                   ));
-//             },
-//           )
-//         ],
-//       ),
-//       body: SingleChildScrollView(
-//         child: Column(
-//           children: <Widget>[
-//             StreamBuilder<BluetoothDeviceState>(
-//               stream: device.state,
-//               initialData: BluetoothDeviceState.connecting,
-//               builder: (c, snapshot) => ListTile(
-//                 leading: (snapshot.data == BluetoothDeviceState.connected)
-//                     ? Icon(Icons.bluetooth_connected)
-//                     : Icon(Icons.bluetooth_disabled),
-//                 title: Text(
-//                     'Device is ${snapshot.data.toString().split('.')[1]}.'),
-//                 subtitle: Text('${device.id}'),
-//                 trailing: StreamBuilder<bool>(
-//                   stream: device.isDiscoveringServices,
-//                   initialData: false,
-//                   builder: (c, snapshot) => IndexedStack(
-//                     index: snapshot.data! ? 1 : 0,
-//                     children: <Widget>[
-//                       IconButton(
-//                         icon: Icon(Icons.refresh),
-//                         onPressed: () => device.discoverServices(),
-//                       ),
-//                       IconButton(
-//                         icon: SizedBox(
-//                           child: CircularProgressIndicator(
-//                             valueColor: AlwaysStoppedAnimation(Colors.grey),
-//                           ),
-//                           width: 18.0,
-//                           height: 18.0,
-//                         ),
-//                         onPressed: null,
-//                       )
-//                     ],
-//                   ),
-//                 ),
-//               ),
-//             ),
-//             StreamBuilder<int>(
-//               stream: device.mtu,
-//               initialData: 0,
-//               builder: (c, snapshot) => ListTile(
-//                 title: Text('MTU Size'),
-//                 subtitle: Text('${snapshot.data} bytes'),
-//                 trailing: IconButton(
-//                   icon: Icon(Icons.edit),
-//                   onPressed: () => device.requestMtu(223),
-//                 ),
-//               ),
-//             ),
-//             StreamBuilder<List<BluetoothService>>(
-//               stream: device.services,
-//               initialData: [],
-//               builder: (c, snapshot) {
-//                 return Container(
-//                   child: _buildServiceTiles(snapshot.data!),
-//                 );
-//               },
-//             ),
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-// }
