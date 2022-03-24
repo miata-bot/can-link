@@ -9,9 +9,16 @@ defmodule CANLink.PWM do
   """
 
   @pwms [
-    led_r: {0, 0},
-    led_g: {0, 1},
-    # led_b: {4, 0}
+    a: {1, 0},
+    b: {1, 1},
+    c: {2, 0},
+    d: {2, 1},
+    e: {3, 1},
+    f: {3, 2},
+    g: {4, 0},
+    h: {4, 1},
+    i: {0, 0},
+    j: {0, 1},
   ]
 
   # Period for 25kHz PWM
