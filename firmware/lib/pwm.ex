@@ -5,20 +5,15 @@ defmodule CANLink.PWM do
   pwm:
      ehrpwm1A == pwmchip2/pwm0 (LED R)
      ehrpwm1B == pwmchip2/pwm1 (LED G)
-     ehrpwm2A == pwmchip4/pwm0 (LED B)
+     ehrpwm2A == pwmchip0/pwm0 (LED B)
+     ehrpwm2B == pwmchip0/pwm1 (LED B)
   """
 
   @pwms [
-    a: {1, 0},
-    b: {1, 1},
-    c: {2, 0},
-    d: {2, 1},
-    e: {3, 1},
-    f: {3, 2},
-    g: {4, 0},
-    h: {4, 1},
-    i: {0, 0},
-    j: {0, 1},
+    led_r: {2, 0},
+    led_g: {2, 1},
+    led_b: {0, 0},
+    a: {0, 1},
   ]
 
   # Period for 25kHz PWM

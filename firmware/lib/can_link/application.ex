@@ -44,7 +44,7 @@ defmodule CANLink.Application do
     :os.cmd('gpsd /dev/ttyS1 --nowait')
     # maybe_start_wifi_wizard()
     gpio_pin = Application.get_env(:can_link, :button_pin, 68)
-
+    CANLink.PWM.init()
     [
       {CANLink.CAN, []},
       {CANLink.Button, gpio_pin},
@@ -55,8 +55,8 @@ defmodule CANLink.Application do
          #  encrypt_key: <<161, 156, 95, 234, 11, 63, 65, 0, 72, 57, 168, 102, 210, 235, 14, 22>>
        ]},
       {CANLink.GPS, []},
-      {CANLink.BLE, [port: "ttyS3", enable: 28]}
-      # {CANLink.RGB, [tty: "ttyUSB0"]}
+      {CANLink.BLE, [port: "ttyS3", enable: 28]},
+      {CANLink.RGB, []}
     ]
   end
 

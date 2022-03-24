@@ -68,7 +68,7 @@ defmodule CANLink.MixProject do
       # version updates, please review their release notes in case
       # changes to your application are needed.
       # {:nerves_system_bbb_can, path: "../nerves_system_bbb_can", runtime: false, targets: :bbb}
-      {:nerves_system_bbb_can, github: "ConnorRigby/nerves_system_bbb_can", tag: "v0.5.0", runtime: false, targets: :bbb}
+      {:nerves_system_bbb_can, github: "ConnorRigby/nerves_system_bbb_can", tag: "v0.6.0", runtime: false, targets: :bbb}
     ]
   end
 
