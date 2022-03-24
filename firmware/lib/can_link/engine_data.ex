@@ -18,13 +18,6 @@ defmodule CANLink.EngineData do
   @impl GenServer
   def handle_cast({:dispatch, frames}, old_state) do
     state = Enum.reduce(frames, old_state, &handle_frame/2)
-
-    if(old_state[:throttle_position] != state[:throttle_position]) do
-      tps = round(state[:throttle_position] || 0.0)
-      CANLink.RGB.set_color(tps, 0, 0)
-    end
-
-    # Logger.info(%{tps: tps})
     {:noreply, state}
   end
 
@@ -38,10 +31,5 @@ defmodule CANLink.EngineData do
         # Logger.error("Dropped frame: #{inspect(frame)}")
         state
     end
-  end
-
-  def handle_frame({id, frame}, state) do
-    Logger.warn("unknown frame id: #{inspect(id)} #{inspect(frame)}")
-    state
   end
 end

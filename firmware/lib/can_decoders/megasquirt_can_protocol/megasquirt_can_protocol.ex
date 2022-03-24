@@ -2,7 +2,7 @@ defmodule MegasquirtCANProtocol do
   import MegasquirtCANProtocol.CSVUtil
 
   specs =
-    File.stream!("ms-can-proto.csv")
+    File.stream!("lib/can_decoders/megasquirt_can_protocol/ms-can-proto.csv")
     |> NimbleCSV.RFC4180.parse_stream()
     |> Enum.to_list()
     |> Enum.with_index(2)

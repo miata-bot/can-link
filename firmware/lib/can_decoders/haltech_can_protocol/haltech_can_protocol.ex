@@ -1,7 +1,7 @@
 defmodule HaltechCANProtocol do
   import HaltechCANProtocol.CSVUtil
 
-  @external_resource "Haltech-CAN-Broadcast-Protocol-V2.35.0.csv"
+  @external_resource "lib/can_decoders/haltech_can_protocol/Haltech-CAN-Broadcast-Protocol-V2.35.0.csv"
   {last, acc} =
     File.stream!(@external_resource)
     |> NimbleCSV.RFC4180.parse_stream()

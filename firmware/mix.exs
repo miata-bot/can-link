@@ -33,6 +33,8 @@ defmodule CANLink.MixProject do
       # Dependencies for all targets
       {:nerves, "~> 1.7.4", runtime: false},
       {:nimble_csv, "~> 1.2", runtime: false},
+      {:decompilerl, github: "aerosol/decompilerl", only: :dev, targets: :host},
+
       {:shoehorn, "~> 0.7.0"},
       {:ring_logger, "~> 0.8.1"},
       {:toolshed, "~> 0.2.13"},
@@ -41,26 +43,22 @@ defmodule CANLink.MixProject do
       {:circuits_uart, "~> 1.4"},
       {:phoenix_pubsub, "~> 2.0"},
 
-      {:decompilerl, github: "aerosol/decompilerl", only: :dev, targets: :host},
       {:circuits_gpio, "~> 1.0", targets: @all_targets, override: true},
       {:circuits_spi, "~> 1.3", targets: @all_targets, override: true},
-      # {:rf69, github: "connorrigby/elixir-rf69", targets: @all_targets},
-      {:rf69, path: "../elixir-rf69", targets: @all_targets},
-      {:gpsd, path: "../elixir-gpsd", targets: @all_targets},
-
-      # Dependencies for all targets except :host
-      {:nerves_runtime, "~> 0.11.3", targets: @all_targets},
-      {:nerves_pack, "~> 0.6.0", targets: @all_targets},
-      {:vintage_net_wizard, "~> 0.2", targets: @all_targets},
-      {:nerves_time_rtc_abracon, "~> 0.2.1", targets: @all_targets},
-
-      # {:can, github: "tonyrog/can", targets: @all_targets},
+      {:rf69, path: "../elixir-rf69"},
+      {:gpsd, path: "../elixir-gpsd"},
       {:ng_can, path: "../ng_can", targets: @all_targets},
       {:blue_heron, github: "blue-heron/blue_heron", branch: "peripheral-updates-cr", override: true},
       {:blue_heron_transport_uart,
        github: "blue-heron/blue_heron_transport_uart", branch: "wilink8", override: true},
       {:blue_heron_ti_wl18xx,
        github: "blue-heron/blue_heron_ti_wl18xx", branch: "main", override: true},
+
+      # Dependencies for all targets except :host
+      {:nerves_runtime, "~> 0.11.3", targets: @all_targets},
+      {:nerves_pack, "~> 0.6.0", targets: @all_targets},
+      {:vintage_net_wizard, "~> 0.2", targets: @all_targets},
+      {:nerves_time_rtc_abracon, "~> 0.2.1", targets: @all_targets},
 
       # Dependencies for specific targets
       # NOTE: It's generally low risk and recommended to follow minor version
