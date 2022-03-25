@@ -34,7 +34,6 @@ defmodule CANLink.MixProject do
       {:nerves, "~> 1.7.4", runtime: false},
       {:nimble_csv, "~> 1.2", runtime: false},
       {:decompilerl, github: "aerosol/decompilerl", only: :dev, targets: :host},
-
       {:shoehorn, "~> 0.7.0"},
       {:ring_logger, "~> 0.8.1"},
       {:toolshed, "~> 0.2.13"},
@@ -42,17 +41,14 @@ defmodule CANLink.MixProject do
       {:extty, "~> 0.2.1"},
       {:circuits_uart, "~> 1.4"},
       {:phoenix_pubsub, "~> 2.0"},
-
       {:circuits_gpio, "~> 1.0", targets: @all_targets, override: true},
       {:circuits_spi, "~> 1.3", targets: @all_targets, override: true},
       {:rf69, path: "../elixir-rf69"},
       {:gpsd, path: "../elixir-gpsd"},
       {:ng_can, path: "../ng_can", targets: @all_targets},
       {:blue_heron, github: "blue-heron/blue_heron", branch: "peripheral-updates-cr", override: true},
-      {:blue_heron_transport_uart,
-       github: "blue-heron/blue_heron_transport_uart", branch: "wilink8", override: true},
-      {:blue_heron_ti_wl18xx,
-       github: "blue-heron/blue_heron_ti_wl18xx", branch: "main", override: true},
+      {:blue_heron_transport_uart, github: "blue-heron/blue_heron_transport_uart", branch: "wilink8", override: true},
+      {:blue_heron_ti_wl18xx, github: "blue-heron/blue_heron_ti_wl18xx", branch: "main", override: true},
 
       # Dependencies for all targets except :host
       {:nerves_runtime, "~> 0.11.3", targets: @all_targets},
@@ -65,8 +61,8 @@ defmodule CANLink.MixProject do
       # bumps to Nerves systems. Since these include Linux kernel and Erlang
       # version updates, please review their release notes in case
       # changes to your application are needed.
-      # {:nerves_system_bbb_can, path: "../nerves_system_bbb_can", runtime: false, targets: :bbb}
-      {:nerves_system_bbb_can, github: "ConnorRigby/nerves_system_bbb_can", tag: "v0.6.0", runtime: false, targets: :bbb}
+      {:nerves_system_bbb_can, path: "../nerves_system_bbb_can", runtime: false, targets: :bbb}
+      # {:nerves_system_bbb_can, github: "ConnorRigby/nerves_system_bbb_can", tag: "v0.6.0", runtime: false, targets: :bbb}
     ]
   end
 

@@ -30,6 +30,7 @@ defmodule CANLink.GPS do
     # CANLink.Radio.send_packet(0, <<lat::float-little-64, lon::float-little-64>>)
     {:noreply, %{state | lat: lat, lon: lon}}
   end
+
   def handle_info(_message, state) do
     # Logger.info(%{gps: message})
     {:noreply, state}

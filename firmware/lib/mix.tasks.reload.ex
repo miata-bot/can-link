@@ -4,7 +4,12 @@ defmodule Mix.Tasks.Reload do
   @app "can_link"
 
   def run(opts) do
-    {args, extra, _} = OptionParser.parse(opts, strict: [name: :string, hostname: :string, app: :string, restart: :boolean], aliases: [n: :name, a: :app, h: :hostname, r: :restart])
+    {args, extra, _} =
+      OptionParser.parse(opts,
+        strict: [name: :string, hostname: :string, app: :string, restart: :boolean],
+        aliases: [n: :name, a: :app, h: :hostname, r: :restart]
+      )
+
     unless Enum.empty?(extra), do: Mix.raise("Unknown args: #{inspect(extra)}")
     {:ok, _} = Node.start(:reloader@localhost)
     Node.set_cookie(:KFUYVQEXKNOEJXOBANFE)

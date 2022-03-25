@@ -22,7 +22,14 @@ defmodule CANLink.CANScript do
   end
 
   def init(_) do
-    port = Port.open({:spawn_executable, '/home/connor/workspace/sixtyeightplus.one/can-link/canscript/zig-out/bin/canscript'}, [{:packet, 2}, :nouse_stdio, :binary, :exit_status])
+    port =
+      Port.open({:spawn_executable, '/home/connor/workspace/sixtyeightplus.one/can-link/canscript/zig-out/bin/canscript'}, [
+        {:packet, 2},
+        :nouse_stdio,
+        :binary,
+        :exit_status
+      ])
+
     {:ok, %{port: port}}
   end
 
@@ -37,16 +44,20 @@ defmodule CANLink.CANScript do
       i8 when i8 <= 128 and i8 >= -128 ->
         Port.command(state.port, <<0, key, 0, value::little-signed>>)
     end
+
     {:reply, :ok, state}
   end
 
   def handle_call({:get, key}, _from, state) do
     Port.command(state.port, <<1, key>>)
+
     receive do
       {_port, {:data, <<1, ^key, 0, value>>}} ->
         {:reply, {:ok, value}, state}
+
       {_port, {:data, <<1, ^key, 1, value::little-signed>>}} ->
         {:reply, {:ok, value}, state}
+
       {_port, {:data, <<1, ^key, 2, value::little-float-64>>}} ->
         {:reply, {:ok, value}, state}
     end
@@ -54,9 +65,11 @@ defmodule CANLink.CANScript do
 
   def handle_call({:load, file}, _from, state) do
     Port.command(state.port, <<2, file::binary>>)
+
     receive do
       {_port, {:data, <<2, 0>>}} ->
         {:reply, :ok, state}
+
       {_port, {:data, <<2, 1, error::binary>>}} ->
         {:reply, {:error, error}, state}
     end
@@ -64,9 +77,11 @@ defmodule CANLink.CANScript do
 
   def handle_call(:pcallk, _from, state) do
     Port.command(state.port, <<3>>)
+
     receive do
       {_port, {:data, <<3, 0>>}} ->
         {:reply, :ok, state}
+
       {_port, {:data, <<3, 1, error::binary>>}} ->
         {:reply, {:error, error}, state}
     end

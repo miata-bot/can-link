@@ -11,7 +11,7 @@ defmodule CANLink.BLE.GenericAttributeService do
         Characteristic.new(%{
           id: {__MODULE__, :service_changed},
           type: 0x2A05,
-          properties: 0x20,
+          properties: 0x20
           # descriptor:
           #   Descriptor.new(%{
           #     permissions: 0b00000010

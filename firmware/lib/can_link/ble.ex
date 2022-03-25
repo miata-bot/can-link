@@ -170,7 +170,6 @@ defmodule CANLink.BLE do
         Logger.info("Started Bluetooth peripheral")
         _ = File.write("/sys/class/leds/beaglebone:green:usr0/invert", "1")
 
-
         data = %{data | peripheral: peripheral}
         actions = [{:next_event, :internal, :init}]
         {:next_state, :advertise, data, actions}
@@ -247,12 +246,13 @@ defmodule CANLink.BLE do
     _ = File.write("/sys/class/leds/beaglebone:green:usr0/trigger", "oneshot")
     _ = File.write("/sys/class/leds/beaglebone:green:usr0/invert", "0")
 
-
     # restart advertising after a disconnect.
     actions = [{:next_event, :internal, :init}]
+
     for {mod, id} <- data.subscriptions do
       mod.unsubscribe(id)
     end
+
     {:keep_state, %{data | subscriptions: []}, actions}
   end
 
@@ -305,9 +305,11 @@ defmodule CANLink.BLE do
   def do_disable(data) do
     {:ok, pin_ref} = Circuits.GPIO.open(data.enable, :output)
     Circuits.GPIO.write(pin_ref, 0)
+
     for {mod, id} <- data.subscriptions do
       mod.unsubscribe(id)
     end
+
     %{data | subscriptions: []}
   end
 end

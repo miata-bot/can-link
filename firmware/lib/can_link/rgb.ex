@@ -12,10 +12,12 @@ defmodule CANLink.RGB do
   def brightness_fade(color \\ :red) do
     on()
     set_color(color)
+
     for i <- 0..255 do
       CANLink.RGB.set_brightness(i)
       Process.sleep(1)
     end
+
     for i <- 255..0 do
       CANLink.RGB.set_brightness(i)
       Process.sleep(1)

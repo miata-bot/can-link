@@ -45,6 +45,7 @@ defmodule CANLink.Application do
     # maybe_start_wifi_wizard()
     gpio_pin = Application.get_env(:can_link, :button_pin, 68)
     CANLink.PWM.init()
+
     [
       {CANLink.CAN, []},
       {CANLink.Button, gpio_pin},

@@ -3,11 +3,6 @@
 
 cd /sys/kernel/config/usb_gadget/g2
 
-mkdir -p strings/0x409
-echo "deadbeef00115599" > strings/0x409/serialnumber
-echo "Cone"        > strings/0x409/manufacturer
-echo "CAN Underglow Controller"   > strings/0x409/product
-
 # create configs
 mkdir configs/c.1
 
@@ -22,9 +17,9 @@ mkdir -p functions/mass_storage.0
 
 # associate with partitions
 mkdir -p functions/mass_storage.0/lun.0
-echo /tmp/lun0.img > functions/mass_storage.0/lun.0/file
+echo /dev/mmcblk0p4 > functions/mass_storage.0/lun.0/file
 
 # associate function with config
 ln -s functions/mass_storage.0 configs/c.1
 
-echo musb-hdrc.1 > UDC
+echo musb-hdrc.0 > UDC
