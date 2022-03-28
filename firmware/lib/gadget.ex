@@ -1,8 +1,9 @@
-defmodule Gadget do
-  def rm(gadget, configs, functions) do
+defmodule CANLinkl.Gadget do
+  def rm(gadget) do
     root = Path.join("/sys/kernel/config/usb_gadget/", gadget)
 
     File.write(Path.join(root, "UDC"), "")
+    configs = File.ls!(Path.join([root, "configs"]))
 
     for config <- configs do
       for f <- File.ls!(Path.join([root, "configs", config])) do
@@ -15,6 +16,7 @@ defmodule Gadget do
       File.rmdir(Path.join([root, "configs", config]))
     end
 
+    functions = File.ls!(Path.join([root, "functions"]))
     for function <- functions do
       for f <- File.ls!(Path.join([root, "functions", function])) do
         case f do
@@ -30,13 +32,4 @@ defmodule Gadget do
     File.rmdir(root)
   end
 
-  def recurse_d(root, dir) do
-    for d <- File.ls!(Path.join(root, dir)) do
-      if File.dir?(Path.join(root, d)) do
-        recurse_d(root, d)
-      else
-        File.rm!(Path.join(root, dir))
-      end
-    end
-  end
 end

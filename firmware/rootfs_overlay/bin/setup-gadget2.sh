@@ -1,8 +1,5 @@
 #!/bin/sh
 
-# modprobe libcomposite
-mount -t configfs none /sys/kernel/config
-
 cd /sys/kernel/config/usb_gadget/
 mkdir g2 && cd g2
 

@@ -6,14 +6,13 @@ defmodule CANLink.PWM do
      ehrpwm1A == pwmchip2/pwm0 (LED R)
      ehrpwm1B == pwmchip2/pwm1 (LED G)
      ehrpwm2A == pwmchip0/pwm0 (LED B)
-     ehrpwm2B == pwmchip0/pwm1 (LED B)
+     ehrpwm2B == pwmchip0/pwm1 (A)
   """
 
   @pwms [
     led_r: {2, 0},
     led_g: {2, 1},
     led_b: {0, 0},
-    a: {0, 1}
   ]
 
   # Period for 25kHz PWM
