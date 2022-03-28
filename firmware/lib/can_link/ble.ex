@@ -35,6 +35,15 @@ defmodule CANLink.BLE do
                 permissions: 0x10
               })
           })
+          Characteristic.new(%{
+            id: {__MODULE__, :location},
+            type: 0x1899B193DE16DE234EBDA5447327B13F,
+            properties: 0b0010010,
+            descriptor:
+              Descriptor.new(%{
+                permissions: 0x10
+              })
+          })
         ]
       })
     end
@@ -42,9 +51,12 @@ defmodule CANLink.BLE do
     def write(_, _), do: "error"
 
     def read(:location) do
-      Logger.info("read")
       {lat, lon} = CANLink.GPS.get_location()
       <<lat::little-float-64, lon::little-float-64>>
+    end
+
+    def read(:gyro) do
+
     end
 
     def subscribe(:location) do

@@ -5,6 +5,10 @@
 		},
 		{
 			"path": "can_companion"
+		},
+		{
+			"name": "ledtest",
+			"path": "../../../Documents/PlatformIO/Projects/ledtest"
 		}
 	]
 }
