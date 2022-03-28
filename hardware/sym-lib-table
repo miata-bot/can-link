@@ -1,0 +1,12 @@
+(sym_lib_table
+  (lib (name "OSD3358-512M-BAS")(type "Legacy")(uri "${KIPRJMOD}/library/OSD3358-512M-BAS/OSD3358-512M-BAS.lib")(options "")(descr ""))
+  (lib (name "SN74LVC1G07")(type "Legacy")(uri "${KIPRJMOD}/library/SN74LVC1G07/SN74LVC1G07.lib")(options "")(descr ""))
+  (lib (name "24LC_32AT-IOT")(type "KiCad")(uri "${KIPRJMOD}/library/24LC_32AT-IOT/24LC_32AT-IOT.kicad_sym")(options "")(descr ""))
+  (lib (name "TPD4S012DRYR")(type "KiCad")(uri "${KIPRJMOD}/library/TPD4S012DRYR/TPD4S012DRYR.kicad_sym")(options "")(descr ""))
+  (lib (name "TPS2105DBVR")(type "Legacy")(uri "${KIPRJMOD}/library/TPS2105DBVR/TPS2105DBVR.lib")(options "")(descr ""))
+  (lib (name "mp2615")(type "KiCad")(uri "${KIPRJMOD}/mp2615.kicad_sym")(options "")(descr ""))
+  (lib (name "bq29209")(type "KiCad")(uri "${KIPRJMOD}/bq29209.kicad_sym")(options "")(descr ""))
+  (lib (name "2022-03-19_18-46-43")(type "KiCad")(uri "C:/Users/jenji/OneDrive/Desktop/proje/KiCAD/2022-03-19_18-46-43/2022-03-19_18-46-43.kicad_sym")(options "")(descr ""))
+  (lib (name "WL1835MODGBMOCT")(type "Legacy")(uri "${KIPRJMOD}/library/WL1835MODGBMOCT/WL1835MODGBMOCT.lib")(options "")(descr ""))
+  (lib (name "U.FL-R-SMT-1_10_")(type "Legacy")(uri "${KIPRJMOD}/footprints/U.FL-R-SMT-1_10_.pretty/U.FL-R-SMT-1_10_.lib")(options "")(descr ""))
+)

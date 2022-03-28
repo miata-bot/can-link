@@ -1,0 +1,60 @@
+
+(module SC70-5 (layer F.Cu) (tedit 6218E5B5)
+  (descr "<b>SC70</b> - DCK<p>0.65 mm pitch")
+  (fp_text reference REF** (at 1.270155 -1.937055 0) (layer F.SilkS)
+    (effects (font (size 0.800102362205 0.800102362205) (thickness 0.15)))
+  )
+  (fp_text value SC70-5 (at 1.170278 1.819017 0) (layer F.Fab)
+    (effects (font (size 0.641028346457 0.641028346457) (thickness 0.15)))
+  )
+  (pad 1 smd rect (at -0.65 0.95) (size 0.4 0.6) (layers F.Cu F.Mask F.Paste))
+  (pad 2 smd rect (at 0.0 0.95) (size 0.4 0.6) (layers F.Cu F.Mask F.Paste))
+  (pad 3 smd rect (at 0.65 0.95) (size 0.4 0.6) (layers F.Cu F.Mask F.Paste))
+  (pad 4 smd rect (at 0.65 -0.95) (size 0.4 0.6) (layers F.Cu F.Mask F.Paste))
+  (pad 5 smd rect (at -0.65 -0.95) (size 0.4 0.6) (layers F.Cu F.Mask F.Paste))
+  (fp_line (start -1.1 -0.6) (end 1.1 -0.6) (layer F.Fab) (width 0.2032))
+  (fp_line (start 1.1 -0.6) (end 1.1 0.6) (layer F.SilkS) (width 0.2032))
+  (fp_line (start 1.1 0.6) (end -1.1 0.6) (layer F.Fab) (width 0.2032))
+  (fp_line (start -1.1 0.6) (end -1.1 -0.6) (layer F.SilkS) (width 0.2032))
+  (fp_circle (center -0.65 0.25) (end -0.5 0.25) (layer F.SilkS) (width 0.0))
+  (fp_poly
+    (pts
+      (xy -0.801103 0.6)
+      (xy -0.5 0.6)
+      (xy -0.5 1.10152)
+      (xy -0.801103 1.10152)
+    ) (layer F.Fab) (width 0.01)
+  )
+  (fp_poly
+    (pts
+      (xy -0.150086 0.6)
+      (xy 0.15 0.6)
+      (xy 0.15 1.10063)
+      (xy -0.150086 1.10063)
+    ) (layer F.Fab) (width 0.01)
+  )
+  (fp_poly
+    (pts
+      (xy 0.50049 0.6)
+      (xy 0.8 0.6)
+      (xy 0.8 1.10108)
+      (xy 0.50049 1.10108)
+    ) (layer F.Fab) (width 0.01)
+  )
+  (fp_poly
+    (pts
+      (xy 0.500609 -1.1)
+      (xy 0.8 -1.1)
+      (xy 0.8 -0.600731)
+      (xy 0.500609 -0.600731)
+    ) (layer F.Fab) (width 0.01)
+  )
+  (fp_poly
+    (pts
+      (xy -0.801183 -1.1)
+      (xy -0.5 -1.1)
+      (xy -0.5 -0.600887)
+      (xy -0.801183 -0.600887)
+    ) (layer F.Fab) (width 0.01)
+  )
+)

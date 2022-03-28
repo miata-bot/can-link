@@ -1,0 +1,5 @@
+(fp_lib_table
+  (lib (name "OSD3358-512M-BAS")(type "KiCad")(uri "${KIPRJMOD}/footprints/OSD3358-512M-BAS.pretty")(options "")(descr ""))
+  (lib (name "WL1835MODGBMOCT")(type "KiCad")(uri "${KIPRJMOD}/footprints/WL1835MODGBMOCT.pretty")(options "")(descr ""))
+  (lib (name "U.FL-R-SMT-1_10_")(type "KiCad")(uri "${KIPRJMOD}/footprints/U.FL-R-SMT-1_10_.pretty")(options "")(descr ""))
+)
