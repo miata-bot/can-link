@@ -7,8 +7,7 @@
 			"path": "can_companion"
 		},
 		{
-			"name": "ledtest",
-			"path": "../../../Documents/PlatformIO/Projects/ledtest"
+			"path": "nerves_system_bbb_can"
 		}
 	]
 }

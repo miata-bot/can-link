@@ -20,4 +20,8 @@
   (lib (name "SOT65P210X110-5N")(type "KiCad")(uri "${KIPRJMOD}/footprints/SOT65P210X110-5N.pretty")(options "")(descr ""))
   (lib (name "PSON50P145X100X60-6N")(type "KiCad")(uri "${KIPRJMOD}/footprints/PSON50P145X100X60-6N.pretty")(options "")(descr ""))
   (lib (name "OSCDFN250X200X89-4N")(type "KiCad")(uri "${KIPRJMOD}/footprints/OSCDFN250X200X89-4N.pretty")(options "")(descr ""))
+  (lib (name "SW_RS-032G05A3-SMRT")(type "KiCad")(uri "${KIPRJMOD}/footprints/SW_RS-032G05A3-SMRT.pretty")(options "")(descr ""))
+  (lib (name "SOP50P310X90-8N")(type "KiCad")(uri "${KIPRJMOD}/footprints/SOP50P310X90-8N.pretty")(options "")(descr ""))
+  (lib (name "TDC-2030-IDC")(type "KiCad")(uri "${KIPRJMOD}/footprints/TDC2030-IDC.pretty")(options "")(descr ""))
+  (lib (name "DT")(type "KiCad")(uri "${KIPRJMOD}/footprints/TE_DT13-4P.pretty")(options "")(descr ""))
 )

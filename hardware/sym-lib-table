@@ -17,4 +17,6 @@
   (lib (name "RFM69HW")(type "Legacy")(uri "${KIPRJMOD}/library/RFM69HW/RFM69HW.lib")(options "")(descr ""))
   (lib (name "ATECC608A-MAHDA-T")(type "Legacy")(uri "${KIPRJMOD}/library/ATECC608A-MAHDA-T/ATECC608A-MAHDA-T.lib")(options "")(descr ""))
   (lib (name "SN74LVC1G07DCKR")(type "Legacy")(uri "${KIPRJMOD}/library/SN74LVC1G07DCKR/SN74LVC1G07DCKR.lib")(options "")(descr ""))
+  (lib (name "TDC-2030-IDC")(type "Legacy")(uri "${KIPRJMOD}/library/TDC2030/TC2030-IDC.lib")(options "")(descr ""))
+  (lib (name "DT")(type "Legacy")(uri "${KIPRJMOD}/library/DT13/DT13-4P.lib")(options "")(descr ""))
 )
