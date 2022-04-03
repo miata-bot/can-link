@@ -46,16 +46,20 @@ defmodule CANLink.Application do
     gpio_pin = Application.get_env(:can_link, :button_pin, 68)
     CANLink.PWM.init()
 
+    # CANLink.Gadget.create("g1")
+    # CANLink.Gadget.rndis("g1", "c.1")
+    # CANLink.Gadget.acm("g1", "c.2")
+    # CANLink.Gadget.enable("g1", "musb-hdrc.0")
     [
       {CANLink.CAN, []},
       {CANLink.Button, gpio_pin},
-      {CANLink.Radio,
-       [
-         spi_bus_name: "spidev1.0",
-         irq_pin: 49
-         #  encrypt_key: <<161, 156, 95, 234, 11, 63, 65, 0, 72, 57, 168, 102, 210, 235, 14, 22>>
-       ]},
-      {CANLink.GPS, []},
+      # {CANLink.Radio,
+      #  [
+      #    spi_bus_name: "spidev1.0",
+      #    irq_pin: 49
+      #    #  encrypt_key: <<161, 156, 95, 234, 11, 63, 65, 0, 72, 57, 168, 102, 210, 235, 14, 22>>
+      #  ]},
+      # {CANLink.GPS, []},
       {CANLink.BLE, [port: "ttyS3", enable: 28]},
       {CANLink.RGB, []}
     ]

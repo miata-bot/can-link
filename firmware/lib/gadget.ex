@@ -1,4 +1,4 @@
-defmodule CANLinkl.Gadget do
+defmodule CANLink.Gadget do
   def rm(gadget) do
     root = Path.join("/sys/kernel/config/usb_gadget/", gadget)
 
@@ -30,6 +30,70 @@ defmodule CANLinkl.Gadget do
 
     File.rmdir(Path.join([root, "strings/0x409"]))
     File.rmdir(root)
+  end
+
+  def create(gadget) do
+    root = Path.join("/sys/kernel/config/usb_gadget/", gadget)
+    File.mkdir(root)
+    File.write(Path.join([root, "idVendor"]), "0x1d6b")  # Linux Foundation
+    File.write(Path.join([root, "idProduct"]), "0x0104") # Multifunction Composite Gadget
+    File.write(Path.join([root, "bcdDevice"]), "0x0100") # v1.0.0
+    File.write(Path.join([root, "bcdUSB"]), "0x0200")    # USB 2.0
+
+
+    File.write(Path.join([root, "bDeviceClass"]), "0xEF")
+    File.write(Path.join([root, "bDeviceSubClass"]), "0x02")
+    File.write(Path.join([root, "bDeviceProtocol"]), "0x01")
+
+    File.mkdir_p(Path.join([root, "strings", "0x409"]))
+
+    serialnumber = :os.cmd('boardid -b bbb -n 16') |> to_string() |> String.trim
+    File.write(Path.join([root, "strings/0x409/serialnumber"]), serialnumber)
+    File.write(Path.join([root, "strings/0x409/manufacturer"]), "Cone")
+    File.write(Path.join([root, "strings/0x409/product"]), "CAN RGB Controller")
+  end
+
+  def acm(gadget, config) do
+    root = Path.join("/sys/kernel/config/usb_gadget/", gadget)
+    File.mkdir_p(Path.join([root, "functions/acm.usb0"]))
+    File.mkdir_p(Path.join([root, "configs", config]))
+    File.write(Path.join([root, "configs", config, "MaxPower"]), "250")
+    File.ln_s(Path.join([root, "functions/acm.usb0"]), Path.join([root, "configs", config, "acm.usb0"]))
+  end
+
+  def rndis(gadget, config) do
+    root = Path.join("/sys/kernel/config/usb_gadget/", gadget)
+    File.mkdir_p(Path.join([root, "functions/rndis.usb0"]))
+    File.mkdir_p(Path.join([root, "configs", config]))
+    File.write(Path.join([root, "configs", config, "MaxPower"]), "250")
+    File.ln_s(Path.join([root, "functions/rndis.usb0"]), Path.join([root, "configs", config, "rndis.usb0"]))
+
+    File.write(Path.join([root, "os_desc/use"]), "1")
+    File.write(Path.join([root, "os_desc/b_vendor_code"]), "0xcd")
+    File.write(Path.join([root, "os_desc/qw_sign"]), "MSFT100")
+
+    File.write( Path.join([root, "functions/rndis.usb0/os_desc/interface.rndis/compatible_id"]), "RNDIS")
+    File.write(Path.join([root, "functions/rndis.usb0/os_desc/interface.rndis/sub_compatible_id"]), "5162001")
+
+    File.ln_s(Path.join([root, "configs", config]), Path.join([root, "os_desc", config]))
+  end
+
+  def ecm(gadget, config) do
+    root = Path.join("/sys/kernel/config/usb_gadget/", gadget)
+    File.mkdir_p(Path.join([root, "functions/ecm.usb0"]))
+    File.mkdir_p(Path.join([root, "configs", config]))
+    File.write(Path.join([root, "configs", config, "MaxPower"]), "250")
+    File.ln_s(Path.join([root, "functions/ecm.usb0"]), Path.join([root, "configs", config, "ecm.usb0"]))
+  end
+
+  def enable(gadget, port) do
+    root = Path.join("/sys/kernel/config/usb_gadget/", gadget)
+    File.write(Path.join(root, "UDC"), port)
+  end
+
+  def disable(gadget) do
+    root = Path.join("/sys/kernel/config/usb_gadget/", gadget)
+    File.write(Path.join(root, "UDC"), "")
   end
 
 end

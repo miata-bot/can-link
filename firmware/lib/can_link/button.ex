@@ -51,7 +51,12 @@ defmodule CANLink.Button do
   def handle_info(:timeout, %{wizard_started: false} = state) do
     _ = File.write("/sys/class/leds/beaglebone:green:usr3/trigger", "pattern")
     _ = File.write("/sys/class/leds/beaglebone:green:usr3/pattern", "0 1000 0 0 255 2000 255 0")
-    :ok = VintageNetWizard.run_wizard(on_exit: {GenServer, :cast, [self(), :on_wizard_exit]})
+    # :ok = VintageNetWizard.run_wizard(on_exit: {GenServer, :cast, [self(), :on_wizard_exit]})
+    CANLink.Gadget.create("g1")
+    # CANLink.Gadget.rndis("g1", "c.1")
+    # CANLink.Gadget.acm("g1", "c.2")
+    CANLink.Gadget.ecm("g1", "c.1")
+    CANLink.Gadget.enable("g1", "musb-hdrc.0")
     {:noreply, %{state | wizard_started: true}}
   end
 

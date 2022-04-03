@@ -34,7 +34,7 @@ defmodule CANLink.BLE do
               Descriptor.new(%{
                 permissions: 0x10
               })
-          })
+          }),
           Characteristic.new(%{
             id: {__MODULE__, :location},
             type: 0x1899B193DE16DE234EBDA5447327B13F,
