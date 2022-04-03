@@ -1,4 +1,9 @@
 defmodule CANLink.Gadget do
+
+  def list_udcs do
+    Path.wildcard("/sys/class/udc/*") |> Enum.map(&Path.split/1) |> Enum.map(&List.last/1)
+  end
+
   def rm(gadget) do
     root = Path.join("/sys/kernel/config/usb_gadget/", gadget)
 
@@ -86,9 +91,25 @@ defmodule CANLink.Gadget do
     File.ln_s(Path.join([root, "functions/ecm.usb0"]), Path.join([root, "configs", config, "ecm.usb0"]))
   end
 
-  def enable(gadget, port) do
+  def mass_storage(gadget, config) do
     root = Path.join("/sys/kernel/config/usb_gadget/", gadget)
-    File.write(Path.join(root, "UDC"), port)
+    File.mkdir_p(Path.join([root, "configs", config]))
+    File.write(Path.join([root, "configs", config, "MaxPower"]), "250")
+
+    File.mkdir_p(Path.join([root, "functions", "mass_storage.0"]))
+    File.mkdir_p(Path.join([root, "functions", "mass_storage.0", "lun.0"]))
+    File.write(Path.join([root, "functions", "mass_storage.0", "lun.0"]), "/dev/mmcblk0p4")
+
+    File.ln_s(Path.join([root, "functions/mass_storage.0"]), Path.join([root, "configs", config, "mass_storage.0"]))
+  end
+
+  def enable(gadget, port) do
+    if port not in list_udcs() do
+      :error
+    else
+      root = Path.join("/sys/kernel/config/usb_gadget/", gadget)
+      File.write(Path.join(root, "UDC"), port)
+    end
   end
 
   def disable(gadget) do

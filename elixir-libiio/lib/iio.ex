@@ -1,6 +1,6 @@
-defmodule Deleteme do
+defmodule IIO do
   @moduledoc """
-  Documentation for Deleteme.
+  Documentation for `IIO`.
   """
 
   @doc """
@@ -8,7 +8,7 @@ defmodule Deleteme do
 
   ## Examples
 
-      iex> Deleteme.hello
+      iex> IIO.hello()
       :world
 
   """

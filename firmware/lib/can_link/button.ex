@@ -56,6 +56,7 @@ defmodule CANLink.Button do
     # CANLink.Gadget.rndis("g1", "c.1")
     # CANLink.Gadget.acm("g1", "c.2")
     CANLink.Gadget.ecm("g1", "c.1")
+    # CANLink.Gadget.mass_storage("g1", "c.1")
     CANLink.Gadget.enable("g1", "musb-hdrc.0")
     {:noreply, %{state | wizard_started: true}}
   end

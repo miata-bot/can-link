@@ -6,3 +6,5 @@ elixir-rf69
 /RFM69
 zig*
 *.DS_Store
+*.out
+speeduino.ini

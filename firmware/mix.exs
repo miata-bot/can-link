@@ -61,7 +61,7 @@ defmodule CANLink.MixProject do
       # bumps to Nerves systems. Since these include Linux kernel and Erlang
       # version updates, please review their release notes in case
       # changes to your application are needed.
-      {:nerves_system_bbb_can, github: "ConnorRigby/nerves_system_bbb_can", tag: "v0.9.0", runtime: false, targets: :bbb}
+      {:nerves_system_bbb_can, github: "ConnorRigby/nerves_system_bbb_can", tag: "v0.10.0", runtime: false, targets: :bbb}
     ]
   end
 
