@@ -24,7 +24,7 @@ This README acts as a root for all the jillion projects contained within the rep
 | ------------| ----------- | -------- | ------- |
 | [hardware](hardware/README.md) | Main hardware designs. Contains schematics, layouts, boms, manufacturing gerbers etc. | KiCad | Creative Commons |
 | [firmware](firmware/README.md) | Main Nerves Firmware project. | Elixir | MIT |
-| [ng_can](ng_can/README.md) | CAN interface library fork | Elixir | ??? |
+| [socket_can](elixir-socket-can/README.md) | CAN interface library fork | Elixir | ??? |
 | [canscript](canscript/README.md) | Main Lua environment and runtime. | Zig | MIT |
 | [can_companion](can_companion/README.md) | proof of concept mobile app for interfacing GPS | Flutter | MIT |
 | [elixir-GPSd](elixir-gpsd/README.md) | GPS library | Elixir | MIT |

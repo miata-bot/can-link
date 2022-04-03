@@ -1,8 +1,8 @@
-defmodule Ng.Can do
+defmodule SocketCAN do
   use GenServer
   require Logger
   @moduledoc """
-  Documentation for NgCan.
+  Documentation for SocketCAN.
   """
   @default_bufsize 106496
   #keep up to 1000 can frames in state, serve up to 100 at a time
@@ -44,7 +44,7 @@ defmodule Ng.Can do
   end
 
   def init(args) do
-    executable = :code.priv_dir(:ng_can) ++ '/ng_can'
+    executable = :code.priv_dir(:socket_can) ++ '/socket_can_port'
     port = Port.open({:spawn_executable, executable},
       [{:args, []},
         {:packet, 2},
@@ -124,7 +124,7 @@ defmodule Ng.Can do
   end
 
   def terminate(reason, state) do
-    Logger.info "Ng.Can terminating with reason: #{inspect reason}"
+    Logger.info "SocketCAN terminating with reason: #{inspect reason}"
   end
 
   defp pad_to_8_bytes(frames) do
@@ -156,7 +156,7 @@ defmodule Ng.Can do
 
   defp log_error(error_response) do
     {:error, msg} = :erlang.binary_to_term(error_response)
-    Logger.error("Ng.Can C port reported error: #{msg}")
+    Logger.error("SocketCAN C port reported error: #{msg}")
   end
 
 end

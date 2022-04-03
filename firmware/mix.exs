@@ -45,7 +45,7 @@ defmodule CANLink.MixProject do
       {:circuits_spi, "~> 1.3", targets: @all_targets, override: true},
       {:rf69, path: "../elixir-rf69"},
       {:gpsd, path: "../elixir-gpsd"},
-      {:ng_can, path: "../ng_can", targets: @all_targets},
+      {:socket_can, path: "../elixir-socket-can", targets: @all_targets},
       {:blue_heron, github: "blue-heron/blue_heron", branch: "peripheral-updates-cr", override: true},
       {:blue_heron_transport_uart, github: "blue-heron/blue_heron_transport_uart", branch: "wilink8", override: true},
       {:blue_heron_ti_wl18xx, github: "blue-heron/blue_heron_ti_wl18xx", branch: "main", override: true},

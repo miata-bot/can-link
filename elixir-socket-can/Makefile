@@ -45,7 +45,7 @@ OBJ=$(SRC:.c=.o)
 
 .PHONY: all clean
 
-all: priv priv/ng_can
+all: priv priv/socket_can_port
 
 %.o: %.c
 	$(CC) -c $(ERL_CFLAGS) $(CFLAGS) -o $@ $<
@@ -53,8 +53,8 @@ all: priv priv/ng_can
 priv:
 	mkdir -p priv
 
-priv/ng_can: $(OBJ)
+priv/socket_can_port: $(OBJ)
 	$(CC) $^ $(ERL_LDFLAGS) $(LDFLAGS) -o $@
 
 clean:
-	rm -f priv/ng_can src/*.o src/ei_copy/*.o
+	rm -f priv/socket_can_port src/*.o src/ei_copy/*.o

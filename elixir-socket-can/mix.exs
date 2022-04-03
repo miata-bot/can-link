@@ -1,9 +1,9 @@
-defmodule Ng.Can.Mixfile do
+defmodule SocketCAN.Mixfile do
   use Mix.Project
 
   def project do
-    [app: :ng_can,
-     name: "Ng.Can",
+    [app: :socket_can,
+     name: "SocketCAN",
      version: "0.1.0",
      elixir: "~> 1.4",
      build_embedded: Mix.env == :prod,

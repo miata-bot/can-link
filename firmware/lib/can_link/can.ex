@@ -52,15 +52,15 @@ defmodule CANLink.CAN do
   end
 
   def open(:internal, :init, data) do
-    {:ok, can_port} = Ng.Can.start_link()
-    Ng.Can.open(can_port, "can0")
+    {:ok, can_port} = SocketCAN.start_link()
+    SocketCAN.open(can_port, "can0")
     data = %{data | can_port: can_port}
     actions = [{:next_event, :internal, :await_read}]
     {:next_state, :await_read, data, actions}
   end
 
   def await_read(:internal, :await_read, data) do
-    Ng.Can.await_read(data.can_port)
+    SocketCAN.await_read(data.can_port)
     :keep_state_and_data
   end
 
@@ -72,7 +72,7 @@ defmodule CANLink.CAN do
   end
 
   def await_read(:cast, {:send_frame, frame}, data) do
-    Ng.Can.write(data.can_port, frame)
+    SocketCAN.write(data.can_port, frame)
     actions = []
     {:keep_state, data, actions}
   end
