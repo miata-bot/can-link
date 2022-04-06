@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <export version="E">
   <design>
-    <source>/Users/connor/workspace/connorrigby/haltech-link/hardware/CONEPROJ.kicad_sch</source>
-    <date>Friday, April 01, 2022 at 07:10:43 PM</date>
-    <tool>Eeschema (6.0.2-0)</tool>
+    <source>/home/connor/workspace/sixtyeightplus.one/can-link/hardware/CONEPROJ.kicad_sch</source>
+    <date>Wed 06 Apr 2022 08:57:35 AM MDT</date>
+    <tool>Eeschema (6.0.2)</tool>
     <sheet number="1" name="/" tstamps="/">
       <title_block>
         <title/>
@@ -28,10 +28,10 @@
       <value>0.1uF</value>
       <footprint>Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder</footprint>
       <fields>
-        <field name="MPN">C0603X7R500-104MNP-CT</field>
+        <field name="MPN">C0603C104M5RAC7867</field>
       </fields>
       <libsource lib="Device" part="C_Small" description="Unpolarized capacitor, small symbol"/>
-      <property name="MPN" value="C0603X7R500-104MNP-CT"/>
+      <property name="MPN" value="C0603C104M5RAC7867"/>
       <property name="Sheetname" value=""/>
       <property name="Sheetfile" value="CONEPROJ.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
@@ -54,10 +54,10 @@
       <value>1uF</value>
       <footprint>Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder</footprint>
       <fields>
-        <field name="MPN">JMK107B7105MA-T</field>
+        <field name="MPN">C0603C105K9RAC7867</field>
       </fields>
       <libsource lib="Device" part="C_Small" description="Unpolarized capacitor, small symbol"/>
-      <property name="MPN" value="JMK107B7105MA-T"/>
+      <property name="MPN" value="C0603C105K9RAC7867"/>
       <property name="Sheetname" value=""/>
       <property name="Sheetfile" value="CONEPROJ.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
@@ -80,10 +80,10 @@
       <value>0.1uF</value>
       <footprint>Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder</footprint>
       <fields>
-        <field name="MPN">C0603X7R500-104MNP-CT</field>
+        <field name="MPN">C0603C104M5RAC7867</field>
       </fields>
       <libsource lib="Device" part="C_Small" description="Unpolarized capacitor, small symbol"/>
-      <property name="MPN" value="C0603X7R500-104MNP-CT"/>
+      <property name="MPN" value="C0603C104M5RAC7867"/>
       <property name="Sheetname" value=""/>
       <property name="Sheetfile" value="CONEPROJ.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
@@ -106,10 +106,10 @@
       <value>0.1uF</value>
       <footprint>Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder</footprint>
       <fields>
-        <field name="MPN">C0603X7R500-104MNP-CT</field>
+        <field name="MPN">C0603C104M5RAC7867</field>
       </fields>
       <libsource lib="Device" part="C_Small" description="Unpolarized capacitor, small symbol"/>
-      <property name="MPN" value="C0603X7R500-104MNP-CT"/>
+      <property name="MPN" value="C0603C104M5RAC7867"/>
       <property name="Sheetname" value=""/>
       <property name="Sheetfile" value="CONEPROJ.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
@@ -119,10 +119,10 @@
       <value>0.1uF</value>
       <footprint>Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder</footprint>
       <fields>
-        <field name="MPN">C0603X7R500-104MNP-CT</field>
+        <field name="MPN">C0603C104M5RAC7867</field>
       </fields>
       <libsource lib="Device" part="C_Small" description="Unpolarized capacitor, small symbol"/>
-      <property name="MPN" value="C0603X7R500-104MNP-CT"/>
+      <property name="MPN" value="C0603C104M5RAC7867"/>
       <property name="Sheetname" value=""/>
       <property name="Sheetfile" value="CONEPROJ.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
@@ -132,10 +132,10 @@
       <value>1uF</value>
       <footprint>Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder</footprint>
       <fields>
-        <field name="MPN">JMK107B7105MA-T</field>
+        <field name="MPN">C0603C105K9RAC7867</field>
       </fields>
       <libsource lib="Device" part="C_Small" description="Unpolarized capacitor, small symbol"/>
-      <property name="MPN" value="JMK107B7105MA-T"/>
+      <property name="MPN" value="C0603C105K9RAC7867"/>
       <property name="Sheetname" value=""/>
       <property name="Sheetfile" value="CONEPROJ.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
@@ -158,10 +158,10 @@
       <value>0.1uF</value>
       <footprint>Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder</footprint>
       <fields>
-        <field name="MPN">C0603X7R500-104MNP-CT</field>
+        <field name="MPN">C0603C104M5RAC7867</field>
       </fields>
       <libsource lib="Device" part="C_Small" description="Unpolarized capacitor, small symbol"/>
-      <property name="MPN" value="C0603X7R500-104MNP-CT"/>
+      <property name="MPN" value="C0603C104M5RAC7867"/>
       <property name="Sheetname" value=""/>
       <property name="Sheetfile" value="CONEPROJ.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
@@ -171,10 +171,10 @@
       <value>0.1uF</value>
       <footprint>Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder</footprint>
       <fields>
-        <field name="MPN">C0603X7R500-104MNP-CT</field>
+        <field name="MPN">C0603C104M5RAC7867</field>
       </fields>
       <libsource lib="Device" part="C_Small" description="Unpolarized capacitor, small symbol"/>
-      <property name="MPN" value="C0603X7R500-104MNP-CT"/>
+      <property name="MPN" value="C0603C104M5RAC7867"/>
       <property name="Sheetname" value=""/>
       <property name="Sheetfile" value="CONEPROJ.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
@@ -184,10 +184,10 @@
       <value>0.1uF</value>
       <footprint>Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder</footprint>
       <fields>
-        <field name="MPN">C0603X7R500-104MNP-CT</field>
+        <field name="MPN">C0603C104M5RAC7867</field>
       </fields>
       <libsource lib="Device" part="C_Small" description="Unpolarized capacitor, small symbol"/>
-      <property name="MPN" value="C0603X7R500-104MNP-CT"/>
+      <property name="MPN" value="C0603C104M5RAC7867"/>
       <property name="Sheetname" value=""/>
       <property name="Sheetfile" value="CONEPROJ.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
@@ -197,10 +197,10 @@
       <value>0.1uF</value>
       <footprint>Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder</footprint>
       <fields>
-        <field name="MPN">C0603X7R500-104MNP-CT</field>
+        <field name="MPN">C0603C104M5RAC7867</field>
       </fields>
       <libsource lib="Device" part="C_Small" description="Unpolarized capacitor, small symbol"/>
-      <property name="MPN" value="C0603X7R500-104MNP-CT"/>
+      <property name="MPN" value="C0603C104M5RAC7867"/>
       <property name="Sheetname" value=""/>
       <property name="Sheetfile" value="CONEPROJ.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
@@ -210,10 +210,10 @@
       <value>0.1uF</value>
       <footprint>Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder</footprint>
       <fields>
-        <field name="MPN">C0603X7R500-104MNP-CT</field>
+        <field name="MPN">C0603C104M5RAC7867</field>
       </fields>
       <libsource lib="Device" part="C_Small" description="Unpolarized capacitor, small symbol"/>
-      <property name="MPN" value="C0603X7R500-104MNP-CT"/>
+      <property name="MPN" value="C0603C104M5RAC7867"/>
       <property name="Sheetname" value=""/>
       <property name="Sheetfile" value="CONEPROJ.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
@@ -223,10 +223,10 @@
       <value>0.1uF</value>
       <footprint>Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder</footprint>
       <fields>
-        <field name="MPN">C0603X7R500-104MNP-CT</field>
+        <field name="MPN">C0603C104M5RAC7867</field>
       </fields>
       <libsource lib="Device" part="C_Small" description="Unpolarized capacitor, small symbol"/>
-      <property name="MPN" value="C0603X7R500-104MNP-CT"/>
+      <property name="MPN" value="C0603C104M5RAC7867"/>
       <property name="Sheetname" value=""/>
       <property name="Sheetfile" value="CONEPROJ.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
@@ -262,10 +262,10 @@
       <value>0.1uF</value>
       <footprint>Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder</footprint>
       <fields>
-        <field name="MPN">C0603X7R500-104MNP-CT</field>
+        <field name="MPN">C0603C104M5RAC7867</field>
       </fields>
       <libsource lib="Device" part="C_Small" description="Unpolarized capacitor, small symbol"/>
-      <property name="MPN" value="C0603X7R500-104MNP-CT"/>
+      <property name="MPN" value="C0603C104M5RAC7867"/>
       <property name="Sheetname" value=""/>
       <property name="Sheetfile" value="CONEPROJ.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
@@ -275,10 +275,10 @@
       <value>0.1uF</value>
       <footprint>Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder</footprint>
       <fields>
-        <field name="MPN">C0603X7R500-104MNP-CT</field>
+        <field name="MPN">C0603C104M5RAC7867</field>
       </fields>
       <libsource lib="Device" part="C_Small" description="Unpolarized capacitor, small symbol"/>
-      <property name="MPN" value="C0603X7R500-104MNP-CT"/>
+      <property name="MPN" value="C0603C104M5RAC7867"/>
       <property name="Sheetname" value=""/>
       <property name="Sheetfile" value="CONEPROJ.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
@@ -366,10 +366,10 @@
       <value>0.1uF</value>
       <footprint>Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder</footprint>
       <fields>
-        <field name="MPN">C0603X7R500-104MNP-CT</field>
+        <field name="MPN">C0603C104M5RAC7867</field>
       </fields>
       <libsource lib="Device" part="C_Small" description="Unpolarized capacitor, small symbol"/>
-      <property name="MPN" value="C0603X7R500-104MNP-CT"/>
+      <property name="MPN" value="C0603C104M5RAC7867"/>
       <property name="Sheetname" value=""/>
       <property name="Sheetfile" value="CONEPROJ.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
@@ -379,10 +379,10 @@
       <value>0.1uF</value>
       <footprint>Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder</footprint>
       <fields>
-        <field name="MPN">C0603X7R500-104MNP-CT</field>
+        <field name="MPN">C0603C104M5RAC7867</field>
       </fields>
       <libsource lib="Device" part="C_Small" description="Unpolarized capacitor, small symbol"/>
-      <property name="MPN" value="C0603X7R500-104MNP-CT"/>
+      <property name="MPN" value="C0603C104M5RAC7867"/>
       <property name="Sheetname" value=""/>
       <property name="Sheetfile" value="CONEPROJ.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
@@ -405,10 +405,10 @@
       <value>0.1uF</value>
       <footprint>Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder</footprint>
       <fields>
-        <field name="MPN">C0603X7R500-104MNP-CT</field>
+        <field name="MPN">C0603C104M5RAC7867</field>
       </fields>
       <libsource lib="Device" part="C_Small" description="Unpolarized capacitor, small symbol"/>
-      <property name="MPN" value="C0603X7R500-104MNP-CT"/>
+      <property name="MPN" value="C0603C104M5RAC7867"/>
       <property name="Sheetname" value=""/>
       <property name="Sheetfile" value="CONEPROJ.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
@@ -418,10 +418,10 @@
       <value>0.1uF</value>
       <footprint>Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder</footprint>
       <fields>
-        <field name="MPN">C0603X7R500-104MNP-CT</field>
+        <field name="MPN">C0603C104M5RAC7867</field>
       </fields>
       <libsource lib="Device" part="C_Small" description="Unpolarized capacitor, small symbol"/>
-      <property name="MPN" value="C0603X7R500-104MNP-CT"/>
+      <property name="MPN" value="C0603C104M5RAC7867"/>
       <property name="Sheetname" value=""/>
       <property name="Sheetfile" value="CONEPROJ.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
@@ -431,10 +431,10 @@
       <value>0.1uF</value>
       <footprint>Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder</footprint>
       <fields>
-        <field name="MPN">C0603X7R500-104MNP-CT</field>
+        <field name="MPN">C0603C104M5RAC7867</field>
       </fields>
       <libsource lib="Device" part="C_Small" description="Unpolarized capacitor, small symbol"/>
-      <property name="MPN" value="C0603X7R500-104MNP-CT"/>
+      <property name="MPN" value="C0603C104M5RAC7867"/>
       <property name="Sheetname" value=""/>
       <property name="Sheetfile" value="CONEPROJ.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
@@ -457,10 +457,10 @@
       <value>0.1uF</value>
       <footprint>Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder</footprint>
       <fields>
-        <field name="MPN">C0603X7R500-104MNP-CT</field>
+        <field name="MPN">C0603C104M5RAC7867</field>
       </fields>
       <libsource lib="Device" part="C_Small" description="Unpolarized capacitor, small symbol"/>
-      <property name="MPN" value="C0603X7R500-104MNP-CT"/>
+      <property name="MPN" value="C0603C104M5RAC7867"/>
       <property name="Sheetname" value=""/>
       <property name="Sheetfile" value="CONEPROJ.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
@@ -470,10 +470,10 @@
       <value>0.1uF</value>
       <footprint>Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder</footprint>
       <fields>
-        <field name="MPN">C0603X7R500-104MNP-CT</field>
+        <field name="MPN">C0603C104M5RAC7867</field>
       </fields>
       <libsource lib="Device" part="C_Small" description="Unpolarized capacitor, small symbol"/>
-      <property name="MPN" value="C0603X7R500-104MNP-CT"/>
+      <property name="MPN" value="C0603C104M5RAC7867"/>
       <property name="Sheetname" value=""/>
       <property name="Sheetfile" value="CONEPROJ.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
@@ -483,10 +483,10 @@
       <value>0.1uF</value>
       <footprint>Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder</footprint>
       <fields>
-        <field name="MPN">C0603X7R500-104MNP-CT</field>
+        <field name="MPN">C0603C104M5RAC7867</field>
       </fields>
       <libsource lib="Device" part="C_Small" description="Unpolarized capacitor, small symbol"/>
-      <property name="MPN" value="C0603X7R500-104MNP-CT"/>
+      <property name="MPN" value="C0603C104M5RAC7867"/>
       <property name="Sheetname" value=""/>
       <property name="Sheetfile" value="CONEPROJ.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
@@ -509,10 +509,10 @@
       <value>0.1uF</value>
       <footprint>Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder</footprint>
       <fields>
-        <field name="MPN">C0603X7R500-104MNP-CT</field>
+        <field name="MPN">C0603C104M5RAC7867</field>
       </fields>
       <libsource lib="Device" part="C_Small" description="Unpolarized capacitor, small symbol"/>
-      <property name="MPN" value="C0603X7R500-104MNP-CT"/>
+      <property name="MPN" value="C0603C104M5RAC7867"/>
       <property name="Sheetname" value=""/>
       <property name="Sheetfile" value="CONEPROJ.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
@@ -522,10 +522,10 @@
       <value>0.1uF</value>
       <footprint>Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder</footprint>
       <fields>
-        <field name="MPN">C0603X7R500-104MNP-CT</field>
+        <field name="MPN">C0603C104M5RAC7867</field>
       </fields>
       <libsource lib="Device" part="C_Small" description="Unpolarized capacitor, small symbol"/>
-      <property name="MPN" value="C0603X7R500-104MNP-CT"/>
+      <property name="MPN" value="C0603C104M5RAC7867"/>
       <property name="Sheetname" value=""/>
       <property name="Sheetfile" value="CONEPROJ.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
@@ -535,10 +535,10 @@
       <value>0.1uF</value>
       <footprint>Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder</footprint>
       <fields>
-        <field name="MPN">C0603X7R500-104MNP-CT</field>
+        <field name="MPN">C0603C104M5RAC7867</field>
       </fields>
       <libsource lib="Device" part="C_Small" description="Unpolarized capacitor, small symbol"/>
-      <property name="MPN" value="C0603X7R500-104MNP-CT"/>
+      <property name="MPN" value="C0603C104M5RAC7867"/>
       <property name="Sheetname" value=""/>
       <property name="Sheetfile" value="CONEPROJ.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
@@ -548,10 +548,10 @@
       <value>0.1uF</value>
       <footprint>Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder</footprint>
       <fields>
-        <field name="MPN">C0603X7R500-104MNP-CT</field>
+        <field name="MPN">C0603C104M5RAC7867</field>
       </fields>
       <libsource lib="Device" part="C_Small" description="Unpolarized capacitor, small symbol"/>
-      <property name="MPN" value="C0603X7R500-104MNP-CT"/>
+      <property name="MPN" value="C0603C104M5RAC7867"/>
       <property name="Sheetname" value=""/>
       <property name="Sheetfile" value="CONEPROJ.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
@@ -574,10 +574,10 @@
       <value>0.1uF</value>
       <footprint>Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder</footprint>
       <fields>
-        <field name="MPN">C0603X7R500-104MNP-CT</field>
+        <field name="MPN">C0603C104M5RAC7867</field>
       </fields>
       <libsource lib="Device" part="C_Small" description="Unpolarized capacitor, small symbol"/>
-      <property name="MPN" value="C0603X7R500-104MNP-CT"/>
+      <property name="MPN" value="C0603C104M5RAC7867"/>
       <property name="Sheetname" value=""/>
       <property name="Sheetfile" value="CONEPROJ.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
@@ -587,10 +587,10 @@
       <value>0.1uF</value>
       <footprint>Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder</footprint>
       <fields>
-        <field name="MPN">C0603X7R500-104MNP-CT</field>
+        <field name="MPN">C0603C104M5RAC7867</field>
       </fields>
       <libsource lib="Device" part="C_Small" description="Unpolarized capacitor, small symbol"/>
-      <property name="MPN" value="C0603X7R500-104MNP-CT"/>
+      <property name="MPN" value="C0603C104M5RAC7867"/>
       <property name="Sheetname" value=""/>
       <property name="Sheetfile" value="CONEPROJ.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
@@ -600,10 +600,10 @@
       <value>0.1uF</value>
       <footprint>Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder</footprint>
       <fields>
-        <field name="MPN">C0603X7R500-104MNP-CT</field>
+        <field name="MPN">C0603C104M5RAC7867</field>
       </fields>
       <libsource lib="Device" part="C_Small" description="Unpolarized capacitor, small symbol"/>
-      <property name="MPN" value="C0603X7R500-104MNP-CT"/>
+      <property name="MPN" value="C0603C104M5RAC7867"/>
       <property name="Sheetname" value=""/>
       <property name="Sheetfile" value="CONEPROJ.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
@@ -613,10 +613,10 @@
       <value>1uF</value>
       <footprint>Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder</footprint>
       <fields>
-        <field name="MPN">JMK107B7105MA-T</field>
+        <field name="MPN">C0603C105K9RAC7867</field>
       </fields>
       <libsource lib="Device" part="C_Small" description="Unpolarized capacitor, small symbol"/>
-      <property name="MPN" value="JMK107B7105MA-T"/>
+      <property name="MPN" value="C0603C105K9RAC7867"/>
       <property name="Sheetname" value=""/>
       <property name="Sheetfile" value="CONEPROJ.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
@@ -665,10 +665,10 @@
       <value>0.1uF</value>
       <footprint>Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder</footprint>
       <fields>
-        <field name="MPN">C0603X7R500-104MNP-CT</field>
+        <field name="MPN">C0603C104M5RAC7867</field>
       </fields>
       <libsource lib="Device" part="C_Small" description="Unpolarized capacitor, small symbol"/>
-      <property name="MPN" value="C0603X7R500-104MNP-CT"/>
+      <property name="MPN" value="C0603C104M5RAC7867"/>
       <property name="Sheetname" value=""/>
       <property name="Sheetfile" value="CONEPROJ.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
@@ -697,13 +697,13 @@
       <value>0.1uF</value>
       <footprint>Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder</footprint>
       <fields>
-        <field name="MPN">C0603X7R500-104MNP-CT</field>
+        <field name="MPN">C0603C104M5RAC7867</field>
         <field name="MPN2">CC0402KRX5R8BB104</field>
         <field name="Manufacturer">Murata Electronics</field>
         <field name="Manufacturer2">Yageo</field>
       </fields>
       <libsource lib="elias-rescue" part="C_Small-Very_Capacitor" description=""/>
-      <property name="MPN" value="C0603X7R500-104MNP-CT"/>
+      <property name="MPN" value="C0603C104M5RAC7867"/>
       <property name="Manufacturer" value="Murata Electronics"/>
       <property name="MPN2" value="CC0402KRX5R8BB104"/>
       <property name="Manufacturer2" value="Yageo"/>
@@ -735,10 +735,10 @@
       <value>0.1uF</value>
       <footprint>Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder</footprint>
       <fields>
-        <field name="MPN">C0603X7R500-104MNP-CT</field>
+        <field name="MPN">C0603C104M5RAC7867</field>
       </fields>
       <libsource lib="Device" part="C_Small" description="Unpolarized capacitor, small symbol"/>
-      <property name="MPN" value="C0603X7R500-104MNP-CT"/>
+      <property name="MPN" value="C0603C104M5RAC7867"/>
       <property name="Sheetname" value=""/>
       <property name="Sheetfile" value="CONEPROJ.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
@@ -875,7 +875,7 @@
       <tstamps>bd4f0fa6-09bc-426b-a8cf-e81ccf722558</tstamps>
     </comp>
     <comp ref="D316">
-      <value>BLU</value>
+      <value>BLUE</value>
       <footprint>LED_SMD:LED_0603_1608Metric_Pad1.05x0.95mm_HandSolder</footprint>
       <fields>
         <field name="MPN">150060BS75000</field>
@@ -935,7 +935,11 @@
     <comp ref="J302">
       <value>LIPO</value>
       <footprint>Connector_JST:JST_PH_S3B-PH-SM4-TB_1x03-1MP_P2.00mm_Horizontal</footprint>
+      <fields>
+        <field name="MPN">S3B-PH-SM4-TB(LF)(SN)</field>
+      </fields>
       <libsource lib="Connector_Generic" part="Conn_01x03" description="Generic connector, single row, 01x03, script generated (kicad-library-utils/schlib/autogen/connector/)"/>
+      <property name="MPN" value="S3B-PH-SM4-TB(LF)(SN)"/>
       <property name="Sheetname" value=""/>
       <property name="Sheetfile" value="CONEPROJ.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
@@ -987,7 +991,11 @@
     <comp ref="J305">
       <value>GPS_MAG</value>
       <footprint>Connector_Molex:Molex_PicoBlade_53261-0671_1x06-1MP_P1.25mm_Horizontal</footprint>
+      <fields>
+        <field name="MPN">0532610671</field>
+      </fields>
       <libsource lib="Connector_Generic" part="Conn_01x06" description="Generic connector, single row, 01x06, script generated (kicad-library-utils/schlib/autogen/connector/)"/>
+      <property name="MPN" value="0532610671"/>
       <property name="Sheetname" value=""/>
       <property name="Sheetfile" value="CONEPROJ.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
@@ -996,7 +1004,11 @@
     <comp ref="J306">
       <value>RGB OUT</value>
       <footprint>Connector_JST:JST_XH_S4B-XH-A_1x04_P2.50mm_Horizontal</footprint>
+      <fields>
+        <field name="MPN">S4B-XH-A-1(LF)(SN)</field>
+      </fields>
       <libsource lib="Connector_Generic" part="Conn_01x04" description="Generic connector, single row, 01x04, script generated (kicad-library-utils/schlib/autogen/connector/)"/>
+      <property name="MPN" value="S4B-XH-A-1(LF)(SN)"/>
       <property name="Sheetname" value=""/>
       <property name="Sheetfile" value="CONEPROJ.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
@@ -1058,7 +1070,11 @@
       <value>USB_B</value>
       <footprint>Connector_USB:USB_B_OST_USB-B1HSxx_Horizontal</footprint>
       <datasheet> ~</datasheet>
+      <fields>
+        <field name="MPN">USB-B1HSB6</field>
+      </fields>
       <libsource lib="Connector" part="USB_B" description="USB Type B connector"/>
+      <property name="MPN" value="USB-B1HSB6"/>
       <property name="Sheetname" value=""/>
       <property name="Sheetfile" value="CONEPROJ.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
@@ -1068,7 +1084,11 @@
       <value>USB_C_Receptacle_USB2.0</value>
       <footprint>Connector_USB:USB_C_Receptacle_HRO_TYPE-C-31-M-12</footprint>
       <datasheet>https://www.usb.org/sites/default/files/documents/usb_type-c.zip</datasheet>
+      <fields>
+        <field name="MPN">TYPE-C-31-M-12</field>
+      </fields>
       <libsource lib="Connector" part="USB_C_Receptacle_USB2.0" description="USB 2.0-only Type-C Receptacle connector"/>
+      <property name="MPN" value="TYPE-C-31-M-12"/>
       <property name="Sheetname" value=""/>
       <property name="Sheetfile" value="CONEPROJ.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
@@ -1096,7 +1116,11 @@
     <comp ref="J312">
       <value>Conn_01x04</value>
       <footprint>Connector_Molex:Molex_PicoBlade_53261-0471_1x04-1MP_P1.25mm_Horizontal</footprint>
+      <fields>
+        <field name="MPN">0532610471</field>
+      </fields>
       <libsource lib="Connector_Generic" part="Conn_01x04" description="Generic connector, single row, 01x04, script generated (kicad-library-utils/schlib/autogen/connector/)"/>
+      <property name="MPN" value="0532610471"/>
       <property name="Sheetname" value=""/>
       <property name="Sheetfile" value="CONEPROJ.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
@@ -1184,12 +1208,12 @@
       <value>Q_NMOS_SGD</value>
       <footprint>Package_SO:SO-8_3.9x4.9mm_P1.27mm</footprint>
       <fields>
-        <field name="MPN">SI4778DY-T1-GE3</field>
+        <field name="MPN">STS8DNF3LL</field>
         <field name="PN">SI4778DY-T1-GE3</field>
       </fields>
       <libsource lib="Device" part="Q_NMOS_SGD" description="N-MOSFET transistor, source/gate/drain"/>
       <property name="PN" value="SI4778DY-T1-GE3"/>
-      <property name="MPN" value="SI4778DY-T1-GE3"/>
+      <property name="MPN" value="STS8DNF3LL"/>
       <property name="Sheetname" value=""/>
       <property name="Sheetfile" value="CONEPROJ.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
@@ -1261,7 +1285,11 @@
     <comp ref="R2">
       <value>1.5k</value>
       <footprint>Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder</footprint>
+      <fields>
+        <field name="MPN">RNCP0603FTD1K50</field>
+      </fields>
       <libsource lib="Device" part="R_Small" description="Resistor, small symbol"/>
+      <property name="MPN" value="RNCP0603FTD1K50"/>
       <property name="Sheetname" value=""/>
       <property name="Sheetfile" value="CONEPROJ.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
@@ -1270,7 +1298,11 @@
     <comp ref="R3">
       <value>1k</value>
       <footprint>Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder</footprint>
+      <fields>
+        <field name="MPN">RNCP0603FTD1K00</field>
+      </fields>
       <libsource lib="Device" part="R_Small" description="Resistor, small symbol"/>
+      <property name="MPN" value="RNCP0603FTD1K00"/>
       <property name="Sheetname" value=""/>
       <property name="Sheetfile" value="CONEPROJ.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
@@ -1279,7 +1311,11 @@
     <comp ref="R4">
       <value>0.1k</value>
       <footprint>Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder</footprint>
+      <fields>
+        <field name="MPN">PT0603FR-7W0R1L</field>
+      </fields>
       <libsource lib="Device" part="R_Small" description="Resistor, small symbol"/>
+      <property name="MPN" value="PT0603FR-7W0R1L"/>
       <property name="Sheetname" value=""/>
       <property name="Sheetfile" value="CONEPROJ.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
@@ -1288,7 +1324,11 @@
     <comp ref="R5">
       <value>10k</value>
       <footprint>Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder</footprint>
+      <fields>
+        <field name="MPN">RNCP0603FTD10K0</field>
+      </fields>
       <libsource lib="Device" part="R_Small" description="Resistor, small symbol"/>
+      <property name="MPN" value="RNCP0603FTD10K0"/>
       <property name="Sheetname" value=""/>
       <property name="Sheetfile" value="CONEPROJ.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
@@ -1297,7 +1337,11 @@
     <comp ref="R6">
       <value>10k</value>
       <footprint>Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder</footprint>
+      <fields>
+        <field name="MPN">RNCP0603FTD10K0</field>
+      </fields>
       <libsource lib="Device" part="R_Small" description="Resistor, small symbol"/>
+      <property name="MPN" value="RNCP0603FTD10K0"/>
       <property name="Sheetname" value=""/>
       <property name="Sheetfile" value="CONEPROJ.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
@@ -1306,7 +1350,11 @@
     <comp ref="R7">
       <value>4.7k</value>
       <footprint>Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder</footprint>
+      <fields>
+        <field name="MPN">RMCF0603FT4K70</field>
+      </fields>
       <libsource lib="Device" part="R_Small" description="Resistor, small symbol"/>
+      <property name="MPN" value="RMCF0603FT4K70"/>
       <property name="Sheetname" value=""/>
       <property name="Sheetfile" value="CONEPROJ.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
@@ -1315,7 +1363,11 @@
     <comp ref="R8">
       <value>10k</value>
       <footprint>Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder</footprint>
+      <fields>
+        <field name="MPN">RNCP0603FTD10K0</field>
+      </fields>
       <libsource lib="Device" part="R_Small" description="Resistor, small symbol"/>
+      <property name="MPN" value="RNCP0603FTD10K0"/>
       <property name="Sheetname" value=""/>
       <property name="Sheetfile" value="CONEPROJ.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
@@ -1324,7 +1376,11 @@
     <comp ref="R9">
       <value>10K, DNP</value>
       <footprint>Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder</footprint>
+      <fields>
+        <field name="MPN">RNCP0603FTD10K0</field>
+      </fields>
       <libsource lib="Device" part="R_Small_US" description="Resistor, small US symbol"/>
+      <property name="MPN" value="RNCP0603FTD10K0"/>
       <property name="Sheetname" value=""/>
       <property name="Sheetfile" value="CONEPROJ.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
@@ -1333,7 +1389,11 @@
     <comp ref="R16">
       <value>100K</value>
       <footprint>Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder</footprint>
+      <fields>
+        <field name="MPN">RC0603FR-07100KL</field>
+      </fields>
       <libsource lib="Device" part="R_Small_US" description="Resistor, small US symbol"/>
+      <property name="MPN" value="RC0603FR-07100KL"/>
       <property name="Sheetname" value=""/>
       <property name="Sheetfile" value="CONEPROJ.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
@@ -1342,7 +1402,11 @@
     <comp ref="R17">
       <value>100K</value>
       <footprint>Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder</footprint>
+      <fields>
+        <field name="MPN">RC0603FR-07100KL</field>
+      </fields>
       <libsource lib="Device" part="R_Small_US" description="Resistor, small US symbol"/>
+      <property name="MPN" value="RC0603FR-07100KL"/>
       <property name="Sheetname" value=""/>
       <property name="Sheetfile" value="CONEPROJ.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
@@ -1351,7 +1415,11 @@
     <comp ref="R18">
       <value>1M</value>
       <footprint>Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder</footprint>
+      <fields>
+        <field name="MPN">RMCF0603FT1M00</field>
+      </fields>
       <libsource lib="Device" part="R_Small" description="Resistor, small symbol"/>
+      <property name="MPN" value="RMCF0603FT1M00"/>
       <property name="Sheetname" value=""/>
       <property name="Sheetfile" value="CONEPROJ.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
@@ -1360,7 +1428,11 @@
     <comp ref="R20">
       <value>1M</value>
       <footprint>Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder</footprint>
+      <fields>
+        <field name="MPN">RMCF0603FT1M00</field>
+      </fields>
       <libsource lib="Device" part="R_Small" description="Resistor, small symbol"/>
+      <property name="MPN" value="RMCF0603FT1M00"/>
       <property name="Sheetname" value=""/>
       <property name="Sheetfile" value="CONEPROJ.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
@@ -1369,7 +1441,11 @@
     <comp ref="R21">
       <value>240</value>
       <footprint>Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder</footprint>
+      <fields>
+        <field name="MPN">RMCF0603FT240R</field>
+      </fields>
       <libsource lib="Device" part="R_Small" description="Resistor, small symbol"/>
+      <property name="MPN" value="RMCF0603FT240R"/>
       <property name="Sheetname" value=""/>
       <property name="Sheetfile" value="CONEPROJ.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
@@ -1378,7 +1454,11 @@
     <comp ref="R22">
       <value>240</value>
       <footprint>Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder</footprint>
+      <fields>
+        <field name="MPN">RMCF0603FT240R</field>
+      </fields>
       <libsource lib="Device" part="R_Small" description="Resistor, small symbol"/>
+      <property name="MPN" value="RMCF0603FT240R"/>
       <property name="Sheetname" value=""/>
       <property name="Sheetfile" value="CONEPROJ.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
@@ -1387,7 +1467,11 @@
     <comp ref="R23">
       <value>1.5k</value>
       <footprint>Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder</footprint>
+      <fields>
+        <field name="MPN">RNCP0603FTD1K50</field>
+      </fields>
       <libsource lib="Device" part="R_Small" description="Resistor, small symbol"/>
+      <property name="MPN" value="RNCP0603FTD1K50"/>
       <property name="Sheetname" value=""/>
       <property name="Sheetfile" value="CONEPROJ.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
@@ -1396,7 +1480,11 @@
     <comp ref="R24">
       <value>4.7k</value>
       <footprint>Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder</footprint>
+      <fields>
+        <field name="MPN">RMCF0603FT4K70</field>
+      </fields>
       <libsource lib="Device" part="R_Small" description="Resistor, small symbol"/>
+      <property name="MPN" value="RMCF0603FT4K70"/>
       <property name="Sheetname" value=""/>
       <property name="Sheetfile" value="CONEPROJ.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
@@ -1405,7 +1493,11 @@
     <comp ref="R26">
       <value>10K</value>
       <footprint>Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder</footprint>
+      <fields>
+        <field name="MPN">RMCF0603JT10K0</field>
+      </fields>
       <libsource lib="Device" part="R_Small_US" description="Resistor, small US symbol"/>
+      <property name="MPN" value="RMCF0603JT10K0"/>
       <property name="Sheetname" value=""/>
       <property name="Sheetfile" value="CONEPROJ.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
@@ -1414,7 +1506,11 @@
     <comp ref="R27">
       <value>150</value>
       <footprint>Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder</footprint>
+      <fields>
+        <field name="MPN">RNCP0603FTD150R</field>
+      </fields>
       <libsource lib="Device" part="R_Small" description="Resistor, small symbol"/>
+      <property name="MPN" value="RNCP0603FTD150R"/>
       <property name="Sheetname" value=""/>
       <property name="Sheetfile" value="CONEPROJ.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
@@ -1423,7 +1519,11 @@
     <comp ref="R28">
       <value>150</value>
       <footprint>Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder</footprint>
+      <fields>
+        <field name="MPN">RNCP0603FTD150R</field>
+      </fields>
       <libsource lib="Device" part="R_Small" description="Resistor, small symbol"/>
+      <property name="MPN" value="RNCP0603FTD150R"/>
       <property name="Sheetname" value=""/>
       <property name="Sheetfile" value="CONEPROJ.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
@@ -1432,7 +1532,11 @@
     <comp ref="R30">
       <value>240</value>
       <footprint>Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder</footprint>
+      <fields>
+        <field name="MPN">RMCF0603FT240R</field>
+      </fields>
       <libsource lib="Device" part="R_Small" description="Resistor, small symbol"/>
+      <property name="MPN" value="RMCF0603FT240R"/>
       <property name="Sheetname" value=""/>
       <property name="Sheetfile" value="CONEPROJ.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
@@ -1441,7 +1545,11 @@
     <comp ref="R34">
       <value>150</value>
       <footprint>Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder</footprint>
+      <fields>
+        <field name="MPN">RNCP0603FTD150R</field>
+      </fields>
       <libsource lib="Device" part="R_Small" description="Resistor, small symbol"/>
+      <property name="MPN" value="RNCP0603FTD150R"/>
       <property name="Sheetname" value=""/>
       <property name="Sheetfile" value="CONEPROJ.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
@@ -1450,7 +1558,11 @@
     <comp ref="R35">
       <value>10K</value>
       <footprint>Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder</footprint>
+      <fields>
+        <field name="MPN">RMCF0603JT10K0</field>
+      </fields>
       <libsource lib="Device" part="R_Small_US" description="Resistor, small US symbol"/>
+      <property name="MPN" value="RMCF0603JT10K0"/>
       <property name="Sheetname" value=""/>
       <property name="Sheetfile" value="CONEPROJ.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
@@ -1459,7 +1571,11 @@
     <comp ref="R44">
       <value>1k</value>
       <footprint>Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder</footprint>
+      <fields>
+        <field name="MPN">RNCP0603FTD1K00</field>
+      </fields>
       <libsource lib="Device" part="R_Small" description="Resistor, small symbol"/>
+      <property name="MPN" value="RNCP0603FTD1K00"/>
       <property name="Sheetname" value=""/>
       <property name="Sheetfile" value="CONEPROJ.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
@@ -1468,7 +1584,11 @@
     <comp ref="R54">
       <value>10K</value>
       <footprint>Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder</footprint>
+      <fields>
+        <field name="MPN">RMCF0603JT10K0</field>
+      </fields>
       <libsource lib="Device" part="R_Small_US" description="Resistor, small US symbol"/>
+      <property name="MPN" value="RMCF0603JT10K0"/>
       <property name="Sheetname" value=""/>
       <property name="Sheetfile" value="CONEPROJ.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
@@ -1477,7 +1597,11 @@
     <comp ref="R55">
       <value>10K</value>
       <footprint>Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder</footprint>
+      <fields>
+        <field name="MPN">RMCF0603JT10K0</field>
+      </fields>
       <libsource lib="Device" part="R_Small_US" description="Resistor, small US symbol"/>
+      <property name="MPN" value="RMCF0603JT10K0"/>
       <property name="Sheetname" value=""/>
       <property name="Sheetfile" value="CONEPROJ.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
@@ -1486,7 +1610,11 @@
     <comp ref="R56">
       <value>10K</value>
       <footprint>Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder</footprint>
+      <fields>
+        <field name="MPN">RMCF0603JT10K0</field>
+      </fields>
       <libsource lib="Device" part="R_Small_US" description="Resistor, small US symbol"/>
+      <property name="MPN" value="RMCF0603JT10K0"/>
       <property name="Sheetname" value=""/>
       <property name="Sheetfile" value="CONEPROJ.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
@@ -1495,7 +1623,11 @@
     <comp ref="R57">
       <value>10K</value>
       <footprint>Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder</footprint>
+      <fields>
+        <field name="MPN">RMCF0603JT10K0</field>
+      </fields>
       <libsource lib="Device" part="R_Small_US" description="Resistor, small US symbol"/>
+      <property name="MPN" value="RMCF0603JT10K0"/>
       <property name="Sheetname" value=""/>
       <property name="Sheetfile" value="CONEPROJ.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
@@ -1504,7 +1636,11 @@
     <comp ref="R58">
       <value>1.5k</value>
       <footprint>Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder</footprint>
+      <fields>
+        <field name="MPN">RNCP0603FTD1K50</field>
+      </fields>
       <libsource lib="Device" part="R_Small" description="Resistor, small symbol"/>
+      <property name="MPN" value="RNCP0603FTD1K50"/>
       <property name="Sheetname" value=""/>
       <property name="Sheetfile" value="CONEPROJ.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
@@ -1513,7 +1649,11 @@
     <comp ref="R59">
       <value>4.7k</value>
       <footprint>Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder</footprint>
+      <fields>
+        <field name="MPN">RMCF0603FT4K70</field>
+      </fields>
       <libsource lib="Device" part="R_Small" description="Resistor, small symbol"/>
+      <property name="MPN" value="RMCF0603FT4K70"/>
       <property name="Sheetname" value=""/>
       <property name="Sheetfile" value="CONEPROJ.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
@@ -1522,7 +1662,11 @@
     <comp ref="R60">
       <value>10k</value>
       <footprint>Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder</footprint>
+      <fields>
+        <field name="MPN">RNCP0603FTD10K0</field>
+      </fields>
       <libsource lib="Device" part="R_Small" description="Resistor, small symbol"/>
+      <property name="MPN" value="RNCP0603FTD10K0"/>
       <property name="Sheetname" value=""/>
       <property name="Sheetfile" value="CONEPROJ.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
@@ -1531,7 +1675,11 @@
     <comp ref="R76">
       <value>33</value>
       <footprint>Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder</footprint>
+      <fields>
+        <field name="MPN">RMCF0603FT33R0</field>
+      </fields>
       <libsource lib="Device" part="R_Small" description="Resistor, small symbol"/>
+      <property name="MPN" value="RMCF0603FT33R0"/>
       <property name="Sheetname" value=""/>
       <property name="Sheetfile" value="CONEPROJ.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
@@ -1540,7 +1688,11 @@
     <comp ref="R77">
       <value>33</value>
       <footprint>Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder</footprint>
+      <fields>
+        <field name="MPN">RMCF0603FT33R0</field>
+      </fields>
       <libsource lib="Device" part="R_Small_US" description="Resistor, small US symbol"/>
+      <property name="MPN" value="RMCF0603FT33R0"/>
       <property name="Sheetname" value=""/>
       <property name="Sheetfile" value="CONEPROJ.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
@@ -1549,7 +1701,11 @@
     <comp ref="R78">
       <value>33</value>
       <footprint>Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder</footprint>
+      <fields>
+        <field name="MPN">RMCF0603FT33R0</field>
+      </fields>
       <libsource lib="Device" part="R_Small_US" description="Resistor, small US symbol"/>
+      <property name="MPN" value="RMCF0603FT33R0"/>
       <property name="Sheetname" value=""/>
       <property name="Sheetfile" value="CONEPROJ.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
@@ -1558,7 +1714,11 @@
     <comp ref="R79">
       <value>33</value>
       <footprint>Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder</footprint>
+      <fields>
+        <field name="MPN">RMCF0603FT33R0</field>
+      </fields>
       <libsource lib="Device" part="R_Small_US" description="Resistor, small US symbol"/>
+      <property name="MPN" value="RMCF0603FT33R0"/>
       <property name="Sheetname" value=""/>
       <property name="Sheetfile" value="CONEPROJ.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
@@ -1567,7 +1727,11 @@
     <comp ref="R80">
       <value>33</value>
       <footprint>Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder</footprint>
+      <fields>
+        <field name="MPN">RMCF0603FT33R0</field>
+      </fields>
       <libsource lib="Device" part="R_Small_US" description="Resistor, small US symbol"/>
+      <property name="MPN" value="RMCF0603FT33R0"/>
       <property name="Sheetname" value=""/>
       <property name="Sheetfile" value="CONEPROJ.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
@@ -1576,7 +1740,11 @@
     <comp ref="R81">
       <value>33</value>
       <footprint>Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder</footprint>
+      <fields>
+        <field name="MPN">RMCF0603FT33R0</field>
+      </fields>
       <libsource lib="Device" part="R_Small_US" description="Resistor, small US symbol"/>
+      <property name="MPN" value="RMCF0603FT33R0"/>
       <property name="Sheetname" value=""/>
       <property name="Sheetfile" value="CONEPROJ.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
@@ -1585,7 +1753,11 @@
     <comp ref="R82">
       <value>33</value>
       <footprint>Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder</footprint>
+      <fields>
+        <field name="MPN">RMCF0603FT33R0</field>
+      </fields>
       <libsource lib="Device" part="R_Small_US" description="Resistor, small US symbol"/>
+      <property name="MPN" value="RMCF0603FT33R0"/>
       <property name="Sheetname" value=""/>
       <property name="Sheetfile" value="CONEPROJ.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
@@ -1594,7 +1766,11 @@
     <comp ref="R83">
       <value>33</value>
       <footprint>Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder</footprint>
+      <fields>
+        <field name="MPN">RMCF0603FT33R0</field>
+      </fields>
       <libsource lib="Device" part="R_Small_US" description="Resistor, small US symbol"/>
+      <property name="MPN" value="RMCF0603FT33R0"/>
       <property name="Sheetname" value=""/>
       <property name="Sheetfile" value="CONEPROJ.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
@@ -1603,7 +1779,11 @@
     <comp ref="R84">
       <value>33</value>
       <footprint>Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder</footprint>
+      <fields>
+        <field name="MPN">RMCF0603FT33R0</field>
+      </fields>
       <libsource lib="Device" part="R_Small_US" description="Resistor, small US symbol"/>
+      <property name="MPN" value="RMCF0603FT33R0"/>
       <property name="Sheetname" value=""/>
       <property name="Sheetfile" value="CONEPROJ.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
@@ -1612,7 +1792,11 @@
     <comp ref="R85">
       <value>33</value>
       <footprint>Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder</footprint>
+      <fields>
+        <field name="MPN">RMCF0603FT33R0</field>
+      </fields>
       <libsource lib="Device" part="R_Small_US" description="Resistor, small US symbol"/>
+      <property name="MPN" value="RMCF0603FT33R0"/>
       <property name="Sheetname" value=""/>
       <property name="Sheetfile" value="CONEPROJ.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
@@ -1621,7 +1805,11 @@
     <comp ref="R86">
       <value>33</value>
       <footprint>Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder</footprint>
+      <fields>
+        <field name="MPN">RMCF0603FT33R0</field>
+      </fields>
       <libsource lib="Device" part="R_Small_US" description="Resistor, small US symbol"/>
+      <property name="MPN" value="RMCF0603FT33R0"/>
       <property name="Sheetname" value=""/>
       <property name="Sheetfile" value="CONEPROJ.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
@@ -1630,7 +1818,11 @@
     <comp ref="R87">
       <value>100K</value>
       <footprint>Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder</footprint>
+      <fields>
+        <field name="MPN">RC0603FR-07100KL</field>
+      </fields>
       <libsource lib="Device" part="R_Small_US" description="Resistor, small US symbol"/>
+      <property name="MPN" value="RC0603FR-07100KL"/>
       <property name="Sheetname" value=""/>
       <property name="Sheetfile" value="CONEPROJ.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
@@ -1639,7 +1831,11 @@
     <comp ref="R88">
       <value>100K</value>
       <footprint>Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder</footprint>
+      <fields>
+        <field name="MPN">RC0603FR-07100KL</field>
+      </fields>
       <libsource lib="Device" part="R_Small_US" description="Resistor, small US symbol"/>
+      <property name="MPN" value="RC0603FR-07100KL"/>
       <property name="Sheetname" value=""/>
       <property name="Sheetfile" value="CONEPROJ.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
@@ -1648,7 +1844,11 @@
     <comp ref="R89">
       <value>1K, DNP</value>
       <footprint>Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder</footprint>
+      <fields>
+        <field name="MPN">RNCP0603FTD1K00</field>
+      </fields>
       <libsource lib="Device" part="R_Small_US" description="Resistor, small US symbol"/>
+      <property name="MPN" value="RNCP0603FTD1K00"/>
       <property name="Sheetname" value=""/>
       <property name="Sheetfile" value="CONEPROJ.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
@@ -1657,7 +1857,11 @@
     <comp ref="R91">
       <value>240</value>
       <footprint>Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder</footprint>
+      <fields>
+        <field name="MPN">RMCF0603FT240R</field>
+      </fields>
       <libsource lib="Device" part="R_Small" description="Resistor, small symbol"/>
+      <property name="MPN" value="RMCF0603FT240R"/>
       <property name="Sheetname" value=""/>
       <property name="Sheetfile" value="CONEPROJ.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
@@ -1666,7 +1870,11 @@
     <comp ref="R92">
       <value>33</value>
       <footprint>Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder</footprint>
+      <fields>
+        <field name="MPN">RMCF0603FT33R0</field>
+      </fields>
       <libsource lib="Device" part="R_Small_US" description="Resistor, small US symbol"/>
+      <property name="MPN" value="RMCF0603FT33R0"/>
       <property name="Sheetname" value=""/>
       <property name="Sheetfile" value="CONEPROJ.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
@@ -1675,7 +1883,11 @@
     <comp ref="R93">
       <value>33</value>
       <footprint>Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder</footprint>
+      <fields>
+        <field name="MPN">RMCF0603FT33R0</field>
+      </fields>
       <libsource lib="Device" part="R_Small_US" description="Resistor, small US symbol"/>
+      <property name="MPN" value="RMCF0603FT33R0"/>
       <property name="Sheetname" value=""/>
       <property name="Sheetfile" value="CONEPROJ.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
@@ -1684,7 +1896,11 @@
     <comp ref="R96">
       <value>33</value>
       <footprint>Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder</footprint>
+      <fields>
+        <field name="MPN">RMCF0603FT33R0</field>
+      </fields>
       <libsource lib="Device" part="R_Small_US" description="Resistor, small US symbol"/>
+      <property name="MPN" value="RMCF0603FT33R0"/>
       <property name="Sheetname" value=""/>
       <property name="Sheetfile" value="CONEPROJ.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
@@ -1693,7 +1909,11 @@
     <comp ref="R97">
       <value>33</value>
       <footprint>Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder</footprint>
+      <fields>
+        <field name="MPN">RMCF0603FT33R0</field>
+      </fields>
       <libsource lib="Device" part="R_Small_US" description="Resistor, small US symbol"/>
+      <property name="MPN" value="RMCF0603FT33R0"/>
       <property name="Sheetname" value=""/>
       <property name="Sheetfile" value="CONEPROJ.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
@@ -1702,7 +1922,11 @@
     <comp ref="R98">
       <value>10K</value>
       <footprint>Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder</footprint>
+      <fields>
+        <field name="MPN">RMCF0603JT10K0</field>
+      </fields>
       <libsource lib="Device" part="R_Small_US" description="Resistor, small US symbol"/>
+      <property name="MPN" value="RMCF0603JT10K0"/>
       <property name="Sheetname" value=""/>
       <property name="Sheetfile" value="CONEPROJ.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
@@ -1711,7 +1935,11 @@
     <comp ref="R99">
       <value>10K</value>
       <footprint>Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder</footprint>
+      <fields>
+        <field name="MPN">RMCF0603JT10K0</field>
+      </fields>
       <libsource lib="Device" part="R_Small_US" description="Resistor, small US symbol"/>
+      <property name="MPN" value="RMCF0603JT10K0"/>
       <property name="Sheetname" value=""/>
       <property name="Sheetfile" value="CONEPROJ.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
@@ -1720,7 +1948,11 @@
     <comp ref="R100">
       <value>33</value>
       <footprint>Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder</footprint>
+      <fields>
+        <field name="MPN">RMCF0603FT33R0</field>
+      </fields>
       <libsource lib="Device" part="R_Small_US" description="Resistor, small US symbol"/>
+      <property name="MPN" value="RMCF0603FT33R0"/>
       <property name="Sheetname" value=""/>
       <property name="Sheetfile" value="CONEPROJ.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
@@ -1729,7 +1961,11 @@
     <comp ref="R101">
       <value>10K</value>
       <footprint>Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder</footprint>
+      <fields>
+        <field name="MPN">RMCF0603JT10K0</field>
+      </fields>
       <libsource lib="Device" part="R_Small_US" description="Resistor, small US symbol"/>
+      <property name="MPN" value="RMCF0603JT10K0"/>
       <property name="Sheetname" value=""/>
       <property name="Sheetfile" value="CONEPROJ.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
@@ -1738,7 +1974,11 @@
     <comp ref="R102">
       <value>10K</value>
       <footprint>Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder</footprint>
+      <fields>
+        <field name="MPN">RMCF0603JT10K0</field>
+      </fields>
       <libsource lib="Device" part="R_Small_US" description="Resistor, small US symbol"/>
+      <property name="MPN" value="RMCF0603JT10K0"/>
       <property name="Sheetname" value=""/>
       <property name="Sheetfile" value="CONEPROJ.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
@@ -1747,7 +1987,11 @@
     <comp ref="R103">
       <value>10K</value>
       <footprint>Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder</footprint>
+      <fields>
+        <field name="MPN">RMCF0603JT10K0</field>
+      </fields>
       <libsource lib="Device" part="R_Small_US" description="Resistor, small US symbol"/>
+      <property name="MPN" value="RMCF0603JT10K0"/>
       <property name="Sheetname" value=""/>
       <property name="Sheetfile" value="CONEPROJ.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
@@ -1756,7 +2000,11 @@
     <comp ref="R104">
       <value>120, DNP</value>
       <footprint>Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder</footprint>
+      <fields>
+        <field name="MPN">RMCF0603FT120R</field>
+      </fields>
       <libsource lib="Device" part="R_Small_US" description="Resistor, small US symbol"/>
+      <property name="MPN" value="RMCF0603FT120R"/>
       <property name="Sheetname" value=""/>
       <property name="Sheetfile" value="CONEPROJ.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
@@ -1765,7 +2013,11 @@
     <comp ref="R105">
       <value>10K</value>
       <footprint>Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder</footprint>
+      <fields>
+        <field name="MPN">RMCF0603JT10K0</field>
+      </fields>
       <libsource lib="Device" part="R_Small_US" description="Resistor, small US symbol"/>
+      <property name="MPN" value="RMCF0603JT10K0"/>
       <property name="Sheetname" value=""/>
       <property name="Sheetfile" value="CONEPROJ.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
@@ -1774,7 +2026,11 @@
     <comp ref="R106">
       <value>1.5K</value>
       <footprint>Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder</footprint>
+      <fields>
+        <field name="MPN">RNCP0603FTD1K50</field>
+      </fields>
       <libsource lib="Device" part="R_Small_US" description="Resistor, small US symbol"/>
+      <property name="MPN" value="RNCP0603FTD1K50"/>
       <property name="Sheetname" value=""/>
       <property name="Sheetfile" value="CONEPROJ.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
@@ -1783,7 +2039,11 @@
     <comp ref="R107">
       <value>0.1</value>
       <footprint>Resistor_SMD:R_0805_2012Metric_Pad1.20x1.40mm_HandSolder</footprint>
+      <fields>
+        <field name="MPN">RL0805JR-070R1L</field>
+      </fields>
       <libsource lib="Device" part="R_Small" description="Resistor, small symbol"/>
+      <property name="MPN" value="RL0805JR-070R1L"/>
       <property name="Sheetname" value=""/>
       <property name="Sheetfile" value="CONEPROJ.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
@@ -1792,7 +2052,11 @@
     <comp ref="R108">
       <value>1K, DNP</value>
       <footprint>Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder</footprint>
+      <fields>
+        <field name="MPN">RNCP0603FTD1K00</field>
+      </fields>
       <libsource lib="Device" part="R_Small_US" description="Resistor, small US symbol"/>
+      <property name="MPN" value="RNCP0603FTD1K00"/>
       <property name="Sheetname" value=""/>
       <property name="Sheetfile" value="CONEPROJ.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
@@ -1801,7 +2065,11 @@
     <comp ref="R111">
       <value>0</value>
       <footprint>Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder</footprint>
+      <fields>
+        <field name="MPN">RMCF0603ZT0R00</field>
+      </fields>
       <libsource lib="Device" part="R_Small" description="Resistor, small symbol"/>
+      <property name="MPN" value="RMCF0603ZT0R00"/>
       <property name="Sheetname" value=""/>
       <property name="Sheetfile" value="CONEPROJ.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
@@ -1810,7 +2078,11 @@
     <comp ref="R113">
       <value>100K</value>
       <footprint>Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder</footprint>
+      <fields>
+        <field name="MPN">RC0603FR-07100KL</field>
+      </fields>
       <libsource lib="Device" part="R_Small_US" description="Resistor, small US symbol"/>
+      <property name="MPN" value="RC0603FR-07100KL"/>
       <property name="Sheetname" value=""/>
       <property name="Sheetfile" value="CONEPROJ.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
@@ -1819,7 +2091,11 @@
     <comp ref="R115">
       <value>100K</value>
       <footprint>Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder</footprint>
+      <fields>
+        <field name="MPN">RC0603FR-07100KL</field>
+      </fields>
       <libsource lib="Device" part="R_Small_US" description="Resistor, small US symbol"/>
+      <property name="MPN" value="RC0603FR-07100KL"/>
       <property name="Sheetname" value=""/>
       <property name="Sheetfile" value="CONEPROJ.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
@@ -1828,7 +2104,11 @@
     <comp ref="R116">
       <value>100K</value>
       <footprint>Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder</footprint>
+      <fields>
+        <field name="MPN">RC0603FR-07100KL</field>
+      </fields>
       <libsource lib="Device" part="R_Small_US" description="Resistor, small US symbol"/>
+      <property name="MPN" value="RC0603FR-07100KL"/>
       <property name="Sheetname" value=""/>
       <property name="Sheetfile" value="CONEPROJ.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
@@ -1837,7 +2117,11 @@
     <comp ref="R118">
       <value>100K</value>
       <footprint>Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder</footprint>
+      <fields>
+        <field name="MPN">RC0603FR-07100KL</field>
+      </fields>
       <libsource lib="Device" part="R_Small_US" description="Resistor, small US symbol"/>
+      <property name="MPN" value="RC0603FR-07100KL"/>
       <property name="Sheetname" value=""/>
       <property name="Sheetfile" value="CONEPROJ.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
@@ -1846,7 +2130,11 @@
     <comp ref="R120">
       <value>100K</value>
       <footprint>Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder</footprint>
+      <fields>
+        <field name="MPN">RC0603FR-07100KL</field>
+      </fields>
       <libsource lib="Device" part="R_Small_US" description="Resistor, small US symbol"/>
+      <property name="MPN" value="RC0603FR-07100KL"/>
       <property name="Sheetname" value=""/>
       <property name="Sheetfile" value="CONEPROJ.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
@@ -1855,7 +2143,11 @@
     <comp ref="R122">
       <value>100K</value>
       <footprint>Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder</footprint>
+      <fields>
+        <field name="MPN">RC0603FR-07100KL</field>
+      </fields>
       <libsource lib="Device" part="R_Small_US" description="Resistor, small US symbol"/>
+      <property name="MPN" value="RC0603FR-07100KL"/>
       <property name="Sheetname" value=""/>
       <property name="Sheetfile" value="CONEPROJ.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
@@ -1864,7 +2156,11 @@
     <comp ref="R123">
       <value>33</value>
       <footprint>Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder</footprint>
+      <fields>
+        <field name="MPN">RMCF0603FT33R0</field>
+      </fields>
       <libsource lib="Device" part="R_Small_US" description="Resistor, small US symbol"/>
+      <property name="MPN" value="RMCF0603FT33R0"/>
       <property name="Sheetname" value=""/>
       <property name="Sheetfile" value="CONEPROJ.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
@@ -1873,7 +2169,11 @@
     <comp ref="R124">
       <value>33</value>
       <footprint>Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder</footprint>
+      <fields>
+        <field name="MPN">RMCF0603FT33R0</field>
+      </fields>
       <libsource lib="Device" part="R_Small_US" description="Resistor, small US symbol"/>
+      <property name="MPN" value="RMCF0603FT33R0"/>
       <property name="Sheetname" value=""/>
       <property name="Sheetfile" value="CONEPROJ.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
@@ -1882,7 +2182,11 @@
     <comp ref="R125">
       <value>100K</value>
       <footprint>Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder</footprint>
+      <fields>
+        <field name="MPN">RC0603FR-07100KL</field>
+      </fields>
       <libsource lib="Device" part="R_Small_US" description="Resistor, small US symbol"/>
+      <property name="MPN" value="RC0603FR-07100KL"/>
       <property name="Sheetname" value=""/>
       <property name="Sheetfile" value="CONEPROJ.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
@@ -1891,7 +2195,11 @@
     <comp ref="R127">
       <value>100K</value>
       <footprint>Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder</footprint>
+      <fields>
+        <field name="MPN">RC0603FR-07100KL</field>
+      </fields>
       <libsource lib="Device" part="R_Small_US" description="Resistor, small US symbol"/>
+      <property name="MPN" value="RC0603FR-07100KL"/>
       <property name="Sheetname" value=""/>
       <property name="Sheetfile" value="CONEPROJ.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
@@ -1900,7 +2208,11 @@
     <comp ref="R129">
       <value>100K</value>
       <footprint>Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder</footprint>
+      <fields>
+        <field name="MPN">RC0603FR-07100KL</field>
+      </fields>
       <libsource lib="Device" part="R_Small_US" description="Resistor, small US symbol"/>
+      <property name="MPN" value="RC0603FR-07100KL"/>
       <property name="Sheetname" value=""/>
       <property name="Sheetfile" value="CONEPROJ.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
@@ -1909,7 +2221,11 @@
     <comp ref="R131">
       <value>100K</value>
       <footprint>Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder</footprint>
+      <fields>
+        <field name="MPN">RC0603FR-07100KL</field>
+      </fields>
       <libsource lib="Device" part="R_Small_US" description="Resistor, small US symbol"/>
+      <property name="MPN" value="RC0603FR-07100KL"/>
       <property name="Sheetname" value=""/>
       <property name="Sheetfile" value="CONEPROJ.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
@@ -1918,7 +2234,11 @@
     <comp ref="R135">
       <value>100K</value>
       <footprint>Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder</footprint>
+      <fields>
+        <field name="MPN">RC0603FR-07100KL</field>
+      </fields>
       <libsource lib="Device" part="R_Small_US" description="Resistor, small US symbol"/>
+      <property name="MPN" value="RC0603FR-07100KL"/>
       <property name="Sheetname" value=""/>
       <property name="Sheetfile" value="CONEPROJ.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
@@ -1927,7 +2247,11 @@
     <comp ref="R140">
       <value>100K</value>
       <footprint>Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder</footprint>
+      <fields>
+        <field name="MPN">RC0603FR-07100KL</field>
+      </fields>
       <libsource lib="Device" part="R_Small_US" description="Resistor, small US symbol"/>
+      <property name="MPN" value="RC0603FR-07100KL"/>
       <property name="Sheetname" value=""/>
       <property name="Sheetfile" value="CONEPROJ.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
@@ -1936,7 +2260,11 @@
     <comp ref="R143">
       <value>100K</value>
       <footprint>Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder</footprint>
+      <fields>
+        <field name="MPN">RC0603FR-07100KL</field>
+      </fields>
       <libsource lib="Device" part="R_Small_US" description="Resistor, small US symbol"/>
+      <property name="MPN" value="RC0603FR-07100KL"/>
       <property name="Sheetname" value=""/>
       <property name="Sheetfile" value="CONEPROJ.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
@@ -1945,7 +2273,11 @@
     <comp ref="R149">
       <value>0</value>
       <footprint>Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder</footprint>
+      <fields>
+        <field name="MPN">RMCF0603ZT0R00</field>
+      </fields>
       <libsource lib="Device" part="R_Small" description="Resistor, small symbol"/>
+      <property name="MPN" value="RMCF0603ZT0R00"/>
       <property name="Sheetname" value=""/>
       <property name="Sheetfile" value="CONEPROJ.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
@@ -1954,7 +2286,11 @@
     <comp ref="R158">
       <value>10k</value>
       <footprint>Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder</footprint>
+      <fields>
+        <field name="MPN">RNCP0603FTD10K0</field>
+      </fields>
       <libsource lib="Device" part="R_Small" description="Resistor, small symbol"/>
+      <property name="MPN" value="RNCP0603FTD10K0"/>
       <property name="Sheetname" value=""/>
       <property name="Sheetfile" value="CONEPROJ.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
@@ -1963,7 +2299,11 @@
     <comp ref="R190">
       <value>1k</value>
       <footprint>Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder</footprint>
+      <fields>
+        <field name="MPN">RNCP0603FTD1K00</field>
+      </fields>
       <libsource lib="Device" part="R_Small" description="Resistor, small symbol"/>
+      <property name="MPN" value="RNCP0603FTD1K00"/>
       <property name="Sheetname" value=""/>
       <property name="Sheetfile" value="CONEPROJ.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
@@ -1972,7 +2312,11 @@
     <comp ref="R301">
       <value>0</value>
       <footprint>Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder</footprint>
+      <fields>
+        <field name="MPN">RMCF0603ZT0R00</field>
+      </fields>
       <libsource lib="Device" part="R_Small" description="Resistor, small symbol"/>
+      <property name="MPN" value="RMCF0603ZT0R00"/>
       <property name="Sheetname" value=""/>
       <property name="Sheetfile" value="CONEPROJ.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
@@ -1982,13 +2326,13 @@
       <value>100k</value>
       <footprint>Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder</footprint>
       <fields>
-        <field name="MPN">RC0402FR-07100KL</field>
+        <field name="MPN">RMCF0603ZT0R00</field>
         <field name="MPN2">RMCF0402FT100K</field>
         <field name="Manufacturer">Yageo</field>
         <field name="Manufacturer2">Stackpole Electronics Inc</field>
       </fields>
       <libsource lib="elias-rescue" part="US_R0402-Very_Resistor" description=""/>
-      <property name="MPN" value="RC0402FR-07100KL"/>
+      <property name="MPN" value="RMCF0603ZT0R00"/>
       <property name="Manufacturer" value="Yageo"/>
       <property name="MPN2" value="RMCF0402FT100K"/>
       <property name="Manufacturer2" value="Stackpole Electronics Inc"/>
@@ -2001,13 +2345,13 @@
       <value>100k</value>
       <footprint>Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder</footprint>
       <fields>
-        <field name="MPN">RC0402FR-07100KL</field>
+        <field name="MPN">RMCF0603ZT0R00</field>
         <field name="MPN2">RMCF0402FT100K</field>
         <field name="Manufacturer">Yageo</field>
         <field name="Manufacturer2">Stackpole Electronics Inc</field>
       </fields>
       <libsource lib="elias-rescue" part="US_R0402-Very_Resistor" description=""/>
-      <property name="MPN" value="RC0402FR-07100KL"/>
+      <property name="MPN" value="RMCF0603ZT0R00"/>
       <property name="Manufacturer" value="Yageo"/>
       <property name="MPN2" value="RMCF0402FT100K"/>
       <property name="Manufacturer2" value="Stackpole Electronics Inc"/>
@@ -2020,13 +2364,13 @@
       <value>100k</value>
       <footprint>Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder</footprint>
       <fields>
-        <field name="MPN">RC0402FR-07100KL</field>
+        <field name="MPN">RMCF0603ZT0R00</field>
         <field name="MPN2">RMCF0402FT100K</field>
         <field name="Manufacturer">Yageo</field>
         <field name="Manufacturer2">Stackpole Electronics Inc</field>
       </fields>
       <libsource lib="elias-rescue" part="US_R0402-Very_Resistor" description=""/>
-      <property name="MPN" value="RC0402FR-07100KL"/>
+      <property name="MPN" value="RMCF0603ZT0R00"/>
       <property name="Manufacturer" value="Yageo"/>
       <property name="MPN2" value="RMCF0402FT100K"/>
       <property name="Manufacturer2" value="Stackpole Electronics Inc"/>
@@ -2038,7 +2382,11 @@
     <comp ref="R305">
       <value>5.1k</value>
       <footprint>Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder</footprint>
+      <fields>
+        <field name="MPN">RMCF0603JT5K10</field>
+      </fields>
       <libsource lib="Device" part="R_Small" description="Resistor, small symbol"/>
+      <property name="MPN" value="RMCF0603JT5K10"/>
       <property name="Sheetname" value=""/>
       <property name="Sheetfile" value="CONEPROJ.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
@@ -2047,7 +2395,11 @@
     <comp ref="R306">
       <value>5.1k</value>
       <footprint>Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder</footprint>
+      <fields>
+        <field name="MPN">RMCF0603JT5K10</field>
+      </fields>
       <libsource lib="Device" part="R_Small" description="Resistor, small symbol"/>
+      <property name="MPN" value="RMCF0603JT5K10"/>
       <property name="Sheetname" value=""/>
       <property name="Sheetfile" value="CONEPROJ.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
@@ -2056,7 +2408,11 @@
     <comp ref="R307">
       <value>10k</value>
       <footprint>Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder</footprint>
+      <fields>
+        <field name="MPN">RNCP0603FTD10K0</field>
+      </fields>
       <libsource lib="Device" part="R_Small" description="Resistor, small symbol"/>
+      <property name="MPN" value="RNCP0603FTD10K0"/>
       <property name="Sheetname" value=""/>
       <property name="Sheetfile" value="CONEPROJ.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
@@ -2065,7 +2421,11 @@
     <comp ref="R308">
       <value>240</value>
       <footprint>Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder</footprint>
+      <fields>
+        <field name="MPN">RMCF0603FT240R</field>
+      </fields>
       <libsource lib="Device" part="R_Small" description="Resistor, small symbol"/>
+      <property name="MPN" value="RMCF0603FT240R"/>
       <property name="Sheetname" value=""/>
       <property name="Sheetfile" value="CONEPROJ.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
@@ -2074,7 +2434,11 @@
     <comp ref="R309">
       <value>240</value>
       <footprint>Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder</footprint>
+      <fields>
+        <field name="MPN">RMCF0603FT240R</field>
+      </fields>
       <libsource lib="Device" part="R_Small" description="Resistor, small symbol"/>
+      <property name="MPN" value="RMCF0603FT240R"/>
       <property name="Sheetname" value=""/>
       <property name="Sheetfile" value="CONEPROJ.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
@@ -2083,7 +2447,11 @@
     <comp ref="R310">
       <value>1k</value>
       <footprint>Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder</footprint>
+      <fields>
+        <field name="MPN">RNCP0603FTD1K00</field>
+      </fields>
       <libsource lib="Device" part="R_Small" description="Resistor, small symbol"/>
+      <property name="MPN" value="RNCP0603FTD1K00"/>
       <property name="Sheetname" value=""/>
       <property name="Sheetfile" value="CONEPROJ.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
@@ -2374,13 +2742,12 @@
       <tstamps>02974cb2-7c65-46f3-8b47-4d16d85c42fc</tstamps>
     </comp>
     <comp ref="U301">
-      <value>S-8261AAJMD-G2JT2G</value>
-      <footprint>SOT95P275X135-6:SOT95P275X135-6</footprint>
+      <value>BQ29716DSET</value>
       <fields>
-        <field name="MPN">S-8261AAJMD-G2JT2G</field>
+        <field name="MPN">BQ29716DSET</field>
       </fields>
       <libsource lib="S-8261AAJMD-G2JT2G" part="S-8261AAJMD-G2JT2G" description=""/>
-      <property name="MPN" value="S-8261AAJMD-G2JT2G"/>
+      <property name="MPN" value="BQ29716DSET"/>
       <property name="Sheetname" value=""/>
       <property name="Sheetfile" value="CONEPROJ.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
@@ -2389,7 +2756,11 @@
     <comp ref="U302">
       <value>MP2615</value>
       <footprint>MP2615GQ-Z:MP2615GQ-Z</footprint>
+      <fields>
+        <field name="MPN">MP2615GQ-Z</field>
+      </fields>
       <libsource lib="" part="MP2615_1" description=""/>
+      <property name="MPN" value="MP2615GQ-Z"/>
       <property name="Sheetname" value=""/>
       <property name="Sheetfile" value="CONEPROJ.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
@@ -2398,7 +2769,11 @@
     <comp ref="U303">
       <value>BQ29209DRBR</value>
       <footprint>BQ29209DRBR:IC_DRV8601DRBT</footprint>
+      <fields>
+        <field name="MPN">BQ29209DRBR</field>
+      </fields>
       <libsource lib="BQ29209DRBR" part="BQ29209DRBR" description=""/>
+      <property name="MPN" value="BQ29209DRBR"/>
       <property name="Sheetname" value=""/>
       <property name="Sheetfile" value="CONEPROJ.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
@@ -2407,7 +2782,11 @@
     <comp ref="U304">
       <value>AP1509</value>
       <footprint>AP1509-50SG-13:SO08</footprint>
+      <fields>
+        <field name="MPN">AP1509-50SG-13</field>
+      </fields>
       <libsource lib="AP1509-50SG-13" part="AP1509-50SG-13" description=""/>
+      <property name="MPN" value="AP1509-50SG-13"/>
       <property name="Sheetname" value=""/>
       <property name="Sheetfile" value="CONEPROJ.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
@@ -2461,7 +2840,11 @@
       <value>BMP280</value>
       <footprint>Package_LGA:Bosch_LGA-8_2x2.5mm_P0.65mm_ClockwisePinNumbering</footprint>
       <datasheet>https://ae-bst.resource.bosch.com/media/_tech/media/datasheets/BST-BMP280-DS001.pdf</datasheet>
+      <fields>
+        <field name="MPN">BMP280</field>
+      </fields>
       <libsource lib="Sensor_Pressure" part="BMP280" description="Absolute Barometric Pressure Sensor, LGA-8"/>
+      <property name="MPN" value="BMP280"/>
       <property name="Sheetname" value=""/>
       <property name="Sheetfile" value="CONEPROJ.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
@@ -2470,7 +2853,11 @@
     <comp ref="U309">
       <value>OSD3358-512M-BAS</value>
       <footprint>OSD3358-512M-BAS:OSD335X-BGA-400</footprint>
+      <fields>
+        <field name="MPN">OSD3358-512M-BAS</field>
+      </fields>
       <libsource lib="OSD3358-512M-BAS" part="OSD3358-512M-BAS" description=""/>
+      <property name="MPN" value="OSD3358-512M-BAS"/>
       <property name="Sheetname" value=""/>
       <property name="Sheetfile" value="CONEPROJ.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
@@ -2492,15 +2879,15 @@
       <tstamps>de8f2a0b-bd53-48d7-a790-eb1846581635</tstamps>
     </comp>
     <comp ref="U311">
-      <value>NC7WZ126</value>
+      <value>SN74LVC2G126DCUR</value>
       <footprint>SOP50P310X90-8N:SOP50P310X90-8N</footprint>
       <fields>
-        <field name="MPN">NC7WZ126K8X</field>
+        <field name="MPN">SN74LVC2G126DCUR</field>
         <field name="Manufacturer">ON Semiconductor</field>
       </fields>
       <libsource lib="elias-rescue" part="NC7WZ126-Very_Buffer" description=""/>
       <property name="Manufacturer" value="ON Semiconductor"/>
-      <property name="MPN" value="NC7WZ126K8X"/>
+      <property name="MPN" value="SN74LVC2G126DCUR"/>
       <property name="Sheetname" value=""/>
       <property name="Sheetfile" value="CONEPROJ.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
@@ -2508,8 +2895,11 @@
     </comp>
     <comp ref="Y1">
       <value>24MHz</value>
-      <footprint>Crystal:Crystal_SMD_Qantek_QC5CB-2Pin_5x3.2mm</footprint>
+      <fields>
+        <field name="MPN">445I23D24M00000</field>
+      </fields>
       <libsource lib="Device" part="Crystal_Small" description="Two pin crystal, small symbol"/>
+      <property name="MPN" value="445I23D24M00000"/>
       <property name="Sheetname" value=""/>
       <property name="Sheetfile" value="CONEPROJ.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
@@ -2518,7 +2908,11 @@
     <comp ref="Y2">
       <value>32.768kHz</value>
       <footprint>Crystal:Crystal_SMD_3215-2Pin_3.2x1.5mm</footprint>
+      <fields>
+        <field name="MPN">FX135A-327</field>
+      </fields>
       <libsource lib="Device" part="Crystal_Small" description="Two pin crystal, small symbol"/>
+      <property name="MPN" value="FX135A-327"/>
       <property name="Sheetname" value=""/>
       <property name="Sheetfile" value="CONEPROJ.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
@@ -3831,64 +4225,64 @@
   </libparts>
   <libraries>
     <library logical="24LC_32AT-IOT">
-      <uri>/Users/connor/workspace/connorrigby/haltech-link/hardware/library/24LC_32AT-IOT/24LC_32AT-IOT.kicad_sym</uri>
+      <uri>/home/connor/workspace/sixtyeightplus.one/can-link/hardware/library/24LC_32AT-IOT/24LC_32AT-IOT.kicad_sym</uri>
     </library>
     <library logical="AP1509-50SG-13">
-      <uri>/Users/connor/workspace/connorrigby/haltech-link/hardware/library/AP1509-50SG-13/AP1509-50SG-13.lib</uri>
+      <uri>/home/connor/workspace/sixtyeightplus.one/can-link/hardware/library/AP1509-50SG-13/AP1509-50SG-13.lib</uri>
     </library>
     <library logical="ATECC608A-MAHDA-T">
-      <uri>/Users/connor/workspace/connorrigby/haltech-link/hardware/library/ATECC608A-MAHDA-T/ATECC608A-MAHDA-T.lib</uri>
+      <uri>/home/connor/workspace/sixtyeightplus.one/can-link/hardware/library/ATECC608A-MAHDA-T/ATECC608A-MAHDA-T.lib</uri>
     </library>
     <library logical="BQ29209DRBR">
-      <uri>/Users/connor/workspace/connorrigby/haltech-link/hardware/library/BQ29209DRBR/BQ29209DRBR.lib</uri>
+      <uri>/home/connor/workspace/sixtyeightplus.one/can-link/hardware/library/BQ29209DRBR/BQ29209DRBR.lib</uri>
     </library>
     <library logical="Connector">
-      <uri>/Applications/KiCad/KiCad.app/Contents/SharedSupport/symbols//Connector.kicad_sym</uri>
+      <uri>/usr/share/kicad/symbols//Connector.kicad_sym</uri>
     </library>
     <library logical="Connector_Generic">
-      <uri>/Applications/KiCad/KiCad.app/Contents/SharedSupport/symbols//Connector_Generic.kicad_sym</uri>
+      <uri>/usr/share/kicad/symbols//Connector_Generic.kicad_sym</uri>
     </library>
     <library logical="Device">
-      <uri>/Applications/KiCad/KiCad.app/Contents/SharedSupport/symbols//Device.kicad_sym</uri>
+      <uri>/usr/share/kicad/symbols//Device.kicad_sym</uri>
     </library>
     <library logical="Mechanical">
-      <uri>/Applications/KiCad/KiCad.app/Contents/SharedSupport/symbols//Mechanical.kicad_sym</uri>
+      <uri>/usr/share/kicad/symbols//Mechanical.kicad_sym</uri>
     </library>
     <library logical="OSD3358-512M-BAS">
-      <uri>/Users/connor/workspace/connorrigby/haltech-link/hardware/library/OSD3358-512M-BAS/OSD3358-512M-BAS.lib</uri>
+      <uri>/home/connor/workspace/sixtyeightplus.one/can-link/hardware/library/OSD3358-512M-BAS/OSD3358-512M-BAS.lib</uri>
     </library>
     <library logical="RFM69HW">
-      <uri>/Users/connor/workspace/connorrigby/haltech-link/hardware/library/RFM69HW/RFM69HW.lib</uri>
+      <uri>/home/connor/workspace/sixtyeightplus.one/can-link/hardware/library/RFM69HW/RFM69HW.lib</uri>
     </library>
     <library logical="S-8261AAJMD-G2JT2G">
-      <uri>/Users/connor/workspace/connorrigby/haltech-link/hardware/library/S-8261AAJMD-G2JT2G/S-8261AAJMD-G2JT2G.lib</uri>
+      <uri>/home/connor/workspace/sixtyeightplus.one/can-link/hardware/library/S-8261AAJMD-G2JT2G/S-8261AAJMD-G2JT2G.lib</uri>
     </library>
     <library logical="SCHA5B0200">
-      <uri>/Users/connor/workspace/connorrigby/haltech-link/hardware/library/SCHA5B0200/SCHA5B0200.lib</uri>
+      <uri>/home/connor/workspace/sixtyeightplus.one/can-link/hardware/library/SCHA5B0200/SCHA5B0200.lib</uri>
     </library>
     <library logical="SN74LV1T126DBVR">
-      <uri>/Users/connor/workspace/connorrigby/haltech-link/hardware/library/SN74LV1T126DBVR/SN74LV1T126DBVR.lib</uri>
+      <uri>/home/connor/workspace/sixtyeightplus.one/can-link/hardware/library/SN74LV1T126DBVR/SN74LV1T126DBVR.lib</uri>
     </library>
     <library logical="SN74LVC1G07DCKR">
-      <uri>/Users/connor/workspace/connorrigby/haltech-link/hardware/library/SN74LVC1G07DCKR/SN74LVC1G07DCKR.lib</uri>
+      <uri>/home/connor/workspace/sixtyeightplus.one/can-link/hardware/library/SN74LVC1G07DCKR/SN74LVC1G07DCKR.lib</uri>
     </library>
     <library logical="Sensor_Motion">
-      <uri>/Applications/KiCad/KiCad.app/Contents/SharedSupport/symbols//Sensor_Motion.kicad_sym</uri>
+      <uri>/usr/share/kicad/symbols//Sensor_Motion.kicad_sym</uri>
     </library>
     <library logical="Sensor_Pressure">
-      <uri>/Applications/KiCad/KiCad.app/Contents/SharedSupport/symbols//Sensor_Pressure.kicad_sym</uri>
+      <uri>/usr/share/kicad/symbols//Sensor_Pressure.kicad_sym</uri>
     </library>
     <library logical="Switch">
-      <uri>/Applications/KiCad/KiCad.app/Contents/SharedSupport/symbols//Switch.kicad_sym</uri>
+      <uri>/usr/share/kicad/symbols//Switch.kicad_sym</uri>
     </library>
     <library logical="TPD4S012DRYR">
-      <uri>/Users/connor/workspace/connorrigby/haltech-link/hardware/library/TPD4S012DRYR/TPD4S012DRYR.lib</uri>
+      <uri>/home/connor/workspace/sixtyeightplus.one/can-link/hardware/library/TPD4S012DRYR/TPD4S012DRYR.lib</uri>
     </library>
     <library logical="U.FL-R-SMT-1_10_">
-      <uri>/Users/connor/workspace/connorrigby/haltech-link/hardware/library/U.FL-R-SMT-1_10_/U.FL-R-SMT-1_10_.lib</uri>
+      <uri>/home/connor/workspace/sixtyeightplus.one/can-link/hardware/library/U.FL-R-SMT-1_10_/U.FL-R-SMT-1_10_.lib</uri>
     </library>
     <library logical="WL1835MODGBMOCT">
-      <uri>/Users/connor/workspace/connorrigby/haltech-link/hardware/library/WL1835MODGBMOCT/WL1835MODGBMOCT.lib</uri>
+      <uri>/home/connor/workspace/sixtyeightplus.one/can-link/hardware/library/WL1835MODGBMOCT/WL1835MODGBMOCT.lib</uri>
     </library>
   </libraries>
   <nets>

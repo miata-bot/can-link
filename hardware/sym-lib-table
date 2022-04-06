@@ -20,4 +20,6 @@
   (lib (name "TDC-2030-IDC")(type "Legacy")(uri "${KIPRJMOD}/library/TDC2030/TC2030-IDC.lib")(options "")(descr ""))
   (lib (name "DT")(type "Legacy")(uri "${KIPRJMOD}/library/DT13/DT13-4P.lib")(options "")(descr ""))
   (lib (name "logos")(type "KiCad")(uri "${KIPRJMOD}/footprints/logos.pretty/cone.kicad_sym")(options "")(descr ""))
+  (lib (name "CM4IO")(type "KiCad")(uri "${KIPRJMOD}/library/CM4IO/CM4IO.kicad_sym")(options "")(descr ""))
+  (lib (name "RP2040")(type "Legacy")(uri "${KIPRJMOD}/library/RP2040/MCU_RaspberryPi_and_Boards.lib")(options "")(descr ""))
 )

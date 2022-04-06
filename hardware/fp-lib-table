@@ -25,4 +25,7 @@
   (lib (name "TDC-2030-IDC")(type "KiCad")(uri "${KIPRJMOD}/footprints/TDC2030-IDC.pretty")(options "")(descr ""))
   (lib (name "DT")(type "KiCad")(uri "${KIPRJMOD}/footprints/TE_DT13-4P.pretty")(options "")(descr ""))
   (lib (name "logos")(type "KiCad")(uri "${KIPRJMOD}/footprints/logos.pretty")(options "")(descr ""))
+  (lib (name "CM4")(type "KiCad")(uri "${KIPRJMOD}/footprints/CM4IO.pretty")(options "")(descr ""))
+  (lib (name "RP2040")(type "KiCad")(uri "${KIPRJMOD}/footprints/MCU_RaspberryPi_and_Boards.pretty")(options "")(descr ""))
+  (lib (name "BQ29716DSET")(type "KiCad")(uri "${KIPRJMOD}/footprints/BQ29716DSET.pretty")(options "")(descr ""))
 )
