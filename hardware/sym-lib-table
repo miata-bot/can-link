@@ -26,4 +26,6 @@
   (lib (name "Device_Dual_Q")(type "KiCad")(uri "${KIPRJMOD}/library/Device_Dual_Q.kicad_sym")(options "")(descr ""))
   (lib (name "WS2815B")(type "Legacy")(uri "${KIPRJMOD}/library/WS2815B/WS2815B.lib")(options "")(descr ""))
   (lib (name "10119313-301TLF")(type "Legacy")(uri "${KIPRJMOD}/library/10119313-301TLF/10119313-301TLF.lib")(options "")(descr ""))
+  (lib (name "TE_DTM1312PA12PBR008")(type "Legacy")(uri "${KIPRJMOD}/library/DTM1312PA12PBR008.lib")(options "")(descr ""))
+  (lib (name "AMPHENOL_UC-31PFFP-QS8001")(type "Legacy")(uri "${KIPRJMOD}/library/UC-31PFFP-QS8001.lib")(options "")(descr ""))
 )
