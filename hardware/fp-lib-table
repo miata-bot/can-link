@@ -30,4 +30,6 @@
   (lib (name "BQ29716DSET")(type "KiCad")(uri "${KIPRJMOD}/footprints/BQ29716DSET.pretty")(options "")(descr ""))
   (lib (name "SD")(type "KiCad")(uri "${KIPRJMOD}/footprints/693071020811.pretty")(options "")(descr ""))
   (lib (name "WS2815B")(type "KiCad")(uri "${KIPRJMOD}/footprints/WS2815B.pretty")(options "")(descr ""))
+  (lib (name "10119313-301TLF")(type "KiCad")(uri "${KIPRJMOD}/footprints/10119313-301TLF.pretty")(options "")(descr ""))
+  (lib (name "AT15")(type "KiCad")(uri "${KIPRJMOD}/footprints/AT15.pretty")(options "")(descr ""))
 )
