@@ -8,13 +8,21 @@ Here's a [Twitter thread](https://twitter.com/pressy4pie/status/1504309482054029
 [video link](https://video.twimg.com/ext_tw_video/1504309386151301125/pu/vid/720x1280/zwIcUEVZBSSQAASE.mp4?tag=12).
 
 Here's a render of the PCB
-![PCB](hardware/images/v2-RevA-PCB-Render-Front-Case.pngPCB-Render.png)
+
+![PCB](hardware/images/v2-RevA-PCB-Render-Front-No-Case.png)
 
 Here's a photo of the radio/gps module prototypes. ![prototypes](hardware/images/beagleblue-prototype.jpg).
 
-Here's a photo of the entire prototype. ![prototypes](hardware/images/prototype-wiring.jpg)
+Here's a photo of the entire ![prototypes](hardware/images/prototype-wiring.jpg)
 
 Here's a [Twitter thread](https://twitter.com/pressy4pie/status/1506779115122139137) showing a demo of the GPS and companion application. [video link](https://video.twimg.com/ext_tw_video/1506778163891740673/pu/vid/720x1630/oxYdaMkSowD5uJmU.mp4?tag=12).
+
+I've written up a few posts on the progress of the project
+
+* [Original hardware design](https://cone.codes/posts/can-link/)
+* [Short post on using PWM to drive LEDS](https://cone.codes/posts/nerves-pwm/)
+* [Hardware redesign](https://cone.codes/posts/can-link-pt-2/)
+* [Hardware reredesign](https://cone.codes/posts/can-link-pt-3/)
 
 ## Description
 
