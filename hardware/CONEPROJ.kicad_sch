@@ -7696,7 +7696,7 @@
     (effects (font (size 1.27 1.27)) (justify right bottom))
     (uuid b38e8f0c-5179-493a-aa29-6465986e4069)
   )
-  (label "VCC" (at 415.29 281.94 180)
+  (label "VIN" (at 415.29 281.94 180)
     (effects (font (size 1.27 1.27)) (justify right bottom))
     (uuid b50f9df0-81ca-4464-8b89-1e286660a442)
   )
@@ -9958,7 +9958,7 @@
   (symbol (lib_id "elias-rescue:C_Small-Very_Capacitor") (at 456.565 271.78 0) (mirror y) (unit 1)
     (in_bom yes) (on_board yes)
     (uuid 7a37ca2b-03f8-42b8-84e4-5a722be13d07)
-    (property "Reference" "C?" (id 0) (at 454.2282 270.6116 0)
+    (property "Reference" "C20" (id 0) (at 454.2282 270.6116 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
     (property "Value" "0.1uF" (id 1) (at 454.2282 272.923 0)
@@ -10130,7 +10130,7 @@
   (symbol (lib_id "elias-rescue:C_Small-Very_Capacitor") (at 441.325 271.78 0) (unit 1)
     (in_bom yes) (on_board yes)
     (uuid 809b8cf6-aa34-4885-969a-ea9d7d5bb7d3)
-    (property "Reference" "C?" (id 0) (at 443.6618 270.6116 0)
+    (property "Reference" "C2" (id 0) (at 443.6618 270.6116 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
     (property "Value" "10uF" (id 1) (at 443.6618 272.923 0)
@@ -11418,7 +11418,7 @@
   (symbol (lib_id "power:GND") (at 456.565 275.59 0) (unit 1)
     (in_bom yes) (on_board yes) (fields_autoplaced)
     (uuid c448a753-7209-4de5-aa84-164df3948945)
-    (property "Reference" "#PWR?" (id 0) (at 456.565 281.94 0)
+    (property "Reference" "#PWR0113" (id 0) (at 456.565 281.94 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "GND" (id 1) (at 456.565 280.67 0))
@@ -11743,7 +11743,7 @@
   (symbol (lib_id "power:GND") (at 441.325 275.59 0) (unit 1)
     (in_bom yes) (on_board yes) (fields_autoplaced)
     (uuid df884e43-58fc-48a1-a545-d30a3cb1db71)
-    (property "Reference" "#PWR?" (id 0) (at 441.325 281.94 0)
+    (property "Reference" "#PWR0115" (id 0) (at 441.325 281.94 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "GND" (id 1) (at 441.325 280.67 0))
@@ -12306,8 +12306,14 @@
     (path "/d7a7e045-01d3-49da-9243-db7ea653f421"
       (reference "#PWR0112") (unit 1) (value "GND") (footprint "")
     )
+    (path "/c448a753-7209-4de5-aa84-164df3948945"
+      (reference "#PWR0113") (unit 1) (value "GND") (footprint "")
+    )
     (path "/54ba24e3-2912-4331-8e77-cbac8dc39d0a"
       (reference "#PWR0114") (unit 1) (value "GND") (footprint "")
+    )
+    (path "/df884e43-58fc-48a1-a545-d30a3cb1db71"
+      (reference "#PWR0115") (unit 1) (value "GND") (footprint "")
     )
     (path "/8bc84bb2-3518-4e6b-ba0e-3a08acb752c0"
       (reference "#PWR0116") (unit 1) (value "GND") (footprint "")
@@ -12474,11 +12480,8 @@
     (path "/067841eb-d019-4e4b-9cd1-652d10c7cad8"
       (reference "#PWR0180") (unit 1) (value "GND") (footprint "")
     )
-    (path "/c448a753-7209-4de5-aa84-164df3948945"
-      (reference "#PWR?") (unit 1) (value "GND") (footprint "")
-    )
-    (path "/df884e43-58fc-48a1-a545-d30a3cb1db71"
-      (reference "#PWR?") (unit 1) (value "GND") (footprint "")
+    (path "/809b8cf6-aa34-4885-969a-ea9d7d5bb7d3"
+      (reference "C2") (unit 1) (value "10uF") (footprint "Capacitor_SMD:C_0805_2012Metric_Pad1.18x1.45mm_HandSolder")
     )
     (path "/f303bae3-07e1-45ad-b2a2-06dc904ca6c2"
       (reference "C3") (unit 1) (value "10uF") (footprint "Capacitor_SMD:C_0805_2012Metric_Pad1.18x1.45mm_HandSolder")
@@ -12531,6 +12534,9 @@
     (path "/5f39aaf9-a490-4d56-830d-a1f4d57a2fa3"
       (reference "C19") (unit 1) (value "0.1uF") (footprint "Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder")
     )
+    (path "/7a37ca2b-03f8-42b8-84e4-5a722be13d07"
+      (reference "C20") (unit 1) (value "0.1uF") (footprint "Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder")
+    )
     (path "/fdd639c9-9c8e-4e1a-bb96-783aa436a358"
       (reference "C21") (unit 1) (value "22pf") (footprint "Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder")
     )
@@ -12554,12 +12560,6 @@
     )
     (path "/572b0f79-d086-4a44-a0dd-6153d05ef800"
       (reference "C305") (unit 1) (value "0.1uF") (footprint "Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder")
-    )
-    (path "/7a37ca2b-03f8-42b8-84e4-5a722be13d07"
-      (reference "C?") (unit 1) (value "0.1uF") (footprint "Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder")
-    )
-    (path "/809b8cf6-aa34-4885-969a-ea9d7d5bb7d3"
-      (reference "C?") (unit 1) (value "10uF") (footprint "Capacitor_SMD:C_0805_2012Metric_Pad1.18x1.45mm_HandSolder")
     )
     (path "/1e616cea-39e5-4f60-9cfc-b30728e65923"
       (reference "CM4A2") (unit 1) (value "DF40C-100DS-0.4V") (footprint "")
