@@ -28,4 +28,6 @@
   (lib (name "10119313-301TLF")(type "Legacy")(uri "${KIPRJMOD}/library/10119313-301TLF/10119313-301TLF.lib")(options "")(descr ""))
   (lib (name "TE_DTM1312PA12PBR008")(type "Legacy")(uri "${KIPRJMOD}/library/DTM1312PA12PBR008.lib")(options "")(descr ""))
   (lib (name "AMPHENOL_UC-31PFFP-QS8001")(type "Legacy")(uri "${KIPRJMOD}/library/UC-31PFFP-QS8001.lib")(options "")(descr ""))
+  (lib (name "TC2030-IDC")(type "Legacy")(uri "${KIPRJMOD}/library/TC2030-IDC.lib")(options "")(descr ""))
+  (lib (name "NC7WZ126K8X")(type "Legacy")(uri "${KIPRJMOD}/library/NC7WZ126K8X.lib")(options "")(descr ""))
 )
