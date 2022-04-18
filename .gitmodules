@@ -1,0 +1,3 @@
+[submodule "firmware/led_driver_firmware/pico-sdk"]
+	path = firmware/led_driver_firmware/pico-sdk
+	url = https://github.com/raspberrypi/pico-sdk.git
