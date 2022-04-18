@@ -34,4 +34,5 @@
   (lib (name "AT15")(type "KiCad")(uri "${KIPRJMOD}/footprints/AT15.pretty")(options "")(descr ""))
   (lib (name "TE_DTM1312PA12PBR008")(type "KiCad")(uri "${KIPRJMOD}/footprints/TE_DTM1312PA12PBR008.pretty")(options "")(descr ""))
   (lib (name "AMPHENOL_UC-31PFFP-QS8001")(type "KiCad")(uri "${KIPRJMOD}/footprints/AMPHENOL_UC-31PFFP-QS8001.pretty")(options "")(descr ""))
+  (lib (name "TFBGA-257")(type "KiCad")(uri "${KIPRJMOD}/footprints/Package_TBGA257")(options "")(descr ""))
 )

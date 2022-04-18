@@ -8,3 +8,4 @@ zig*
 *.DS_Store
 *.out
 speeduino.ini
+/*/*backups/
