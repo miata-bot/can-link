@@ -1,0 +1,47 @@
+EESchema-LIBRARY Version 2.3
+#encoding utf-8
+#(c) SnapEDA 2016 (snapeda.com)
+#This work is licensed under a Creative Commons Attribution-ShareAlike 4.0 International License (CC BY-SA) with Design Exception 1.0
+#
+# SN74LVC1G07
+#
+DEF SN74LVC1G07 U 0 40 Y Y 1 L N
+F0 "U" -250 350 50 H V L BNN
+F1 "SN74LVC1G07" -250 -425 50 H V L BNN
+F3 "" 0 0 50 H I L BNN
+$FPLIST
+ SOT23-5
+ SC70-5
+ SOT-5
+$ENDFPLIST
+DRAW
+P 2 0 0 10 -100 100 100 0 N
+P 2 0 0 10 100 0 -100 -100 N
+P 2 0 0 10 -100 -100 -100 0 N
+P 2 0 0 10 -100 0 -100 100 N
+P 2 0 0 16 300 300 -300 300 N
+P 2 0 0 16 -300 300 -300 0 N
+P 2 0 0 16 -300 0 -300 -300 N
+P 2 0 0 16 -300 -300 300 -300 N
+P 2 0 0 16 300 -300 300 -200 N
+P 2 0 0 16 300 -200 300 300 N
+P 2 0 0 6 -100 0 -300 0 N
+P 2 0 0 6 100 0 200 0 N
+P 2 0 0 6 200 0 200 -200 N
+P 2 0 0 6 200 -200 300 -200 N
+P 2 0 0 6 -31 25 -6 0 N
+P 2 0 0 6 -56 0 -31 -25 N
+P 2 0 0 6 -56 0 -31 25 N
+P 2 0 0 6 -31 -25 -6 0 N
+P 2 0 0 6 -56 -31 -6 -31 N
+T 0 -200 25 50 0 0 0 A Normal 0 L B
+T 0 150 25 50 0 0 0 Y Normal 0 L B
+X ~ 2 -500 0 200 R 40 40 0 0 I 
+X ~ 4 500 -200 200 L 40 40 0 0 O 
+X VCC 5 500 200 200 L 40 40 0 0 W 
+X GND 3 -500 -200 200 R 40 40 0 0 W 
+X NC 1 -500 200 200 R 40 40 0 0 N 
+ENDDRAW
+ENDDEF
+#
+# End Library

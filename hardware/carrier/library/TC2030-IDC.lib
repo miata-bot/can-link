@@ -1,0 +1,27 @@
+EESchema-LIBRARY Version 2.3
+#encoding utf-8
+#(c) SnapEDA 2016 (snapeda.com)
+#This work is licensed under a Creative Commons Attribution-ShareAlike 4.0 International License (CC BY-SA) with Design Exception 1.0
+#
+# TC2030-IDC
+#
+DEF TC2030-IDC TC 0 40 Y Y 1 L N
+F0 "TC" -150 230 50 H V L BNN
+F1 "TC2030-IDC" -150 -300 50 H V L BNN
+F3 "" 0 0 50 H I L BNN
+$FPLIST
+ TC2030-IDC
+ TC2030-IDC-NL
+$ENDFPLIST
+DRAW
+S -400 -200 500 200 0 0 16 f
+X VCC 1 600 -100 100 L 40 40 0 0 P 
+X NRESET 3 600 0 100 L 40 40 0 0 P 
+X GND 5 600 100 100 L 40 40 0 0 P 
+X SWDIO 2 -500 -100 100 R 40 40 0 0 P 
+X SWCLK 4 -500 0 100 R 40 40 0 0 P 
+X SWO 6 -500 100 100 R 40 40 0 0 P 
+ENDDRAW
+ENDDEF
+#
+# End Library
