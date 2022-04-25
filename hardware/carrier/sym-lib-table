@@ -30,5 +30,5 @@
   (lib (name "AMPHENOL_UC-31PFFP-QS8001")(type "Legacy")(uri "${KIPRJMOD}/library/UC-31PFFP-QS8001.lib")(options "")(descr ""))
   (lib (name "TC2030-IDC")(type "Legacy")(uri "${KIPRJMOD}/library/TC2030-IDC.lib")(options "")(descr ""))
   (lib (name "NC7WZ126K8X")(type "Legacy")(uri "${KIPRJMOD}/library/NC7WZ126K8X.lib")(options "")(descr ""))
-  (lib (name "DRV8844PWP")(type "Legacy")(uri "${KIPRJMOD}/library/DRV8844PWP/DRV8844PWP.lib")(options "")(descr ""))
+  (lib (name "DRV8844PWP")(type "KiCad")(uri "${KIPRJMOD}/library/DRV8844PWP/DRV8844PWP.kicad_sym")(options "")(descr ""))
 )
