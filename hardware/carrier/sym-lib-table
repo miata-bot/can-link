@@ -7,7 +7,7 @@
   (lib (name "MP2615GQ-Z")(type "Legacy")(uri "${KIPRJMOD}/library/MP2615GQ-Z/MP2615GQ-Z.lib")(options "")(descr ""))
   (lib (name "WL1835MODGBMOCT")(type "Legacy")(uri "${KIPRJMOD}/library/WL1835MODGBMOCT/WL1835MODGBMOCT.lib")(options "")(descr ""))
   (lib (name "U.FL-R-SMT-1_10_")(type "Legacy")(uri "${KIPRJMOD}/library/U.FL-R-SMT-1_10_/U.FL-R-SMT-1_10_.lib")(options "")(descr ""))
-  (lib (name "AP1509-50SG-13")(type "Legacy")(uri "${KIPRJMOD}/library/AP1509-50SG-13/AP1509-50SG-13.lib")(options "")(descr ""))
+  (lib (name "AP1509-50SG-13")(type "KiCad")(uri "${KIPRJMOD}/library/AP1509-50SG-13/AP1509-50SG-13.kicad_sym")(options "")(descr ""))
   (lib (name "BQ29209DRBR")(type "Legacy")(uri "${KIPRJMOD}/library/BQ29209DRBR/BQ29209DRBR.lib")(options "")(descr ""))
   (lib (name "S-8261AAJMD-G2JT2G")(type "Legacy")(uri "${KIPRJMOD}/library/S-8261AAJMD-G2JT2G/S-8261AAJMD-G2JT2G.lib")(options "")(descr ""))
   (lib (name "SCHA5B0200")(type "Legacy")(uri "${KIPRJMOD}/library/SCHA5B0200/SCHA5B0200.lib")(options "")(descr ""))
