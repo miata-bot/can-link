@@ -1,0 +1,60 @@
+
+(module SOT-5 (layer F.Cu) (tedit 6218E5B5)
+  (descr "<b>SOT</b> - DRL<p>0.50 mm pitch")
+  (fp_text reference REF** (at 0.63526 -3.04926 0) (layer F.SilkS)
+    (effects (font (size 0.800330708661 0.800330708661) (thickness 0.15)))
+  )
+  (fp_text value SOT-5 (at 0.1270375 2.7695065 0) (layer F.Fab)
+    (effects (font (size 0.64021023622 0.64021023622) (thickness 0.15)))
+  )
+  (pad 1 smd rect (at -1.0 1.5) (size 0.55 1.2) (layers F.Cu F.Mask F.Paste))
+  (pad 2 smd rect (at 0.0 1.5) (size 0.55 1.2) (layers F.Cu F.Mask F.Paste))
+  (pad 3 smd rect (at 1.0 1.5) (size 0.55 1.2) (layers F.Cu F.Mask F.Paste))
+  (pad 4 smd rect (at 1.0 -1.5) (size 0.55 1.2) (layers F.Cu F.Mask F.Paste))
+  (pad 5 smd rect (at -1.0 -1.5) (size 0.55 1.2) (layers F.Cu F.Mask F.Paste))
+  (fp_line (start 1.5 -0.65) (end 1.5 0.65) (layer F.SilkS) (width 0.1778))
+  (fp_line (start 1.5 0.65) (end -1.5 0.65) (layer F.Fab) (width 0.1778))
+  (fp_line (start -1.5 0.65) (end -1.5 -0.65) (layer F.SilkS) (width 0.1778))
+  (fp_line (start -1.5 -0.65) (end 1.5 -0.65) (layer F.Fab) (width 0.1778))
+  (fp_circle (center -0.9525 0.2675) (end -0.728 0.2675) (layer F.SilkS) (width 0.0))
+  (fp_poly
+    (pts
+      (xy -0.250152 0.675)
+      (xy 0.25 0.675)
+      (xy 0.25 1.65101)
+      (xy -0.250152 1.65101)
+    ) (layer F.Fab) (width 0.01)
+  )
+  (fp_poly
+    (pts
+      (xy 0.751336 -1.65)
+      (xy 1.25 -1.65)
+      (xy 1.25 -0.676202)
+      (xy 0.751336 -0.676202)
+    ) (layer F.Fab) (width 0.01)
+  )
+  (fp_poly
+    (pts
+      (xy -1.25246 -1.65)
+      (xy -0.75 -1.65)
+      (xy -0.75 -0.67633)
+      (xy -1.25246 -0.67633)
+    ) (layer F.Fab) (width 0.01)
+  )
+  (fp_poly
+    (pts
+      (xy -1.2523 0.675)
+      (xy -0.75 0.675)
+      (xy -0.75 1.65304)
+      (xy -1.2523 1.65304)
+    ) (layer F.Fab) (width 0.01)
+  )
+  (fp_poly
+    (pts
+      (xy 0.750806 0.675)
+      (xy 1.25 0.675)
+      (xy 1.25 1.65177)
+      (xy 0.750806 1.65177)
+    ) (layer F.Fab) (width 0.01)
+  )
+)
