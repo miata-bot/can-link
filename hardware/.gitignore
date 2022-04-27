@@ -15,3 +15,4 @@ _autosave-*
 fp-info-cache
 .~lock.*
 \#auto_saved_files\#
+*.xml

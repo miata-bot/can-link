@@ -955,7 +955,7 @@
       (net 16 "GND") (pinfunction "A") (pintype "passive") (tstamp 34537ece-6c30-44d9-9626-f1d50d784a00))
     (pad "2" smd rect (at 4 0) (size 2 2) (layers "F.Cu" "F.Paste" "F.Mask")
       (net 81 "/PAUSE_BTN") (pinfunction "B") (pintype "passive") (tstamp 2eecd9a6-40c8-4b14-bef6-e20a37fdf6c6))
-    (model "${KIPRJMOD}/3dmodels/RS-032G05A3-SMRT.3dshapes/RS-032G05A3-SMRT.step"
+    (model "${KIPRJMOD}/../3dmodels/RS-032G05A3-SMRT.3dshapes/RS-032G05A3-SMRT.step"
       (offset (xyz 0 0 0))
       (scale (xyz 1 1 1))
       (rotate (xyz -90 0 0))
@@ -1019,7 +1019,7 @@
       (net 59 "/QSPI_SD3") (pinfunction "IO3") (pintype "bidirectional") (tstamp a90fd9bf-c647-4c95-b26b-4404558f07bb))
     (pad "8" smd roundrect (at 3.6 -1.905 270) (size 1.6 0.6) (layers "F.Cu" "F.Paste" "F.Mask") (roundrect_rratio 0.25)
       (net 132 "+3V3") (pinfunction "VCC") (pintype "power_in") (tstamp 39a7b41c-c5d0-4cc7-9c5b-f5966038af61))
-    (model "${KIPRJMOD}/3dmodels/SOIC127P599X175-8N.3dshapes/SOIC127P599X175-8N.step"
+    (model "${KIPRJMOD}/../3dmodels/SOIC127P599X175-8N.3dshapes/SOIC127P599X175-8N.step"
       (offset (xyz 0 0 0))
       (scale (xyz 1.3 1 1))
       (rotate (xyz -90 0 0))
@@ -1658,15 +1658,20 @@
       (scale (xyz 1 1 1))
       (rotate (xyz 0 0 0))
     )
-    (model "${KIPRJMOD}/3dmodels/pxc_1714875_01_FP-1-27-32-FH_3D.stp" hide
+    (model "${KIPRJMOD}/../3dmodels/pxc_1714875_01_FP-1-27-32-FH_3D.stp" hide
       (offset (xyz 10 -12.7 -0.75))
       (scale (xyz 1 1 1))
       (rotate (xyz 0 0 -90))
     )
-    (model "${KIPRJMOD}/3dmodels/pxc_1714917_03_FP-1-27-32-MH_3D.stp"
+    (model "${KIPRJMOD}/../3dmodels/pxc_1714917_03_FP-1-27-32-MH_3D.stp"
       (offset (xyz 8.85 -12.7 -0.75))
       (scale (xyz 1 1 1))
       (rotate (xyz 0 0 -90))
+    )
+    (model "/home/connor/workspace/sixtyeightplus.one/can-link/hardware/platform-i.mx6/nano.step"
+      (offset (xyz -12 63.5 0))
+      (scale (xyz 1 1 1))
+      (rotate (xyz 0 -180 -90))
     )
   )
 
@@ -2446,12 +2451,12 @@
       (net 10 "/EXT_UART_TX") (pinfunction "B11") (pintype "passive") (tstamp 0191d231-6b1e-4bb1-ac35-fa38f4f9feca))
     (pad "B12" thru_hole circle (at 17.025 1.96 180) (size 2.056 2.056) (drill 1.294) (layers *.Cu *.Mask)
       (net 9 "/EXT_UART_RX") (pinfunction "B12") (pintype "passive") (tstamp b032d38d-7616-45a6-a14e-5e9fca2b4d52))
-    (model "${KIPRJMOD}/3dmodels/c-eec-325x4a-g-3d.stp" hide
-      (offset (xyz 0 -13 8))
+    (model "${KIPRJMOD}/../3dmodels/c-eec-325x4a-g-3d.stp" hide
+      (opacity 0.4300)      (offset (xyz 0 -13 8))
       (scale (xyz 1 1 1))
       (rotate (xyz -90 0 0))
     )
-    (model "${KIPRJMOD}/3dmodels/DTM1312PA12PBR008.step"
+    (model "${KIPRJMOD}/../3dmodels/DTM1312PA12PBR008.step"
       (offset (xyz 0 -30.7 10.5))
       (scale (xyz 1 1 1))
       (rotate (xyz -90 0 0))
@@ -2851,7 +2856,7 @@
       (net 16 "GND") (pinfunction "A") (pintype "passive") (tstamp 21f81961-55d2-4515-9891-48075aece62c))
     (pad "2" smd rect (at 4 0) (size 2 2) (layers "F.Cu" "F.Paste" "F.Mask")
       (net 80 "/MODE_BTN") (pinfunction "B") (pintype "passive") (tstamp a2678742-2802-444b-b318-737e455145a3))
-    (model "${KIPRJMOD}/3dmodels/RS-032G05A3-SMRT.3dshapes/RS-032G05A3-SMRT.step"
+    (model "${KIPRJMOD}/../3dmodels/RS-032G05A3-SMRT.3dshapes/RS-032G05A3-SMRT.step"
       (offset (xyz 0 0 0))
       (scale (xyz 1 1 1))
       (rotate (xyz -90 0 0))
@@ -3354,7 +3359,7 @@
       (net 16 "GND") (pinfunction "GND") (pintype "power_in") (tstamp b01d06bc-8d27-451f-8ef8-ede1cabdb8c5))
     (pad "57" thru_hole circle locked (at 1.275 1.275 270) (size 0.6 0.6) (drill 0.35) (layers *.Cu)
       (net 16 "GND") (pinfunction "GND") (pintype "power_in") (tstamp dd64c1ac-4bcb-4bf4-91c5-bb4a8004371e))
-    (model "${KIPRJMOD}/3dmodels/MAX9276AGTN+.STEP"
+    (model "${KIPRJMOD}/../3dmodels/MAX9276AGTN+.STEP"
       (offset (xyz 0 0 0))
       (scale (xyz 0.8 1 0.8))
       (rotate (xyz -90 0 0))
@@ -4878,7 +4883,7 @@
       (net 3 "/G_OUT") (pinfunction "D") (pintype "passive") (tstamp bc126bbb-6288-4e4d-b3c4-c16776ff6b3b))
     (pad "8" smd roundrect (at 2.575 1.905 90) (size 1.75 0.6) (layers "B.Cu" "B.Paste" "B.Mask") (roundrect_rratio 0.25)
       (net 3 "/G_OUT") (pinfunction "D") (pintype "passive") (tstamp 9bf70002-4c0b-4f6e-a3f2-a12144cc3269))
-    (model "${KIPRJMOD}/3dmodels/SOIC127P599X175-8N.3dshapes/SOIC127P599X175-8N.step"
+    (model "${KIPRJMOD}/../3dmodels/SOIC127P599X175-8N.3dshapes/SOIC127P599X175-8N.step"
       (offset (xyz 0 0 0))
       (scale (xyz 1 1 1))
       (rotate (xyz -90 0 0))
@@ -4981,7 +4986,7 @@
       (net 44 "/GPO_7_OUT") (pinfunction "D") (pintype "passive") (tstamp 94a3356f-a6c6-4d54-8062-a13c2ff6cf3c))
     (pad "8" smd roundrect (at 2.575 1.905 90) (size 1.75 0.6) (layers "B.Cu" "B.Paste" "B.Mask") (roundrect_rratio 0.25)
       (net 44 "/GPO_7_OUT") (pinfunction "D") (pintype "passive") (tstamp e36a64fd-5c08-4c05-b18a-54c3e21bc64f))
-    (model "${KIPRJMOD}/3dmodels/SOIC127P599X175-8N.3dshapes/SOIC127P599X175-8N.step"
+    (model "${KIPRJMOD}/../3dmodels/SOIC127P599X175-8N.3dshapes/SOIC127P599X175-8N.step"
       (offset (xyz 0 0 0))
       (scale (xyz 1 1 1))
       (rotate (xyz -90 0 0))
@@ -5608,7 +5613,7 @@
       (net 86 "unconnected-(U310-Pad15)") (pinfunction "DIO1") (pintype "bidirectional+no_connect") (tstamp 5c4f0a16-a9d3-48c0-afcb-489968e116b6))
     (pad "16" smd rect (at 7.5 7 180) (size 3 1.2) (layers "B.Cu" "B.Paste" "B.Mask")
       (net 87 "unconnected-(U310-Pad16)") (pinfunction "DIO2") (pintype "bidirectional+no_connect") (tstamp aa58d750-17fe-44c6-b283-06250ddacce7))
-    (model "${KIPRJMOD}/3dmodels/RFM69HW.3dshapes/RFM69HW.step"
+    (model "${KIPRJMOD}/../3dmodels/RFM69HW.3dshapes/RFM69HW.step"
       (offset (xyz 0 0 0))
       (scale (xyz 1 1 1))
       (rotate (xyz -90 0 0))
@@ -5829,7 +5834,7 @@
       (net 45 "/GPO_9_OUT") (pinfunction "D") (pintype "passive") (tstamp 7ea82077-79df-4f72-94fb-566308cb6da4))
     (pad "8" smd roundrect (at 2.575 1.905 90) (size 1.75 0.6) (layers "B.Cu" "B.Paste" "B.Mask") (roundrect_rratio 0.25)
       (net 45 "/GPO_9_OUT") (pinfunction "D") (pintype "passive") (tstamp 6dfa1d7b-985b-4910-9879-b635d174255c))
-    (model "${KIPRJMOD}/3dmodels/SOIC127P599X175-8N.3dshapes/SOIC127P599X175-8N.step"
+    (model "${KIPRJMOD}/../3dmodels/SOIC127P599X175-8N.3dshapes/SOIC127P599X175-8N.step"
       (offset (xyz 0 0 0))
       (scale (xyz 1 1 1))
       (rotate (xyz -90 0 0))
@@ -6380,7 +6385,7 @@
         )
       )
     )
-    (model "${KIPRJMOD}/3dmodels/U.FL-R-SMT-1_10_.3dshapes/U.FL-R-SMT-1_10_.step"
+    (model "${KIPRJMOD}/../3dmodels/U.FL-R-SMT-1_10_.3dshapes/U.FL-R-SMT-1_10_.step"
       (offset (xyz 0 0 0))
       (scale (xyz 1 1 1))
       (rotate (xyz -90 0 90))

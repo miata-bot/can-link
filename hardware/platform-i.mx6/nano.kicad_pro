@@ -620,7 +620,7 @@
       "idf": "",
       "netlist": "nano.net",
       "specctra_dsn": "",
-      "step": "",
+      "step": "nano.step",
       "vrml": ""
     },
     "page_layout_descr_file": ""
@@ -695,10 +695,6 @@
     [
       "00000000-0000-0000-0000-00005b657534",
       "PMIC PF1550"
-    ],
-    [
-      "2d044fb1-7873-4702-a1eb-9c8b8137263c",
-      "rp2040"
     ]
   ],
   "text_variables": {}
