@@ -2,18 +2,12 @@
 
 Very much work in progress software and hardware project built with [Nerves](https://www.nerves-project.org/), [Flutter](https://flutter.dev/), [Kicad](https://www.kicad.org/), [Zig](https://ziglang.org/), [Lua](https://www.lua.org) and pretty much any other tech buzz word you might want. See [The requirements doc](Requirements.md) for the guts of the project.
 
+![render](/hardware/carrier/images/v2-RevA-PCB-Render-Front-Case.png)
+
 ## TLDR
 
 Here's a [Twitter thread](https://twitter.com/pressy4pie/status/1504309482054029315) showing a demo of the ECU integration.
 [video link](https://video.twimg.com/ext_tw_video/1504309386151301125/pu/vid/720x1280/zwIcUEVZBSSQAASE.mp4?tag=12).
-
-Here's a render of the PCB
-
-![PCB](hardware/images/v2-RevA-PCB-Render-Front-No-Case.png)
-
-Here's a photo of the radio/gps module prototypes. ![prototypes](hardware/images/beagleblue-prototype.jpg).
-
-Here's a photo of the entire ![prototypes](hardware/images/prototype-wiring.jpg)
 
 Here's a [Twitter thread](https://twitter.com/pressy4pie/status/1506779115122139137) showing a demo of the GPS and companion application. [video link](https://video.twimg.com/ext_tw_video/1506778163891740673/pu/vid/720x1630/oxYdaMkSowD5uJmU.mp4?tag=12).
 
@@ -23,6 +17,8 @@ I've written up a few posts on the progress of the project
 * [Short post on using PWM to drive LEDS](https://cone.codes/posts/nerves-pwm/)
 * [Hardware redesign](https://cone.codes/posts/can-link-pt-2/)
 * [Hardware reredesign](https://cone.codes/posts/can-link-pt-3/)
+* [Hardware rereredesign](https://cone.codes/posts/can-link-pt-4/)
+* [Designing a Development test board](https://cone.codes/posts/imx6-devboard/)
 
 ## Description
 
@@ -36,7 +32,6 @@ This README acts as a root for all the jillion projects contained within the rep
 | [canscript](canscript/README.md) | Main Lua environment and runtime. | Zig | MIT |
 | [can_companion](can_companion/README.md) | proof of concept mobile app for interfacing GPS | Flutter | MIT |
 | [elixir-GPSd](elixir-gpsd/README.md) | GPS library | Elixir | MIT |
-| [deleteme](deleteme/README.md) | Test firmware for radio functions, to be deleted | Elixir | MIT |
 
 There are auxilary projects involved in the development of this one. Notably:
 
