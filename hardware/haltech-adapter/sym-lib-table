@@ -1,0 +1,3 @@
+(sym_lib_table
+  (lib (name "Connector_TEConnectivity")(type "KiCad")(uri "${KIPRJMOD}/library/Connector_TEConnectivity.kicad_sym")(options "")(descr ""))
+)
