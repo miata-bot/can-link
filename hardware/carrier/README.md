@@ -1,40 +1,22 @@
-# Hardware Designfiles
+# Carrier Board
 
-## Prototypes
+This is the "top" half of the device. It does power management, CAN communication and output control.
 
-![BoneBlue](images/beagleblue-prototype.jpg)
-![BoneBlue Wiring](images/prototype-wiring.jpg)
+![pcb-front](/hardware/carrier/images/v3/v3-front.png)
 
-## Renders
+![pcb-front](/hardware/carrier/images/v3/v3-back.png)
 
-### V1 (04/03/22)
+## Major Components
 
-Initial design. Could not source components, notably the main OSD335x CPU
-
-![V1](images/v1-PCB-Render.png)
-
-### V2 (04/10/22)
-
-Redesign using CM4 module with supporting chips for extra features
-
-![V2](images/v2-PCB-Render.png)
-
-### V2 Rev A (04/12/22)
-
-Revision of the intial V2 design to support a TE connectivity case/connector
-
-![V2 RevA](images/v2-RevA-PCB-Render-Front-No-Case.png)
-![V2 RevA](images/v2-RevA-PCB-Render-Back-No-Case.png)
-![V2 RevA](images/v2-RevA-PCB-Render-Front-Case.png)
-![V2 RevA](images/v2-RevA-PCB-Render-Back-Case.png)
-
-## Features and Core Components
-
-|name                |function                       |
-|--------------------|-------------------------------|
-|CM4 Module          |Main CPU                       |
-|RP2040              |GPIO expander                  |
-|MCP2515             |CAN Interface                  |
-|RFM69 Packet Radio  |Sub GHz radio for local syncing|
-|12 Low side drivers |PWM capable for driving LEDs   |
-|4 TTL level outputs |Individually addressable LEDs  |
+| Name | Description |
+| ---- | ----------- |
+| RP2040 | Main MCU. dual core ARM M0 |
+| 3.3v automotive regulator | Power supply for radio, CAN transciever, CAN interface and RP2040 |
+| 5.0V automotive regulator | Power supply for the `platform` board |
+| RFM69 Packet radio | Packet radio for wireless syncronization |
+| Motor driver | 2 motor output motor driver |
+| Dual footprint MCP2515 CAN interface | Very popular CAN interface IC. Both packages are placed in the case that one cannot be obtained |
+| CAN transciever | driver for CAN communication |
+| 2 Buttons | what can i say about buttons |
+| 3 status LEDS | control em however u want |
+| WS15 LED | first node in a chain of individually addressable LEDS |
