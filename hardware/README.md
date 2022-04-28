@@ -7,3 +7,5 @@ The `platform` board has the full Linux capable SOC and related components, USB 
 | -------| ----------- |
 | [`carrier`](/hardware/carrier/README.md) | Carrier board |
 | [`platform-i.mx6`](/hardware/platform-i.mx6/README.md) | i.mx6 platform board |
+| - | - |
+| [`haltech-adapter`](/hardware/haltech-adapter/README.md) | PNP adapter for Haltech to NA6 Miata |
