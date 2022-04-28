@@ -1668,10 +1668,20 @@
       (scale (xyz 1 1 1))
       (rotate (xyz 0 0 -90))
     )
-    (model "/home/connor/workspace/sixtyeightplus.one/can-link/hardware/platform-i.mx6/nano.step"
+    (model "/home/connor/workspace/sixtyeightplus.one/can-link/hardware/platform-i.mx6/nano.step" hide
       (offset (xyz -12 63.5 0))
       (scale (xyz 1 1 1))
       (rotate (xyz 0 -180 -90))
+    )
+    (model "/home/connor/workspace/sixtyeightplus.one/can-link/hardware/platform-cm4/platform-cm4.step"
+      (offset (xyz -6.5 -58 -1.5))
+      (scale (xyz 1 1 1))
+      (rotate (xyz 0 0 -90))
+    )
+    (model "/home/connor/workspace/sixtyeightplus.one/can-link/hardware/3dmodels/cm-min.step"
+      (offset (xyz 74.5 -37 1.5))
+      (scale (xyz 1 1 1))
+      (rotate (xyz 0 0 -90))
     )
   )
 
@@ -2451,7 +2461,7 @@
       (net 10 "/EXT_UART_TX") (pinfunction "B11") (pintype "passive") (tstamp 0191d231-6b1e-4bb1-ac35-fa38f4f9feca))
     (pad "B12" thru_hole circle (at 17.025 1.96 180) (size 2.056 2.056) (drill 1.294) (layers *.Cu *.Mask)
       (net 9 "/EXT_UART_RX") (pinfunction "B12") (pintype "passive") (tstamp b032d38d-7616-45a6-a14e-5e9fca2b4d52))
-    (model "${KIPRJMOD}/../3dmodels/c-eec-325x4a-g-3d.stp" hide
+    (model "${KIPRJMOD}/../3dmodels/c-eec-325x4a-g-3d.stp"
       (opacity 0.4300)      (offset (xyz 0 -13 8))
       (scale (xyz 1 1 1))
       (rotate (xyz -90 0 0))

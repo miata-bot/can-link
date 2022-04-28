@@ -1,3 +1,6 @@
 [submodule "firmware/led_driver_firmware/pico-sdk"]
 	path = firmware/led_driver_firmware/pico-sdk
 	url = https://github.com/raspberrypi/pico-sdk.git
+[submodule "hardware/platform-esp/kicad-libraries"]
+	path = hardware/platform-esp/kicad-libraries
+	url = https://github.com/espressif/kicad-libraries.git

@@ -1,0 +1,3 @@
+(fp_lib_table
+  (lib (name "Module_Beaglebone")(type "KiCad")(uri "${KIPRJMOD}/footprints/Module_Beaglebone.pretty")(options "")(descr ""))
+)
