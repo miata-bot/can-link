@@ -2,4 +2,8 @@
   (lib (name "MCU_ESP")(type "KiCad")(uri "${KIPRJMOD}/library/MCU_ESP.kicad_sym")(options "")(descr ""))
   (lib (name "SCHA5B0200")(type "Legacy")(uri "/home/connor/workspace/sixtyeightplus.one/can-link/hardware/library/SCHA5B0200/SCHA5B0200.lib")(options "")(descr ""))
   (lib (name "Connector_Hirose_SD")(type "KiCad")(uri "${KIPRJMOD}/library/Connector_Hirose_SD.kicad_sym")(options "")(descr ""))
+  (lib (name "Connector_TDC")(type "KiCad")(uri "${KIPRJMOD}/library/Connector_TDC.kicad_sym")(options "")(descr ""))
+  (lib (name "Connector_TE_Connectivity_DTM")(type "KiCad")(uri "${KIPRJMOD}/library/Connector_TE_Connectivity_DTM.kicad_sym")(options "")(descr ""))
+  (lib (name "Connector_GCT_USB")(type "KiCad")(uri "${KIPRJMOD}/library/Connector_GCT_USB.kicad_sym")(options "")(descr ""))
+  (lib (name "Connector_CK")(type "KiCad")(uri "${KIPRJMOD}/library/Connector_CK.kicad_sym")(options "")(descr ""))
 )

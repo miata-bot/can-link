@@ -1,6 +1,6 @@
 (footprint "SW_RS-032G05A3-SMRT" (version 20211014) (generator pcbnew)
   (layer "F.Cu")
-  (tedit 6260719D)
+  (tedit 6275C1BC)
   (attr through_hole)
   (fp_text reference "REF**" (at -0.32559 -3.14077) (layer "F.SilkS")
     (effects (font (size 1.001843 1.001843) (thickness 0.15)))
@@ -33,7 +33,7 @@
   (fp_line (start -3 -1.75) (end -3 1.75) (layer "F.Fab") (width 0.254) (tstamp 81af6a30-e342-4039-9aa1-86b129106b65))
   (pad "1" smd rect (at -4 0) (size 2 2) (layers "F.Cu" "F.Paste" "F.Mask") (tstamp e03b7ce7-b45f-4476-8ba6-d43aa5c53747))
   (pad "2" smd rect (at 4 0) (size 2 2) (layers "F.Cu" "F.Paste" "F.Mask") (tstamp ec8d909c-9a13-44a3-ac39-9a260de11772))
-  (model "${KIPRJMOD}/3dmodels/RS-032G05A3-SMRT.3dshapes/RS-032G05A3-SMRT.step"
+  (model "${KIPRJMOD}/../3dmodels/RS-032G05A3-SMRT.3dshapes/RS-032G05A3-SMRT.step"
     (offset (xyz 0 0 0))
     (scale (xyz 1 1 1))
     (rotate (xyz -90 0 0))

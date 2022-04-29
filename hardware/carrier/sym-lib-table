@@ -31,4 +31,5 @@
   (lib (name "TC2030-IDC")(type "Legacy")(uri "${KIPRJMOD}/../library/TC2030-IDC.lib")(options "")(descr ""))
   (lib (name "NC7WZ126K8X")(type "Legacy")(uri "${KIPRJMOD}/../library/NC7WZ126K8X.lib")(options "")(descr ""))
   (lib (name "DRV8844PWP")(type "KiCad")(uri "${KIPRJMOD}/../library/DRV8844PWP/DRV8844PWP.kicad_sym")(options "")(descr ""))
+  (lib (name "MCU_Espriff_S3")(type "Legacy")(uri "${PLATFORM_ESP_DIR}/library/ESP32-S3R2.lib")(options "")(descr ""))
 )
