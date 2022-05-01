@@ -5,4 +5,5 @@
   (lib (name "Connector_TDC")(type "KiCad")(uri "${KIPRJMOD}/library/Connector_TDC.kicad_sym")(options "")(descr ""))
   (lib (name "Connector_TE_Connectivity_DTM")(type "KiCad")(uri "${KIPRJMOD}/library/Connector_TE_Connectivity_DTM.kicad_sym")(options "")(descr ""))
   (lib (name "Connector_GCT_USB")(type "KiCad")(uri "${KIPRJMOD}/library/Connector_GCT_USB.kicad_sym")(options "")(descr ""))
+  (lib (name "Connector_CK")(type "KiCad")(uri "${KIPRJMOD}/library/Connector_CK.kicad_sym")(options "")(descr ""))
 )

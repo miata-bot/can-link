@@ -55,7 +55,12 @@
           "width": 0.0
         }
       ],
-      "drc_exclusions": [],
+      "drc_exclusions": [
+        "clearance|71030000|81290000|051fd5ef-6581-4d73-b172-26cfe902d706|210ff276-2d44-4f54-b053-ebfc3e423b1d",
+        "clearance|71030000|81540000|0058f088-898c-4543-b8ca-77a8e71865fc|210ff276-2d44-4f54-b053-ebfc3e423b1d",
+        "clearance|72680000|81290000|d20bccd6-0732-4a74-ac86-28e5e7dd77f9|210ff276-2d44-4f54-b053-ebfc3e423b1d",
+        "clearance|73130000|81290000|9c4fb3a5-9374-4e1d-9510-f5cc7e34b102|210ff276-2d44-4f54-b053-ebfc3e423b1d"
+      ],
       "meta": {
         "version": 2
       },
@@ -63,7 +68,7 @@
         "annular_width": "error",
         "clearance": "error",
         "copper_edge_clearance": "error",
-        "courtyards_overlap": "error",
+        "courtyards_overlap": "ignore",
         "diff_pair_gap_out_of_range": "error",
         "diff_pair_uncoupled_length_too_long": "error",
         "drill_out_of_range": "error",
@@ -85,8 +90,8 @@
         "padstack": "error",
         "pth_inside_courtyard": "ignore",
         "shorting_items": "error",
-        "silk_over_copper": "warning",
-        "silk_overlap": "warning",
+        "silk_over_copper": "ignore",
+        "silk_overlap": "ignore",
         "skew_out_of_range": "error",
         "through_hole_pad_without_hole": "error",
         "too_many_vias": "error",
@@ -104,13 +109,13 @@
         "allow_microvias": false,
         "max_error": 0.005,
         "min_clearance": 0.18,
-        "min_copper_edge_clearance": 1.0,
+        "min_copper_edge_clearance": 0.0,
         "min_hole_clearance": 0.25,
         "min_hole_to_hole": 0.25,
         "min_microvia_diameter": 0.19999999999999998,
         "min_microvia_drill": 0.09999999999999999,
         "min_silk_clearance": 0.0,
-        "min_through_hole_diameter": 0.3,
+        "min_through_hole_diameter": 0.19999999999999998,
         "min_track_width": 0.19999999999999998,
         "min_via_annular_width": 0.049999999999999996,
         "min_via_diameter": 0.39999999999999997,

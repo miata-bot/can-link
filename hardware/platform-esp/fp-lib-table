@@ -8,4 +8,5 @@
   (lib (name "Connector_TE_Connectivity_DTM")(type "KiCad")(uri "${KIPRJMOD}/footprints/Connector_TE_Connectivity_DTM")(options "")(descr ""))
   (lib (name "Connector_Amphenol_RJ")(type "KiCad")(uri "${KIPRJMOD}/footprints/Connector_Amphenol_RJ.pretty")(options "")(descr ""))
   (lib (name "Connector_GCT_USB")(type "KiCad")(uri "${KIPRJMOD}/footprints/Connector_GCT_USB.pretty")(options "")(descr ""))
+  (lib (name "Connector_CK")(type "KiCad")(uri "${KIPRJMOD}/footprints/Connector_CK.pretty")(options "")(descr ""))
 )
