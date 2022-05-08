@@ -1,3 +1,0 @@
-(sym_lib_table
-  (lib (name "Module_Beaglebone")(type "Legacy")(uri "${KIPRJMOD}/library/BEAGLEBONEBLACK.lib")(options "")(descr ""))
-)

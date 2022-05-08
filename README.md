@@ -27,13 +27,4 @@ This README acts as a root for all the jillion projects contained within the rep
 | Folder Name | Description | Language | License |
 | ------------| ----------- | -------- | ------- |
 | [hardware](hardware/README.md) | Main hardware designs. Contains schematics, layouts, boms, manufacturing gerbers etc. | KiCad | Creative Commons |
-| [firmware](firmware/README.md) | Main Nerves Firmware project. | Elixir | MIT |
-| [socket_can](elixir-socket-can/README.md) | CAN interface library fork | Elixir | ??? |
-| [canscript](canscript/README.md) | Main Lua environment and runtime. | Zig | MIT |
-| [can_companion](can_companion/README.md) | proof of concept mobile app for interfacing GPS | Flutter | MIT |
-| [elixir-GPSd](elixir-gpsd/README.md) | GPS library | Elixir | MIT |
-
-There are auxilary projects involved in the development of this one. Notably:
-
-* [nerves_system_bbb_can](https://github.com/connorrigby/nerves_system_bbb_can) - Nerves base system for this device. There are so many changes now, that it should be moved here.
-* [elixir-rf69](https://github.com/connorrigby/elixir-rf69) - Elixir library for interfacing the RF69 Radio
+| [firmware](firmware/README.md) | 2 Main Firmware projects. | C++ | MIT |

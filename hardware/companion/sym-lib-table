@@ -1,4 +1,0 @@
-(sym_lib_table
-  (lib (name "MCU_Espriff_S3")(type "Legacy")(uri "${PLATFORM_ESP_DIR}/library/ESP32-S3R2.lib")(options "")(descr ""))
-  (lib (name "MCU_RaspberryPi")(type "Legacy")(uri "/home/connor/workspace/sixtyeightplus.one/can-link/hardware/library/RP2040/MCU_RaspberryPi_and_Boards.lib")(options "")(descr ""))
-)

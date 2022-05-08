@@ -1,3 +1,0 @@
-(fp_lib_table
-  (lib (name "Module_CM4")(type "KiCad")(uri "/home/connor/workspace/sixtyeightplus.one/can-link/hardware/footprints/CM4IO.pretty")(options "")(descr ""))
-)
