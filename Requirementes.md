@@ -5,7 +5,7 @@ or other RGB lights between two or more cars. Below is a high-level list of all 
 
 0) This is not a for profit product, I'm building this for fun.
 1) The device should have a CAN interface for aftermarket ECUs and OBD2 capable cars. This notably leaves out interfacing older pre-obd2 cars right now. See [Non CAN enabled applications](#non-can-enabled-systems) for justification and workarounds. See [ECU Support](#ecu-support) for a list of planned support.
-2) The device should be WiFi/Bluetooth capable, which means it should be a Linux capable platform. See the [Hardware](#hardware) section.
+2) The device should be WiFi/Bluetooth capable. See the [Hardware](#hardware) section.
 3) Every component should be open source where applicable. See the [Licensing](#license) section.
 4) It doesn't need to be the cheapest thing. See the [Pricing](#pricing).
 5) The device should work offline. See the [Offline Use](#offline-use).
@@ -23,54 +23,23 @@ Here's the current supported platform matrix:
 
 | ECU        | Coded? | Tested? | Note  |
 | ---------- | ------ | ------- | ----- |
-| MegaSquirt | yes    | yes     | Broadcast protocol with default ID |
-| Haltech    | yes    | yes     | Broadcast protocol |
-| Maxx       | yes    | no      | Default broadcast protocol, too extensible to test every combo? |
+| MegaSquirt | no     | no      | Broadcast protocol with default ID |
+| Haltech    | no     | no      | Broadcast protocol |
+| Maxx       | no     | no      | Default broadcast protocol, too extensible to test every combo? |
 | OBD2       | no     | no      | Enabled in Linux, need to decode messages somehow |
 | Speeduino  | no     | no      | Very similar to MS proto iirc |
 
 ## Hardware
 
-I've tried this project a few times in the past, and every single time I wish I just started with Linux. I'm sure it's possible to do in an RTOS or even an Arduino system etc. It's just to hard to reason about a system with so much connectivity for me. This puts a much higher price tag because the components selected for the board are just by nature quite a bit more expensive. See the pricing section.
+~~I've tried this project a few times in the past, and every single time I wish I just started with Linux. I'm sure it's possible to do in an RTOS or even an Arduino system etc. It's just to hard to reason about a system with so much connectivity for me. This puts a much higher price tag because the components selected for the board are just by nature quite a bit more expensive. See the pricing section.~
 
-Here's a table for the "main" components. See the full BOM for exact component selection.
-
-| Part Name | Purpose | Required? |
-| ----------| --------| --------- |
-| OSD358x      | Main CPU, RAM, PMIC               | yes                 |
-| CAN Xceiver  | CAN interface                     | yes (but maybe no?) |
-| BT / WIFI    | Phone Companion app               | no                  |
-| Packet radio | External syncing with other nodes | yes   |
-| LIPO Charger | Battery backup | no |
-| GPS          | Accurate positioning | no |
-| Compass      | Direction            | no |
-| IMU          | Logging?             | no |
-| USB1         | Mass storage, configuration | yes |
-| USB2         | debug, firmware dev  | yes |
+Designing around a modern SOC right now is just too hard due to the global chip shortage. Maybe I'll try again in the future. For now, I've redesigned the device to use an ESP32-S3 as the "main" chip, and a secondary RP Pico as a coprocessor to do the IO heavy stuff. I'm certain there's better solutions to this but it's what I knew I'd be able to complete without learning a ton of new stuff since I'm on a deadline now.
 
 ## Firmware
 
-The firmware is the most interesting part to me. I've proof of concepted all the core functions. Below is a list of the main technology buzzwords used. See the SBOM for a more exact list of all techs used. (this file doesn't exist yet).
-
-* Embedded Linux Kernel
-* Buildroot - framework used to create an embedded Linux distribution with UBoot bootloader, devicetrees, and root file system.
-* Nerves - framework built on top of Buildroot to create embedded Linux firmware using the Elixir programming language.
-* Elixir - programming language built on Erlang/OTP to build the main firmware.
-* Flutter - UI Toolkit for building native apps using the Dart programming language.
-* Dart - programming language developed for Flutter.
-* Lua - programming language that will be used for the main plugin system.
-* Zig - programming language to build the Lua interface.
-* SocketCAN - Linux API for interfacing CAN Bus
-
-## Plugin System
-
-The main interface for the firmware is a Lua scripting environment. All of the core firmware exists to support and supplement this system. The primary reason for this is purely because I just want to build it. There are other reasons, including but not limited to:
-
-* Lua is easier to learn and write.
-* I can build a community plugin repo?
-* I have friends that want to contribute and already know Lua.
-* I want anyone to be able to write their own plugins.
-* It's just cool.
+There are two firmwares that need to be loaded.
+*) ESP32-S3 firmware - handles comms: RFM69 packet radio, CAN, BLE, WiFi
+*) RP2040 firmware - handles IO: Low side outs
 
 ## Packet Radio
 

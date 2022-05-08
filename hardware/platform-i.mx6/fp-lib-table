@@ -1,6 +1,0 @@
-(fp_lib_table
-  (lib (name "Custom Components")(type "KiCad")(uri "${KIPRJMOD}/custom_components.pretty")(options "")(descr "Custom components"))
-  (lib (name "rfm69")(type "KiCad")(uri "${KIPRJMOD}/../footprints/XCVR_RFM69HW.pretty")(options "")(descr ""))
-  (lib (name "ufl")(type "KiCad")(uri "${KIPRJMOD}/../footprints/U.FL-R-SMT-1_10_.pretty")(options "")(descr ""))
-  (lib (name "rp2040")(type "KiCad")(uri "${KIPRJMOD}/../footprints/MCU_RaspberryPi_and_Boards.pretty")(options "")(descr ""))
-)
