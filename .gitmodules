@@ -1,0 +1,3 @@
+[submodule "firmware/rp2040_fw/pico-sdk"]
+	path = firmware/rp2040_fw/pico-sdk
+	url = https://github.com/raspberrypi/pico-sdk.git
