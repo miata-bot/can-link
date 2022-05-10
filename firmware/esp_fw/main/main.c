@@ -12,17 +12,26 @@
 #include <esp_spiffs.h>
 #include <esp_err.h>
 #include <esp_log.h>
+#include <esp_chip_info.h>
+#include <esp_spi_flash.h>
 
 #include <driver/spi_master.h>
 #include <driver/gpio.h>
 #include <driver/twai.h>
 #include <soc/gpio_struct.h>
+#include <esp_vfs_fat.h>
+#include <sdmmc_cmd.h>
+
+static void report(lua_State *L, int status);
+static void halt();
+static void mount_spiffs();
 
 static const char *TAG = "CONEPROJ";
-#define PIN_NUM_MISO
-#define PIN_NUM_MOSI
-#define PIN_NUM_CLK
-#define PIN_NUM_SD_CS
+#define PIN_NUM_MISO 2
+#define PIN_NUM_MOSI 13
+#define PIN_NUM_CLK 14
+#define PIN_NUM_SD_CS 15
+const char mount_point[] = "/sdcard";
 
 void spi_init()
 {   
@@ -31,11 +40,13 @@ void spi_init()
         .mosi_io_num=PIN_NUM_MOSI,
         .sclk_io_num=PIN_NUM_CLK,
         .quadwp_io_num=-1,
-        .quadhd_io_num=-1
+        .quadhd_io_num=-1,
+        .max_transfer_sz = 4000,
     };
 
-    //Initialize the SPI bus
-    esp_err_t ret = spi_bus_initialize(HSPI_HOST, &buscfg, 1);
+    //Initialize the SPI bus in HSPI mode. DMA channel might need changing later?
+    esp_err_t ret = spi_bus_initialize(HSPI_HOST, &buscfg, SPI_DMA_CH_AUTO);
+    
     switch (ret)
     {
         case ESP_OK:
@@ -70,7 +81,6 @@ void sdcard_init()
         .allocation_unit_size = 16 * 1024
     };
     sdmmc_card_t *card;
-    // const char mount_point[] = MOUNT_POINT;
     ESP_LOGI(TAG, "Initializing SD card");
 
     // Use settings defined above to initialize SD card and mount FAT filesystem.
@@ -107,10 +117,10 @@ void sdcard_init()
 void sdcard_deinit()
 {
     // All done, unmount partition and disable SPI peripheral
-    esp_vfs_fat_sdcard_unmount(mount_point, card);
+    // esp_vfs_fat_sdcard_unmount(mount_point, card);
 
-    sdspi_host_remove_device();
-    sdspi_host_deinit();
+    // sdspi_host_remove_device();
+    // sdspi_host_deinit();
 }
 
 void radio_init()
@@ -135,45 +145,45 @@ void motor_deinit()
 
 void twai_init()
 {
-    //Initialize configuration structures using macro initializers
-    twai_general_config_t g_config = TWAI_GENERAL_CONFIG_DEFAULT(GPIO_NUM_21, GPIO_NUM_22, TWAI_MODE_NORMAL);
-    twai_timing_config_t t_config = TWAI_TIMING_CONFIG_500KBITS();
-    twai_filter_config_t f_config = TWAI_FILTER_CONFIG_ACCEPT_ALL();
+    // //Initialize configuration structures using macro initializers
+    // twai_general_config_t g_config = TWAI_GENERAL_CONFIG_DEFAULT(GPIO_NUM_21, GPIO_NUM_22, TWAI_MODE_NORMAL);
+    // twai_timing_config_t t_config = TWAI_TIMING_CONFIG_500KBITS();
+    // twai_filter_config_t f_config = TWAI_FILTER_CONFIG_ACCEPT_ALL();
 
-    //Install TWAI driver
-    if (twai_driver_install(&g_config, &t_config, &f_config) == ESP_OK) {
-        printf("Driver installed\n");
-    } else {
-        printf("Failed to install driver\n");
-        return;
-    }
+    // //Install TWAI driver
+    // if (twai_driver_install(&g_config, &t_config, &f_config) == ESP_OK) {
+    //     printf("Driver installed\n");
+    // } else {
+    //     printf("Failed to install driver\n");
+    //     return;
+    // }
 
-    //Start TWAI driver
-    if (twai_start() == ESP_OK) {
-        printf("Driver started\n");
-    } else {
-        printf("Failed to start driver\n");
-        return;
-    }
+    // //Start TWAI driver
+    // if (twai_start() == ESP_OK) {
+    //     printf("Driver started\n");
+    // } else {
+    //     printf("Failed to start driver\n");
+    //     return;
+    // }
 }
 
 void twai_deinit()
 {
-    //Stop the TWAI driver
-    if (twai_stop() == ESP_OK) {
-        printf("Driver stopped\n");
-    } else {
-        printf("Failed to stop driver\n");
-        return;
-    }
+    // //Stop the TWAI driver
+    // if (twai_stop() == ESP_OK) {
+    //     printf("Driver stopped\n");
+    // } else {
+    //     printf("Failed to stop driver\n");
+    //     return;
+    // }
 
-    //Uninstall the TWAI driver
-    if (twai_driver_uninstall() == ESP_OK) {
-        printf("Driver uninstalled\n");
-    } else {
-        printf("Failed to uninstall driver\n");
-        return;
-    }
+    // //Uninstall the TWAI driver
+    // if (twai_driver_uninstall() == ESP_OK) {
+    //     printf("Driver uninstalled\n");
+    // } else {
+    //     printf("Failed to uninstall driver\n");
+    //     return;
+    // }
 }
 
 void ble_init()
@@ -241,7 +251,7 @@ void mainTask(void *arg)
 
     luaL_openlibs(L);
 
-    int r = luaL_loadfilex(L, "/lua/main.lua", NULL);
+    int r = luaL_loadfilex(L, "/sdcard/main.lua", NULL);
     if (r != LUA_OK)
         printf("Failed to execute /lua/main.lua\n");
     else
@@ -268,6 +278,14 @@ void mainTask(void *arg)
 
 void app_main()
 {
+    esp_chip_info_t chip_info;
+    esp_chip_info(&chip_info);
+    printf("This is %s chip with %d CPU core(s), WiFi%s%s, ",
+            CONFIG_IDF_TARGET,
+            chip_info.cores,
+            (chip_info.features & CHIP_FEATURE_BT) ? "/BT" : "",
+            (chip_info.features & CHIP_FEATURE_BLE) ? "/BLE" : "");
+
     spi_init();
     sdcard_init();
     radio_init();
