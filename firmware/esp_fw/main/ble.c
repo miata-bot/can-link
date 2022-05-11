@@ -39,10 +39,10 @@ static uint8_t char1_str[] = {0x11, 0x22, 0x33};
 static esp_gatt_char_prop_t a_property = 0;
 
 static esp_attr_value_t gatts_demo_char1_val =
-    {
-        .attr_max_len = GATTS_DEMO_CHAR_VAL_LEN_MAX,
-        .attr_len = sizeof(char1_str),
-        .attr_value = char1_str,
+{
+    .attr_max_len = GATTS_DEMO_CHAR_VAL_LEN_MAX,
+    .attr_len = sizeof(char1_str),
+    .attr_value = char1_str,
 };
 
 static uint8_t adv_config_done = 0;
@@ -153,7 +153,8 @@ static struct gatts_profile_inst gl_profile_tab[PROFILE_NUM] = {
     [GATT_PROFILE_APP_ID] = {
         .gatts_cb = gatts_profile_event_handler,
         .gatts_if = ESP_GATT_IF_NONE, /* Not get the gatt_if, so initial is ESP_GATT_IF_NONE */
-    }};
+    }
+};
 
 typedef struct
 {
@@ -406,9 +407,9 @@ static void gatts_profile_event_handler(esp_gatts_cb_event_t event, esp_gatt_if_
         esp_ble_gatts_start_service(gl_profile_tab[GATT_PROFILE_APP_ID].service_handle);
         a_property = ESP_GATT_CHAR_PROP_BIT_READ | ESP_GATT_CHAR_PROP_BIT_WRITE | ESP_GATT_CHAR_PROP_BIT_NOTIFY;
         esp_err_t add_char_ret = esp_ble_gatts_add_char(gl_profile_tab[GATT_PROFILE_APP_ID].service_handle, &gl_profile_tab[GATT_PROFILE_APP_ID].char_uuid,
-                                                        ESP_GATT_PERM_READ | ESP_GATT_PERM_WRITE,
-                                                        a_property,
-                                                        &gatts_demo_char1_val, NULL);
+                                 ESP_GATT_PERM_READ | ESP_GATT_PERM_WRITE,
+                                 a_property,
+                                 &gatts_demo_char1_val, NULL);
         if (add_char_ret)
         {
             ESP_LOGE(GATTS_TAG, "add char failed, error code =%x", add_char_ret);
@@ -438,7 +439,7 @@ static void gatts_profile_event_handler(esp_gatts_cb_event_t event, esp_gatt_if_
             ESP_LOGI(GATTS_TAG, "prf_char[%x] =%x\n", i, prf_char[i]);
         }
         esp_err_t add_descr_ret = esp_ble_gatts_add_char_descr(gl_profile_tab[GATT_PROFILE_APP_ID].service_handle, &gl_profile_tab[GATT_PROFILE_APP_ID].descr_uuid,
-                                                               ESP_GATT_PERM_READ | ESP_GATT_PERM_WRITE, NULL, NULL);
+                                  ESP_GATT_PERM_READ | ESP_GATT_PERM_WRITE, NULL, NULL);
         if (add_descr_ret)
         {
             ESP_LOGE(GATTS_TAG, "add char descr failed, error code =%x", add_descr_ret);
@@ -523,7 +524,7 @@ static void gatts_event_handler(esp_gatts_cb_event_t event, esp_gatt_if_t gatts_
         for (idx = 0; idx < PROFILE_NUM; idx++)
         {
             if (gatts_if == ESP_GATT_IF_NONE || /* ESP_GATT_IF_NONE, not specify a certain gatt_if, need to call every profile cb function */
-                gatts_if == gl_profile_tab[idx].gatts_if)
+                    gatts_if == gl_profile_tab[idx].gatts_if)
             {
                 if (gl_profile_tab[idx].gatts_cb)
                 {
