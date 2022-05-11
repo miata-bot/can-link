@@ -18,12 +18,13 @@
 
 #include <driver/spi_master.h>
 #include <driver/gpio.h>
-#include <driver/twai.h>
 #include <soc/gpio_struct.h>
-#include <esp_vfs_fat.h>
-#include <sdmmc_cmd.h>
 
 #include "ble.h"
+#include "sdcard.h"
+#include "motor.h"
+#include "can.h"
+#include "radio.h"
 
 static void halt();
 
@@ -32,11 +33,6 @@ static const char *TAG = "CONEPROJ";
 #define PIN_NUM_MISO 2
 #define PIN_NUM_MOSI 13
 #define PIN_NUM_CLK 14
-
-// SD Config
-#define PIN_NUM_SD_CS 15
-const char SD_MOUNT_POINT[] = "/sdcard";
-sdmmc_card_t SDCARD;
 
 static void spi_init()
 {
@@ -76,117 +72,14 @@ static void spi_deinit()
     // spi_bus_free(HSPI_HOST);
 }
 
-static void sdcard_init()
-{
-    esp_vfs_fat_sdmmc_mount_config_t mount_config = {
-        .format_if_mount_failed = false,
-        .max_files = 5,
-        .allocation_unit_size = 16 * 1024};
-
-    sdmmc_host_t host = SDSPI_HOST_DEFAULT();
-    ESP_LOGI(TAG, "Mounting SD filesystem");
-
-    // This initializes the slot without card detect (CD) and write protect (WP) signals.
-    // Modify slot_config.gpio_cd and slot_config.gpio_wp if your board has these signals.
-    sdspi_device_config_t slot_config = SDSPI_DEVICE_CONFIG_DEFAULT();
-    slot_config.gpio_cs = PIN_NUM_SD_CS;
-    slot_config.host_id = host.slot;
-    sdmmc_card_t *card = &SDCARD;
-
-    // Mount the filesystem
-    esp_err_t ret = esp_vfs_fat_sdspi_mount(SD_MOUNT_POINT, &host, &slot_config, &mount_config, &card);
-
-    switch (ret)
-    {
-    case ESP_OK:
-        ESP_LOGI(TAG, "Filesystem mounted");
-        break;
-    case ESP_FAIL:
-        ESP_LOGE(TAG, "Failed to mount filesystem.");
-        return;
-    default:
-        ESP_LOGE(TAG, "Failed to initialize the card (%s). ", esp_err_to_name(ret));
-        return;
-    }
-
-    // Card has been initialized, print its properties
-    sdmmc_card_print_info(stdout, card);
-}
-
-static void sdcard_deinit()
-{
-    // unmount partition and disable SPI peripheral
-    esp_vfs_fat_sdcard_unmount(SD_MOUNT_POINT, &SDCARD);
-}
-
-static void radio_init()
-{
-    // spi_bus_add_device
-}
-
-static void radio_deinit()
-{
-    // spi_bus_remove_device()
-}
-
-static void motor_init()
-{
-}
-
-static void motor_deinit()
-{
-}
-
-static void twai_init()
-{
-    // //Initialize configuration structures using macro initializers
-    // twai_general_config_t g_config = TWAI_GENERAL_CONFIG_DEFAULT(GPIO_NUM_21, GPIO_NUM_22, TWAI_MODE_NORMAL);
-    // twai_timing_config_t t_config = TWAI_TIMING_CONFIG_500KBITS();
-    // twai_filter_config_t f_config = TWAI_FILTER_CONFIG_ACCEPT_ALL();
-
-    // //Install TWAI driver
-    // if (twai_driver_install(&g_config, &t_config, &f_config) == ESP_OK) {
-    //     printf("Driver installed\n");
-    // } else {
-    //     printf("Failed to install driver\n");
-    //     return;
-    // }
-
-    // //Start TWAI driver
-    // if (twai_start() == ESP_OK) {
-    //     printf("Driver started\n");
-    // } else {
-    //     printf("Failed to start driver\n");
-    //     return;
-    // }
-}
-
-static void twai_deinit()
-{
-    // //Stop the TWAI driver
-    // if (twai_stop() == ESP_OK) {
-    //     printf("Driver stopped\n");
-    // } else {
-    //     printf("Failed to stop driver\n");
-    //     return;
-    // }
-
-    // //Uninstall the TWAI driver
-    // if (twai_driver_uninstall() == ESP_OK) {
-    //     printf("Driver uninstalled\n");
-    // } else {
-    //     printf("Failed to uninstall driver\n");
-    //     return;
-    // }
-}
-
 static void spiffs_init()
 {
     esp_vfs_spiffs_conf_t conf = {
         .base_path = "/spiffs",
         .partition_label = NULL,
         .max_files = 5,
-        .format_if_mount_failed = false};
+        .format_if_mount_failed = false
+    };
 
     esp_err_t ret = esp_vfs_spiffs_register(&conf);
     switch (ret)
@@ -209,11 +102,10 @@ static void spiffs_init()
     ESP_ERROR_CHECK(esp_spiffs_info(NULL, &total, &used));
     ESP_LOGI(TAG, "Partition size: total: %d, used: %d", total, used);
 }
+
 static void spiffs_deinit()
 {
 }
-
-
 
 static void report(lua_State *L, int status)
 {
