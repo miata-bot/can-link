@@ -116,8 +116,8 @@
         "min_microvia_drill": 0.09999999999999999,
         "min_silk_clearance": 0.0,
         "min_through_hole_diameter": 0.19999999999999998,
-        "min_track_width": 0.19999999999999998,
-        "min_via_annular_width": 0.049999999999999996,
+        "min_track_width": 0.18,
+        "min_via_annular_width": 0.125,
         "min_via_diameter": 0.39999999999999997,
         "solder_mask_clearance": 0.0,
         "solder_mask_min_width": 0.0,
@@ -127,6 +127,7 @@
         0.0,
         0.2,
         0.254,
+        0.3528,
         0.5,
         1.0
       ],
@@ -137,7 +138,7 @@
         },
         {
           "diameter": 0.45,
-          "drill": 0.254
+          "drill": 0.2
         }
       ],
       "zones_allow_external_fillets": false,
@@ -440,6 +441,10 @@
     [
       "465b9a35-7fb3-44cf-baad-d436034be791",
       ""
+    ],
+    [
+      "496ef6b0-1dda-40d1-9759-9b5cec19c814",
+      "neopixels"
     ]
   ],
   "text_variables": {}
