@@ -9,4 +9,6 @@
   (lib (name "Connector_Amphenol_RJ")(type "KiCad")(uri "${KIPRJMOD}/footprints/Connector_Amphenol_RJ.pretty")(options "")(descr ""))
   (lib (name "Connector_GCT_USB")(type "KiCad")(uri "${KIPRJMOD}/footprints/Connector_GCT_USB.pretty")(options "")(descr ""))
   (lib (name "Connector_CK")(type "KiCad")(uri "${KIPRJMOD}/footprints/Connector_CK.pretty")(options "")(descr ""))
+  (lib (name "Connector_GC9A01")(type "KiCad")(uri "${KIPRJMOD}/footprints/Connector_GC9A01.pretty")(options "")(descr ""))
+  (lib (name "WS2815B")(type "KiCad")(uri "${KIPRJMOD}/footprints/WS2815B.pretty")(options "")(descr ""))
 )

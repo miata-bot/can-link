@@ -440,6 +440,10 @@
     [
       "465b9a35-7fb3-44cf-baad-d436034be791",
       ""
+    ],
+    [
+      "496ef6b0-1dda-40d1-9759-9b5cec19c814",
+      "neopixels"
     ]
   ],
   "text_variables": {}
