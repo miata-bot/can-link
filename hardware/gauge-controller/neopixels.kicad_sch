@@ -639,9 +639,9 @@
     (uuid ff576751-4e89-4162-bbef-850d85474231)
   )
 
-  (label "NEO_OUT" (at 24.13 87.63 90)
-    (effects (font (size 1.27 1.27)) (justify left bottom))
-    (uuid 4149cdf7-5461-4b90-a1fd-08debb5408a2)
+  (hierarchical_label "NEO_OUT" (shape input) (at 24.13 87.63 90)
+    (effects (font (size 1.27 1.27)) (justify left))
+    (uuid 66b1050a-1685-4a97-bda8-8df7be103568)
   )
 
   (symbol (lib_id "Device:C_Small") (at 170.815 72.39 0) (unit 1)
