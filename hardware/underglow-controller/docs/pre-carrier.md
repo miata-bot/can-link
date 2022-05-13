@@ -28,7 +28,7 @@ Redesign using CM4 module with supporting chips for extra features
 
 Revision of the intial V2 design to support a TE connectivity case/connector
 
-![V2 RevA](/hardware/carrier/images/v2-RevA-PCB-Render-Front-No-Case.png)
-![V2 RevA](/hardware/carrier/images/v2-RevA-PCB-Render-Back-No-Case.png)
-![V2 RevA](/hardware/carrier/images/v2-RevA-PCB-Render-Front-Case.png)
-![V2 RevA](/hardware/carrier/images/v2-RevA-PCB-Render-Back-Case.png)
+![V2 RevA](/hardware/carrier/images/v2/v2-RevA-PCB-Render-Front-No-Case.png)
+![V2 RevA](/hardware/carrier/images/v2/v2-RevA-PCB-Render-Back-No-Case.png)
+![V2 RevA](/hardware/carrier/images/v2/v2-RevA-PCB-Render-Front-Case.png)
+![V2 RevA](/hardware/carrier/images/v2/v2-RevA-PCB-Render-Back-Case.png)
