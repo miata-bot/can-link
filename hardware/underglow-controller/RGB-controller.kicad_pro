@@ -403,7 +403,7 @@
     "pinned_symbol_libs": []
   },
   "meta": {
-    "filename": "CONEPROJ.kicad_pro",
+    "filename": "RGB-controller.kicad_pro",
     "version": 1
   },
   "net_settings": {
@@ -488,8 +488,7 @@
           "/RF69_RF_ANT",
           "/RF69_RF_ANT_PCB",
           "/RF69_RF_EXT",
-          "/RF_ANT",
-          "/RF_ANT_EXT"
+          "/RF_ANT"
         ],
         "pcb_color": "rgba(0, 0, 0, 0.000)",
         "schematic_color": "rgba(0, 0, 0, 0.000)",
