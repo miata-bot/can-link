@@ -404,7 +404,7 @@
     "pinned_symbol_libs": []
   },
   "meta": {
-    "filename": "RGB-controller.kicad_pro",
+    "filename": "motor-controller.kicad_pro",
     "version": 1
   },
   "net_settings": {
@@ -436,14 +436,7 @@
         "microvia_diameter": 0.3,
         "microvia_drill": 0.1,
         "name": "Low Side Out",
-        "nets": [
-          "/GPO1",
-          "/GPO2",
-          "/GPO3",
-          "/GPO4",
-          "/GPO5",
-          "/GPO6"
-        ],
+        "nets": [],
         "pcb_color": "rgba(0, 0, 0, 0.000)",
         "schematic_color": "rgba(0, 0, 0, 0.000)",
         "track_width": 1.0,
@@ -486,9 +479,6 @@
         "name": "RF",
         "nets": [
           "/LNA_IN",
-          "/RF69_RF_ANT",
-          "/RF69_RF_ANT_PCB",
-          "/RF69_RF_EXT",
           "/RF_ANT"
         ],
         "pcb_color": "rgba(0, 0, 0, 0.000)",

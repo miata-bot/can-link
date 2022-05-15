@@ -404,7 +404,7 @@
     "pinned_symbol_libs": []
   },
   "meta": {
-    "filename": "RGB-controller.kicad_pro",
+    "filename": "usb-stick.kicad_pro",
     "version": 1
   },
   "net_settings": {
@@ -436,14 +436,7 @@
         "microvia_diameter": 0.3,
         "microvia_drill": 0.1,
         "name": "Low Side Out",
-        "nets": [
-          "/GPO1",
-          "/GPO2",
-          "/GPO3",
-          "/GPO4",
-          "/GPO5",
-          "/GPO6"
-        ],
+        "nets": [],
         "pcb_color": "rgba(0, 0, 0, 0.000)",
         "schematic_color": "rgba(0, 0, 0, 0.000)",
         "track_width": 1.0,
@@ -461,12 +454,7 @@
         "microvia_diameter": 0.3,
         "microvia_drill": 0.1,
         "name": "Motor Out",
-        "nets": [
-          "/MOTOR1_OUT1",
-          "/MOTOR1_OUT2",
-          "/MOTOR2_OUT1",
-          "/MOTOR2_OUT2"
-        ],
+        "nets": [],
         "pcb_color": "rgba(0, 0, 0, 0.000)",
         "schematic_color": "rgba(0, 0, 0, 0.000)",
         "track_width": 1.0,
