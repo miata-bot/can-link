@@ -24,7 +24,7 @@
 #include "sdcard.h"
 #include "motor.h"
 #include "can.h"
-#include "radio.h"
+#include "SX1231.h"
 
 static void halt();
 
@@ -33,6 +33,8 @@ static const char *TAG = "CONEPROJ";
 #define PIN_NUM_MISO 2
 #define PIN_NUM_MOSI 13
 #define PIN_NUM_CLK 14
+
+SX1231_t* sx1231;
 
 static void spi_init()
 {
@@ -66,10 +68,31 @@ static void spi_init()
     }
 }
 
+void radio_init()
+{
+    SX1231_config_t cfg = {
+        .freqBand = RF69_868MHZ,
+        .nodeID = 1, 
+        .networkID = 100,
+        .isRFM69HW_HCW = true,
+        .host = HSPI_HOST
+    };
+    esp_err_t err = sx1231_initialize(&cfg,  &sx1231);
+    if(err != ESP_OK) {
+        ESP_LOGE(TAG, "Failed to initialize radio (%s)", esp_err_to_name(err));
+        halt();
+    }
+    ESP_LOGI(TAG, "Initalized radio");
+}
+
 static void spi_deinit()
 {
     // causes panic for some reason
     // spi_bus_free(HSPI_HOST);
+}
+
+void radio_deinit()
+{
 }
 
 static void spiffs_init()
@@ -171,12 +194,12 @@ void app_main()
            (chip_info.features & CHIP_FEATURE_BLE) ? "/BLE" : "");
 
     spi_init();
-    sdcard_init();
+    // sdcard_init();
     radio_init();
-    motor_init();
-    twai_init();
-    spiffs_init();
-    ble_init();
+    // motor_init();
+    // twai_init();
+    // spiffs_init();
+    // ble_init();
 
     xTaskCreate(mainTask, "mainTask", 0x10000, NULL, 5, NULL);
 }
