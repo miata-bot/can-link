@@ -14,72 +14,102 @@
 
 static const char TAG[] = "SX1231";
 
-#define GPIO_RADIO_CS       27
-#define GPIO_RADIO_RESET    26
-#define GPIO_INPUT_IO_0     4
-
-#define GPIO_INPUT_PIN_SEL  (1ULL<<GPIO_INPUT_IO_0)
-#define GPIO_RESET_PIN_SEL  (1ULL<<GPIO_RADIO_RESET)
-
 #define ESP_INTR_FLAG_DEFAULT 0
 
-static QueueHandle_t gpio_evt_queue = NULL;
-volatile bool _sx1231_haveData;
+static QueueHandle_t sx1231_isr_queue = NULL;
 
-static void IRAM_ATTR sx1231_gpio_isr_handler(void* arg)
+static void IRAM_ATTR sx1231_isr(void* arg)
 {
-    uint32_t gpio_num = (uint32_t) arg;
-    xQueueSendFromISR(gpio_evt_queue, &gpio_num, NULL);
+  uint32_t gpio_num = (uint32_t) arg;
+  xQueueSendFromISR(sx1231_isr_queue, &gpio_num, NULL);
 }
 
-static void gpio_task_example(void* arg)
+static void sx1231_isr_task(void* arg)
 {
-    uint32_t io_num;
-    for(;;) {
-        if(xQueueReceive(gpio_evt_queue, &io_num, portMAX_DELAY)) {
-            printf("GPIO[%d] intr, val: %d\n", io_num, gpio_get_level(io_num));
-            _sx1231_haveData = true;
-        }
+  SX1231_t* sx1231 = (SX1231_t*)arg;
+  uint32_t io_num;
+  for(;;) {
+    if(xQueueReceive(sx1231_isr_queue, &io_num, portMAX_DELAY)) {
+      if(io_num == sx1231->cfg.gpio_int)
+        sx1231->_dataAvailable = true;
     }
+  }
 }
 
-esp_err_t sx1231_initialize(SX1231_config_t *cfg, SX1231_t** out_ctx) {
+esp_err_t sx1231_install_interrupts(SX1231_t* ctx) 
+{
+  //zero-initialize the config structure.
+  gpio_config_t io_conf = {};
+
+  //interrupt of rising edge
+  io_conf.intr_type = GPIO_INTR_POSEDGE;
+  //bit mask of the pins, use GPIO_INPUT_PIN_SEL here
+  io_conf.pin_bit_mask = (1ULL<<ctx->cfg.gpio_int);
+  //set as input mode
+  io_conf.mode = GPIO_MODE_INPUT;
+  //enable pull-down mode
+  io_conf.pull_down_en = 1;
+  gpio_config(&io_conf);
+
+  //create a queue to handle gpio event from isr
+  sx1231_isr_queue = xQueueCreate(10, sizeof(uint32_t));
+  //start gpio task
+  xTaskCreate(sx1231_isr_task, "sx1231_isr_task", 2048, ctx, 10, NULL);
+
+  //install gpio isr service
+  gpio_install_isr_service(ESP_INTR_FLAG_DEFAULT);
+  //hook isr handler for specific gpio pin
+  gpio_isr_handler_add(ctx->cfg.gpio_int, sx1231_isr, (void*) ctx->cfg.gpio_int);
+  return ESP_OK;
+}
+
+esp_err_t sx1231_reset(SX1231_t* ctx)
+{
+  gpio_set_direction(ctx->cfg.gpio_reset, GPIO_MODE_OUTPUT);
+  gpio_set_level(ctx->cfg.gpio_reset, 1);
+  vTaskDelay(10 / portTICK_PERIOD_MS);
+  gpio_set_level(ctx->cfg.gpio_reset, 0);
+  vTaskDelay(10 / portTICK_PERIOD_MS);
+  return ESP_OK;
+}
+
+esp_err_t sx1231_initialize(SX1231_config_t *cfg, SX1231_t** out_ctx) 
+{
   esp_err_t err = ESP_OK;
-  
-  gpio_set_direction(GPIO_RADIO_RESET, GPIO_MODE_OUTPUT);
-  // reset
-  gpio_set_level(GPIO_RADIO_RESET, 1);
-  vTaskDelay(10 / portTICK_PERIOD_MS);
-  gpio_set_level(GPIO_RADIO_RESET, 0);
-  vTaskDelay(10 / portTICK_PERIOD_MS);
+  spi_device_handle_t spi;
+
+  spi_device_interface_config_t devcfg={
+    .clock_speed_hz = SPI_MASTER_FREQ_10M,
+    .mode = 0,  //SPI mode 0
+    .spics_io_num = cfg->gpio_cs,
+    .queue_size = 8,
+    .command_bits = 8,
+    .input_delay_ns=100,
+    .flags = SPI_DEVICE_NO_DUMMY
+  };
+
+  //Attach the radio to the SPI bus
+  err = spi_bus_add_device(cfg->host, &devcfg, &spi);
+
+  if (err != ESP_OK)  {
+    ESP_LOGE(TAG, "Could not create SPI device");
+    return err;
+  } // TODO: should cleanup here
 
   SX1231_t* ctx = (SX1231_t*)malloc(sizeof(SX1231_t));
-  spi_device_handle_t spi;
   if (!ctx) return ESP_ERR_NO_MEM;
 
   *ctx = (SX1231_t) {
     .cfg = *cfg,
     ._mode = RF69_MODE_STANDBY,
     ._powerLevel = 31,
+    ._dataAvailable = false,
+    ._address = cfg->nodeID,
+    .spi = spi 
   };
+  sx1231_reset(ctx);
 
-  spi_device_interface_config_t devcfg={
-    .clock_speed_hz = SPI_MASTER_FREQ_10M,
-    .mode = 0,  //SPI mode 0
-    .spics_io_num = GPIO_RADIO_CS,
-    .queue_size = 8,
-    // .address_bits = 8
-  };
-
-  //Attach the radio to the SPI bus
-  err = spi_bus_add_device(ctx->cfg.host, &devcfg, &spi);
-
-  if (err != ESP_OK)  {
-    ESP_LOGE(TAG, "Could not create SPI device");
-    return err;
-  } // TODO: should cleanup here
-  ctx->spi = spi;
-
+  // this is a lot of data. maybe put it in flash?
   const uint8_t CONFIG[][2] =
   {
     /* 0x01 */ { REG_OPMODE, RF_OPMODE_SEQUENCER_ON | RF_OPMODE_LISTEN_OFF | RF_OPMODE_STANDBY },
@@ -123,17 +153,14 @@ esp_err_t sx1231_initialize(SX1231_config_t *cfg, SX1231_t** out_ctx) {
     /* 0x6F */ { REG_TESTDAGC, RF_DAGC_IMPROVED_LOWBETA0 }, // run DAGC continuously in RX mode for Fading Margin Improvement, recommended default for AfcLowBetaOn=0
     {255, 0}
   };
+
   // esp timer is actually a uint64_t
-  uint32_t start = esp_timer_get_time();
+  uint64_t start = (esp_timer_get_time() / 1000);
   uint8_t timeout = 50;
 
-  // sx1231_writeReg(ctx, REG_SYNCVALUE1, 0xAA);
-  // sx1231_readReg(ctx, REG_SYNCVALUE1);
-  // return;
-
-  do sx1231_writeReg(ctx, REG_SYNCVALUE1, 0xAA); while (sx1231_readReg(ctx, REG_SYNCVALUE1) != 0xAA && esp_timer_get_time()-start < timeout);
-  start = esp_timer_get_time();
-  do sx1231_writeReg(ctx, REG_SYNCVALUE1, 0x55); while (sx1231_readReg(ctx, REG_SYNCVALUE1) != 0x55 && esp_timer_get_time()-start < timeout);
+  do sx1231_writeReg(ctx, REG_SYNCVALUE1, 0xAA); while (sx1231_readReg(ctx, REG_SYNCVALUE1) != 0xAA && (esp_timer_get_time() / 1000)-start < timeout);
+  start = (esp_timer_get_time() / 1000);
+  do sx1231_writeReg(ctx, REG_SYNCVALUE1, 0x55); while (sx1231_readReg(ctx, REG_SYNCVALUE1) != 0x55 && (esp_timer_get_time() / 1000)-start < timeout);
   ESP_LOGI(TAG, "Radio sync");
 
   for (uint8_t i = 0; CONFIG[i][0] != 255; i++)
@@ -145,40 +172,18 @@ esp_err_t sx1231_initialize(SX1231_config_t *cfg, SX1231_t** out_ctx) {
 
   sx1231_setHighPower(ctx, cfg->isRFM69HW_HCW); // called regardless if it's a RFM69W or RFM69HW (at this point _isRFM69HW may not be explicitly set by constructor and setHighPower() may not have been called yet (ie called after initialize() call)
   sx1231_setMode(ctx, RF69_MODE_STANDBY);
-  start = esp_timer_get_time();
-  while (((sx1231_readReg(ctx, REG_IRQFLAGS1) & RF_IRQFLAGS1_MODEREADY) == 0x00) && esp_timer_get_time()-start < timeout); // wait for ModeReady
+  start = (esp_timer_get_time() / 1000);
 
-  if (esp_timer_get_time()-start >= timeout)
-    return false;
+  while (((sx1231_readReg(ctx, REG_IRQFLAGS1) & RF_IRQFLAGS1_MODEREADY) == 0x00) && (esp_timer_get_time() / 1000)-start < timeout); // wait for ModeReady
 
-  ctx->_address = cfg->nodeID;
+  if ((esp_timer_get_time() / 1000)-start >= timeout)
+    return -1;
 
-  //zero-initialize the config structure.
-  gpio_config_t io_conf = {};
-
-  //interrupt of rising edge
-  io_conf.intr_type = GPIO_INTR_POSEDGE;
-  //bit mask of the pins
-  io_conf.pin_bit_mask = GPIO_INPUT_PIN_SEL;
-  //set as input mode
-  io_conf.mode = GPIO_MODE_INPUT;
-  //enable pull-up mode
-  io_conf.pull_up_en = 1;
-  gpio_config(&io_conf);
-
-  //change gpio interrupt type for one pin
-  gpio_set_intr_type(GPIO_INPUT_IO_0, GPIO_INTR_ANYEDGE);
-
-  //create a queue to handle gpio event from isr
-  gpio_evt_queue = xQueueCreate(10, sizeof(uint32_t));
-
-  //start gpio task
-  xTaskCreate(gpio_task_example, "sx1231_gpio_task", 2048, NULL, 10, NULL);
-
-  //install gpio isr service
-  gpio_install_isr_service(ESP_INTR_FLAG_DEFAULT);
-  //hook isr handler for specific gpio pin
-  gpio_isr_handler_add(GPIO_INPUT_IO_0, sx1231_gpio_isr_handler, (void*) GPIO_INPUT_IO_0);
+  err = sx1231_install_interrupts(ctx);
+  if(err != ESP_OK) {
+    ESP_LOGE(TAG, "Could not attach interrupts");
+    return err;
+  }
 
   *out_ctx = ctx;
   return ESP_OK;
@@ -204,8 +209,8 @@ bool sx1231_canSend(SX1231_t *sx1231) {
 
 void sx1231_send(SX1231_t *sx1231, uint16_t toAddress, const void* buffer, uint8_t bufferSize, bool requestACK) {
   sx1231_writeReg(sx1231, REG_PACKETCONFIG2, (sx1231_readReg(sx1231, REG_PACKETCONFIG2) & 0xFB) | RF_PACKET2_RXRESTART); // avoid RX deadlocks
-  uint32_t now = esp_timer_get_time();
-  while (!sx1231_canSend(sx1231) && esp_timer_get_time() - now < RF69_CSMA_LIMIT_MS){
+  uint32_t now = (esp_timer_get_time() / 1000);
+  while (!sx1231_canSend(sx1231) && (esp_timer_get_time() / 1000) - now < RF69_CSMA_LIMIT_MS){
       sx1231_receiveDone(sx1231);
   }
   sx1231_sendFrame(sx1231, toAddress, buffer, bufferSize, requestACK, false);
@@ -222,10 +227,11 @@ bool sx1231_sendWithRetry(SX1231_t *sx1231, uint16_t toAddress, const void* buff
   for (uint8_t i = 0; i <= retries; i++)
   {
     sx1231_send(sx1231, toAddress, buffer, bufferSize, true);
-    sentTime = esp_timer_get_time();
-    while (esp_timer_get_time() - sentTime < retryWaitTime)
+    sentTime = (esp_timer_get_time() / 1000);
+    while ((esp_timer_get_time() / 1000) - sentTime < retryWaitTime)
     {
       if (sx1231_ACKReceived(sx1231, toAddress)) return true;
+      vTaskDelay(1);
     }
   }
   return false;
@@ -233,19 +239,20 @@ bool sx1231_sendWithRetry(SX1231_t *sx1231, uint16_t toAddress, const void* buff
 
 // checks if a packet was received and/or puts transceiver in receive (ie RX or listen) mode
 bool sx1231_receiveDone(SX1231_t *sx1231) {
-  if (_sx1231_haveData) {
-  	_sx1231_haveData = false;
+  if (sx1231->_dataAvailable) {
+  	sx1231->_dataAvailable = false;
   	sx1231_interruptHandler(sx1231);
   }
+
   if (sx1231->_mode == RF69_MODE_RX && sx1231->PAYLOADLEN > 0)
   {
     sx1231_setMode(sx1231, RF69_MODE_STANDBY); // enables interrupts
     return true;
   }
+
   else if (sx1231->_mode == RF69_MODE_RX) // already in RX no payload yet
-  {
     return false;
-  }
+
   sx1231_receiveBegin(sx1231);
   return false;
 }
@@ -268,8 +275,8 @@ void sx1231_sendACK(SX1231_t *sx1231, const void* buffer, uint8_t bufferSize) {
   uint16_t sender = sx1231->SENDERID;
   int16_t _RSSI = sx1231->RSSI; // save payload received RSSI value
   sx1231_writeReg(sx1231, REG_PACKETCONFIG2, (sx1231_readReg(sx1231, REG_PACKETCONFIG2) & 0xFB) | RF_PACKET2_RXRESTART); // avoid RX deadlocks
-  uint32_t now = esp_timer_get_time();
-  while (!sx1231_canSend(sx1231) && esp_timer_get_time() - now < RF69_CSMA_LIMIT_MS){
+  uint32_t now = (esp_timer_get_time() / 1000);
+  while (!sx1231_canSend(sx1231) && (esp_timer_get_time() / 1000) - now < RF69_CSMA_LIMIT_MS){
       sx1231_receiveDone(sx1231);
   }
   sx1231->SENDERID = sender;    // TWS: Restore SenderID after it gets wiped out by receiveDone()
@@ -308,10 +315,9 @@ void sx1231_encrypt(SX1231_t *sx1231, const char* key) {
     sx1231_select(sx1231);
     // _spi->transfer(REG_AESKEY1 | 0x80);
     spi_transaction_t t = {
-      .addr = REG_AESKEY1 | 0x80,
+      .cmd = REG_AESKEY1 | 0x80,
       .length = 16,
       .flags = 0,
-      // .tx_data = (uint8_t*)key,
       .tx_buffer = key,
       .user = sx1231,
     };
@@ -461,62 +467,44 @@ uint8_t sx1231_setLNA(SX1231_t *sx1231, uint8_t newReg) {
   return oldReg;  // return the original value in case we need to restore it
 }
 
-uint8_t sx1231_readReg(SX1231_t *sx1231, uint8_t addr) {
-
+uint8_t sx1231_readReg(SX1231_t *sx1231, uint8_t addr) 
+{
   sx1231_select(sx1231);
-  // _spi->transfer(addr & 0x7F);
-  spi_transaction_t t1 = {
-    .length = 16,
-    // .flags = SPI_TRANS_USE_RXDATA,
-    .flags = SPI_TRANS_USE_TXDATA | SPI_TRANS_USE_RXDATA,
+  spi_transaction_t t = {
+    .cmd = addr & 0x7F,
+    .length = 8,
+    .flags = SPI_TRANS_USE_RXDATA,
     .user = sx1231,
-    .tx_data = {addr & 0x7F, 0}
   };
-  esp_err_t err = spi_device_polling_transmit(sx1231->spi, &t1);
+
+  esp_err_t err = spi_device_polling_transmit(sx1231->spi, &t);
   if (err!= ESP_OK) {
-    ESP_LOGE(TAG, "Could not read SPI bus");
+    ESP_LOGE(TAG, "Could not read register %02X", addr);
     return 0; // this is wrong lmao
   }
-  // sx1231_unselect(sx1231);
 
-  // sx1231_select(sx1231);
-  // spi_transaction_t t2 = {
-  //   .length = 8,
-  //   // .flags = SPI_TRANS_USE_RXDATA,
-  //   .flags = SPI_TRANS_USE_RXDATA,
-  //   .user = sx1231,
-  //   // .tx_data = {0}
-  // };
-  // err = spi_device_polling_transmit(sx1231->spi, &t2);
-  
-  // uint8_t regval = t2.rx_data[0];
-  uint8_t regval = t1.rx_data[1];
-
-  // uint8_t regval = _spi->transfer(0);
+  uint8_t regval = t.rx_data[0];
   sx1231_unselect(sx1231);
-  ESP_LOGI(TAG, "sx1231_readReg(%02x)=%02x", addr, regval);
   return regval;
 }
 
-void sx1231_writeReg(SX1231_t *sx1231, uint8_t addr, uint8_t value) {
+void sx1231_writeReg(SX1231_t *sx1231, uint8_t addr, uint8_t value) 
+{
   sx1231_select(sx1231);
-  // _spi->transfer(addr | 0x80);
-  // _spi->transfer(value);
-  spi_transaction_t t1 = {
-    // .addr = addr | 0x80,
-    .length = 16,
+  spi_transaction_t t = {
+    .cmd = addr | 0x80,
+    .length = 8,
     .flags = SPI_TRANS_USE_TXDATA,
-    .tx_data = {addr | 0x80, value},
+    .tx_data = {value},
     .user = sx1231,
   };
-  esp_err_t err = spi_device_polling_transmit(sx1231->spi, &t1);
-  sx1231_unselect(sx1231);
-
+  esp_err_t err = spi_device_polling_transmit(sx1231->spi, &t);
   if (err!= ESP_OK) {
-    ESP_LOGE(TAG, "Could not write register");
+    ESP_LOGE(TAG, "Failed to write register %02X", addr);
     return;
   }
-  ESP_LOGI(TAG, "sx1231_writeReg(%02x)=%02x", addr, value);
+
+  sx1231_unselect(sx1231);
 }
 
 void sx1231_setMode(SX1231_t *sx1231, uint8_t newMode) {
@@ -552,7 +540,6 @@ void sx1231_setMode(SX1231_t *sx1231, uint8_t newMode) {
   sx1231->_mode = newMode;
 }
 
-// todo: delete
 void sx1231_select(SX1231_t *sx1231) {
   esp_err_t err;
   err = spi_device_acquire_bus(sx1231->spi, portMAX_DELAY);
@@ -570,35 +557,28 @@ void sx1231_unselect(SX1231_t *sx1231) {
 
 void sx1231_interruptHandler(SX1231_t *sx1231) {
   esp_err_t err;
-  ESP_LOGI(TAG, "sx1231_interruptHandler()");
   if (sx1231->_mode == RF69_MODE_RX && (sx1231_readReg(sx1231, REG_IRQFLAGS2) & RF_IRQFLAGS2_PAYLOADREADY))
   {
     sx1231_setMode(sx1231, RF69_MODE_STANDBY);
 
     sx1231_select(sx1231);
 
-    // _spi->transfer(REG_FIFO & 0x7F);
-    spi_transaction_t t = {
-        .addr = REG_FIFO & 0x7F,
+    spi_transaction_t t1 = {
+        .cmd = REG_FIFO & 0x7F,
         .length = 32,
         .flags = SPI_TRANS_USE_RXDATA,
         .user = sx1231,
     };
-    err = spi_device_polling_transmit(sx1231->spi, &t);
+    err = spi_device_polling_transmit(sx1231->spi, &t1);
     if (err != ESP_OK) {
       ESP_LOGE(TAG, "Could not read SPI bus");
       return;
     }
-
-    // sx1231->PAYLOADLEN = _spi->transfer(0);
-    sx1231->PAYLOADLEN = t.rx_data[0];
+    sx1231->PAYLOADLEN = t1.rx_data[0];
     sx1231->PAYLOADLEN = sx1231->PAYLOADLEN > 66 ? 66 : sx1231->PAYLOADLEN; // precaution
-    // sx1231->TARGETID = _spi->transfer(0);
-    sx1231->TARGETID = t.rx_data[1];
-    // sx1231->SENDERID = _spi->transfer(0);
-    sx1231->SENDERID = t.rx_data[2];
-    // uint8_t CTLbyte = _spi->transfer(0);
-    uint8_t CTLbyte = t.rx_data[3];
+    sx1231->TARGETID = t1.rx_data[1];
+    sx1231->SENDERID = t1.rx_data[2];
+    uint8_t CTLbyte = t1.rx_data[3];
 
     sx1231->TARGETID |= (((uint16_t) CTLbyte) & 0x0C) << 6; //10 bit address (most significant 2 bits stored in bits(2,3) of CTL byte
     sx1231->SENDERID |= (((uint16_t) CTLbyte) & 0x03) << 8; //10 bit address (most sifnigicant 2 bits stored in bits(0,1) of CTL byte
@@ -615,31 +595,36 @@ void sx1231_interruptHandler(SX1231_t *sx1231) {
     sx1231->DATALEN = sx1231->PAYLOADLEN - 3;
     sx1231->ACK_RECEIVED = CTLbyte & RFM69_CTL_SENDACK; // extract ACK-received flag
     sx1231->ACK_REQUESTED = CTLbyte & RFM69_CTL_REQACK; // extract ACK-requested flag
+    // sx1231_unselect(sx1231);
 
-    // for (uint8_t i = 0; i < sx1231->DATALEN; i++) sx1231->DATA[i] = _spi->transfer(0);
+    ESP_LOGI(TAG, "CTLbyte=%d ACK=%d ACKR=%d", CTLbyte, sx1231->ACK_RECEIVED, sx1231->ACK_REQUESTED);
+    // while(1) {
+    //   vTaskDelay(10);
+    // }
+    // sx1231_select(sx1231);
+
     spi_transaction_t t2 = {
-      // .addr = CMD_READ | (REG_FIFO & 0x7F),
-      .addr = REG_FIFO & 0x7F,
-      .length = sx1231->DATALEN,
-      .flags = SPI_TRANS_USE_RXDATA,
+      .cmd = REG_FIFO & 0x7F,
+      .length = sx1231->DATALEN * 8,
       .user = sx1231,
+      .rx_buffer = sx1231->DATA
     };
+
     err = spi_device_polling_transmit(sx1231->spi, &t2);
     if (err != ESP_OK) {
-      ESP_LOGE(TAG, "Could not read rx data");
+      ESP_LOGE(TAG, "Could not read payload");
       return;
     }
-    for (uint8_t i = 0; i < sx1231->DATALEN; i++) sx1231->DATA[i] = t2.rx_data[i];
 
-    sx1231->DATA[sx1231->DATALEN] = 0; // add null at end of string 
+    sx1231->DATA[sx1231->DATALEN] = 0; // add null at end of payload 
     sx1231_unselect(sx1231);
     sx1231_setMode(sx1231, RF69_MODE_RX);
   }
   sx1231->RSSI = sx1231_readRSSI(sx1231, false);
 }
 
-
-void sx1231_sendFrame(SX1231_t *sx1231, uint16_t toAddress, const void* buffer, uint8_t bufferSize, bool requestACK, bool sendACK) {
+void sx1231_sendFrame(SX1231_t *sx1231, uint16_t toAddress, const void* buffer, uint8_t bufferSize, bool requestACK, bool sendACK)
+{
   sx1231_setMode(sx1231, RF69_MODE_STANDBY); // turn off receiver to prevent reception while filling fifo
   while ((sx1231_readReg(sx1231, REG_IRQFLAGS1) & RF_IRQFLAGS1_MODEREADY) == 0x00); // wait for ModeReady
   //writeReg(REG_DIOMAPPING1, RF_DIOMAPPING1_DIO0_00); // DIO0 is "Packet Sent"
@@ -657,6 +642,23 @@ void sx1231_sendFrame(SX1231_t *sx1231, uint16_t toAddress, const void* buffer, 
 
   // write to FIFO
   sx1231_select(sx1231);
+  char buffer2[4 + bufferSize];
+  memset(buffer2, 0, 4 + bufferSize);
+  buffer2[0] = bufferSize + 3;
+  buffer2[1] = (uint8_t)toAddress;
+  buffer2[2] = (uint8_t)sx1231->_address;
+  buffer2[3] = CTLbyte;
+  for(uint8_t i = 0; i < bufferSize; i++)
+    buffer2[4 + i] = ((uint8_t*)buffer)[i];
+
+  esp_err_t ret;
+  spi_transaction_t t;
+  memset(&t, 0, sizeof(t)); 
+  t.cmd = REG_FIFO | 0x80;
+  t.length=(bufferSize + 4)*8;
+  t.tx_buffer=buffer2;
+  t.user=sx1231;                
+  ret=spi_device_polling_transmit(sx1231->spi, &t);  //Transmit!
 
   // _spi->transfer(REG_FIFO | 0x80);
   // _spi->transfer(bufferSize + 3);
@@ -666,42 +668,49 @@ void sx1231_sendFrame(SX1231_t *sx1231, uint16_t toAddress, const void* buffer, 
 
   // for (uint8_t i = 0; i < bufferSize; i++)
   //   _spi->transfer(((uint8_t*) buffer)[i]);
-  spi_transaction_t t = {
-      .addr = REG_FIFO | 0x80,
-      .length = 32,
-      .flags = SPI_TRANS_USE_TXDATA,
-      .tx_data = {bufferSize + 3, (uint8_t)toAddress, (uint8_t)sx1231->_address, CTLbyte},
-      .user = sx1231,
-  };
-  esp_err_t err = spi_device_polling_transmit(sx1231->spi, &t);
+  // ESP_LOGI(TAG, "header = {%02X, %02X, %02X, %02X}", bufferSize + 3, (uint8_t)toAddress, (uint8_t)sx1231->_address, CTLbyte);
 
-  if (err != ESP_OK) {
-      ESP_LOGE(TAG, "Failed to transmit fifo");
-      return;
-  }
+  // spi_transaction_t t = {
+  //     .cmd = REG_FIFO | 0x80,
+  //     .length = 32,
+  //     .flags = SPI_TRANS_USE_TXDATA,
+  //     .tx_data = {bufferSize + 3, (uint8_t)toAddress, (uint8_t)sx1231->_address, CTLbyte},
+  //     .user = sx1231,
+  // };
+  // esp_err_t err = spi_device_polling_transmit(sx1231->spi, &t);
 
-  spi_transaction_t t2 = {
-      // .addr = CMD_WRITE | (REG_FIFO | 0x80),
-      .addr = REG_FIFO | 0x80,
-      .length = bufferSize,
-      .tx_buffer = (uint8_t*)buffer,
-      // .flags = SPI_TRANS_USE_TXDATA,
-      // .tx_data = (uint8_t*) buffer,
-      .user = sx1231,
-  };
-  err = spi_device_polling_transmit(sx1231->spi, &t2);
-
-  if (err != ESP_OK) {
-      ESP_LOGE(TAG, "Failed to transmit payload");
-      return;
-  }
-
+  // if (err != ESP_OK) {
+  //     ESP_LOGE(TAG, "Failed to transmit header");
+  //     return;
+  // }
   sx1231_unselect(sx1231);
+  // vTaskDelay(100);
+  // sx1231_select(sx1231);
+
+  // spi_transaction_t t2 = {
+  //     .cmd = REG_FIFO | 0x80,
+  //     .length = bufferSize * 8,
+  //     .tx_buffer = buffer,
+  //     // .flags = SPI_TRANS_USE_TXDATA,
+  //     // .tx_data = {'p', 'i', 's', 's'},
+  //     .user = sx1231,
+  // };
+  // err = spi_device_polling_transmit(sx1231->spi, &t2);
+  // if (err != ESP_OK) {
+  //     ESP_LOGE(TAG, "Failed to transmit payload");
+  //     return;
+  // }
+  // // ESP_LOGI(TAG, "payload=%.*s", bufferSize, (char*)buffer);
+  // sx1231_unselect(sx1231);
+  // while(1) {vTaskDelay(100);}
 
   // no need to wait for transmit mode to be ready since its handled by the radio
   sx1231_setMode(sx1231, RF69_MODE_TX);
   while ((sx1231_readReg(sx1231, REG_IRQFLAGS2) & RF_IRQFLAGS2_PACKETSENT) == 0x00); // wait for PacketSent
-  sx1231_setMode(sx1231, RF69_MODE_STANDBY);
+  // sx1231_setMode(sx1231, RF69_MODE_STANDBY);
+  sx1231_setMode(sx1231, RF69_MODE_RX);
+
+  // ESP_LOGI(TAG, "sent packet");
 }
 
 void sx1231_receiveBegin(SX1231_t *sx1231) {

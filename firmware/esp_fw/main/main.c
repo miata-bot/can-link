@@ -30,9 +30,12 @@ static void halt();
 
 static const char *TAG = "CONEPROJ";
 
-#define PIN_NUM_MISO 2
-#define PIN_NUM_MOSI 13
-#define PIN_NUM_CLK 14
+#define PIN_NUM_MISO           2
+#define PIN_NUM_MOSI           13
+#define PIN_NUM_CLK            14
+#define PIN_NUM_RADIO_CS       27
+#define PIN_NUM_RADIO_RESET    26
+#define PIN_NUM_RADIO_IRQ      4
 
 SX1231_t* sx1231;
 
@@ -71,8 +74,11 @@ static void spi_init()
 void radio_init()
 {
     SX1231_config_t cfg = {
-        .freqBand = RF69_868MHZ,
-        .nodeID = 1, 
+        .gpio_cs = PIN_NUM_RADIO_CS,
+        .gpio_int = PIN_NUM_RADIO_IRQ,
+        .gpio_reset = PIN_NUM_RADIO_RESET,
+        .freqBand = RF69_915MHZ,
+        .nodeID = 5, 
         .networkID = 100,
         .isRFM69HW_HCW = true,
         .host = HSPI_HOST
@@ -147,42 +153,6 @@ static void halt()
         vTaskDelay(1000);
 }
 
-void mainTask(void *arg)
-{
-    lua_State *L = luaL_newstate();
-    ESP_ERROR_CHECK(L ? ESP_OK : ESP_FAIL);
-
-    luaL_openlibs(L);
-
-    int r = luaL_loadfilex(L, "/sdcard/main.lua", NULL);
-    if (r != LUA_OK)
-        printf("Failed to execute main.lua\n");
-    else
-        r = lua_pcall(L, 0, LUA_MULTRET, 0);
-
-    report(L, r);
-    lua_close(L);
-
-    printf("State closed, heap: %d\n", xPortGetFreeHeapSize());
-
-    while (1)
-    {
-        printf(".");
-        fflush(stdout);
-        vTaskDelay(100);
-    }
-
-    // Deinit peripherals in reverse of initialization
-    ble_deinit();
-    spiffs_deinit();
-    twai_deinit();
-    motor_deinit();
-    radio_deinit();
-    sdcard_deinit();
-    spi_deinit();
-    halt();
-}
-
 void app_main()
 {
     esp_chip_info_t chip_info;
@@ -201,5 +171,47 @@ void app_main()
     // spiffs_init();
     // ble_init();
 
-    xTaskCreate(mainTask, "mainTask", 0x10000, NULL, 5, NULL);
+    // xTaskCreate(mainTask, "mainTask", 0x10000, NULL, 5, NULL);
+
+    lua_State *L = luaL_newstate();
+    ESP_ERROR_CHECK(L ? ESP_OK : ESP_FAIL);
+
+    luaL_openlibs(L);
+
+    int r = luaL_loadfilex(L, "/sdcard/main.lua", NULL);
+    if (r != LUA_OK)
+        printf("Failed to execute main.lua\n");
+    else
+        r = lua_pcall(L, 0, LUA_MULTRET, 0);
+
+    report(L, r);
+    lua_close(L);
+
+    printf("State closed, heap: %d\n", xPortGetFreeHeapSize());
+
+
+    while (1)
+    {
+        // sx1231_send(sx1231, 2, "test", 4, false);
+        if(sx1231_sendWithRetry(sx1231, 2, "ABCD", 4, 3, 10)) {
+            ESP_LOGI("RADIO", "got ack");
+        }
+        // printf(".");
+        fflush(stdout);
+        vTaskDelay(100);
+        if(sx1231_receiveDone(sx1231)) {
+            ESP_LOGI("RADIO", "SENDER=%d RSSI=%d dbm rx_data={%.*s}", sx1231->SENDERID, sx1231->RSSI, sx1231->DATALEN, sx1231->DATA);
+        }
+        // sx1231_receiveDone(sx1231);
+    }
+
+    // Deinit peripherals in reverse of initialization
+    ble_deinit();
+    spiffs_deinit();
+    twai_deinit();
+    motor_deinit();
+    radio_deinit();
+    sdcard_deinit();
+    spi_deinit();
+    halt();
 }

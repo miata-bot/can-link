@@ -37,6 +37,10 @@
 /// Configurations of the SX1231 radio
 typedef struct {
     spi_host_device_t host; ///< The SPI host used, set before calling `SX1231_init()`
+    gpio_num_t gpio_cs;
+    gpio_num_t gpio_int;
+    gpio_num_t gpio_reset;
+
     uint8_t freqBand; 
     uint16_t nodeID;
     uint8_t networkID;
@@ -56,11 +60,12 @@ typedef struct SX1231 {
     uint8_t _mode; // should be protected?
 
     // Private
-    uint8_t _slaveSelectPin;
-    uint8_t _interruptPin;
-    uint8_t _interruptNum;
+    uint8_t  _slaveSelectPin;
+    uint8_t  _interruptPin;
+    uint8_t  _interruptNum;
     uint16_t _address;
-    uint8_t _powerLevel;
+    uint8_t  _powerLevel;
+    bool     _dataAvailable;
 
     SX1231_config_t cfg;
     spi_device_handle_t spi;
@@ -109,8 +114,13 @@ void sx1231_select(SX1231_t *sx1231);
 void sx1231_unselect(SX1231_t *sx1231);
 
 // Private API
-void sx1231_isr0(SX1231_t *sx1231);
-void sx1231_interruptHandler();
+static void IRAM_ATTR sx1231_isr(void* arg);
+static void sx1231_isr_task(void* arg);
+
+esp_err_t sx1231_install_interrupts(SX1231_t *sx1231);
+esp_err_t sx1231_reset(SX1231_t *sx1231);
+
+void sx1231_interruptHandler(SX1231_t *sx1231);
 void sx1231_sendFrame(SX1231_t *sx1231, uint16_t toAddress, const void* buffer, uint8_t size, bool requestACK, bool sendACK);
 
 // for ListenMode sleep/timer
