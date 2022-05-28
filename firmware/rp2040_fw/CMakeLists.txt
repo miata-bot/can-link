@@ -14,6 +14,7 @@ endif()
 set(PICO_EXAMPLES_PATH ${PROJECT_SOURCE_DIR})
 
 # Initialize the SDK
+set(PICO_XOSC_STARTUP_DELAY_MULTIPLIER, yes)
 pico_sdk_init()
 
 add_compile_options(-Wall
@@ -23,27 +24,15 @@ add_compile_options(-Wall
         )
 
 if (TARGET tinyusb_device)
-    add_executable(rp2040_fw
-            main.c
-            )
+    add_executable(rp2040_fw)
 
-    pico_generate_pio_header(rp2040_fw ${CMAKE_CURRENT_LIST_DIR}/ws2812.pio OUTPUT_DIR ${CMAKE_CURRENT_LIST_DIR}/generated)
-    # pull in common dependencies
-    target_link_libraries(rp2040_fw pico_stdlib hardware_pwm hardware_pio hardware_dma)
-
-    # enable usb output, disable uart output
-    pico_enable_stdio_usb(rp2040_fw 1)
-    pico_enable_stdio_uart(rp2040_fw 0)
-
-    # create map/bin/hex/uf2 file etc.
+    #pico_generate_pio_header(rp2040_fw ${CMAKE_CURRENT_LIST_DIR}/ws2812.pio)
+    #pico_generate_pio_header(rp2040_fw ${CMAKE_CURRENT_LIST_DIR}/spi.pio)
+    target_sources(rp2040_fw PRIVATE
+        main.c
+    )
+    target_link_libraries(rp2040_fw PRIVATE pico_stdlib pico_stdio_usb hardware_pio hardware_pwm hardware_dma hardware_uart hardware_spi)
     pico_add_extra_outputs(rp2040_fw)
-    # Additionally generate python and hex pioasm outputs for inclusion in the RP2040 datasheet
-    add_custom_target(rp2040_fw_datasheet DEPENDS ${CMAKE_CURRENT_LIST_DIR}/generated/ws2812.py)
-    add_custom_command(OUTPUT ${CMAKE_CURRENT_LIST_DIR}/generated/ws2812.py
-            DEPENDS ${CMAKE_CURRENT_LIST_DIR}/ws2812.pio
-            COMMAND Pioasm -o python ${CMAKE_CURRENT_LIST_DIR}/ws2812.pio ${CMAKE_CURRENT_LIST_DIR}/generated/ws2812.py
-            )
-    add_dependencies(rp2040_fw rp2040_fw_datasheet)
 
 elseif(PICO_ON_DEVICE)
     message(WARNING "not building rp2040_fw because TinyUSB submodule is not initialized in the SDK")

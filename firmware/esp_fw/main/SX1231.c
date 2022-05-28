@@ -79,7 +79,8 @@ esp_err_t sx1231_initialize(SX1231_config_t *cfg, SX1231_t** out_ctx)
   spi_device_handle_t spi;
 
   spi_device_interface_config_t devcfg={
-    .clock_speed_hz = SPI_MASTER_FREQ_10M,
+    // .clock_speed_hz = SPI_MASTER_FREQ_10M,
+    .clock_speed_hz = APB_CLK_FREQ/800,
     .mode = 0,  //SPI mode 0
     .spics_io_num = cfg->gpio_cs,
     .queue_size = 8,

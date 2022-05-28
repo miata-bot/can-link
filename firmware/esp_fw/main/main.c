@@ -30,14 +30,99 @@ static void halt();
 
 static const char *TAG = "CONEPROJ";
 
-#define PIN_NUM_MISO           2
-#define PIN_NUM_MOSI           13
-#define PIN_NUM_CLK            14
-#define PIN_NUM_RADIO_CS       27
-#define PIN_NUM_RADIO_RESET    26
-#define PIN_NUM_RADIO_IRQ      4
+#define PIN_NUM_MISO           37
+#define PIN_NUM_MOSI           35
+#define PIN_NUM_CLK            36
+
+#define PIN_NUM_RADIO_CS       9
+#define PIN_NUM_RADIO_RESET    2
+#define PIN_NUM_RADIO_IRQ      1
+
+#define PIN_NUM_RP2040_EN 29
+#define PIN_NUM_RP2040_CSN 13
 
 SX1231_t* sx1231;
+
+esp_err_t rp2040_reset()
+{
+  gpio_set_direction(PIN_NUM_RP2040_EN, GPIO_MODE_OUTPUT);
+  gpio_set_level(PIN_NUM_RP2040_EN, 0);
+  vTaskDelay(10 / portTICK_PERIOD_MS);
+
+  gpio_set_direction(PIN_NUM_RP2040_CSN, GPIO_MODE_OUTPUT);
+  gpio_set_level(PIN_NUM_RP2040_CSN, 1);
+
+//   while(true) {
+//     gpio_set_level(PIN_NUM_RP2040_CSN, 0);
+//     vTaskDelay(250 / portTICK_PERIOD_MS);
+//     gpio_set_level(PIN_NUM_RP2040_CSN, 1);
+//     vTaskDelay(250 / portTICK_PERIOD_MS);
+//   }
+
+
+  esp_err_t err = ESP_OK;
+  spi_device_handle_t spi;
+
+  spi_device_interface_config_t devcfg={
+    .clock_speed_hz = APB_CLK_FREQ/800,
+    // .clock_speed_hz = SPI_MASTER_FREQ_10M,
+    .mode = 0,  //SPI mode 0
+    // .spics_io_num = PIN_NUM_RP2040_CSN,
+    .spics_io_num = -1,
+    .queue_size = 8,
+    // .command_bits = 8,
+    .input_delay_ns=10,
+    .flags = SPI_DEVICE_NO_DUMMY
+  };
+  ESP_LOGI(TAG, "add device");
+//Attach the pico to the SPI bus
+  err = spi_bus_add_device(SPI3_HOST, &devcfg, &spi);
+  ESP_LOGI(TAG, "add device ok");
+
+  if (err != ESP_OK)  {
+    ESP_LOGE(TAG, "Could not create SPI device");
+    ESP_ERROR_CHECK(err);
+    return err;
+  }
+
+//   gpio_set_level(PIN_NUM_RP2040_EN, 1);
+//   vTaskDelay(10 / portTICK_PERIOD_MS);
+
+  uint8_t buffer[10];
+  memset(buffer, 0, 10);
+
+    while(true) {
+        gpio_set_level(PIN_NUM_RP2040_CSN, 0);
+        ESP_LOGI(TAG, "select");
+        vTaskDelay(1000 / portTICK_PERIOD_MS);
+
+        err = spi_device_acquire_bus(spi, portMAX_DELAY);
+        ESP_ERROR_CHECK(err);
+        spi_transaction_t t = {
+            // .cmd = 0x69,
+            .length = 8,
+            .flags = SPI_TRANS_USE_TXDATA,
+            .tx_data = {0xab},
+            .rx_buffer = &buffer,
+            .user = NULL,
+        };
+        err = spi_device_polling_transmit(spi, &t);
+        ESP_ERROR_CHECK(err);
+        ESP_LOGI(TAG, "SPI XFER %d", buffer[0]);
+
+        vTaskDelay(1000 / portTICK_PERIOD_MS);
+
+        spi_device_release_bus(spi);
+        gpio_set_level(PIN_NUM_RP2040_CSN, 1);
+        ESP_LOGI(TAG, "unselect\n");
+
+        vTaskDelay(5000 / portTICK_PERIOD_MS);
+
+    }
+
+
+  return err;
+}
 
 static void spi_init()
 {
@@ -51,7 +136,7 @@ static void spi_init()
     };
 
     // Initialize the SPI bus in HSPI mode. DMA channel might need changing later?
-    esp_err_t ret = spi_bus_initialize(HSPI_HOST, &buscfg, SPI_DMA_CH_AUTO);
+    esp_err_t ret = spi_bus_initialize(SPI3_HOST, &buscfg, SPI_DMA_CH_AUTO);
 
     switch (ret)
     {
@@ -81,7 +166,7 @@ void radio_init()
         .nodeID = 5, 
         .networkID = 100,
         .isRFM69HW_HCW = true,
-        .host = HSPI_HOST
+        .host = SPI3_HOST
     };
     esp_err_t err = sx1231_initialize(&cfg,  &sx1231);
     if(err != ESP_OK) {
@@ -163,9 +248,16 @@ void app_main()
            (chip_info.features & CHIP_FEATURE_BT) ? "/BT" : "",
            (chip_info.features & CHIP_FEATURE_BLE) ? "/BLE" : "");
 
+
+    
     spi_init();
     // sdcard_init();
     radio_init();
+    if(rp2040_reset() != ESP_OK) {
+        ESP_LOGE(TAG, "RP2040 reset fail");
+        halt();
+    }
+    // ESP_LOGI(TAG, "RP2040 reset");
     // motor_init();
     // twai_init();
     // spiffs_init();
