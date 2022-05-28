@@ -20,23 +20,47 @@
 
 #include "pico/stdlib.h"
 #include "pico/time.h"
+#include "hardware/gpio.h"
 #include "hardware/irq.h"
+#include "hardware/spi.h"
 #include "hardware/pwm.h"
 #include "hardware/pio.h"
 #include "hardware/clocks.h"
-#include "ws2812.pio.h"
+// #include "ws2812.pio.h"
+// #include "pio_spi.h"
 
-#define PIN_LED_R 13
-#define PIN_LED_G 12
-#define PIN_LED_B 11
-#define WS2812_PIN 2
+#define PIN_LED_R 28
+#define PIN_LED_G 27
+#define PIN_LED_B 26
+#define WS2812_PIN 29
+
+#ifdef PICO_DEFAULT_SPI_SCK_PIN
+#undef PICO_DEFAULT_SPI_SCK_PIN
+#endif
+
+#ifdef PICO_DEFAULT_SPI_TX_PIN
+#undef PICO_DEFAULT_SPI_TX_PIN
+#endif
+
+#ifdef PICO_DEFAULT_SPI_RX_PIN
+#undef PICO_DEFAULT_SPI_RX_PIN
+#endif
+
+#ifdef PICO_DEFAULT_SPI_CSN_PIN
+#undef PICO_DEFAULT_SPI_CSN_PIN
+#endif
+
+#define PICO_DEFAULT_SPI_RX_PIN  0
+#define PICO_DEFAULT_SPI_TX_PIN  3
+#define PICO_DEFAULT_SPI_SCK_PIN 2
+#define PICO_DEFAULT_SPI_CSN_PIN  1
 
 #define IS_RGBW false
 #define NUM_PIXELS 150
 
-static inline void put_pixel(uint32_t pixel_grb) {
-    pio_sm_put_blocking(pio0, 0, pixel_grb << 8u);
-}
+// static inline void put_pixel(uint32_t pixel_grb) {
+//     pio_sm_put_blocking(pio0, 0, pixel_grb << 8u);
+// }
 
 static inline uint32_t urgb_u32(uint8_t r, uint8_t g, uint8_t b) {
     return
@@ -93,7 +117,118 @@ const struct {
         {pattern_greys,   "Greys"},
 };
 
+#define BUF_LEN         1
+
+void printbuf(uint8_t buf[], size_t len) {
+    int i;
+    for (i = 0; i < len; ++i) {
+        if (i % 16 == 15)
+            printf("%02x\n", buf[i]);
+        else
+            printf("%02x ", buf[i]);
+    }
+
+    // append trailing newline if there isn't one
+    if (i % 16) {
+        putchar('\n');
+    }
+}
+
 int main() {
+    stdio_init_all();
+
+    while (!stdio_usb_connected()) {
+        tight_loop_contents();
+    }
+
+    const uint STATUS_LED_GREEN_PIN = 16;
+    gpio_init(STATUS_LED_GREEN_PIN);
+    gpio_set_dir(STATUS_LED_GREEN_PIN, GPIO_OUT);
+    gpio_put(STATUS_LED_GREEN_PIN, 1);
+
+    const uint STATUS_LED_RED_PIN = 17;
+    gpio_init(STATUS_LED_RED_PIN);
+    gpio_set_dir(STATUS_LED_RED_PIN, GPIO_OUT);
+    gpio_put(STATUS_LED_RED_PIN, 1);
+
+    // gpio_init(PICO_DEFAULT_SPI_TX_PIN);
+    // gpio_set_dir(PICO_DEFAULT_SPI_TX_PIN, GPIO_OUT);
+    // while(true) {
+    //     gpio_put(PICO_DEFAULT_SPI_TX_PIN, 1);
+    //     sleep_ms(250);
+    //     gpio_put(PICO_DEFAULT_SPI_TX_PIN, 0);
+    //     sleep_ms(250);
+    // }
+
+    // Enable SPI 0 at 1 MHz and connect to GPIOs
+    spi_init(spi_default, 1000*1000);
+    spi_set_slave(spi_default, true);
+    spi_set_format(spi_default, 8, SPI_CPHA_0, SPI_CPOL_0, SPI_MSB_FIRST);
+
+    gpio_set_function(PICO_DEFAULT_SPI_RX_PIN, GPIO_FUNC_SPI);
+    gpio_set_function(PICO_DEFAULT_SPI_TX_PIN, GPIO_FUNC_SPI);
+    gpio_set_function(PICO_DEFAULT_SPI_SCK_PIN, GPIO_FUNC_SPI);
+    gpio_set_function(PICO_DEFAULT_SPI_CSN_PIN, GPIO_FUNC_SPI);
+    // gpio_init(PICO_DEFAULT_SPI_CSN_PIN);
+    // gpio_set_dir(PICO_DEFAULT_SPI_CSN_PIN, GPIO_IN);
+    // gpio_set_pulls(PICO_DEFAULT_SPI_CSN_PIN, 1, 0);
+    // gpio_pull_up(PICO_DEFAULT_SPI_CSN_PIN);
+    // gpio_set_dir(PICO_DEFAULT_SPI_CSN_PIN, GPIO_OUT);
+    // while(true) {
+    //     while(gpio_get(PICO_DEFAULT_SPI_CSN_PIN) == 1) {}
+    //     printf("input=%d\n", in);
+    //     // gpio_put(PICO_DEFAULT_SPI_CSN_PIN, 1);
+    //     // sleep_us(250);
+    //     // gpio_put(PICO_DEFAULT_SPI_CSN_PIN, 0);
+    //     sleep_us(250);
+    // }
+
+    // pio_spi_inst_t spi = {
+    //         .pio = pio0,
+    //         .sm = 0,
+    //         .cs_pin = PICO_DEFAULT_SPI_CSN_PIN
+    // };
+    // float clkdiv = 31.25f;  // 1 MHz @ 125 clk_sys
+    // uint cpha0_prog_offs = pio_add_program(spi.pio, &spi_cpha0_cs_program);
+    // pio_spi_cs_init(spi.pio, spi.sm, cpha0_prog_offs, 8, clkdiv, 0, 0, PICO_DEFAULT_SPI_SCK_PIN, PICO_DEFAULT_SPI_TX_PIN, PICO_DEFAULT_SPI_RX_PIN);
+
+    uint8_t out_buf[BUF_LEN], in_buf[BUF_LEN];
+
+    // Initialize output buffer
+    for (size_t i = 0; i < BUF_LEN; ++i) {
+        out_buf[i] = i;
+    }
+
+    printf("SPI slave says: When reading from MOSI, the following buffer will be written to MISO:\n");
+    printbuf(out_buf, BUF_LEN);
+
+    for (size_t i = 0; ; ++i) {
+        // printf("waiting CSN HIGH\n");
+        // while(gpio_get(PICO_DEFAULT_SPI_CSN_PIN) == 1) {}
+
+        printf("starting xaction\n");
+
+        // // Write the output buffer to MISO, and at the same time read from MOSI.
+        // spi_write_read_blocking(spi_default, out_buf, in_buf, BUF_LEN);
+        // // pio_spi_write8_read8_blocking(&spi, out_buf, in_buf, BUF_LEN);
+        spi_read_blocking(spi_default, 0x69, in_buf, BUF_LEN);
+
+        // // Write to stdio whatever came in on the MOSI line.
+        printf("SPI slave says: read page %d from the MOSI line:\n", i);
+        printbuf(in_buf, BUF_LEN);
+        // printf("waiting CSN LOW\n");
+        // while(gpio_get(PICO_DEFAULT_SPI_CSN_PIN) == 0) {}
+        printf("xaction done\n\n");
+    }
+    
+
+    while(true) {
+        printf("hello world");
+        gpio_put(STATUS_LED_RED_PIN, 1);
+        sleep_ms(250);
+        gpio_put(STATUS_LED_RED_PIN, 0);
+        sleep_ms(250);
+    }
     // Tell the LED pin that the PWM is in charge of its value.
     gpio_set_function(PIN_LED_R, GPIO_FUNC_PWM);
     gpio_set_function(PIN_LED_G, GPIO_FUNC_PWM);
@@ -123,54 +258,80 @@ int main() {
     pwm_set_gpio_level(PIN_LED_G, 0);
     pwm_set_gpio_level(PIN_LED_B, 0);
 
-    PIO pio = pio0;
-    int sm = 0;
-    uint offset = pio_add_program(pio, &ws2812_program);
-
-    ws2812_program_init(pio, sm, offset, WS2812_PIN, 800000, IS_RGBW);
+    // PIO pio = pio0;
+    // int sm = 0;
+    // uint offset = pio_add_program(pio, &ws2812_program);
+    // ws2812_program_init(pio, sm, offset, WS2812_PIN, 800000, IS_RGBW);
 
     int t = 0;
 
     while(true) {
-        int pat = rand() % count_of(pattern_table);
-        int dir = (rand() >> 30) & 1 ? 1 : -1;
-        puts(pattern_table[pat].name);
-        puts(dir == 1 ? "(forward)" : "(backward)");
-        for (int i = 0; i < 1000; ++i) {
-            pattern_table[pat].pat(NUM_PIXELS, t);
-            sleep_ms(10);
-            t += dir;
-        }
+        // int pat = rand() % count_of(pattern_table);
+        // int dir = (rand() >> 30) & 1 ? 1 : -1;
+        // puts(pattern_table[pat].name);
+        // puts(dir == 1 ? "(forward)" : "(backward)");
+        // for (int i = 0; i < 1000; ++i) {
+        //     pattern_table[pat].pat(NUM_PIXELS, t);
+        //     sleep_ms(10);
+        //     t += dir;
+        // }
 
+    // gpio_put(STATUS_LED_GREEN_PIN, 1);
+    // sleep_ms(250);
+    // gpio_put(STATUS_LED_GREEN_PIN, 0);
 
     for(int i = 0; i < 255; i++) {
         pwm_set_gpio_level(PIN_LED_R, 255 * i);
         sleep_ms(10);
     }
+
+    // gpio_put(STATUS_LED_GREEN_PIN, 1);
+    // sleep_ms(250);
+    // gpio_put(STATUS_LED_GREEN_PIN, 0);
     
     for(int i = 255; i >= 0; i--) {
         pwm_set_gpio_level(PIN_LED_R, 255 * i);
         sleep_ms(10);
     }
 
-    // for(int i = 0; i < 255; i++) {
-    //     pwm_set_gpio_level(PIN_LED_G, 255 * i);
-    //     sleep_ms(10);
-    // }
+    // gpio_put(STATUS_LED_GREEN_PIN, 1);
+    // sleep_ms(250);
+    // gpio_put(STATUS_LED_GREEN_PIN, 0);
+
+    for(int i = 0; i < 255; i++) {
+        pwm_set_gpio_level(PIN_LED_G, 255 * i);
+        sleep_ms(10);
+    }
+
+    // gpio_put(STATUS_LED_GREEN_PIN, 1);
+    // sleep_ms(250);
+    // gpio_put(STATUS_LED_GREEN_PIN, 0);
     
-    // for(int i = 255; i >= 0; i--) {
-    //     pwm_set_gpio_level(PIN_LED_G, 255 * i);
-    //     sleep_ms(10);
-    // }
+    for(int i = 255; i >= 0; i--) {
+        pwm_set_gpio_level(PIN_LED_G, 255 * i);
+        sleep_ms(10);
+    }
+
+    // gpio_put(STATUS_LED_GREEN_PIN, 1);
+    // sleep_ms(250);
+    // gpio_put(STATUS_LED_GREEN_PIN, 0);
 
     for(int i = 0; i < 255; i++) {
         pwm_set_gpio_level(PIN_LED_B, 255 * i);
         sleep_ms(10);
     }
+
+    // gpio_put(STATUS_LED_GREEN_PIN, 1);
+    // sleep_ms(250);
+    // gpio_put(STATUS_LED_GREEN_PIN, 0);
     
     for(int i = 255; i >= 0; i--) {
         pwm_set_gpio_level(PIN_LED_B, 255 * i);
         sleep_ms(10);
     }
+    // gpio_put(STATUS_LED_GREEN_PIN, 1);
+    // sleep_ms(250);
+    // gpio_put(STATUS_LED_GREEN_PIN, 0);
+
     }
 }
