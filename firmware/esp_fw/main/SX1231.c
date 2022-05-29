@@ -661,49 +661,7 @@ void sx1231_sendFrame(SX1231_t *sx1231, uint16_t toAddress, const void* buffer, 
   t.user=sx1231;                
   ret=spi_device_polling_transmit(sx1231->spi, &t);  //Transmit!
 
-  // _spi->transfer(REG_FIFO | 0x80);
-  // _spi->transfer(bufferSize + 3);
-  // _spi->transfer((uint8_t)toAddress);
-  // _spi->transfer((uint8_t)sx1231->_address);
-  // _spi->transfer(CTLbyte);
-
-  // for (uint8_t i = 0; i < bufferSize; i++)
-  //   _spi->transfer(((uint8_t*) buffer)[i]);
-  // ESP_LOGI(TAG, "header = {%02X, %02X, %02X, %02X}", bufferSize + 3, (uint8_t)toAddress, (uint8_t)sx1231->_address, CTLbyte);
-
-  // spi_transaction_t t = {
-  //     .cmd = REG_FIFO | 0x80,
-  //     .length = 32,
-  //     .flags = SPI_TRANS_USE_TXDATA,
-  //     .tx_data = {bufferSize + 3, (uint8_t)toAddress, (uint8_t)sx1231->_address, CTLbyte},
-  //     .user = sx1231,
-  // };
-  // esp_err_t err = spi_device_polling_transmit(sx1231->spi, &t);
-
-  // if (err != ESP_OK) {
-  //     ESP_LOGE(TAG, "Failed to transmit header");
-  //     return;
-  // }
   sx1231_unselect(sx1231);
-  // vTaskDelay(100);
-  // sx1231_select(sx1231);
-
-  // spi_transaction_t t2 = {
-  //     .cmd = REG_FIFO | 0x80,
-  //     .length = bufferSize * 8,
-  //     .tx_buffer = buffer,
-  //     // .flags = SPI_TRANS_USE_TXDATA,
-  //     // .tx_data = {'p', 'i', 's', 's'},
-  //     .user = sx1231,
-  // };
-  // err = spi_device_polling_transmit(sx1231->spi, &t2);
-  // if (err != ESP_OK) {
-  //     ESP_LOGE(TAG, "Failed to transmit payload");
-  //     return;
-  // }
-  // // ESP_LOGI(TAG, "payload=%.*s", bufferSize, (char*)buffer);
-  // sx1231_unselect(sx1231);
-  // while(1) {vTaskDelay(100);}
 
   // no need to wait for transmit mode to be ready since its handled by the radio
   sx1231_setMode(sx1231, RF69_MODE_TX);

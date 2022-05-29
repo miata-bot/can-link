@@ -7,6 +7,8 @@
 #include "hardware/gpio.h"
 #include "hardware/pwm.h"
 
+#include "logging.h"
+
 typedef struct RGB {
   uint32_t gpio_r;
   uint32_t gpio_g;

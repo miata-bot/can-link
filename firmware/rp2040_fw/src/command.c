@@ -20,6 +20,18 @@ void command_init(command_t* command)
   gpio_set_function(command->gpio_csn, GPIO_FUNC_SPI);
 }
 
+void command_sync(command_t* command)
+{
+  memset(command->buffer, 0, 4);
+  while(command->buffer[0] != COMMAND_SYNC) {
+    PICO_LOGI("Waiting sync");
+    spi_read_blocking(command->spi, COMMAND_SYNC, command->buffer, 1);
+    PICO_LOGI("SYNC WORD: %02X", command->buffer[0]);
+  }
+  // clear the buffer
+  memset(command->buffer, 0, 4);
+}
+
 void command_read(command_t* command)
 {
   // zero out the rx buffer
@@ -44,11 +56,17 @@ void command_decode(command_t* command)
 
   // get the type out of the top 4 bits
   command->type = (command_type_t)command->buffer[0] >> 4;
+  if(command->buffer[0] == COMMAND_SYNC)
+    command->type = COMMAND_SYNC;
   PICO_LOGI("command=%d", command->type);
 
   // index is the next 4 bits, followed by 3 optional arguments, 8 bits each
 
   switch(command->type) {
+    case COMMAND_SYNC: {
+      PICO_LOGI("command=COMMAND_SYNC");
+      command->response = COMMAND_RESPONSE_SYNC;
+    } break;
     case COMMAND_STATUS_LED_SET_STATE: {
       PICO_LOGI("command=COMMAND_STATUS_LED_SET_STATE");
       command->args.status_led_set_state.index = (command_arg_index_t) command->buffer[0] & 0x0f,

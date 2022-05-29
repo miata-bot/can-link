@@ -110,6 +110,7 @@ static void pico_init()
         halt();
     }
     ESP_LOGI(TAG, "Initalized pico");
+    pico_ping(pico);
 }
 
 static void spi_deinit()
@@ -174,6 +175,24 @@ static void halt()
         vTaskDelay(1000);
 }
 
+void fade(uint8_t r, uint8_t g, uint8_t b)
+{
+    pico_set_color(pico, COMMAND_RGB_INDEX_0, r, g, b);
+    ESP_LOGI(TAG, "fade up %02X %02X %02X",  r, g, b);
+    for(uint8_t i = 0; i < 255; i+=5) {
+        pico_set_brightness(pico, COMMAND_RGB_INDEX_0, i);
+    }
+    vTaskDelay(500 / portTICK_PERIOD_MS);
+
+    ESP_LOGI(TAG, "fade down %02X %02X %02X",  r, g, b);
+    for(uint8_t i = 255; i != 0; i-=5) {
+        pico_set_brightness(pico, COMMAND_RGB_INDEX_0, i);
+    }
+    vTaskDelay(500 / portTICK_PERIOD_MS);
+    pico_set_color(pico, COMMAND_RGB_INDEX_0, 0x00, 0x00, 0x00);
+    pico_set_brightness(pico, COMMAND_RGB_INDEX_0, 0);
+}
+
 void app_main()
 {
     esp_chip_info_t chip_info;
@@ -183,61 +202,18 @@ void app_main()
            chip_info.cores,
            (chip_info.features & CHIP_FEATURE_BT) ? "/BT" : "",
            (chip_info.features & CHIP_FEATURE_BLE) ? "/BLE" : "");
-
-
     
+    spiffs_init();
     spi_init();
     // sdcard_init();
     radio_init();
     pico_init();
+    ESP_LOGI(TAG, "pico=%p", pico);
+    ble_init();
 
-    pico_command_t command;
-    memset(&command, 0, sizeof(pico_command_t));
-    command.type = COMMAND_RGB_SET_COLOR;
-    command.index = COMMAND_RGB_INDEX_0;
-    command.args.rgb_set_color.r = 0xff;
-    command.args.rgb_set_color.r = 0x00;
-    command.args.rgb_set_color.r = 0x00;
-    command_response_t response = pico_send_command(pico, &command);
-    ESP_LOGI(TAG, "pico response=%d", response);
-    vTaskDelay(500 / portTICK_PERIOD_MS);
-
-    memset(&command, 0, sizeof(pico_command_t));
-    command.type = COMMAND_RGB_SET_BRIGHTNESS;
-    command.index = COMMAND_RGB_INDEX_0;
-    command.args.rgb_set_brightness.brightness = 255;
-    response = pico_send_command(pico, &command);
-    ESP_LOGI(TAG, "pico response=%d", response);
-    vTaskDelay(500 / portTICK_PERIOD_MS);
-
-    // while(true) {
-    //     pico_command_t command;
-
-    //     memset(&command, 0, sizeof(pico_command_t));
-    //     command.type = COMMAND_STATUS_LED_SET_STATE;
-    //     command.index = COMMAND_STATUS_LED_INDEX_GREEN;
-    //     command.args.status_led_set_state.state = STATUS_HIGH;
-    //     command_response_t response = pico_send_command(pico, &command);
-    //     ESP_LOGI(TAG, "pico response=%d", response);
-
-    //     vTaskDelay(500 / portTICK_PERIOD_MS);
-
-    //     memset(&command, 0, sizeof(pico_command_t));
-    //     command.type = COMMAND_STATUS_LED_SET_STATE;
-    //     command.index = COMMAND_STATUS_LED_INDEX_GREEN;
-    //     command.args.status_led_set_state.state = STATUS_LOW;
-    //     response = pico_send_command(pico, &command);
-    //     ESP_LOGI(TAG, "pico response=%d", response);
-    //     vTaskDelay(500 / portTICK_PERIOD_MS);
-    // }
-
-    // ESP_LOGI(TAG, "RP2040 reset");
-    // motor_init();
-    // twai_init();
-    // spiffs_init();
-    // ble_init();
-
-    // xTaskCreate(mainTask, "mainTask", 0x10000, NULL, 5, NULL);
+    // fade(0xff, 0x00, 0x00);
+    // fade(0x00, 0xff, 0x00);
+    // fade(0x00, 0x00, 0xff);
 
     lua_State *L = luaL_newstate();
     ESP_ERROR_CHECK(L ? ESP_OK : ESP_FAIL);

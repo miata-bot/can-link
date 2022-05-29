@@ -12,6 +12,7 @@
 #include "ws2812.h"
 
 typedef enum __attribute__((__packed__)) {
+  COMMAND_SYNC                   = 0xff,
   COMMAND_STATUS_LED_SET_STATE   = 1,
   COMMAND_STATUS_LED_BLINK       = 2,
   COMMAND_REGULATOR_SET_STATE    = 3,
@@ -30,7 +31,8 @@ typedef enum __attribute__((__packed__)) {
 } command_arg_index_t;
 
 typedef enum __attribute__((__packed__)) {
-  COMMAND_RESPONSE_BUSY                  = 0xff,
+  COMMAND_RESPONSE_SYNC                  = 0xff,
+  COMMAND_RESPONSE_BUSY                  = 0xfe,
   COMMAND_RESPONSE_OK                    = 0xfb,
   COMMAND_RESPONSE_ERROR_BAD_INDEX       = 0x1,
   COMMAND_RESPONSE_ERROR_UNKNOWN_COMMAND = 0x2,
@@ -118,6 +120,7 @@ typedef struct command {
 } command_t;
 
 void command_init(command_t*);
+void command_sync(command_t*);
 void command_read(command_t*);
 void command_decode(command_t*);
 void command_reply(command_t*);

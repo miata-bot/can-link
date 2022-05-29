@@ -26,7 +26,7 @@ typedef struct pico {
 } pico_t;
 
 typedef enum __attribute__((__packed__)) {
-  COMMAND_SYNC                   = 0,
+  COMMAND_SYNC                   = 0xff,
   COMMAND_STATUS_LED_SET_STATE   = 1,
   COMMAND_STATUS_LED_BLINK       = 2,
   COMMAND_REGULATOR_SET_STATE    = 3,
@@ -45,7 +45,8 @@ typedef enum __attribute__((__packed__)) {
 } command_arg_index_t;
 
 typedef enum __attribute__((__packed__)) {
-  COMMAND_RESPONSE_BUSY                  = 0xff,
+  COMMAND_RESPONSE_DESYNC                = 0xff,
+  COMMAND_RESPONSE_BUSY                  = 0xfe,
   COMMAND_RESPONSE_OK                    = 0xfb,
   COMMAND_RESPONSE_ERROR_NO_RESP         = 0x0,
   COMMAND_RESPONSE_ERROR_BAD_INDEX       = 0x1,
@@ -132,8 +133,13 @@ typedef struct {
 } pico_command_t;
 
 esp_err_t pico_initialize(pico_config_t *, pico_t**);
+esp_err_t pico_sync(pico_t*);
 esp_err_t pico_reset(pico_t*);
 
 command_response_t pico_send_command(pico_t*, pico_command_t*);
+
+command_response_t pico_ping(pico_t*);
+command_response_t pico_set_color(pico_t*, command_arg_index_t, uint8_t, uint8_t, uint8_t);
+command_response_t pico_set_brightness(pico_t*, command_arg_index_t, uint8_t);
 
 #endif

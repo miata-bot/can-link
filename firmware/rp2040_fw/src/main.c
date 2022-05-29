@@ -26,9 +26,9 @@
 #define RGB0_G_PIN 27
 #define RGB0_B_PIN 26
 
-#define RGB1_R_PIN 28
-#define RGB1_G_PIN 27
-#define RGB1_B_PIN 26
+#define RGB1_R_PIN 25
+#define RGB1_G_PIN 24
+#define RGB1_B_PIN 23
 
 #define WS2812_PIN 4
 
@@ -61,8 +61,8 @@ int main() {
     stdio_init_all();
 
     // wait for USB
-    // while (!stdio_usb_connected())
-    //     tight_loop_contents();
+    while (!stdio_usb_connected())
+        tight_loop_contents();
 
     PICO_LOGI("initialize status LEDs");
 
@@ -85,11 +85,19 @@ int main() {
         .sm = 0,
         .offset = 0,
         .gpio = WS2812_PIN,
-        .is_rgbw = false,
-        .num_nodes = 150,
-        .frequency = 80000
+        .is_rgbw = true,
+        .num_nodes = 255,
+        .frequency = 800000
     };
     ws2812_init(&ws2812);
+    // int t = 0;
+    // int dir = (rand() >> 30) & 1 ? 1 : -1;
+    // for (int i = 0; i < 1000; ++i) {
+    //     ws2812_pattern_snakes(&ws2812, t);
+    //     sleep_ms(10);
+    //     t += dir;
+    // }
+    // ws2812_pattern_greys(&ws2812, 0);
 
     PICO_LOGI("initialize ws2812 OK");
 
@@ -115,8 +123,6 @@ int main() {
         .brightness = 0
     };
     rgb_init(&rgb0);
-    rgb_set_brightness(&rgb0, 255);
-    rgb_set_color(&rgb0, 0xff, 0xff, 0xff);
 
     PICO_LOGI("initialize rgb0 OK");
 
@@ -158,6 +164,9 @@ int main() {
 
         // handle the command
         switch(command.type) {
+            case COMMAND_SYNC: {
+                command.response = COMMAND_RESPONSE_SYNC;
+            } break;
             case COMMAND_STATUS_LED_SET_STATE: {
                 status_led_t* status_led;
                 command.response = COMMAND_RESPONSE_OK;

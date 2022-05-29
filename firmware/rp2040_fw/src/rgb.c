@@ -51,12 +51,14 @@ void rgb_disable(RGB_t* rgb)
 
 void rgb_set_color(RGB_t* rgb, uint8_t r, uint8_t g, uint8_t b)
 {
+  PICO_LOGI("RGB set_color(%02X, %02X, %02X)", r, g, b);
   rgb->r = r; rgb->g = g; rgb->b = b;
   rgb_set(rgb);
 }
 
 void rgb_set_brightness(RGB_t* rgb, uint8_t brightness)
 {
+  PICO_LOGI("RGB set_brightness(%02X)", brightness);
   rgb->brightness = brightness;
   rgb_set(rgb);
 }
