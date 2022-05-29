@@ -25,6 +25,7 @@
 #include "motor.h"
 #include "can.h"
 #include "SX1231.h"
+#include "pico.h"
 
 static void halt();
 
@@ -42,87 +43,7 @@ static const char *TAG = "CONEPROJ";
 #define PIN_NUM_RP2040_CSN 13
 
 SX1231_t* sx1231;
-
-esp_err_t rp2040_reset()
-{
-  gpio_set_direction(PIN_NUM_RP2040_EN, GPIO_MODE_OUTPUT);
-  gpio_set_level(PIN_NUM_RP2040_EN, 0);
-  vTaskDelay(10 / portTICK_PERIOD_MS);
-
-  gpio_set_direction(PIN_NUM_RP2040_CSN, GPIO_MODE_OUTPUT);
-  gpio_set_level(PIN_NUM_RP2040_CSN, 1);
-
-//   while(true) {
-//     gpio_set_level(PIN_NUM_RP2040_CSN, 0);
-//     vTaskDelay(250 / portTICK_PERIOD_MS);
-//     gpio_set_level(PIN_NUM_RP2040_CSN, 1);
-//     vTaskDelay(250 / portTICK_PERIOD_MS);
-//   }
-
-
-  esp_err_t err = ESP_OK;
-  spi_device_handle_t spi;
-
-  spi_device_interface_config_t devcfg={
-    .clock_speed_hz = APB_CLK_FREQ/800,
-    // .clock_speed_hz = SPI_MASTER_FREQ_10M,
-    .mode = 0,  //SPI mode 0
-    // .spics_io_num = PIN_NUM_RP2040_CSN,
-    .spics_io_num = -1,
-    .queue_size = 8,
-    // .command_bits = 8,
-    .input_delay_ns=10,
-    .flags = SPI_DEVICE_NO_DUMMY
-  };
-  ESP_LOGI(TAG, "add device");
-//Attach the pico to the SPI bus
-  err = spi_bus_add_device(SPI3_HOST, &devcfg, &spi);
-  ESP_LOGI(TAG, "add device ok");
-
-  if (err != ESP_OK)  {
-    ESP_LOGE(TAG, "Could not create SPI device");
-    ESP_ERROR_CHECK(err);
-    return err;
-  }
-
-//   gpio_set_level(PIN_NUM_RP2040_EN, 1);
-//   vTaskDelay(10 / portTICK_PERIOD_MS);
-
-  uint8_t buffer[10];
-  memset(buffer, 0, 10);
-
-    while(true) {
-        gpio_set_level(PIN_NUM_RP2040_CSN, 0);
-        ESP_LOGI(TAG, "select");
-        vTaskDelay(1000 / portTICK_PERIOD_MS);
-
-        err = spi_device_acquire_bus(spi, portMAX_DELAY);
-        ESP_ERROR_CHECK(err);
-        spi_transaction_t t = {
-            // .cmd = 0x69,
-            .length = 8,
-            .flags = SPI_TRANS_USE_TXDATA,
-            .tx_data = {0xab},
-            .rx_buffer = &buffer,
-            .user = NULL,
-        };
-        err = spi_device_polling_transmit(spi, &t);
-        ESP_ERROR_CHECK(err);
-        ESP_LOGI(TAG, "SPI XFER %d", buffer[0]);
-
-        vTaskDelay(1000 / portTICK_PERIOD_MS);
-
-        spi_device_release_bus(spi);
-        gpio_set_level(PIN_NUM_RP2040_CSN, 1);
-        ESP_LOGI(TAG, "unselect\n");
-
-        vTaskDelay(5000 / portTICK_PERIOD_MS);
-
-    }
-
-
-  return err;
-}
+pico_t* pico;
 
 static void spi_init()
 {
@@ -174,6 +95,21 @@ void radio_init()
         halt();
     }
     ESP_LOGI(TAG, "Initalized radio");
+}
+
+static void pico_init()
+{
+    pico_config_t cfg = {
+        .gpio_en = PIN_NUM_RP2040_EN,
+        .gpio_cs = PIN_NUM_RP2040_CSN,
+        .host = SPI3_HOST
+    };
+    esp_err_t err = pico_initialize(&cfg, &pico);
+    if(err != ESP_OK) {
+        ESP_LOGE(TAG, "Failed to initialize pico (%s)", esp_err_to_name(err));
+        halt();
+    }
+    ESP_LOGI(TAG, "Initalized pico");
 }
 
 static void spi_deinit()
@@ -253,10 +189,48 @@ void app_main()
     spi_init();
     // sdcard_init();
     radio_init();
-    if(rp2040_reset() != ESP_OK) {
-        ESP_LOGE(TAG, "RP2040 reset fail");
-        halt();
-    }
+    pico_init();
+
+    pico_command_t command;
+    memset(&command, 0, sizeof(pico_command_t));
+    command.type = COMMAND_RGB_SET_COLOR;
+    command.index = COMMAND_RGB_INDEX_0;
+    command.args.rgb_set_color.r = 0xff;
+    command.args.rgb_set_color.r = 0x00;
+    command.args.rgb_set_color.r = 0x00;
+    command_response_t response = pico_send_command(pico, &command);
+    ESP_LOGI(TAG, "pico response=%d", response);
+    vTaskDelay(500 / portTICK_PERIOD_MS);
+
+    memset(&command, 0, sizeof(pico_command_t));
+    command.type = COMMAND_RGB_SET_BRIGHTNESS;
+    command.index = COMMAND_RGB_INDEX_0;
+    command.args.rgb_set_brightness.brightness = 255;
+    response = pico_send_command(pico, &command);
+    ESP_LOGI(TAG, "pico response=%d", response);
+    vTaskDelay(500 / portTICK_PERIOD_MS);
+
+    // while(true) {
+    //     pico_command_t command;
+
+    //     memset(&command, 0, sizeof(pico_command_t));
+    //     command.type = COMMAND_STATUS_LED_SET_STATE;
+    //     command.index = COMMAND_STATUS_LED_INDEX_GREEN;
+    //     command.args.status_led_set_state.state = STATUS_HIGH;
+    //     command_response_t response = pico_send_command(pico, &command);
+    //     ESP_LOGI(TAG, "pico response=%d", response);
+
+    //     vTaskDelay(500 / portTICK_PERIOD_MS);
+
+    //     memset(&command, 0, sizeof(pico_command_t));
+    //     command.type = COMMAND_STATUS_LED_SET_STATE;
+    //     command.index = COMMAND_STATUS_LED_INDEX_GREEN;
+    //     command.args.status_led_set_state.state = STATUS_LOW;
+    //     response = pico_send_command(pico, &command);
+    //     ESP_LOGI(TAG, "pico response=%d", response);
+    //     vTaskDelay(500 / portTICK_PERIOD_MS);
+    // }
+
     // ESP_LOGI(TAG, "RP2040 reset");
     // motor_init();
     // twai_init();
@@ -280,7 +254,6 @@ void app_main()
     lua_close(L);
 
     printf("State closed, heap: %d\n", xPortGetFreeHeapSize());
-
 
     while (1)
     {

@@ -26,12 +26,28 @@ add_compile_options(-Wall
 if (TARGET tinyusb_device)
     add_executable(rp2040_fw)
 
-    pico_generate_pio_header(rp2040_fw ${CMAKE_CURRENT_LIST_DIR}/ws2812.pio)
-    #pico_generate_pio_header(rp2040_fw ${CMAKE_CURRENT_LIST_DIR}/spi.pio)
+    pico_generate_pio_header(rp2040_fw ${CMAKE_CURRENT_LIST_DIR}/src/ws2812.pio)
+
+    target_include_directories(rp2040_fw PRIVATE ${CMAKE_CURRENT_LIST_DIR}/include)
+
     target_sources(rp2040_fw PRIVATE
-        main.c
+        src/command.c
+        src/main.c
+        src/regulator.c
+        src/rgb.c
+        src/status_led.c
+        src/ws2812.c
     )
-    target_link_libraries(rp2040_fw PRIVATE pico_stdlib pico_stdio_usb hardware_pio hardware_pwm hardware_dma hardware_uart hardware_spi)
+
+    target_link_libraries(rp2040_fw PRIVATE 
+        pico_stdlib 
+        pico_stdio_usb 
+        hardware_pio 
+        hardware_pwm 
+        hardware_dma 
+        hardware_uart 
+        hardware_spi
+    )
     pico_add_extra_outputs(rp2040_fw)
 
 elseif(PICO_ON_DEVICE)
