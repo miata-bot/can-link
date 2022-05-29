@@ -26,7 +26,7 @@ add_compile_options(-Wall
 if (TARGET tinyusb_device)
     add_executable(rp2040_fw)
 
-    #pico_generate_pio_header(rp2040_fw ${CMAKE_CURRENT_LIST_DIR}/ws2812.pio)
+    pico_generate_pio_header(rp2040_fw ${CMAKE_CURRENT_LIST_DIR}/ws2812.pio)
     #pico_generate_pio_header(rp2040_fw ${CMAKE_CURRENT_LIST_DIR}/spi.pio)
     target_sources(rp2040_fw PRIVATE
         main.c

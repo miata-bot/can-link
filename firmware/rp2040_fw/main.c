@@ -26,13 +26,15 @@
 #include "hardware/pwm.h"
 #include "hardware/pio.h"
 #include "hardware/clocks.h"
-// #include "ws2812.pio.h"
-// #include "pio_spi.h"
+#include "ws2812.pio.h"
 
 #define PIN_LED_R 28
 #define PIN_LED_G 27
 #define PIN_LED_B 26
-#define WS2812_PIN 29
+#define WS2812_PIN 4
+#define STATUS_LED_GREEN_PIN 16
+#define STATUS_LED_RED_PIN 17
+#define REG_EN 5
 
 #ifdef PICO_DEFAULT_SPI_SCK_PIN
 #undef PICO_DEFAULT_SPI_SCK_PIN
@@ -58,9 +60,9 @@
 #define IS_RGBW false
 #define NUM_PIXELS 150
 
-// static inline void put_pixel(uint32_t pixel_grb) {
-//     pio_sm_put_blocking(pio0, 0, pixel_grb << 8u);
-// }
+static inline void put_pixel(uint32_t pixel_grb) {
+    pio_sm_put_blocking(pio0, 0, pixel_grb << 8u);
+}
 
 static inline uint32_t urgb_u32(uint8_t r, uint8_t g, uint8_t b) {
     return
@@ -134,32 +136,7 @@ void printbuf(uint8_t buf[], size_t len) {
     }
 }
 
-int main() {
-    stdio_init_all();
-
-    while (!stdio_usb_connected()) {
-        tight_loop_contents();
-    }
-
-    const uint STATUS_LED_GREEN_PIN = 16;
-    gpio_init(STATUS_LED_GREEN_PIN);
-    gpio_set_dir(STATUS_LED_GREEN_PIN, GPIO_OUT);
-    gpio_put(STATUS_LED_GREEN_PIN, 1);
-
-    const uint STATUS_LED_RED_PIN = 17;
-    gpio_init(STATUS_LED_RED_PIN);
-    gpio_set_dir(STATUS_LED_RED_PIN, GPIO_OUT);
-    gpio_put(STATUS_LED_RED_PIN, 1);
-
-    // gpio_init(PICO_DEFAULT_SPI_TX_PIN);
-    // gpio_set_dir(PICO_DEFAULT_SPI_TX_PIN, GPIO_OUT);
-    // while(true) {
-    //     gpio_put(PICO_DEFAULT_SPI_TX_PIN, 1);
-    //     sleep_ms(250);
-    //     gpio_put(PICO_DEFAULT_SPI_TX_PIN, 0);
-    //     sleep_ms(250);
-    // }
-
+void spi_test() {
     // Enable SPI 0 at 1 MHz and connect to GPIOs
     spi_init(spi_default, 1000*1000);
     spi_set_slave(spi_default, true);
@@ -169,28 +146,6 @@ int main() {
     gpio_set_function(PICO_DEFAULT_SPI_TX_PIN, GPIO_FUNC_SPI);
     gpio_set_function(PICO_DEFAULT_SPI_SCK_PIN, GPIO_FUNC_SPI);
     gpio_set_function(PICO_DEFAULT_SPI_CSN_PIN, GPIO_FUNC_SPI);
-    // gpio_init(PICO_DEFAULT_SPI_CSN_PIN);
-    // gpio_set_dir(PICO_DEFAULT_SPI_CSN_PIN, GPIO_IN);
-    // gpio_set_pulls(PICO_DEFAULT_SPI_CSN_PIN, 1, 0);
-    // gpio_pull_up(PICO_DEFAULT_SPI_CSN_PIN);
-    // gpio_set_dir(PICO_DEFAULT_SPI_CSN_PIN, GPIO_OUT);
-    // while(true) {
-    //     while(gpio_get(PICO_DEFAULT_SPI_CSN_PIN) == 1) {}
-    //     printf("input=%d\n", in);
-    //     // gpio_put(PICO_DEFAULT_SPI_CSN_PIN, 1);
-    //     // sleep_us(250);
-    //     // gpio_put(PICO_DEFAULT_SPI_CSN_PIN, 0);
-    //     sleep_us(250);
-    // }
-
-    // pio_spi_inst_t spi = {
-    //         .pio = pio0,
-    //         .sm = 0,
-    //         .cs_pin = PICO_DEFAULT_SPI_CSN_PIN
-    // };
-    // float clkdiv = 31.25f;  // 1 MHz @ 125 clk_sys
-    // uint cpha0_prog_offs = pio_add_program(spi.pio, &spi_cpha0_cs_program);
-    // pio_spi_cs_init(spi.pio, spi.sm, cpha0_prog_offs, 8, clkdiv, 0, 0, PICO_DEFAULT_SPI_SCK_PIN, PICO_DEFAULT_SPI_TX_PIN, PICO_DEFAULT_SPI_RX_PIN);
 
     uint8_t out_buf[BUF_LEN], in_buf[BUF_LEN];
 
@@ -220,15 +175,43 @@ int main() {
         // while(gpio_get(PICO_DEFAULT_SPI_CSN_PIN) == 0) {}
         printf("xaction done\n\n");
     }
-    
+}
 
-    while(true) {
-        printf("hello world");
-        gpio_put(STATUS_LED_RED_PIN, 1);
+void blink_status_led_red() {
+        gpio_put(STATUS_LED_GREEN_PIN, 1);
         sleep_ms(250);
-        gpio_put(STATUS_LED_RED_PIN, 0);
+        gpio_put(STATUS_LED_GREEN_PIN, 0);
         sleep_ms(250);
+}
+
+int main() {
+    stdio_init_all();
+
+    PIO pio = pio0;
+    int sm = 0;
+    uint offset = pio_add_program(pio, &ws2812_program);
+    ws2812_program_init(pio, sm, offset, WS2812_PIN, 800000, IS_RGBW);
+
+    for(int i = 0; i < NUM_PIXELS; i++) {
+        put_pixel(0);
     }
+
+    while (!stdio_usb_connected()) {
+        tight_loop_contents();
+    }
+
+    gpio_init(REG_EN);
+    gpio_set_dir(REG_EN, GPIO_OUT);
+    gpio_put(REG_EN, 0);
+
+    gpio_init(STATUS_LED_GREEN_PIN);
+    gpio_set_dir(STATUS_LED_GREEN_PIN, GPIO_OUT);
+    gpio_put(STATUS_LED_GREEN_PIN, 1);
+
+    gpio_init(STATUS_LED_RED_PIN);
+    gpio_set_dir(STATUS_LED_RED_PIN, GPIO_OUT);
+    gpio_put(STATUS_LED_RED_PIN, 1);
+
     // Tell the LED pin that the PWM is in charge of its value.
     gpio_set_function(PIN_LED_R, GPIO_FUNC_PWM);
     gpio_set_function(PIN_LED_G, GPIO_FUNC_PWM);
@@ -258,80 +241,74 @@ int main() {
     pwm_set_gpio_level(PIN_LED_G, 0);
     pwm_set_gpio_level(PIN_LED_B, 0);
 
-    // PIO pio = pio0;
-    // int sm = 0;
-    // uint offset = pio_add_program(pio, &ws2812_program);
-    // ws2812_program_init(pio, sm, offset, WS2812_PIN, 800000, IS_RGBW);
+
 
     int t = 0;
 
     while(true) {
-        // int pat = rand() % count_of(pattern_table);
-        // int dir = (rand() >> 30) & 1 ? 1 : -1;
-        // puts(pattern_table[pat].name);
-        // puts(dir == 1 ? "(forward)" : "(backward)");
-        // for (int i = 0; i < 1000; ++i) {
-        //     pattern_table[pat].pat(NUM_PIXELS, t);
-        //     sleep_ms(10);
-        //     t += dir;
-        // }
 
-    // gpio_put(STATUS_LED_GREEN_PIN, 1);
-    // sleep_ms(250);
-    // gpio_put(STATUS_LED_GREEN_PIN, 0);
+        gpio_put(STATUS_LED_RED_PIN, 1);
+        sleep_ms(250);
+        gpio_put(STATUS_LED_RED_PIN, 0);
+        sleep_ms(250);
+        gpio_put(REG_EN, 1);
 
-    for(int i = 0; i < 255; i++) {
-        pwm_set_gpio_level(PIN_LED_R, 255 * i);
-        sleep_ms(10);
-    }
+        int pat = rand() % count_of(pattern_table);
+        int dir = (rand() >> 30) & 1 ? 1 : -1;
+        puts(pattern_table[pat].name);
+        puts(dir == 1 ? "(forward)" : "(backward)");
+        for (int i = 0; i < 1000; ++i) {
+            pattern_table[pat].pat(NUM_PIXELS, t);
+            sleep_ms(10);
+            t += dir;
+        }
 
-    // gpio_put(STATUS_LED_GREEN_PIN, 1);
-    // sleep_ms(250);
-    // gpio_put(STATUS_LED_GREEN_PIN, 0);
+        for(int i = 0; i < NUM_PIXELS; i++) {
+            put_pixel(0);
+        }
+
+        blink_status_led_red();
+
+        for(int i = 0; i < 255; i++) {
+            pwm_set_gpio_level(PIN_LED_R, 255 * i);
+            sleep_ms(10);
+        }
+
+        blink_status_led_red();
+        
+        for(int i = 255; i >= 0; i--) {
+            pwm_set_gpio_level(PIN_LED_R, 255 * i);
+            sleep_ms(10);
+        }
+
+        blink_status_led_red();
+
+        for(int i = 0; i < 255; i++) {
+            pwm_set_gpio_level(PIN_LED_G, 255 * i);
+            sleep_ms(10);
+        }
+
+        blink_status_led_red();
     
-    for(int i = 255; i >= 0; i--) {
-        pwm_set_gpio_level(PIN_LED_R, 255 * i);
-        sleep_ms(10);
-    }
+        for(int i = 255; i >= 0; i--) {
+            pwm_set_gpio_level(PIN_LED_G, 255 * i);
+            sleep_ms(10);
+        }
 
-    // gpio_put(STATUS_LED_GREEN_PIN, 1);
-    // sleep_ms(250);
-    // gpio_put(STATUS_LED_GREEN_PIN, 0);
+        blink_status_led_red();
 
-    for(int i = 0; i < 255; i++) {
-        pwm_set_gpio_level(PIN_LED_G, 255 * i);
-        sleep_ms(10);
-    }
+        for(int i = 0; i < 255; i++) {
+            pwm_set_gpio_level(PIN_LED_B, 255 * i);
+            sleep_ms(10);
+        }
 
-    // gpio_put(STATUS_LED_GREEN_PIN, 1);
-    // sleep_ms(250);
-    // gpio_put(STATUS_LED_GREEN_PIN, 0);
-    
-    for(int i = 255; i >= 0; i--) {
-        pwm_set_gpio_level(PIN_LED_G, 255 * i);
-        sleep_ms(10);
-    }
-
-    // gpio_put(STATUS_LED_GREEN_PIN, 1);
-    // sleep_ms(250);
-    // gpio_put(STATUS_LED_GREEN_PIN, 0);
-
-    for(int i = 0; i < 255; i++) {
-        pwm_set_gpio_level(PIN_LED_B, 255 * i);
-        sleep_ms(10);
-    }
-
-    // gpio_put(STATUS_LED_GREEN_PIN, 1);
-    // sleep_ms(250);
-    // gpio_put(STATUS_LED_GREEN_PIN, 0);
-    
-    for(int i = 255; i >= 0; i--) {
-        pwm_set_gpio_level(PIN_LED_B, 255 * i);
-        sleep_ms(10);
-    }
-    // gpio_put(STATUS_LED_GREEN_PIN, 1);
-    // sleep_ms(250);
-    // gpio_put(STATUS_LED_GREEN_PIN, 0);
+        blink_status_led_red();
+        
+        for(int i = 255; i >= 0; i--) {
+            pwm_set_gpio_level(PIN_LED_B, 255 * i);
+            sleep_ms(10);
+        }
+        blink_status_led_red();
 
     }
 }
