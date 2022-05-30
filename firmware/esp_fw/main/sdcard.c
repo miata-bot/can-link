@@ -1,11 +1,11 @@
 #include "sdcard.h"
+#include "pins.h"
 
 // SD Config
-#define PIN_NUM_SD_CS 15
 const char SD_MOUNT_POINT[] = "/sdcard";
 sdmmc_card_t SDCARD;
 
-static const char *SDCARD_TAG = "CONEPROJ";
+static const char *TAG = "SD";
 
 void sdcard_init()
 {
@@ -16,7 +16,7 @@ void sdcard_init()
     };
 
     sdmmc_host_t host = SDSPI_HOST_DEFAULT();
-    ESP_LOGI(SDCARD_TAG, "Mounting SD filesystem");
+    ESP_LOGI(TAG, "Mounting SD filesystem");
 
     // This initializes the slot without card detect (CD) and write protect (WP) signals.
     // Modify slot_config.gpio_cd and slot_config.gpio_wp if your board has these signals.
@@ -31,13 +31,13 @@ void sdcard_init()
     switch (ret)
     {
     case ESP_OK:
-        ESP_LOGI(SDCARD_TAG, "Filesystem mounted");
+        ESP_LOGI(TAG, "Filesystem mounted");
         break;
     case ESP_FAIL:
-        ESP_LOGE(SDCARD_TAG, "Failed to mount filesystem.");
+        ESP_LOGE(TAG, "Failed to mount filesystem.");
         return;
     default:
-        ESP_LOGE(SDCARD_TAG, "Failed to initialize the card (%s). ", esp_err_to_name(ret));
+        ESP_LOGE(TAG, "Failed to initialize the card (%s). ", esp_err_to_name(ret));
         return;
     }
 

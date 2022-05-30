@@ -18,13 +18,13 @@ static const char TAG[] = "SX1231";
 
 static QueueHandle_t sx1231_isr_queue = NULL;
 
-static void IRAM_ATTR sx1231_isr(void* arg)
+void IRAM_ATTR sx1231_isr(void* arg)
 {
   uint32_t gpio_num = (uint32_t) arg;
   xQueueSendFromISR(sx1231_isr_queue, &gpio_num, NULL);
 }
 
-static void sx1231_isr_task(void* arg)
+void sx1231_isr_task(void* arg)
 {
   SX1231_t* sx1231 = (SX1231_t*)arg;
   uint32_t io_num;

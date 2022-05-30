@@ -114,8 +114,8 @@ void sx1231_select(SX1231_t *sx1231);
 void sx1231_unselect(SX1231_t *sx1231);
 
 // Private API
-static void IRAM_ATTR sx1231_isr(void* arg);
-static void sx1231_isr_task(void* arg);
+void IRAM_ATTR sx1231_isr(void* arg);
+void sx1231_isr_task(void* arg);
 
 esp_err_t sx1231_install_interrupts(SX1231_t *sx1231);
 esp_err_t sx1231_reset(SX1231_t *sx1231);

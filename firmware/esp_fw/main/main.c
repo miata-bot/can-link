@@ -9,41 +9,38 @@
 #include <lua/lauxlib.h>
 #include <lua/lualib.h>
 
-#include <esp_spiffs.h>
+#include <esp_chip_info.h>
 #include <esp_err.h>
 #include <esp_log.h>
-#include <esp_chip_info.h>
 #include <esp_spi_flash.h>
+#include <esp_spiffs.h>
 #include <esp_system.h>
 
-#include <driver/spi_master.h>
 #include <driver/gpio.h>
+#include <driver/spi_master.h>
 #include <soc/gpio_struct.h>
 
 #include "ble.h"
-#include "sdcard.h"
-#include "motor.h"
 #include "can.h"
-#include "SX1231.h"
+#include "console.h"
+#include "motor.h"
 #include "pico.h"
+#include "regulator.h"
+#include "sdcard.h"
+#include "SX1231.h"
+
+#include "pins.h"
 
 static void halt();
 
 static const char *TAG = "CONEPROJ";
 
-#define PIN_NUM_MISO           37
-#define PIN_NUM_MOSI           35
-#define PIN_NUM_CLK            36
-
-#define PIN_NUM_RADIO_CS       9
-#define PIN_NUM_RADIO_RESET    2
-#define PIN_NUM_RADIO_IRQ      1
-
-#define PIN_NUM_RP2040_EN 29
-#define PIN_NUM_RP2040_CSN 13
-
 SX1231_t* sx1231;
 pico_t* pico;
+
+reg_t*   motor_reg;
+motor_t* motor1;
+motor_t* motor2;
 
 static void spi_init()
 {
@@ -57,7 +54,7 @@ static void spi_init()
     };
 
     // Initialize the SPI bus in HSPI mode. DMA channel might need changing later?
-    esp_err_t ret = spi_bus_initialize(SPI3_HOST, &buscfg, SPI_DMA_CH_AUTO);
+    esp_err_t ret = spi_bus_initialize(SPI2_HOST, &buscfg, SPI_DMA_CH_AUTO);
 
     switch (ret)
     {
@@ -87,7 +84,7 @@ void radio_init()
         .nodeID = 5, 
         .networkID = 100,
         .isRFM69HW_HCW = true,
-        .host = SPI3_HOST
+        .host = SPI2_HOST
     };
     esp_err_t err = sx1231_initialize(&cfg,  &sx1231);
     if(err != ESP_OK) {
@@ -102,7 +99,7 @@ static void pico_init()
     pico_config_t cfg = {
         .gpio_en = PIN_NUM_RP2040_EN,
         .gpio_cs = PIN_NUM_RP2040_CSN,
-        .host = SPI3_HOST
+        .host = SPI2_HOST
     };
     esp_err_t err = pico_initialize(&cfg, &pico);
     if(err != ESP_OK) {
@@ -123,7 +120,7 @@ void radio_deinit()
 {
 }
 
-static void spiffs_init()
+static void flash_init()
 {
     esp_vfs_spiffs_conf_t conf = {
         .base_path = "/spiffs",
@@ -158,6 +155,70 @@ static void spiffs_deinit()
 {
 }
 
+void motor_init()
+{
+    esp_err_t err;
+    motor_config_t cfg1 = {
+        .gpio_enA = PIN_NUM_MCPWM_EN1,
+        .gpio_enB = PIN_NUM_MCPWM_EN2,
+
+        .gpio_inA = PIN_NUM_MCPWM_IN1,
+        .gpio_inB = PIN_NUM_MCPWM_IN2,
+
+        .unit = BDC_MCPWM_UNIT,
+        .timer = BDC_MCPWM_TIMER,
+        .frequency = BDC_MCPWM_FREQ_HZ
+    };
+    err = motor_initialize(&cfg1, &motor1);
+    if(err != ESP_OK) {
+        ESP_LOGE(TAG, "Failed to initialize motor1");
+        halt();
+    }
+    ESP_LOGI(TAG, "initialized motor 1");
+
+    // motor_config_t cfg2 = {
+    //     .gpio_enA = PIN_NUM_MCPWM_EN1,
+    //     .gpio_inA = PIN_NUM_MCPWM_IN1,
+    //     .gpio_enB = PIN_NUM_MCPWM_EN2,
+    //     .gpio_inB = PIN_NUM_MCPWM_IN2,
+    //     .unit = 0,
+    //     .timer = 0,
+    //     .frequency = 15000
+    // };
+    // err = motor_initialize(&cfg2, &motor2);
+    // if(err != ESP_OK) {
+    //     ESP_LOGE(TAG, "Failed to initialize motor1");
+    //     halt();
+    // }
+    // ESP_LOGI(TAG, "initialized motor 2");
+}
+
+void reg_init()
+{
+    reg_config_t config = {
+        .gpio_enable  = PIN_NUM_MCPWM_REG_EN,
+        .enable_value = REG_HIGH
+    };
+    esp_err_t err = reg_initialize(&config, &motor_reg);
+    if(err != ESP_OK) {
+        ESP_LOGE(TAG, "Failed to initialize motor regulator");
+        halt();
+    }
+    ESP_LOGI(TAG, "initialized motor regulator");
+    // reg_disable(motor_reg);
+    reg_enable(motor_reg);
+}
+
+void console_init()
+{
+    esp_err_t err = console_initialize();
+    if(err != ESP_OK) {
+        ESP_LOGE(TAG, "Failed to initialize console");
+        halt();
+    }
+    ESP_LOGI(TAG, "initialized console");
+}
+
 static void report(lua_State *L, int status)
 {
     if (status == LUA_OK)
@@ -175,45 +236,25 @@ static void halt()
         vTaskDelay(1000);
 }
 
-void fade(uint8_t r, uint8_t g, uint8_t b)
-{
-    pico_set_color(pico, COMMAND_RGB_INDEX_0, r, g, b);
-    ESP_LOGI(TAG, "fade up %02X %02X %02X",  r, g, b);
-    for(uint8_t i = 0; i < 255; i+=5) {
-        pico_set_brightness(pico, COMMAND_RGB_INDEX_0, i);
-    }
-    vTaskDelay(500 / portTICK_PERIOD_MS);
-
-    ESP_LOGI(TAG, "fade down %02X %02X %02X",  r, g, b);
-    for(uint8_t i = 255; i != 0; i-=5) {
-        pico_set_brightness(pico, COMMAND_RGB_INDEX_0, i);
-    }
-    vTaskDelay(500 / portTICK_PERIOD_MS);
-    pico_set_color(pico, COMMAND_RGB_INDEX_0, 0x00, 0x00, 0x00);
-    pico_set_brightness(pico, COMMAND_RGB_INDEX_0, 0);
-}
-
 void app_main()
 {
     esp_chip_info_t chip_info;
     esp_chip_info(&chip_info);
-    printf("This is %s chip with %d CPU core(s), WiFi%s%s, ",
+    ESP_LOGI(TAG, "This is %s chip with %d CPU core(s), WiFi%s%s, ",
            CONFIG_IDF_TARGET,
            chip_info.cores,
            (chip_info.features & CHIP_FEATURE_BT) ? "/BT" : "",
            (chip_info.features & CHIP_FEATURE_BLE) ? "/BLE" : "");
-    
-    spiffs_init();
+
+    flash_init();
     spi_init();
-    // sdcard_init();
+    sdcard_init();
     radio_init();
     pico_init();
-    ESP_LOGI(TAG, "pico=%p", pico);
+    motor_init();
+    reg_init();
     ble_init();
-
-    // fade(0xff, 0x00, 0x00);
-    // fade(0x00, 0xff, 0x00);
-    // fade(0x00, 0x00, 0xff);
+    console_init();
 
     lua_State *L = luaL_newstate();
     ESP_ERROR_CHECK(L ? ESP_OK : ESP_FAIL);
