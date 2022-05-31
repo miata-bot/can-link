@@ -4,6 +4,14 @@
 
   (paper "A4")
 
+  (title_block
+    (title "CAN RGB Controller")
+    (date "2022-05-30")
+    (rev "B")
+    (company "cone.codes")
+    (comment 1 "https://github.com/miata-bot/can-link")
+  )
+
   (lib_symbols
     (symbol "ConeCodes:RP2040" (pin_names (offset 1.016)) (in_bom yes) (on_board yes)
       (property "Reference" "U11" (id 0) (at 2.0194 -50.8 0)
@@ -1956,7 +1964,7 @@
     (effects (font (size 1.27 1.27)) (justify left))
     (uuid 2c8aab0b-2d95-4c86-ad33-49f3cac22f85)
   )
-  (hierarchical_label "USB_DN" (shape bidirectional) (at 240.665 65.405 0)
+  (hierarchical_label "USB_D_N" (shape bidirectional) (at 240.665 65.405 0)
     (effects (font (size 1.27 1.27)) (justify left))
     (uuid 43f971d5-b1e0-446c-a818-91c0bbfd70ac)
   )
@@ -1996,7 +2004,7 @@
     (effects (font (size 1.27 1.27)) (justify left))
     (uuid a5cb978c-f63b-4ce4-9507-e44001d9bdcb)
   )
-  (hierarchical_label "USB_DP" (shape bidirectional) (at 240.665 55.88 0)
+  (hierarchical_label "USB_D_P" (shape bidirectional) (at 240.665 55.88 0)
     (effects (font (size 1.27 1.27)) (justify left))
     (uuid c650b1bd-43d4-4e11-8262-79587b49e822)
   )
@@ -2252,7 +2260,7 @@
   (symbol (lib_id "Device:LED") (at 248.92 121.285 0) (mirror x) (unit 1)
     (in_bom yes) (on_board yes)
     (uuid 390d6778-6448-44d2-a72d-26dfece1812c)
-    (property "Reference" "D4" (id 0) (at 251.46 117.475 0)
+    (property "Reference" "D3" (id 0) (at 251.46 117.475 0)
       (effects (font (size 1.27 1.27)) (justify right))
     )
     (property "Value" "RED" (id 1) (at 254.635 120.015 0)
@@ -2277,7 +2285,7 @@
   (symbol (lib_id "Device:LED") (at 248.92 113.665 0) (mirror x) (unit 1)
     (in_bom yes) (on_board yes)
     (uuid 43aa7594-b49f-420a-a6e5-7c0eb81418b4)
-    (property "Reference" "D3" (id 0) (at 251.46 109.855 0)
+    (property "Reference" "D4" (id 0) (at 251.46 109.855 0)
       (effects (font (size 1.27 1.27)) (justify right))
     )
     (property "Value" "GRN" (id 1) (at 254.635 112.395 0)
