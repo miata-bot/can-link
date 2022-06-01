@@ -18,9 +18,6 @@
   (junction (at 243.205 114.3) (diameter 0) (color 0 255 255 1)
     (uuid 2d5aedac-603c-41ac-a5f7-05e39ebba3fe)
   )
-  (junction (at 105.41 154.305) (diameter 0) (color 255 0 0 1)
-    (uuid 333d1d4f-095e-4c54-bbde-1521b6e3b008)
-  )
   (junction (at 280.035 114.3) (diameter 0) (color 0 255 255 1)
     (uuid 34913b29-f470-43e6-9fff-f932b0b2f234)
   )
@@ -97,6 +94,10 @@
     (stroke (width 0) (type default) (color 255 255 194 1))
     (uuid 200c0a60-418b-4ff6-97ec-3cab20667df0)
   )
+  (wire (pts (xy 116.84 58.42) (xy 105.41 58.42))
+    (stroke (width 0) (type default) (color 0 0 0 0))
+    (uuid 21d8a864-c3b0-47c6-925a-89200a76fe10)
+  )
   (wire (pts (xy 147.955 53.34) (xy 165.1 53.34))
     (stroke (width 0) (type default) (color 194 194 194 1))
     (uuid 26483bd8-d389-4017-a674-fd9c3f54b382)
@@ -117,7 +118,7 @@
     (stroke (width 0) (type default) (color 255 0 255 1))
     (uuid 31922ece-5607-494f-a339-1a06512d3bc8)
   )
-  (wire (pts (xy 105.41 61.595) (xy 105.41 154.305))
+  (wire (pts (xy 105.41 61.595) (xy 105.41 204.47))
     (stroke (width 0) (type default) (color 255 0 0 1))
     (uuid 34e5b148-94fb-46f7-97cf-1192eb523c42)
   )
@@ -137,13 +138,13 @@
     (stroke (width 0) (type default) (color 0 255 255 1))
     (uuid 3a5020ef-ba9d-44cd-9e2b-37697ad2a1ba)
   )
-  (wire (pts (xy 105.41 61.595) (xy 116.84 61.595))
-    (stroke (width 0) (type default) (color 255 0 0 1))
-    (uuid 3baa93fc-5c6f-4a16-af95-8ce67ac651af)
-  )
   (wire (pts (xy 233.045 167.005) (xy 273.685 167.005))
     (stroke (width 0) (type default) (color 255 255 194 1))
     (uuid 3d1abdd2-85f4-4403-8a51-dc936c06a425)
+  )
+  (wire (pts (xy 93.345 55.88) (xy 116.84 55.88))
+    (stroke (width 0) (type default) (color 0 0 0 0))
+    (uuid 4015452a-dc0e-4823-8cab-16103a7c78d7)
   )
   (wire (pts (xy 282.575 111.76) (xy 282.575 132.08))
     (stroke (width 0) (type default) (color 255 255 0 1))
@@ -301,10 +302,6 @@
     (stroke (width 0) (type default) (color 255 255 194 1))
     (uuid b60a5cf7-326b-4506-9cdb-f433d84caac9)
   )
-  (wire (pts (xy 105.41 204.47) (xy 105.41 154.305))
-    (stroke (width 0) (type default) (color 255 0 0 1))
-    (uuid b89d7543-f961-4945-8c61-f9e362466d25)
-  )
   (wire (pts (xy 93.345 175.895) (xy 165.1 175.895))
     (stroke (width 0) (type default) (color 255 255 194 1))
     (uuid b92d83f4-bccc-4932-9ae0-27bd9b5faa6a)
@@ -316,6 +313,10 @@
   (wire (pts (xy 334.645 132.08) (xy 334.645 81.28))
     (stroke (width 0) (type default) (color 204 102 0 1))
     (uuid bc8a2aea-ea65-4cf0-ac8a-3f8c268d1354)
+  )
+  (wire (pts (xy 105.41 58.42) (xy 105.41 61.595))
+    (stroke (width 0) (type default) (color 0 0 0 0))
+    (uuid be8da45d-10d0-4d15-abb9-e81bd9f4db73)
   )
   (wire (pts (xy 93.345 147.955) (xy 273.685 147.955))
     (stroke (width 0) (type default) (color 255 255 255 1))
@@ -336,10 +337,6 @@
   (wire (pts (xy 344.805 71.755) (xy 344.805 132.08))
     (stroke (width 0) (type default) (color 221 133 0 1))
     (uuid c3480973-3d2f-47a3-b6f4-1f6425ce9764)
-  )
-  (wire (pts (xy 105.41 154.305) (xy 165.1 154.305))
-    (stroke (width 0) (type default) (color 255 0 0 1))
-    (uuid c62349d4-6891-40b2-b2b5-c439275f8bf0)
   )
   (wire (pts (xy 287.655 99.695) (xy 287.655 132.08))
     (stroke (width 0) (type default) (color 0 0 255 1))
@@ -479,10 +476,6 @@
     (effects (font (size 1.27 1.27)) (justify left bottom))
     (uuid 47e72d9e-8a92-4cac-a75d-4e50f5add08e)
   )
-  (label "VIN" (at 106.68 61.595 0)
-    (effects (font (size 1.27 1.27)) (justify left bottom))
-    (uuid 4e0bc638-841c-423c-8552-5e0f9c658d0e)
-  )
   (label "MCPWM1_INA" (at 245.745 66.675 0)
     (effects (font (size 1.27 1.27)) (justify left bottom))
     (uuid 51c3dd98-a948-402f-a6f0-f98e1cffd1e2)
@@ -531,7 +524,7 @@
     (effects (font (size 1.27 1.27)) (justify left bottom))
     (uuid ac608366-d090-47e3-a07e-96363c7f3c34)
   )
-  (label "VBAT" (at 106.045 53.34 0)
+  (label "VIN" (at 96.52 53.34 0)
     (effects (font (size 1.27 1.27)) (justify left bottom))
     (uuid b9fe3be1-06ab-4aae-8eee-1c6e8af70479)
   )
@@ -631,15 +624,11 @@
       (effects (font (size 1.27 1.27)) (justify right))
       (uuid 31fd908a-4b80-4def-b3d8-5a9cc2b69eae)
     )
-    (pin "VIN" input (at 330.2 204.47 180)
-      (effects (font (size 1.27 1.27)) (justify left))
-      (uuid b2f0397c-8acf-431a-8c3e-8bedb3f52768)
-    )
-    (pin "MOTOR2_OUT1" output (at 330.2 214.63 180)
+    (pin "MOTOR2_OUT1" output (at 330.2 212.09 180)
       (effects (font (size 1.27 1.27)) (justify left))
       (uuid 12e61bde-c508-4e40-a5d3-a70d4b59ca96)
     )
-    (pin "MOTOR2_OUT2" output (at 330.2 212.09 180)
+    (pin "MOTOR2_OUT2" output (at 330.2 214.63 180)
       (effects (font (size 1.27 1.27)) (justify left))
       (uuid c218ff32-e730-4cfa-aad7-bf2cd28badb8)
     )
@@ -650,6 +639,10 @@
     (pin "MOTOR1_OUT1" output (at 330.2 207.01 180)
       (effects (font (size 1.27 1.27)) (justify left))
       (uuid 3693800a-3bb4-4a90-b23c-eeb109f5cfee)
+    )
+    (pin "VOUT" input (at 330.2 204.47 180)
+      (effects (font (size 1.27 1.27)) (justify left))
+      (uuid b1f8c214-5b04-4c26-8db7-219ed89d9e1d)
     )
   )
 
@@ -815,10 +808,6 @@
     (pin "GPIO_GP03" input (at 233.045 167.005 0)
       (effects (font (size 1.27 1.27)) (justify right))
       (uuid d6ea81fe-8a24-4455-be79-2b5408d2888d)
-    )
-    (pin "VIN" input (at 165.1 154.305 180)
-      (effects (font (size 1.27 1.27)) (justify left))
-      (uuid 9d39b755-d509-4998-bf2c-c577a5a41a67)
     )
     (pin "LEDA_OUT" output (at 165.1 157.48 180)
       (effects (font (size 1.27 1.27)) (justify left))
@@ -1068,10 +1057,6 @@
       (effects (font (size 1.27 1.27)) (justify right))
       (uuid 533422e8-dafb-48fd-91bd-e60562e26343)
     )
-    (pin "VBAT" output (at 93.345 53.34 0)
-      (effects (font (size 1.27 1.27)) (justify right))
-      (uuid 45b10747-69d8-49ac-9d51-45b985b06ac9)
-    )
     (pin "MOTOR2_OUT2" input (at 93.345 214.63 0)
       (effects (font (size 1.27 1.27)) (justify right))
       (uuid d1628266-1113-4890-b284-be3fa2572607)
@@ -1084,21 +1069,9 @@
       (effects (font (size 1.27 1.27)) (justify right))
       (uuid 5665a796-62f0-4595-a039-77657da123fa)
     )
-    (pin "GPO6" input (at 93.345 175.895 0)
-      (effects (font (size 1.27 1.27)) (justify right))
-      (uuid 3732a4bb-7106-4b28-bc13-be2a204893ad)
-    )
-    (pin "GPO5" input (at 93.345 173.355 0)
-      (effects (font (size 1.27 1.27)) (justify right))
-      (uuid bef3b634-5e89-4ff1-b0ee-a21d19182d37)
-    )
     (pin "GPO2" input (at 93.345 165.735 0)
       (effects (font (size 1.27 1.27)) (justify right))
       (uuid 315f7034-7228-4d34-81f1-90ed84d7ae12)
-    )
-    (pin "GPO4" input (at 93.345 170.815 0)
-      (effects (font (size 1.27 1.27)) (justify right))
-      (uuid 20ba300d-a835-4fd0-9a61-8f9bcaa1501d)
     )
     (pin "GPO1" input (at 93.345 163.195 0)
       (effects (font (size 1.27 1.27)) (justify right))
@@ -1160,6 +1133,14 @@
       (effects (font (size 1.27 1.27)) (justify right))
       (uuid 90bbbda2-8b4a-4087-a094-2db6040d1a13)
     )
+    (pin "VIN" output (at 93.345 53.34 0)
+      (effects (font (size 1.27 1.27)) (justify right))
+      (uuid 5a5176da-1b89-4455-b6ac-b9aad332b113)
+    )
+    (pin "FUSE_OUT" output (at 93.345 55.88 0)
+      (effects (font (size 1.27 1.27)) (justify right))
+      (uuid bb05479d-c2a9-4f13-9e48-7846f710fb8e)
+    )
   )
 
   (sheet (at 116.84 51.435) (size 31.115 12.065)
@@ -1177,13 +1158,21 @@
       (effects (font (size 1.27 1.27)) (justify right))
       (uuid 7e8a8a69-cf4b-420d-b67c-cbf090c837e7)
     )
-    (pin "VBAT" input (at 116.84 53.34 180)
-      (effects (font (size 1.27 1.27)) (justify left))
-      (uuid fee32323-cf0f-4588-94af-d157c9396fb5)
-    )
-    (pin "VIN" output (at 116.84 61.595 180)
+    (pin "VIN" output (at 116.84 53.34 180)
       (effects (font (size 1.27 1.27)) (justify left))
       (uuid 49d70569-1e9a-4736-9d74-244f4b096c22)
+    )
+    (pin "VBAT" input (at 116.84 55.88 180)
+      (effects (font (size 1.27 1.27)) (justify left))
+      (uuid e119cfd8-4513-4f4c-8328-31e3e823448d)
+    )
+    (pin "VOUT" output (at 116.84 58.42 180)
+      (effects (font (size 1.27 1.27)) (justify left))
+      (uuid 7ac76c06-d9c6-4fa5-8eae-d14fd7165a58)
+    )
+    (pin "VOUT_EN" input (at 116.84 60.96 180)
+      (effects (font (size 1.27 1.27)) (justify left))
+      (uuid 59124faf-a8b2-4413-9ec0-c4cac0b996dd)
     )
   )
 
@@ -1227,9 +1216,6 @@
     (path "/22209dda-b41a-469a-b12c-6db64ed64364/1f517f19-8478-4f01-943d-9db788d34799"
       (reference "#PWR010") (unit 1) (value "+3V3") (footprint "")
     )
-    (path "/757733fb-8fb0-4a42-ae57-238e8944cf64/b17dbe74-2acd-4a76-b180-4d13e7bc4c61"
-      (reference "#PWR011") (unit 1) (value "GND") (footprint "")
-    )
     (path "/cdfd05b1-ba4c-4be9-bca4-ea35e57e89e1/f9589fea-556f-4036-954a-0658df99e992"
       (reference "#PWR012") (unit 1) (value "GND") (footprint "")
     )
@@ -1245,9 +1231,6 @@
     (path "/22209dda-b41a-469a-b12c-6db64ed64364/e5058089-9958-4ed8-a5ac-083da9e98b93"
       (reference "#PWR016") (unit 1) (value "GND") (footprint "")
     )
-    (path "/757733fb-8fb0-4a42-ae57-238e8944cf64/7c78d7b5-fe6e-4acc-84fe-d68541bef237"
-      (reference "#PWR017") (unit 1) (value "GND") (footprint "")
-    )
     (path "/cdfd05b1-ba4c-4be9-bca4-ea35e57e89e1/301268ce-dc18-436c-9b57-c1bade3273d3"
       (reference "#PWR018") (unit 1) (value "+3V3") (footprint "")
     )
@@ -1257,14 +1240,8 @@
     (path "/22209dda-b41a-469a-b12c-6db64ed64364/e48d241f-46a6-4a8b-ba1a-fa851b5d9c92"
       (reference "#PWR020") (unit 1) (value "GND") (footprint "")
     )
-    (path "/757733fb-8fb0-4a42-ae57-238e8944cf64/8ee91f45-7872-4431-ab51-671d37257ac4"
-      (reference "#PWR021") (unit 1) (value "GND") (footprint "")
-    )
     (path "/22209dda-b41a-469a-b12c-6db64ed64364/edda723f-19ef-4d41-bae8-213074c42465"
       (reference "#PWR022") (unit 1) (value "GND") (footprint "")
-    )
-    (path "/757733fb-8fb0-4a42-ae57-238e8944cf64/65705248-4664-4a03-94f4-fe5af1793f80"
-      (reference "#PWR023") (unit 1) (value "GND") (footprint "")
     )
     (path "/9fec575d-5caa-48b8-a384-a8b5485b21d3/300d2d28-2e9d-43b0-9c59-5408b4c6d6d6"
       (reference "#PWR024") (unit 1) (value "GND") (footprint "")
@@ -1293,9 +1270,6 @@
     (path "/22209dda-b41a-469a-b12c-6db64ed64364/c6bdd9aa-8493-4a74-b4e8-e5ac462f75ea"
       (reference "#PWR032") (unit 1) (value "GND") (footprint "")
     )
-    (path "/22209dda-b41a-469a-b12c-6db64ed64364/4335b1d6-7ab5-4f9e-91b3-11b3521771a5"
-      (reference "#PWR033") (unit 1) (value "GND") (footprint "")
-    )
     (path "/f5becad4-435f-4c1a-8fa2-8b2b4ba75dd3/c0756028-dc7b-4014-8b8e-b2eea327a63d"
       (reference "#PWR034") (unit 1) (value "+3V3") (footprint "")
     )
@@ -1314,9 +1288,6 @@
     (path "/22209dda-b41a-469a-b12c-6db64ed64364/411c10dd-5596-43fa-ac11-deaf0c2d9c7e"
       (reference "#PWR039") (unit 1) (value "GND") (footprint "")
     )
-    (path "/22209dda-b41a-469a-b12c-6db64ed64364/fa0b7f8b-2407-4a9e-8ec2-c72acd84f7f2"
-      (reference "#PWR040") (unit 1) (value "GND") (footprint "")
-    )
     (path "/9fec575d-5caa-48b8-a384-a8b5485b21d3/16cfe0ca-67d7-4570-8438-2b33f812d004"
       (reference "#PWR041") (unit 1) (value "GND") (footprint "")
     )
@@ -1328,9 +1299,6 @@
     )
     (path "/9fec575d-5caa-48b8-a384-a8b5485b21d3/e4707ed3-f33a-482d-bedb-c799f69b9af3"
       (reference "#PWR044") (unit 1) (value "GND") (footprint "")
-    )
-    (path "/e9e6f5bb-a41c-4501-b501-81730dc832f7/3af682be-163c-4761-82d6-786c9d502d0f"
-      (reference "#PWR047") (unit 1) (value "GND") (footprint "")
     )
     (path "/f5becad4-435f-4c1a-8fa2-8b2b4ba75dd3/aabdc45d-4b05-4e50-bdeb-15051f2651b7"
       (reference "#PWR050") (unit 1) (value "GND") (footprint "")
@@ -1364,9 +1332,6 @@
     )
     (path "/9fec575d-5caa-48b8-a384-a8b5485b21d3/c242f3c1-922a-401c-b835-8413922e602d"
       (reference "#PWR060") (unit 1) (value "GND") (footprint "")
-    )
-    (path "/190ebd3d-5a9e-49fd-ba77-62b87cc74b11/8beee94d-bfc3-454e-b854-d8bafcd164f6"
-      (reference "#PWR061") (unit 1) (value "+3V3") (footprint "")
     )
     (path "/9fec575d-5caa-48b8-a384-a8b5485b21d3/f5735ea8-b852-40cf-8383-67c6ed8538bc"
       (reference "#PWR062") (unit 1) (value "GND") (footprint "")
@@ -1410,11 +1375,11 @@
     (path "/cc54d552-979d-45e5-8a37-77b089e91e3e/43b0a1de-eb19-487d-ae3e-fa467d87c6b6"
       (reference "#PWR0107") (unit 1) (value "+3V3") (footprint "")
     )
-    (path "/cc54d552-979d-45e5-8a37-77b089e91e3e/32968481-4f3c-488a-8063-28f18b059f64"
+    (path "/190ebd3d-5a9e-49fd-ba77-62b87cc74b11/a886f1aa-e8e8-444c-84a4-7b42dc2ad1cd"
       (reference "#PWR0108") (unit 1) (value "GND") (footprint "")
     )
-    (path "/cc54d552-979d-45e5-8a37-77b089e91e3e/9400f572-1d6a-4526-899d-65ed658057c3"
-      (reference "#PWR0109") (unit 1) (value "+3V3") (footprint "")
+    (path "/e9e6f5bb-a41c-4501-b501-81730dc832f7/941e1202-3bad-4a0c-b11d-8fcc58a6464f"
+      (reference "#PWR0109") (unit 1) (value "GND") (footprint "")
     )
     (path "/cc54d552-979d-45e5-8a37-77b089e91e3e/486c59d5-eb06-4d8c-83c7-28a3e43fd4da"
       (reference "#PWR0110") (unit 1) (value "GND") (footprint "")
@@ -1428,7 +1393,7 @@
     (path "/cc54d552-979d-45e5-8a37-77b089e91e3e/c2fc9b4e-7655-4be8-a1b2-e256fca6c166"
       (reference "#PWR0113") (unit 1) (value "GND") (footprint "")
     )
-    (path "/cc54d552-979d-45e5-8a37-77b089e91e3e/774d0e76-af20-4326-a861-50fafaff08fe"
+    (path "/e9e6f5bb-a41c-4501-b501-81730dc832f7/2aa43299-ea06-404b-80b4-d3d90df0772f"
       (reference "#PWR0114") (unit 1) (value "GND") (footprint "")
     )
     (path "/cc54d552-979d-45e5-8a37-77b089e91e3e/f974f781-18d9-475a-9d9c-cb71452b8e14"
@@ -1445,6 +1410,9 @@
     )
     (path "/cc54d552-979d-45e5-8a37-77b089e91e3e/dec2edcb-20a5-45ea-be53-7a9598cca30e"
       (reference "#PWR0119") (unit 1) (value "+1V1") (footprint "")
+    )
+    (path "/e9e6f5bb-a41c-4501-b501-81730dc832f7/1f298364-fdb0-470a-8c87-efd33357da40"
+      (reference "#PWR0120") (unit 1) (value "GND") (footprint "")
     )
     (path "/22209dda-b41a-469a-b12c-6db64ed64364/92a32ccb-9fbc-4cbf-a527-b4fd0ba67a14"
       (reference "#PWR0121") (unit 1) (value "+3V3") (footprint "")
@@ -1512,6 +1480,9 @@
     (path "/9fec575d-5caa-48b8-a384-a8b5485b21d3/d5f93063-5c6e-4474-af41-ecd269fbfefa"
       (reference "AE3") (unit 1) (value "Antenna_Shield") (footprint "RF_Antenna:Texas_SWRA416_868MHz_915MHz")
     )
+    (path "/9fec575d-5caa-48b8-a384-a8b5485b21d3/d9e716ba-28db-4208-8124-f8b6f8b4958a"
+      (reference "AE4") (unit 1) (value "Antenna_Shield") (footprint "RF_Antenna:Texas_SWRA416_868MHz_915MHz")
+    )
     (path "/9fec575d-5caa-48b8-a384-a8b5485b21d3/df3eea9b-31a2-44aa-a4af-a01e09ce0d3f"
       (reference "C2") (unit 1) (value "10uF") (footprint "Capacitor_SMD:C_0805_2012Metric")
     )
@@ -1523,9 +1494,6 @@
     )
     (path "/cdfd05b1-ba4c-4be9-bca4-ea35e57e89e1/9e990f7b-eefd-4bc5-9235-6d71e6735603"
       (reference "C5") (unit 1) (value "10uF") (footprint "Capacitor_SMD:C_0805_2012Metric")
-    )
-    (path "/757733fb-8fb0-4a42-ae57-238e8944cf64/3ce69b20-3e72-4aef-84d4-642951851547"
-      (reference "C6") (unit 1) (value "0.1uF") (footprint "Capacitor_SMD:C_0805_2012Metric")
     )
     (path "/22209dda-b41a-469a-b12c-6db64ed64364/d0452785-c5da-4719-acbe-8c226f23d871"
       (reference "C7") (unit 1) (value "0.1uF") (footprint "Capacitor_SMD:C_0402_1005Metric")
@@ -1563,9 +1531,6 @@
     (path "/22209dda-b41a-469a-b12c-6db64ed64364/f62bf565-f965-43ce-a370-abaf3c86d685"
       (reference "C18") (unit 1) (value "16pF") (footprint "Capacitor_SMD:C_0402_1005Metric")
     )
-    (path "/22209dda-b41a-469a-b12c-6db64ed64364/38ee7055-0240-4fca-a9da-05feab3551b7"
-      (reference "C19") (unit 1) (value "10pF") (footprint "Capacitor_SMD:C_0402_1005Metric")
-    )
     (path "/22209dda-b41a-469a-b12c-6db64ed64364/8f0c0055-39c3-4bc1-8d2e-250e21f6141c"
       (reference "C20") (unit 1) (value "4pF") (footprint "Capacitor_SMD:C_0402_1005Metric")
     )
@@ -1574,9 +1539,6 @@
     )
     (path "/22209dda-b41a-469a-b12c-6db64ed64364/a4890812-8f15-4b27-88f5-b975210cb942"
       (reference "C22") (unit 1) (value "16pF") (footprint "Capacitor_SMD:C_0402_1005Metric")
-    )
-    (path "/22209dda-b41a-469a-b12c-6db64ed64364/eb279893-01e6-47a2-9b38-5a64316f2025"
-      (reference "C23") (unit 1) (value "10pF") (footprint "Capacitor_SMD:C_0402_1005Metric")
     )
     (path "/cc54d552-979d-45e5-8a37-77b089e91e3e/c8ccc577-7371-454b-a6e6-2c1b8cff0aa8"
       (reference "C24") (unit 1) (value "20pF") (footprint "Capacitor_SMD:C_0402_1005Metric")
@@ -1716,17 +1678,29 @@
     (path "/cc54d552-979d-45e5-8a37-77b089e91e3e/43aa7594-b49f-420a-a6e5-7c0eb81418b4"
       (reference "D4") (unit 1) (value "GRN") (footprint "LED_SMD:LED_0603_1608Metric")
     )
-    (path "/f5becad4-435f-4c1a-8fa2-8b2b4ba75dd3/143b3cce-81a8-42a9-a551-25a05eef788d"
+    (path "/e9e6f5bb-a41c-4501-b501-81730dc832f7/20ad0641-9541-4afc-b4c4-76694d4d7746"
       (reference "D5") (unit 1) (value "D_Small") (footprint "Diode_SMD:D_SOD-123F")
     )
-    (path "/cc54d552-979d-45e5-8a37-77b089e91e3e/d0ee53ff-5e89-4bdb-a9ac-2173ca0fdb09"
-      (reference "D7") (unit 1) (value "CUHS15S30,H3F") (footprint "Diode_SMD:D_SOD-123F")
+    (path "/190ebd3d-5a9e-49fd-ba77-62b87cc74b11/1e05b136-a807-4421-a058-4abaa99df007"
+      (reference "D6") (unit 1) (value "GRN") (footprint "LED_SMD:LED_0603_1608Metric")
     )
-    (path "/e9e6f5bb-a41c-4501-b501-81730dc832f7/9408e566-853f-4164-9a5f-b130fc52fff4"
-      (reference "H1") (unit 1) (value "MountingHole_Pad") (footprint "MountingHole:MountingHole_3.2mm_M3_DIN965_Pad")
+    (path "/e9e6f5bb-a41c-4501-b501-81730dc832f7/926126db-c1ef-485d-a65d-7c7aee7c688d"
+      (reference "D7") (unit 1) (value "PESD2CANFD24V-T") (footprint "Package_TO_SOT_SMD:SOT-23")
+    )
+    (path "/e9e6f5bb-a41c-4501-b501-81730dc832f7/0d920cd6-e538-4aaf-88b2-e6ca80a68077"
+      (reference "D8") (unit 1) (value "PESD2CANFD24V-T") (footprint "Package_TO_SOT_SMD:SOT-23")
+    )
+    (path "/190ebd3d-5a9e-49fd-ba77-62b87cc74b11/737d80c5-1af8-45ab-aa76-30565cae9b61"
+      (reference "D9") (unit 1) (value "GRN") (footprint "LED_SMD:LED_0603_1608Metric")
+    )
+    (path "/e9e6f5bb-a41c-4501-b501-81730dc832f7/6d437722-aa4e-4ae0-b6bd-979414e395bc"
+      (reference "F2") (unit 1) (value "Fuse") (footprint "ConeCodes:Keystone-3587-10TR")
     )
     (path "/9fec575d-5caa-48b8-a384-a8b5485b21d3/4e98d521-f1db-4925-9d17-e4add1ce98f3"
       (reference "J2") (unit 1) (value "U.FL-R-SMT-1(10)") (footprint "ConeCodes:HRS_U.FL-R-SMT-1(10)")
+    )
+    (path "/e9e6f5bb-a41c-4501-b501-81730dc832f7/fe76142d-61ad-41ec-b19f-146f626fdfed"
+      (reference "J3") (unit 1) (value "Conn_01x04") (footprint "Connector_PinHeader_1.27mm:PinHeader_1x04_P1.27mm_Vertical")
     )
     (path "/e9e6f5bb-a41c-4501-b501-81730dc832f7/e647b4d0-3082-4a47-b626-b7bceca978bc"
       (reference "J4") (unit 1) (value "DTM1312PA12PBR008") (footprint "TE_DTM1312PA12PBR008")
@@ -1740,14 +1714,8 @@
     (path "/22209dda-b41a-469a-b12c-6db64ed64364/1ad7552b-1b20-4843-88bd-c83410a7584f"
       (reference "J7") (unit 1) (value "U.FL-R-SMT-1(10)") (footprint "ConeCodes:HRS_U.FL-R-SMT-1(10)")
     )
-    (path "/cc54d552-979d-45e5-8a37-77b089e91e3e/c41fb18c-595d-4848-af17-dae5d0ef0615"
-      (reference "J9") (unit 1) (value "Spare IO") (footprint "Connector_PinHeader_2.54mm:PinHeader_2x03_P2.54mm_Vertical")
-    )
     (path "/9fec575d-5caa-48b8-a384-a8b5485b21d3/2515d7ba-da17-4207-9800-cf5e9d22e239"
       (reference "J10") (unit 1) (value "U.FL-R-SMT-1(10)") (footprint "ConeCodes:HRS_U.FL-R-SMT-1(10)")
-    )
-    (path "/757733fb-8fb0-4a42-ae57-238e8944cf64/ceecbf2e-73d8-4137-ad38-4067f55d71dc"
-      (reference "JP2") (unit 1) (value "LED Voltage Select") (footprint "Jumper:SolderJumper-3_P1.3mm_Bridged12_RoundedPad1.0x1.5mm_NumberLabels")
     )
     (path "/9fec575d-5caa-48b8-a384-a8b5485b21d3/4c00da93-b273-4943-ad99-8647251e553b"
       (reference "L2") (unit 1) (value "2.7nH") (footprint "Inductor_SMD:L_0402_1005Metric")
@@ -1794,12 +1762,6 @@
     (path "/757733fb-8fb0-4a42-ae57-238e8944cf64/8c700b3a-4e53-4a56-bb41-63e855a43a8f"
       (reference "Q3") (unit 2) (value "STS8DNF3LL") (footprint "Package_SO:SO-8_3.9x4.9mm_P1.27mm")
     )
-    (path "/757733fb-8fb0-4a42-ae57-238e8944cf64/7244a399-c95a-4e00-9654-eb0db6d99e7a"
-      (reference "Q4") (unit 1) (value "STS8DNF3LL") (footprint "Package_SO:SO-8_3.9x4.9mm_P1.27mm")
-    )
-    (path "/757733fb-8fb0-4a42-ae57-238e8944cf64/75182be2-f02b-4a2d-93da-eb5d28286797"
-      (reference "Q4") (unit 2) (value "STS8DNF3LL") (footprint "Package_SO:SO-8_3.9x4.9mm_P1.27mm")
-    )
     (path "/757733fb-8fb0-4a42-ae57-238e8944cf64/32587687-7f82-44f0-b63c-863e92947bf0"
       (reference "Q5") (unit 1) (value "MBT3904DW1T1G") (footprint "Package_TO_SOT_SMD:SOT-363_SC-70-6")
     )
@@ -1811,6 +1773,9 @@
     )
     (path "/757733fb-8fb0-4a42-ae57-238e8944cf64/5e7b3c5d-b8f9-4b8f-8b0f-29cf06f922c8"
       (reference "Q6") (unit 2) (value "MBT3904DW1T1G") (footprint "Package_TO_SOT_SMD:SOT-363_SC-70-6")
+    )
+    (path "/f5becad4-435f-4c1a-8fa2-8b2b4ba75dd3/97d2b2f7-62ca-49b4-9887-c1671b4a9963"
+      (reference "Q7") (unit 1) (value "Q_PMOS_GDS") (footprint "Package_TO_SOT_SMD:TO-252-2")
     )
     (path "/757733fb-8fb0-4a42-ae57-238e8944cf64/cff1f61d-1b63-4858-a5b2-4955d462591a"
       (reference "R2") (unit 1) (value "10k") (footprint "Resistor_SMD:R_0402_1005Metric")
@@ -1869,11 +1834,17 @@
     (path "/cc54d552-979d-45e5-8a37-77b089e91e3e/e4ff33a6-ee2f-4010-94bb-90d02bd3944d"
       (reference "R20") (unit 1) (value "240R") (footprint "Resistor_SMD:R_0603_1608Metric")
     )
+    (path "/190ebd3d-5a9e-49fd-ba77-62b87cc74b11/71a09f66-cdc1-4542-8229-b3642eb435b0"
+      (reference "R21") (unit 1) (value "240R") (footprint "Resistor_SMD:R_0603_1608Metric")
+    )
     (path "/22209dda-b41a-469a-b12c-6db64ed64364/d13f79d9-fce4-4d31-8fda-7c17a5162e48"
       (reference "R22") (unit 1) (value "0R") (footprint "Resistor_SMD:R_0402_1005Metric")
     )
     (path "/f5becad4-435f-4c1a-8fa2-8b2b4ba75dd3/08b8890c-8b43-4e81-a41e-d1c00483d944"
       (reference "R23") (unit 1) (value "10k") (footprint "Resistor_SMD:R_0603_1608Metric")
+    )
+    (path "/9fec575d-5caa-48b8-a384-a8b5485b21d3/8eb91370-bce8-4cc9-939c-606697f62fc3"
+      (reference "R24") (unit 1) (value "0R") (footprint "Resistor_SMD:R_0402_1005Metric")
     )
     (path "/22209dda-b41a-469a-b12c-6db64ed64364/3c1255c5-a480-499a-ad5a-fdcda059ed6b"
       (reference "R25") (unit 1) (value "10k") (footprint "Resistor_SMD:R_0402_1005Metric")
@@ -1917,14 +1888,35 @@
     (path "/cc54d552-979d-45e5-8a37-77b089e91e3e/66d13c8e-fe8b-40ca-a156-fab8bd266041"
       (reference "R38") (unit 1) (value "10k") (footprint "Resistor_SMD:R_0402_1005Metric")
     )
-    (path "/190ebd3d-5a9e-49fd-ba77-62b87cc74b11/e681d3e1-5989-4748-993c-fd7e1efff3a5"
-      (reference "R39") (unit 1) (value "10k") (footprint "Resistor_SMD:R_0402_1005Metric")
+    (path "/190ebd3d-5a9e-49fd-ba77-62b87cc74b11/19d85b97-5d95-469d-8290-6fd8ecea74fc"
+      (reference "R39") (unit 1) (value "10k") (footprint "Resistor_SMD:R_0603_1608Metric")
+    )
+    (path "/9fec575d-5caa-48b8-a384-a8b5485b21d3/a8e40a2e-59cf-4d65-ba8c-17cb2e89c54e"
+      (reference "R40") (unit 1) (value "0R") (footprint "Resistor_SMD:R_0402_1005Metric")
     )
     (path "/cc54d552-979d-45e5-8a37-77b089e91e3e/dddecf2e-0aee-466a-a760-709714d91189"
       (reference "R41") (unit 1) (value "27r4") (footprint "Resistor_SMD:R_0402_1005Metric")
     )
     (path "/cc54d552-979d-45e5-8a37-77b089e91e3e/d6c9881e-13b9-4da3-844b-add9b8364337"
       (reference "R42") (unit 1) (value "27r4") (footprint "Resistor_SMD:R_0402_1005Metric")
+    )
+    (path "/9fec575d-5caa-48b8-a384-a8b5485b21d3/d8cd75c1-f1e8-4fb9-b6e8-c3420e783ea2"
+      (reference "R43") (unit 1) (value "0R") (footprint "Resistor_SMD:R_0402_1005Metric")
+    )
+    (path "/9fec575d-5caa-48b8-a384-a8b5485b21d3/c991c12f-906c-48ce-8863-b44f072e8d64"
+      (reference "R44") (unit 1) (value "0R") (footprint "Resistor_SMD:R_0402_1005Metric")
+    )
+    (path "/757733fb-8fb0-4a42-ae57-238e8944cf64/0807c8e9-28a2-4aeb-a27c-b9b512826ab4"
+      (reference "R45") (unit 1) (value "0R") (footprint "Resistor_SMD:R_2512_6332Metric")
+    )
+    (path "/190ebd3d-5a9e-49fd-ba77-62b87cc74b11/a558b85c-1dd0-48c3-8ca1-7c6f47ae39fe"
+      (reference "R46") (unit 1) (value "240R") (footprint "Resistor_SMD:R_0603_1608Metric")
+    )
+    (path "/f5becad4-435f-4c1a-8fa2-8b2b4ba75dd3/15b7b2b1-b094-4505-a95f-0f8e6e76865c"
+      (reference "R47") (unit 1) (value "10k") (footprint "Resistor_SMD:R_0603_1608Metric")
+    )
+    (path "/f5becad4-435f-4c1a-8fa2-8b2b4ba75dd3/a13b9cdd-765c-4e63-b7ca-ada0cc4eee08"
+      (reference "R48") (unit 1) (value "10k") (footprint "Resistor_SMD:R_0603_1608Metric")
     )
     (path "/22209dda-b41a-469a-b12c-6db64ed64364/c72532ec-0bbb-47a7-b812-d19a67f9eda2"
       (reference "SW2") (unit 1) (value "SW_Push") (footprint "ConeCodes:SW_RS-032G05A3-SMRT")
@@ -1941,41 +1933,14 @@
     (path "/22209dda-b41a-469a-b12c-6db64ed64364/a1cb5919-d952-4439-b254-b82fac996161"
       (reference "TC2") (unit 1) (value "TC2030-IDC") (footprint "Connector:Tag-Connect_TC2030-IDC-NL_2x03_P1.27mm_Vertical")
     )
-    (path "/cc54d552-979d-45e5-8a37-77b089e91e3e/a437fb25-6685-4e23-b8cc-146bbde7329c"
-      (reference "TC3") (unit 1) (value "TC2030-IDC") (footprint "Connector:Tag-Connect_TC2030-IDC-NL_2x03_P1.27mm_Vertical")
-    )
-    (path "/22209dda-b41a-469a-b12c-6db64ed64364/9a130413-0ebc-4c62-b59b-0b905fa5d428"
-      (reference "TP2") (unit 1) (value "CHIP_PU") (footprint "TestPoint:TestPoint_Pad_D1.0mm")
-    )
     (path "/f5becad4-435f-4c1a-8fa2-8b2b4ba75dd3/de436728-f1f0-4e35-bf8b-d4f95a53373d"
       (reference "TP3") (unit 1) (value "VSENSE") (footprint "TestPoint:TestPoint_Pad_D1.0mm")
     )
     (path "/f5becad4-435f-4c1a-8fa2-8b2b4ba75dd3/4ceef33d-a6b1-4a9d-b799-4b9de62aebe5"
       (reference "TP4") (unit 1) (value "3V3OUT") (footprint "TestPoint:TestPoint_Pad_D1.0mm")
     )
-    (path "/22209dda-b41a-469a-b12c-6db64ed64364/54a8000f-b685-4635-bbdd-58c933180d1a"
-      (reference "TP5") (unit 1) (value "MOSI") (footprint "TestPoint:TestPoint_Pad_D1.0mm")
-    )
-    (path "/22209dda-b41a-469a-b12c-6db64ed64364/b879f31d-481e-4866-b5ac-1e05e4c9f192"
-      (reference "TP6") (unit 1) (value "MISO") (footprint "TestPoint:TestPoint_Pad_D1.0mm")
-    )
     (path "/f5becad4-435f-4c1a-8fa2-8b2b4ba75dd3/612969ca-4520-4cee-9216-bd8f6fb3f4a3"
       (reference "TP7") (unit 1) (value "3V3OUT") (footprint "TestPoint:TestPoint_Pad_D1.0mm")
-    )
-    (path "/22209dda-b41a-469a-b12c-6db64ed64364/b3e6e089-cc90-4bc9-bfe6-56b4d60fe07c"
-      (reference "TP8") (unit 1) (value "SCLK") (footprint "TestPoint:TestPoint_Pad_D1.0mm")
-    )
-    (path "/22209dda-b41a-469a-b12c-6db64ed64364/e32ebdfc-2e39-4ad6-be9c-19e4cb685c9b"
-      (reference "TP9") (unit 1) (value "CS0") (footprint "TestPoint:TestPoint_Pad_D1.0mm")
-    )
-    (path "/22209dda-b41a-469a-b12c-6db64ed64364/927d2e3e-d7a6-4464-9ff7-3a5091c845f8"
-      (reference "TP10") (unit 1) (value "CS1") (footprint "TestPoint:TestPoint_Pad_D1.0mm")
-    )
-    (path "/22209dda-b41a-469a-b12c-6db64ed64364/06387c9d-93aa-458c-9789-02cfe0b29480"
-      (reference "TP11") (unit 1) (value "CS2") (footprint "TestPoint:TestPoint_Pad_D1.0mm")
-    )
-    (path "/cc54d552-979d-45e5-8a37-77b089e91e3e/fb249d71-7c05-4aff-be9f-9b3e041b0f8d"
-      (reference "TP12") (unit 1) (value "RP_RUN") (footprint "TestPoint:TestPoint_Pad_D1.0mm")
     )
     (path "/9fec575d-5caa-48b8-a384-a8b5485b21d3/b28374c6-171a-45a6-b993-088c1a195970"
       (reference "TP13") (unit 1) (value "DIO0") (footprint "TestPoint:TestPoint_Pad_D1.0mm")
@@ -2007,9 +1972,6 @@
     (path "/22209dda-b41a-469a-b12c-6db64ed64364/e82b3e56-067a-497c-b449-a88cc540d809"
       (reference "U5") (unit 1) (value "W25Q128JVS") (footprint "Package_SO:SOIC-8W_5.3x5.3mm_P1.27mm")
     )
-    (path "/757733fb-8fb0-4a42-ae57-238e8944cf64/5ec59569-92c9-4ca6-8984-a963eb7c2f6c"
-      (reference "U6") (unit 1) (value "WS2815B") (footprint "ConeCodes:worldsemi-WS2815B-MFG")
-    )
     (path "/cc54d552-979d-45e5-8a37-77b089e91e3e/0831d4b1-e16a-4767-a88b-0da2c75c99d1"
       (reference "U7") (unit 1) (value "W25Q128JVS") (footprint "Package_SO:SOIC-8W_5.3x5.3mm_P1.27mm")
     )
@@ -2024,9 +1986,6 @@
     )
     (path "/22209dda-b41a-469a-b12c-6db64ed64364/5511474a-f242-4c98-96f5-e20af99be428"
       (reference "Y2") (unit 1) (value "40MHZ") (footprint "Crystal:Crystal_SMD_3225-4Pin_3.2x2.5mm")
-    )
-    (path "/22209dda-b41a-469a-b12c-6db64ed64364/9492c999-f666-437e-8cd8-89b4fb524635"
-      (reference "Y3") (unit 1) (value "32.7k") (footprint "Crystal:Crystal_SMD_MicroCrystal_CC7V-T1A-2Pin_3.2x1.5mm")
     )
     (path "/cc54d552-979d-45e5-8a37-77b089e91e3e/80c4d8e0-5961-4495-8598-106993145672"
       (reference "Y4") (unit 1) (value "12MHZ") (footprint "Crystal:Crystal_SMD_3225-4Pin_3.2x2.5mm")
