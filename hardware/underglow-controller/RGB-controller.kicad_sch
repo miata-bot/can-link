@@ -1418,10 +1418,10 @@
     (path "/22209dda-b41a-469a-b12c-6db64ed64364/c68316a8-b787-466e-a9b4-6f959c6976a0"
       (reference "#PWR0124") (unit 1) (value "+3V3") (footprint "")
     )
-    (path "/e9e6f5bb-a41c-4501-b501-81730dc832f7/f4efd594-0351-43fc-a99f-8d203bc32450"
+    (path "/e9e6f5bb-a41c-4501-b501-81730dc832f7/d23b90bb-3d0d-4717-83a3-9b126f38cc08"
       (reference "#PWR0125") (unit 1) (value "+3V3") (footprint "")
     )
-    (path "/e9e6f5bb-a41c-4501-b501-81730dc832f7/78371b30-5cb0-4fdd-ba36-838652dadc9a"
+    (path "/e9e6f5bb-a41c-4501-b501-81730dc832f7/487e8f5e-72de-44b3-aa88-e4b709ae770a"
       (reference "#PWR0126") (unit 1) (value "GND") (footprint "")
     )
     (path "/f5becad4-435f-4c1a-8fa2-8b2b4ba75dd3/28526084-32d6-46f9-ba4e-90627a7f5bd9"
@@ -1489,6 +1489,9 @@
     )
     (path "/cdfd05b1-ba4c-4be9-bca4-ea35e57e89e1/9e990f7b-eefd-4bc5-9235-6d71e6735603"
       (reference "C5") (unit 1) (value "10uF") (footprint "Capacitor_SMD:C_0805_2012Metric")
+    )
+    (path "/e9e6f5bb-a41c-4501-b501-81730dc832f7/2ac8fdf3-5dd0-40dd-8eec-89750982d045"
+      (reference "C6") (unit 1) (value "10uF") (footprint "Capacitor_SMD:C_0805_2012Metric")
     )
     (path "/22209dda-b41a-469a-b12c-6db64ed64364/d0452785-c5da-4719-acbe-8c226f23d871"
       (reference "C7") (unit 1) (value "0.1uF") (footprint "Capacitor_SMD:C_0402_1005Metric")
@@ -1700,8 +1703,8 @@
     (path "/e9e6f5bb-a41c-4501-b501-81730dc832f7/e647b4d0-3082-4a47-b626-b7bceca978bc"
       (reference "J4") (unit 1) (value "DTM1312PA12PBR008") (footprint "TE_DTM1312PA12PBR008")
     )
-    (path "/e9e6f5bb-a41c-4501-b501-81730dc832f7/5f71c0a3-3d99-4c8a-805a-7ecd5ffefa1b"
-      (reference "J5") (unit 1) (value "Conn_01x10") (footprint "Connector_PinHeader_2.54mm:PinHeader_1x10_P2.54mm_Vertical")
+    (path "/e9e6f5bb-a41c-4501-b501-81730dc832f7/e72f0def-aa8c-4f49-9b04-539302f0b226"
+      (reference "J5") (unit 1) (value "Conn_01x05") (footprint "Connector_PinHeader_1.27mm:PinHeader_1x05_P1.27mm_Vertical")
     )
     (path "/22209dda-b41a-469a-b12c-6db64ed64364/285e1ec1-7000-4041-9838-d1b28c40e149"
       (reference "J6") (unit 1) (value "CONSOLE") (footprint "Connector_PinHeader_1.27mm:PinHeader_1x06_P1.27mm_Vertical")
