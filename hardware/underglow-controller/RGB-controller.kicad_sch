@@ -1409,9 +1409,6 @@
     (path "/190ebd3d-5a9e-49fd-ba77-62b87cc74b11/899aaa51-6a68-482c-aa97-1d101c8cc33a"
       (reference "#PWR076") (unit 1) (value "+3V3") (footprint "")
     )
-    (path "/190ebd3d-5a9e-49fd-ba77-62b87cc74b11/a886f1aa-e8e8-444c-84a4-7b42dc2ad1cd"
-      (reference "#PWR077") (unit 1) (value "GND") (footprint "")
-    )
     (path "/190ebd3d-5a9e-49fd-ba77-62b87cc74b11/d0a6eb95-b5db-459e-be98-bcb464efe754"
       (reference "#PWR078") (unit 1) (value "GND") (footprint "")
     )
@@ -1679,9 +1676,6 @@
     (path "/cc54d552-979d-45e5-8a37-77b089e91e3e/390d6778-6448-44d2-a72d-26dfece1812c"
       (reference "D3") (unit 1) (value "RED") (footprint "LED_SMD:LED_0603_1608Metric")
     )
-    (path "/190ebd3d-5a9e-49fd-ba77-62b87cc74b11/1e05b136-a807-4421-a058-4abaa99df007"
-      (reference "D4") (unit 1) (value "GRN") (footprint "LED_SMD:LED_0603_1608Metric")
-    )
     (path "/190ebd3d-5a9e-49fd-ba77-62b87cc74b11/737d80c5-1af8-45ab-aa76-30565cae9b61"
       (reference "D5") (unit 1) (value "GRN") (footprint "LED_SMD:LED_0603_1608Metric")
     )
@@ -1891,9 +1885,6 @@
     )
     (path "/757733fb-8fb0-4a42-ae57-238e8944cf64/99ff044a-4aac-43f1-9d9f-5ca0bf787fae"
       (reference "R36") (unit 1) (value "499R") (footprint "Resistor_SMD:R_0402_1005Metric")
-    )
-    (path "/190ebd3d-5a9e-49fd-ba77-62b87cc74b11/71a09f66-cdc1-4542-8229-b3642eb435b0"
-      (reference "R37") (unit 1) (value "240R") (footprint "Resistor_SMD:R_0603_1608Metric")
     )
     (path "/190ebd3d-5a9e-49fd-ba77-62b87cc74b11/a558b85c-1dd0-48c3-8ca1-7c6f47ae39fe"
       (reference "R38") (unit 1) (value "240R") (footprint "Resistor_SMD:R_0603_1608Metric")
