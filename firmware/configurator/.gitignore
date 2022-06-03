@@ -1,0 +1,4 @@
+exampleapp
+*.o
+*.compiled
+*.valid

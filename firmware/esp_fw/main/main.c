@@ -19,6 +19,8 @@
 #include <driver/gpio.h>
 #include <driver/spi_master.h>
 #include <soc/gpio_struct.h>
+#include <tinyusb.h>
+#include <tusb_cdc_acm.h>
 
 #include "ble.h"
 #include "can.h"
@@ -219,6 +221,69 @@ void console_init()
     ESP_LOGI(TAG, "initialized console");
 }
 
+static uint8_t buf[CONFIG_TINYUSB_CDC_RX_BUFSIZE + 1];
+
+void tinyusb_cdc_rx_callback(int itf, cdcacm_event_t *event)
+{
+    /* initialization */
+    size_t rx_size = 0;
+
+    /* read */
+    esp_err_t ret = tinyusb_cdcacm_read(itf, buf, CONFIG_TINYUSB_CDC_RX_BUFSIZE, &rx_size);
+    if (ret == ESP_OK) {
+        ESP_LOGI(TAG, "Data from channel %d:", itf);
+        ESP_LOG_BUFFER_HEXDUMP(TAG, buf, rx_size, ESP_LOG_INFO);
+    } else {
+        ESP_LOGE(TAG, "Read error");
+    }
+
+    /* write back */
+    tinyusb_cdcacm_write_queue(itf, buf, rx_size);
+    tinyusb_cdcacm_write_flush(itf, 0);
+}
+
+void tinyusb_cdc_line_state_changed_callback(int itf, cdcacm_event_t *event)
+{
+    int dtr = event->line_state_changed_data.dtr;
+    int rts = event->line_state_changed_data.rts;
+    ESP_LOGI(TAG, "Line state changed on channel %d: DTR:%d, RTS:%d", itf, dtr, rts);
+}
+
+void usb_init()
+{
+        ESP_LOGI(TAG, "USB initialization");
+    tinyusb_config_t tusb_cfg = {}; // the configuration using default values
+    ESP_ERROR_CHECK(tinyusb_driver_install(&tusb_cfg));
+
+    tinyusb_config_cdcacm_t amc_cfg = {
+        .usb_dev = TINYUSB_USBDEV_0,
+        .cdc_port = TINYUSB_CDC_ACM_0,
+        .rx_unread_buf_sz = 64,
+        .callback_rx = &tinyusb_cdc_rx_callback, // the first way to register a callback
+        .callback_rx_wanted_char = NULL,
+        .callback_line_state_changed = NULL,
+        .callback_line_coding_changed = NULL
+    };
+
+    ESP_ERROR_CHECK(tusb_cdc_acm_init(&amc_cfg));
+    /* the second way to register a callback */
+    ESP_ERROR_CHECK(tinyusb_cdcacm_register_callback(
+                        TINYUSB_CDC_ACM_0,
+                        CDC_EVENT_LINE_STATE_CHANGED,
+                        &tinyusb_cdc_line_state_changed_callback));
+
+#if (CONFIG_TINYUSB_CDC_COUNT > 1)
+    amc_cfg.cdc_port = TINYUSB_CDC_ACM_1;
+    ESP_ERROR_CHECK(tusb_cdc_acm_init(&amc_cfg));
+    ESP_ERROR_CHECK(tinyusb_cdcacm_register_callback(
+                        TINYUSB_CDC_ACM_1,
+                        CDC_EVENT_LINE_STATE_CHANGED,
+                        &tinyusb_cdc_line_state_changed_callback));
+#endif
+
+    ESP_LOGI(TAG, "USB initialization DONE");
+}
+
 static void report(lua_State *L, int status)
 {
     if (status == LUA_OK)
@@ -248,9 +313,10 @@ void app_main()
 
     flash_init();
     spi_init();
-    sdcard_init();
+    usb_init();
+    // sdcard_init();
     radio_init();
-    pico_init();
+    // pico_init();
     motor_init();
     reg_init();
     ble_init();
@@ -274,17 +340,34 @@ void app_main()
 
     while (1)
     {
-        // sx1231_send(sx1231, 2, "test", 4, false);
-        if(sx1231_sendWithRetry(sx1231, 2, "ABCD", 4, 3, 10)) {
-            ESP_LOGI("RADIO", "got ack");
-        }
-        // printf(".");
-        fflush(stdout);
-        vTaskDelay(100);
+        // if(sx1231_sendWithRetry(sx1231, 2, "ABCD", 4, 3, 10)) {
+        //     ESP_LOGI("RADIO", "got ack");
+        // }
         if(sx1231_receiveDone(sx1231)) {
             ESP_LOGI("RADIO", "SENDER=%d RSSI=%d dbm rx_data={%.*s}", sx1231->SENDERID, sx1231->RSSI, sx1231->DATALEN, sx1231->DATA);
+            struct __attribute__((__packed__)) {
+                uint8_t event;
+                uint8_t senderID;
+                uint8_t targetID;
+                uint8_t ackReq;
+                uint8_t ackRecv;
+                int16_t rssi;
+                uint8_t dataLength;
+            } payload;
+
+            payload.event      = 0x10;
+            payload.senderID   = sx1231->SENDERID;
+            payload.targetID   = sx1231->TARGETID;
+            payload.ackReq     = sx1231->ACK_REQUESTED;
+            payload.ackRecv    = sx1231->ACK_RECEIVED;
+            payload.rssi       = sx1231->RSSI;
+            payload.dataLength = sx1231->DATALEN;
+
+            tinyusb_cdcacm_write_queue(0, (void*)&payload, 8);
+            tinyusb_cdcacm_write_queue(0, sx1231->DATA, sx1231->DATALEN);
+            tinyusb_cdcacm_write_flush(0, 0);
         }
-        // sx1231_receiveDone(sx1231);
+        vTaskDelay(10);
     }
 
     // Deinit peripherals in reverse of initialization
