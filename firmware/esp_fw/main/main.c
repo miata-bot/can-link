@@ -19,8 +19,8 @@
 #include <driver/gpio.h>
 #include <driver/spi_master.h>
 #include <soc/gpio_struct.h>
-#include <tinyusb.h>
-#include <tusb_cdc_acm.h>
+
+#include "ini.h"
 
 #include "ble.h"
 #include "can.h"
@@ -28,8 +28,8 @@
 #include "motor.h"
 #include "pico.h"
 #include "regulator.h"
-#include "sdcard.h"
 #include "SX1231.h"
+#include "usb_acm.h"
 
 #include "pins.h"
 
@@ -43,6 +43,14 @@ pico_t* pico;
 reg_t*   motor_reg;
 motor_t* motor1;
 motor_t* motor2;
+
+typedef struct
+{
+    int version;
+    uint8_t node_id;
+    uint8_t network_id;
+
+} configuration;
 
 static void spi_init()
 {
@@ -76,15 +84,15 @@ static void spi_init()
     }
 }
 
-void radio_init()
+void radio_init(configuration* config)
 {
     SX1231_config_t cfg = {
         .gpio_cs = PIN_NUM_RADIO_CS,
         .gpio_int = PIN_NUM_RADIO_IRQ,
         .gpio_reset = PIN_NUM_RADIO_RESET,
         .freqBand = RF69_915MHZ,
-        .nodeID = 5, 
-        .networkID = 100,
+        .nodeID = config->node_id, 
+        .networkID = config->network_id,
         .isRFM69HW_HCW = true,
         .host = SPI2_HOST
     };
@@ -221,69 +229,6 @@ void console_init()
     ESP_LOGI(TAG, "initialized console");
 }
 
-static uint8_t buf[CONFIG_TINYUSB_CDC_RX_BUFSIZE + 1];
-
-void tinyusb_cdc_rx_callback(int itf, cdcacm_event_t *event)
-{
-    /* initialization */
-    size_t rx_size = 0;
-
-    /* read */
-    esp_err_t ret = tinyusb_cdcacm_read(itf, buf, CONFIG_TINYUSB_CDC_RX_BUFSIZE, &rx_size);
-    if (ret == ESP_OK) {
-        ESP_LOGI(TAG, "Data from channel %d:", itf);
-        ESP_LOG_BUFFER_HEXDUMP(TAG, buf, rx_size, ESP_LOG_INFO);
-    } else {
-        ESP_LOGE(TAG, "Read error");
-    }
-
-    /* write back */
-    tinyusb_cdcacm_write_queue(itf, buf, rx_size);
-    tinyusb_cdcacm_write_flush(itf, 0);
-}
-
-void tinyusb_cdc_line_state_changed_callback(int itf, cdcacm_event_t *event)
-{
-    int dtr = event->line_state_changed_data.dtr;
-    int rts = event->line_state_changed_data.rts;
-    ESP_LOGI(TAG, "Line state changed on channel %d: DTR:%d, RTS:%d", itf, dtr, rts);
-}
-
-void usb_init()
-{
-        ESP_LOGI(TAG, "USB initialization");
-    tinyusb_config_t tusb_cfg = {}; // the configuration using default values
-    ESP_ERROR_CHECK(tinyusb_driver_install(&tusb_cfg));
-
-    tinyusb_config_cdcacm_t amc_cfg = {
-        .usb_dev = TINYUSB_USBDEV_0,
-        .cdc_port = TINYUSB_CDC_ACM_0,
-        .rx_unread_buf_sz = 64,
-        .callback_rx = &tinyusb_cdc_rx_callback, // the first way to register a callback
-        .callback_rx_wanted_char = NULL,
-        .callback_line_state_changed = NULL,
-        .callback_line_coding_changed = NULL
-    };
-
-    ESP_ERROR_CHECK(tusb_cdc_acm_init(&amc_cfg));
-    /* the second way to register a callback */
-    ESP_ERROR_CHECK(tinyusb_cdcacm_register_callback(
-                        TINYUSB_CDC_ACM_0,
-                        CDC_EVENT_LINE_STATE_CHANGED,
-                        &tinyusb_cdc_line_state_changed_callback));
-
-#if (CONFIG_TINYUSB_CDC_COUNT > 1)
-    amc_cfg.cdc_port = TINYUSB_CDC_ACM_1;
-    ESP_ERROR_CHECK(tusb_cdc_acm_init(&amc_cfg));
-    ESP_ERROR_CHECK(tinyusb_cdcacm_register_callback(
-                        TINYUSB_CDC_ACM_1,
-                        CDC_EVENT_LINE_STATE_CHANGED,
-                        &tinyusb_cdc_line_state_changed_callback));
-#endif
-
-    ESP_LOGI(TAG, "USB initialization DONE");
-}
-
 static void report(lua_State *L, int status)
 {
     if (status == LUA_OK)
@@ -301,6 +246,23 @@ static void halt()
         vTaskDelay(1000);
 }
 
+static int config_ini_handler(void* user, const char* section, const char* name, const char* value)
+{
+    configuration* pconfig = (configuration*)user;
+
+    #define MATCH(s, n) strcmp(section, s) == 0 && strcmp(name, n) == 0
+    if (MATCH("protocol", "version")) {
+        pconfig->version = atoi(value);
+    } else if (MATCH("node", "id")) {
+        pconfig->node_id = atoi(value);
+    } else if (MATCH("node", "network")) {
+        pconfig->network_id = atoi(value);
+    } else {
+        return 0;  /* unknown section/name, error */
+    }
+    return 1;
+}
+
 void app_main()
 {
     esp_chip_info_t chip_info;
@@ -312,10 +274,18 @@ void app_main()
            (chip_info.features & CHIP_FEATURE_BLE) ? "/BLE" : "");
 
     flash_init();
+
+    configuration config;
+    if (ini_parse("/spiffs/config.ini", config_ini_handler, &config) < 0) {
+        ESP_LOGE(TAG, "Can't load 'config.ini'\n");
+        halt();
+    }
+    ESP_LOGI(TAG, "Config loaded from 'config.ini': version=%d nodeid=%d networkid=%d\n", config.version, config.node_id, config.network_id);
+
     spi_init();
     usb_init();
-    // sdcard_init();
-    radio_init();
+    radio_init(&config);
+
     // pico_init();
     motor_init();
     reg_init();
@@ -376,7 +346,6 @@ void app_main()
     twai_deinit();
     motor_deinit();
     radio_deinit();
-    sdcard_deinit();
     spi_deinit();
     halt();
 }

@@ -9,6 +9,7 @@ idf_component_register(SRCS
                           "motor.c" 
                           "pico.c" 
                           "regulator.c"
-                          "sdcard.c" 
-                          "SX1231.c" 
+                          "usb_acm.c" 
+                          "SX1231.c"
+                          "ini.c"
                     INCLUDE_DIRS "." "include")
