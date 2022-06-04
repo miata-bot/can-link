@@ -5,6 +5,9 @@
 		},
 		{
 			"path": "rp2040_fw"
+		},
+		{
+			"path": "../../../../esp/esp-idf/components/tinyusb"
 		}
 	],
 	"settings": {

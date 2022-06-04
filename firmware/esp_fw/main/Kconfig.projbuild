@@ -1,0 +1,24 @@
+menu "CONEPROJ Configuration"
+    config CONEPROJ_USB_VID
+        hex "USB vendor ID"
+        default 0x4269
+
+    config CONEPROJ_USB_PID
+        hex "USB product ID"
+        default 0x6969
+
+    config CONEPROJ_MANUFACTURER
+        string "USB CONEPROJ manufacturer"
+        default "cone.codes"
+
+    config CONEPROJ_PRODUCT_NAME
+        string "USB product name"
+        default "CONEPROJ"
+
+    config CONEPROJ_MSC_VOLUME_LABEL
+        string "Volume label shown in the MSC disc"
+        default "CONERGB"
+        help
+            Volume label shown in the MSC disc. Max lenght is 11 ASCII characters.
+
+endmenu
