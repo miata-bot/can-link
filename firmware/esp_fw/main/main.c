@@ -523,9 +523,9 @@ void app_main()
             payload.rssi       = sx1231->RSSI;
             payload.dataLength = sx1231->DATALEN;
 
-            // tinyusb_cdcacm_write_queue(0, (void*)&payload, 8);
-            // tinyusb_cdcacm_write_queue(0, sx1231->DATA, sx1231->DATALEN);
-            // tinyusb_cdcacm_write_flush(0, 0);
+            tinyusb_cdcacm_write_queue(0, (void*)&payload, 8);
+            tinyusb_cdcacm_write_queue(0, sx1231->DATA, sx1231->DATALEN);
+            tinyusb_cdcacm_write_flush(0, 0);
         }
         vTaskDelay(10);
     }

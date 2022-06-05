@@ -662,6 +662,7 @@ void sx1231_sendFrame(SX1231_t *sx1231, uint16_t toAddress, const void* buffer, 
     t.tx_buffer=buffer2;
     t.user=sx1231;
     ret=spi_device_polling_transmit(sx1231->spi, &t);  //Transmit!
+    ESP_ERROR_CHECK(ret);
 
     sx1231_unselect(sx1231);
 

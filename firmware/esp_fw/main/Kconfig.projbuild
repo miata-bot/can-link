@@ -15,10 +15,4 @@ menu "CONEPROJ Configuration"
         string "USB product name"
         default "CONEPROJ"
 
-    config CONEPROJ_MSC_VOLUME_LABEL
-        string "Volume label shown in the MSC disc"
-        default "CONERGB"
-        help
-            Volume label shown in the MSC disc. Max lenght is 11 ASCII characters.
-
 endmenu

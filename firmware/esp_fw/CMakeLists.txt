@@ -5,10 +5,7 @@ cmake_minimum_required(VERSION 3.5)
 include($ENV{IDF_PATH}/tools/cmake/project.cmake)
 project(CONEPROJ)
 
-# spiffs_create_partition_image(storage spiffs_image FLASH_IN_PROJECT)
-fatfs_create_spiflash_image(storage spiffs_image FLASH_IN_PROJECT)
-# fatfs_create_spiflash_image(storage spiffs_image)
-#fatfs_create_rawflash_image(storage spiffs_image FLASH_IN_PROJECT)
+fatfs_create_spiflash_image(storage flash_image FLASH_IN_PROJECT)
 
 if(${IDF_VERSION_MAJOR} EQUAL 4 AND ${IDF_VERSION_MINOR} EQUAL 3)
     # add_library("tinyusb") was used instead of idf_component_register so "__idf_" wasn't added to the name
