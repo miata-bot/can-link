@@ -13,5 +13,6 @@ idf_component_register(SRCS
                           "SX1231.c"
                           "util.c"
                           "ini.c"
+                          "usb_acm.c"
                     INCLUDE_DIRS "." "include"
 )

@@ -1,6 +1,6 @@
 #include "usb_acm.h"
 
-static const char *TAG = "USB";
+static const char *TAG = "ACM";
 
 static uint8_t buf[CONFIG_TINYUSB_CDC_RX_BUFSIZE + 1];
 
@@ -30,11 +30,11 @@ void tinyusb_cdc_line_state_changed_callback(int itf, cdcacm_event_t *event)
     ESP_LOGI(TAG, "Line state changed on channel %d: DTR:%d, RTS:%d", itf, dtr, rts);
 }
 
-void usb_init()
+void acm_init()
 {
     ESP_LOGI(TAG, "initialization");
-    tinyusb_config_t tusb_cfg = {}; // the configuration using default values
-    ESP_ERROR_CHECK(tinyusb_driver_install(&tusb_cfg));
+    // tinyusb_config_t tusb_cfg = {}; // the configuration using default values
+    // ESP_ERROR_CHECK(tinyusb_driver_install(&tusb_cfg));
 
     tinyusb_config_cdcacm_t amc_cfg = {
         .usb_dev = TINYUSB_USBDEV_0,

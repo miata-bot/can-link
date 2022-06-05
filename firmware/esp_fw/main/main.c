@@ -40,6 +40,7 @@
 #include "pico.h"
 #include "regulator.h"
 #include "SX1231.h"
+#include "usb_acm.h"
 
 #include "msc.h"
 #include "hal/usb_hal.h"
@@ -458,6 +459,7 @@ void app_main()
 
     serial_number_init();
     usb_init();
+    acm_init();
 
     xTaskCreate(tusb_device_task, "tusb_device_task", 4 * 1024, NULL, 5, NULL);
     xTaskCreate(msc_task, "msc_task", 4 * 1024, NULL, 5, NULL);
