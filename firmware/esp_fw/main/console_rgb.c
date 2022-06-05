@@ -60,30 +60,30 @@ static int console_brightness(int argc, char **argv)
 
 esp_err_t console_rgb_install()
 {
-  color_args.r = arg_intn("r", "red", "<u8>", 1, 1, "red 0-255");
-  color_args.g = arg_intn("g", "green", "<u8>", 1, 1, "green 0-255");
-  color_args.b = arg_intn("b", "blue", "<u8>", 1, 1, "blue 0-255");
-  color_args.end = arg_end(3);
+    color_args.r = arg_intn("r", "red", "<u8>", 1, 1, "red 0-255");
+    color_args.g = arg_intn("g", "green", "<u8>", 1, 1, "green 0-255");
+    color_args.b = arg_intn("b", "blue", "<u8>", 1, 1, "blue 0-255");
+    color_args.end = arg_end(3);
 
-  const esp_console_cmd_t color_cmd = {
-      .command = "set_color",
-      .help = "set the rgb color",
-      .hint = NULL,
-      .func = &console_color,
-      .argtable = &color_args
-  };
-  ESP_ERROR_CHECK(esp_console_cmd_register(&color_cmd));
+    const esp_console_cmd_t color_cmd = {
+        .command = "set_color",
+        .help = "set the rgb color",
+        .hint = NULL,
+        .func = &console_color,
+        .argtable = &color_args
+    };
+    ESP_ERROR_CHECK(esp_console_cmd_register(&color_cmd));
 
-  brightness_args.brightness = arg_intn("b", "brightness", "<u8>", 1, 1, "brightness 0-255");
-  brightness_args.end = arg_end(1);
+    brightness_args.brightness = arg_intn("b", "brightness", "<u8>", 1, 1, "brightness 0-255");
+    brightness_args.end = arg_end(1);
 
-  const esp_console_cmd_t brightness_cmd = {
-      .command = "set_brightness",
-      .help = "set the brightness",
-      .hint = NULL,
-      .func = &console_brightness,
-      .argtable = &brightness_args
-  };
-  ESP_ERROR_CHECK(esp_console_cmd_register(&brightness_cmd));
-  return ESP_OK;
+    const esp_console_cmd_t brightness_cmd = {
+        .command = "set_brightness",
+        .help = "set the brightness",
+        .hint = NULL,
+        .func = &console_brightness,
+        .argtable = &brightness_args
+    };
+    ESP_ERROR_CHECK(esp_console_cmd_register(&brightness_cmd));
+    return ESP_OK;
 }

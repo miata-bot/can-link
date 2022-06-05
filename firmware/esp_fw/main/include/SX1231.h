@@ -41,7 +41,7 @@ typedef struct {
     gpio_num_t gpio_int;
     gpio_num_t gpio_reset;
 
-    uint8_t freqBand; 
+    uint8_t freqBand;
     uint16_t nodeID;
     uint8_t networkID;
     bool isRFM69HW_HCW;
@@ -93,7 +93,7 @@ void sx1231_setHighPower(SX1231_t *sx1231, bool _isRFM69HW_HCW); // has to be ca
 void sx1231_setPowerLevel(SX1231_t *sx1231, uint8_t level); // reduce/increase transmit power level
 int8_t sx1231_setPowerDBm(SX1231_t *sx1231, int8_t dBm); // reduce/increase transmit power level, in dBm
 
-uint8_t sx1231_getPowerLevel(SX1231_t *sx1231); // get powerLevel	
+uint8_t sx1231_getPowerLevel(SX1231_t *sx1231); // get powerLevel
 void sx1231_sleep(SX1231_t *sx1231);
 uint8_t sx1231_readTemperature(SX1231_t *sx1231, uint8_t calFactor); // get CMOS temperature (8bit)
 void sx1231_rcCalibration(SX1231_t *sx1231); // calibrate the internal RC oscillator for use in wide temperature variations - see datasheet section [4.3.5. RC Timer Accuracy]

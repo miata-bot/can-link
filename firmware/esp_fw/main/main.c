@@ -277,7 +277,7 @@ static void spi_init()
         eub_abort();
     }
 }
-static void spi_deinit(){}
+static void spi_deinit() {}
 
 void radio_init(configuration* config)
 {
@@ -286,7 +286,7 @@ void radio_init(configuration* config)
         .gpio_int = PIN_NUM_RADIO_IRQ,
         .gpio_reset = PIN_NUM_RADIO_RESET,
         .freqBand = RF69_915MHZ,
-        .nodeID = config->node_id, 
+        .nodeID = config->node_id,
         .networkID = config->network_id,
         .isRFM69HW_HCW = true,
         .host = SPI2_HOST
@@ -298,7 +298,7 @@ void radio_init(configuration* config)
     }
     ESP_LOGI(TAG, "Initalized radio");
 }
-static void radio_deinit(){}
+static void radio_deinit() {}
 
 static void pico_init()
 {
@@ -322,9 +322,9 @@ static void flash_init()
     // To mount device we need name of device partition, define base_path
     // and allow format partition in case if it is new one and was not formatted before
     const esp_vfs_fat_mount_config_t mount_config = {
-            .max_files = 4,
-            .format_if_mount_failed = true,
-            .allocation_unit_size = CONFIG_WL_SECTOR_SIZE
+        .max_files = 4,
+        .format_if_mount_failed = true,
+        .allocation_unit_size = CONFIG_WL_SECTOR_SIZE
     };
     esp_err_t err = esp_vfs_fat_spiflash_mount_rw_wl(base_path, "storage", &mount_config, &s_wl_handle);
     if (err != ESP_OK) {
@@ -333,7 +333,7 @@ static void flash_init()
     }
 }
 
-static void flash_deinit(){}
+static void flash_deinit() {}
 
 static void usb_init()
 {
@@ -431,7 +431,7 @@ static int config_ini_handler(void* user, const char* section, const char* name,
 {
     configuration* pconfig = (configuration*)user;
 
-    #define MATCH(s, n) strcmp(section, s) == 0 && strcmp(name, n) == 0
+#define MATCH(s, n) strcmp(section, s) == 0 && strcmp(name, n) == 0
     if (MATCH("protocol", "version")) {
         pconfig->version = atoi(value);
     } else if (MATCH("node", "id")) {
@@ -449,10 +449,10 @@ void app_main()
     esp_chip_info_t chip_info;
     esp_chip_info(&chip_info);
     ESP_LOGI(TAG, "This is %s chip with %d CPU core(s), WiFi%s%s, ",
-           CONFIG_IDF_TARGET,
-           chip_info.cores,
-           (chip_info.features & CHIP_FEATURE_BT) ? "/BT" : "",
-           (chip_info.features & CHIP_FEATURE_BLE) ? "/BLE" : "");
+             CONFIG_IDF_TARGET,
+             chip_info.cores,
+             (chip_info.features & CHIP_FEATURE_BT) ? "/BT" : "",
+             (chip_info.features & CHIP_FEATURE_BLE) ? "/BLE" : "");
 
     flash_init();
 
@@ -514,7 +514,8 @@ void app_main()
                 uint8_t ackRecv;
                 int16_t rssi;
                 uint8_t dataLength;
-            } payload;
+            }
+            payload;
 
             payload.event      = 0x10;
             payload.senderID   = sx1231->SENDERID;

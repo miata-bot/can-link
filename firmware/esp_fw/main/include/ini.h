@@ -83,7 +83,7 @@ INI_API int ini_parse_file(FILE* file, ini_handler handler, void* user);
    filename. Used for implementing custom or string-based I/O (see also
    ini_parse_string). */
 INI_API int ini_parse_stream(ini_reader reader, void* stream, ini_handler handler,
-                     void* user);
+                             void* user);
 
 /* Same as ini_parse(), but takes a zero-terminated string with the INI data
 instead of a file. Useful for parsing INI data from a network socket or
