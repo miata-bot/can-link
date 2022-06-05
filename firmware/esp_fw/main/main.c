@@ -459,14 +459,10 @@ void app_main()
 
     serial_number_init();
     usb_init();
-    acm_init();
 
     xTaskCreate(tusb_device_task, "tusb_device_task", 4 * 1024, NULL, 5, NULL);
     xTaskCreate(msc_task, "msc_task", 4 * 1024, NULL, 5, NULL);
-    while(true)
-    {
-        vTaskDelay(100);
-    }
+    acm_init();
 
     configuration config;
     if (ini_parse("/flash/config.ini", config_ini_handler, &config) < 0) {
@@ -485,19 +481,19 @@ void app_main()
     ble_init();
     console_init();
 
-    // lua_State *L = luaL_newstate();
-    // ESP_ERROR_CHECK(L ? ESP_OK : ESP_FAIL);
+    lua_State *L = luaL_newstate();
+    ESP_ERROR_CHECK(L ? ESP_OK : ESP_FAIL);
 
-    // luaL_openlibs(L);
+    luaL_openlibs(L);
 
-    // int r = luaL_loadfilex(L, "/flash/main.lua", NULL);
-    // if (r != LUA_OK)
-    //     printf("Failed to execute main.lua\n");
-    // else
-    //     r = lua_pcall(L, 0, LUA_MULTRET, 0);
+    int r = luaL_loadfilex(L, "/flash/main.lua", NULL);
+    if (r != LUA_OK)
+        printf("Failed to execute main.lua\n");
+    else
+        r = lua_pcall(L, 0, LUA_MULTRET, 0);
 
-    // report(L, r);
-    // lua_close(L);
+    report(L, r);
+    lua_close(L);
 
     printf("State closed, heap: %d\n", xPortGetFreeHeapSize());
 
