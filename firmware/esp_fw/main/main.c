@@ -280,6 +280,40 @@ static void spi_init()
 }
 static void spi_deinit() {}
 
+
+static void radio_task() {
+    while (1)
+    {
+        // if(sx1231_sendWithRetry(sx1231, 2, "ABCD", 4, 3, 10)) {
+        //     ESP_LOGI("RADIO", "got ack");
+        // }
+        if(sx1231_receiveDone(sx1231)) {
+            ESP_LOGI("RADIO", "SENDER=%d RSSI=%d dbm", sx1231->SENDERID, sx1231->RSSI);
+             
+            ESP_LOG_BUFFER_HEXDUMP("radio payload", sx1231->DATA, sx1231->DATALEN, ESP_LOG_INFO);
+
+            switch(sx1231->DATA[0]) {
+                case COMMAND_RGB_SET_COLOR: {
+                    ESP_LOGI("RADIO", "pico_set_color(%02X, %02X, %02X)", sx1231->DATA[1], sx1231->DATA[2], sx1231->DATA[3]);
+                    pico_set_color(pico, COMMAND_RGB_INDEX_0, sx1231->DATA[1], sx1231->DATA[2], sx1231->DATA[3]);
+                    break;
+                }
+                case COMMAND_RGB_SET_BRIGHTNESS: {
+                    ESP_LOGI("RADIO", "pico_set_brightness(%02X)", sx1231->DATA[1]);
+                    pico_set_brightness(pico, COMMAND_RGB_INDEX_0, sx1231->DATA[1]);
+                    break;
+                }
+                default: {
+                    ESP_LOGE("RADIO", "unknown command %02X", sx1231->DATA[0]);
+                    break;
+                }
+            }
+        }
+        vTaskDelay(10);
+    }
+    vTaskDelete(NULL);
+}
+
 void radio_init(configuration* config)
 {
     SX1231_config_t cfg = {
@@ -298,6 +332,7 @@ void radio_init(configuration* config)
         eub_abort();
     }
     ESP_LOGI(TAG, "Initalized radio");
+    xTaskCreate(radio_task, "radio_task", 4 * 1024, NULL, 5, NULL);
 }
 static void radio_deinit() {}
 
@@ -315,6 +350,9 @@ static void pico_init()
     }
     ESP_LOGI(TAG, "Initalized pico");
     pico_ping(pico);
+    pico_ping(pico);
+    pico_ping(pico);
+    pico_ping(pico); // idk lol
 }
 
 static void flash_init()
@@ -424,21 +462,27 @@ void console_init()
 
 static int lua_set_color(lua_State *L)
 {
-    double index = luaL_checknumber(L, 1);
-    double r = luaL_checknumber(L, 2);
-    double g = luaL_checknumber(L, 3);
-    double b = luaL_checknumber(L, 4);
-    ESP_LOGI(TAG, "lua_set_color(%d, %02X, %02X, %02x)", (uint8_t)index, (uint8_t)r, (uint8_t)g, (uint8_t)b);
-    pico_set_color(pico, (uint8_t)index, (uint8_t)r, (uint8_t)g, (uint8_t)b);
+    double r = luaL_checknumber(L, 1);
+    double g = luaL_checknumber(L, 2);
+    double b = luaL_checknumber(L, 3);
+    ESP_LOGI(TAG, "lua_set_color(%02X, %02X, %02x)", (uint8_t)r, (uint8_t)g, (uint8_t)b);
+    pico_set_color(pico, COMMAND_RGB_INDEX_0, (uint8_t)r, (uint8_t)g, (uint8_t)b);
     return 0;
 }
 
 static int lua_set_brightness(lua_State *L)
 {
-    double index = luaL_checknumber(L, 1);
-    double brightness = luaL_checknumber(L, 2);
-    ESP_LOGI(TAG, "lua_set_brightness(%d, %02X)", (uint8_t)index, (uint8_t)brightness);
-    pico_set_brightness(pico, (uint8_t)index, (uint8_t)brightness);
+    double brightness = luaL_checknumber(L, 1);
+    ESP_LOGI(TAG, "lua_set_brightness(%02X)", (uint8_t)brightness);
+    pico_set_brightness(pico, COMMAND_RGB_INDEX_0, (uint8_t)brightness);
+    return 0;
+}
+
+static int lua_delay_ms(lua_State *L)
+{
+    double ms = luaL_checknumber(L, 1);
+    ESP_LOGD(TAG, "lua_delay_ms(%d)", (int)ms);
+    vTaskDelay((int)ms / portTICK_PERIOD_MS);
     return 0;
 }
 
@@ -502,21 +546,23 @@ void app_main()
     console_init();
 
     ESP_LOGI(TAG, "Preparing to run MAIN.LUA");
-    vTaskDelay(pdMS_TO_TICKS(1500));
-    pico_set_color(pico, COMMAND_RGB_INDEX_0, 0xff, 0, 0xff);
-    pico_set_brightness(pico, COMMAND_RGB_INDEX_0, 0xff);
+    pico_set_color(pico, COMMAND_RGB_INDEX_0, 0, 0, 0);
+    pico_set_brightness(pico, COMMAND_RGB_INDEX_0, 0);
 
     lua_State *L = luaL_newstate();
     ESP_ERROR_CHECK(L ? ESP_OK : ESP_FAIL);
 
     luaL_openlibs(L);
 
-    //Expose the rgb function to the lua environment
+    //Expose functions to the lua environment
     lua_pushcfunction(L, lua_set_color);
     lua_setglobal(L, "set_color");
 
     lua_pushcfunction(L, lua_set_brightness);
     lua_setglobal(L, "set_brightness");
+
+    lua_pushcfunction(L, lua_delay_ms);
+    lua_setglobal(L, "delay_ms");
 
     int r = luaL_loadfilex(L, "/flash/main.lua", NULL);
     if (r != LUA_OK)
@@ -532,34 +578,6 @@ void app_main()
 
     while (1)
     {
-        // if(sx1231_sendWithRetry(sx1231, 2, "ABCD", 4, 3, 10)) {
-        //     ESP_LOGI("RADIO", "got ack");
-        // }
-        if(sx1231_receiveDone(sx1231)) {
-            ESP_LOGI("RADIO", "SENDER=%d RSSI=%d dbm rx_data={%.*s}", sx1231->SENDERID, sx1231->RSSI, sx1231->DATALEN, sx1231->DATA);
-            struct __attribute__((__packed__)) {
-                uint8_t event;
-                uint8_t senderID;
-                uint8_t targetID;
-                uint8_t ackReq;
-                uint8_t ackRecv;
-                int16_t rssi;
-                uint8_t dataLength;
-            }
-            payload;
-
-            payload.event      = 0x10;
-            payload.senderID   = sx1231->SENDERID;
-            payload.targetID   = sx1231->TARGETID;
-            payload.ackReq     = sx1231->ACK_REQUESTED;
-            payload.ackRecv    = sx1231->ACK_RECEIVED;
-            payload.rssi       = sx1231->RSSI;
-            payload.dataLength = sx1231->DATALEN;
-
-            tinyusb_cdcacm_write_queue(0, (void*)&payload, 8);
-            tinyusb_cdcacm_write_queue(0, sx1231->DATA, sx1231->DATALEN);
-            tinyusb_cdcacm_write_flush(0, 0);
-        }
         vTaskDelay(10);
     }
 
