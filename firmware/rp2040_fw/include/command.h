@@ -120,7 +120,6 @@ typedef struct command {
 } command_t;
 
 void command_init(command_t*);
-void command_sync(command_t*);
 void command_read(command_t*);
 void command_decode(command_t*);
 void command_reply(command_t*);

@@ -20,18 +20,6 @@ void command_init(command_t* command)
   gpio_set_function(command->gpio_csn, GPIO_FUNC_SPI);
 }
 
-void command_sync(command_t* command)
-{
-  memset(command->buffer, 0, 4);
-  while(command->buffer[0] != COMMAND_SYNC) {
-    PICO_LOGI("Waiting sync");
-    spi_read_blocking(command->spi, COMMAND_SYNC, command->buffer, 1);
-    PICO_LOGI("SYNC WORD: %02X", command->buffer[0]);
-  }
-  // clear the buffer
-  memset(command->buffer, 0, 4);
-}
-
 void command_read(command_t* command)
 {
   // zero out the rx buffer
@@ -49,7 +37,8 @@ void command_read(command_t* command)
 
 void command_decode(command_t* command)
 {
-  command->response = COMMAND_RESPONSE_BUSY;
+  // just in case
+  command->response = COMMAND_RESPONSE_SYNC;
 
   // zero out the args for good luck
   memset(&command->args, 0, sizeof(command_args_t));
@@ -120,4 +109,6 @@ void command_reply(command_t* command)
 {
   // clock out the response, read the sync word (ignored)
   spi_read_blocking(command->spi, command->response, command->buffer, 1);
+  PICO_LOGI("reply=%02X", command->buffer[0]);
+  spi_read_blocking(command->spi, COMMAND_RESPONSE_SYNC, command->buffer, 0);
 }

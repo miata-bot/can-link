@@ -61,8 +61,8 @@ int main() {
     stdio_init_all();
 
     // wait for USB
-    while (!stdio_usb_connected())
-        tight_loop_contents();
+    // while (!stdio_usb_connected())
+    //     tight_loop_contents();
 
     PICO_LOGI("initialize status LEDs");
 

@@ -22,7 +22,8 @@
 			"utility": "c",
 			"variant": "c",
 			"condition_variable": "c",
-			"string.h": "c"
+			"string.h": "c",
+			"random": "c"
 		}
 	}
 }

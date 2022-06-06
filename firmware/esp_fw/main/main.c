@@ -422,6 +422,26 @@ void console_init()
     ESP_LOGI(TAG, "initialized console");
 }
 
+static int lua_set_color(lua_State *L)
+{
+    double index = luaL_checknumber(L, 1);
+    double r = luaL_checknumber(L, 2);
+    double g = luaL_checknumber(L, 3);
+    double b = luaL_checknumber(L, 4);
+    ESP_LOGI(TAG, "lua_set_color(%d, %02X, %02X, %02x)", (uint8_t)index, (uint8_t)r, (uint8_t)g, (uint8_t)b);
+    pico_set_color(pico, (uint8_t)index, (uint8_t)r, (uint8_t)g, (uint8_t)b);
+    return 0;
+}
+
+static int lua_set_brightness(lua_State *L)
+{
+    double index = luaL_checknumber(L, 1);
+    double brightness = luaL_checknumber(L, 2);
+    ESP_LOGI(TAG, "lua_set_brightness(%d, %02X)", (uint8_t)index, (uint8_t)brightness);
+    pico_set_brightness(pico, (uint8_t)index, (uint8_t)brightness);
+    return 0;
+}
+
 static void report(lua_State *L, int status)
 {
     if (status == LUA_OK)
@@ -475,22 +495,35 @@ void app_main()
 
     radio_init(&config);
 
-    // pico_init();
+    pico_init();
     motor_init();
     reg_init();
     ble_init();
     console_init();
+
+    ESP_LOGI(TAG, "Preparing to run MAIN.LUA");
+    vTaskDelay(pdMS_TO_TICKS(1500));
+    pico_set_color(pico, COMMAND_RGB_INDEX_0, 0xff, 0, 0xff);
+    pico_set_brightness(pico, COMMAND_RGB_INDEX_0, 0xff);
 
     lua_State *L = luaL_newstate();
     ESP_ERROR_CHECK(L ? ESP_OK : ESP_FAIL);
 
     luaL_openlibs(L);
 
+    //Expose the rgb function to the lua environment
+    lua_pushcfunction(L, lua_set_color);
+    lua_setglobal(L, "set_color");
+
+    lua_pushcfunction(L, lua_set_brightness);
+    lua_setglobal(L, "set_brightness");
+
     int r = luaL_loadfilex(L, "/flash/main.lua", NULL);
     if (r != LUA_OK)
         printf("Failed to execute main.lua\n");
-    else
+    else {
         r = lua_pcall(L, 0, LUA_MULTRET, 0);
+    }
 
     report(L, r);
     lua_close(L);
