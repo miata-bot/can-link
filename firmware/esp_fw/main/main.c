@@ -352,6 +352,10 @@ static void usb_init()
         ESP_LOGE(TAG, "Failed to initialize USB");
         eub_abort();
     }
+
+    xTaskCreate(tusb_device_task, "tusb_device_task", 4 * 1024, NULL, 5, NULL);
+    xTaskCreate(msc_task, "msc_task", 4 * 1024, NULL, 5, NULL);
+    acm_init();
 }
 
 void motor_init()
@@ -459,10 +463,6 @@ void app_main()
 
     serial_number_init();
     usb_init();
-
-    xTaskCreate(tusb_device_task, "tusb_device_task", 4 * 1024, NULL, 5, NULL);
-    xTaskCreate(msc_task, "msc_task", 4 * 1024, NULL, 5, NULL);
-    acm_init();
 
     configuration config;
     if (ini_parse("/flash/config.ini", config_ini_handler, &config) < 0) {
