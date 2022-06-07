@@ -1,0 +1,3 @@
+(sym_lib_table
+  (lib (name "ConeCodes")(type "KiCad")(uri "${CONECODES_ROOT_DIR}/library/symbols/ConeCodes.kicad_sym")(options "")(descr ""))
+)
