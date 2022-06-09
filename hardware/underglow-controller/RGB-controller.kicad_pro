@@ -183,15 +183,6 @@
         "clearance|95960000|95280000|292a5316-10a9-40a8-9a0f-c7a6354dfbfa|89febf60-f99e-46ef-aa0e-692115d00bf2",
         "clearance|97070000|95280000|e9c227e8-44d8-4fa4-927f-064741c52081|503b3ecd-e4f4-4386-a0d0-f46790f7d550",
         "clearance|97070000|97100000|e945afde-3a24-417b-8140-adde9c7c7e1e|98ebedda-ca1b-4646-b0e7-374a5913601b",
-        "diff_pair_gap_out_of_range|44721346|57230000|24fd99f6-b0e3-45ea-9a3e-249c3d4c8501|ec391656-2ca9-4c5d-bc01-64e936b556e5",
-        "diff_pair_gap_out_of_range|45658896|103427826|985b41d8-2767-424d-a7ea-4b50f033b016|01eb726e-d6e6-4b86-b1b7-e6e024794f58",
-        "diff_pair_gap_out_of_range|45659520|101060480|32871aaf-a893-4352-b83f-fbdd5419ae28|3afa886a-c958-48a9-820d-408a49993852",
-        "diff_pair_gap_out_of_range|45758896|126447826|985b41d8-2767-424d-a7ea-4b50f033b016|01eb726e-d6e6-4b86-b1b7-e6e024794f58",
-        "diff_pair_gap_out_of_range|45759520|124080480|32871aaf-a893-4352-b83f-fbdd5419ae28|3afa886a-c958-48a9-820d-408a49993852",
-        "diff_pair_gap_out_of_range|47920000|54031346|68e11c51-8940-4ddc-9fe4-d8195eb38aae|4a472443-9390-46a1-a6a5-df6da73c31da",
-        "diff_pair_gap_out_of_range|51289038|113130000|920dbe4b-538f-4035-b4ff-01ba17f80c7a|54a9f077-890d-4a89-a934-b694970effde",
-        "diff_pair_gap_out_of_range|51289038|113460973|920dbe4b-538f-4035-b4ff-01ba17f80c7a|54a9f077-890d-4a89-a934-b694970effde",
-        "diff_pair_gap_out_of_range|53195000|82170000|0c01a7a3-174b-496b-ac79-461de48d3d0a|e59c0a19-8a6b-45f3-9a4e-747fc74d0876",
         "items_not_allowed|64660000|128890000|8c464b59-1598-436c-894b-95b849289c16|00000000-0000-0000-0000-000000000000",
         "items_not_allowed|93485000|127145003|ced19b33-9986-4fe2-b713-6efbc564723a|00000000-0000-0000-0000-000000000000",
         "items_not_allowed|93485000|127145003|ddfbda33-68a5-4b58-a504-6c0d8da1658e|00000000-0000-0000-0000-000000000000",
@@ -205,7 +196,7 @@
         "clearance": "warning",
         "copper_edge_clearance": "error",
         "courtyards_overlap": "ignore",
-        "diff_pair_gap_out_of_range": "error",
+        "diff_pair_gap_out_of_range": "ignore",
         "diff_pair_uncoupled_length_too_long": "error",
         "drill_out_of_range": "error",
         "duplicate_footprints": "warning",
@@ -483,7 +474,7 @@
       "no_connect_dangling": "warning",
       "pin_not_connected": "error",
       "pin_not_driven": "error",
-      "pin_to_pin": "warning",
+      "pin_to_pin": "error",
       "power_pin_not_driven": "error",
       "similar_labels": "warning",
       "unannotated": "error",
@@ -493,7 +484,9 @@
     }
   },
   "libraries": {
-    "pinned_footprint_libs": [],
+    "pinned_footprint_libs": [
+      "ConeCodes"
+    ],
     "pinned_symbol_libs": []
   },
   "meta": {
@@ -591,7 +584,7 @@
     "page_layout_descr_file": ""
   },
   "schematic": {
-    "annotate_start_num": 1,
+    "annotate_start_num": 100,
     "drawing": {
       "default_line_thickness": 6.0,
       "default_text_size": 50.0,
@@ -634,24 +627,12 @@
       ""
     ],
     [
-      "cc54d552-979d-45e5-8a37-77b089e91e3e",
-      "Pico Remote Proc"
-    ],
-    [
-      "9fec575d-5caa-48b8-a384-a8b5485b21d3",
-      "SX1276"
-    ],
-    [
       "22209dda-b41a-469a-b12c-6db64ed64364",
       "ESP32-S3"
     ],
     [
-      "757733fb-8fb0-4a42-ae57-238e8944cf64",
-      "External-IO"
-    ],
-    [
-      "190ebd3d-5a9e-49fd-ba77-62b87cc74b11",
-      "Motor-Control"
+      "e9e6f5bb-a41c-4501-b501-81730dc832f7",
+      "Connectors"
     ],
     [
       "f5becad4-435f-4c1a-8fa2-8b2b4ba75dd3",
@@ -662,8 +643,16 @@
       "CAN-Bus"
     ],
     [
-      "e9e6f5bb-a41c-4501-b501-81730dc832f7",
-      "Connectors"
+      "9fec575d-5caa-48b8-a384-a8b5485b21d3",
+      "SX1231"
+    ],
+    [
+      "757733fb-8fb0-4a42-ae57-238e8944cf64",
+      "External-IO"
+    ],
+    [
+      "faf1df09-e756-404d-a7ad-c3057352a8f3",
+      "Microphone"
     ]
   ],
   "text_variables": {}

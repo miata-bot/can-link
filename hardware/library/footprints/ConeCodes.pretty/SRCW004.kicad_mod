@@ -1,0 +1,74 @@
+(footprint "SRCW004" (version 20211014) (generator pcbnew)
+  (layer "F.Cu")
+  (tedit 62A2575B)
+  (attr smd)
+  (fp_text reference "REF**" (at -0.15 -2.45 unlocked) (layer "F.SilkS")
+    (effects (font (size 1 1) (thickness 0.15)))
+    (tstamp 7bc99cbe-6474-4501-9b15-5b6ebd1f4184)
+  )
+  (fp_text value "SRCW004" (at 0 1 unlocked) (layer "F.Fab")
+    (effects (font (size 1 1) (thickness 0.15)))
+    (tstamp 297531e5-b032-48c1-8897-12802d8e10fe)
+  )
+  (fp_text user "${REFERENCE}" (at 0 2.5 unlocked) (layer "F.Fab")
+    (effects (font (size 1 1) (thickness 0.15)))
+    (tstamp ea0875e8-5dfb-498b-9b4a-46017e9523e4)
+  )
+  (fp_line (start 9.566274 0.124032) (end 7.766275 0.124032) (layer "Dwgs.User") (width 0.1) (tstamp 10927c1b-ebfd-45d5-9120-4867c717f270))
+  (fp_line (start 9.216274 -0.525967) (end 8.116274 -0.525967) (layer "Dwgs.User") (width 0.1) (tstamp 20eda35d-4099-46fe-b55e-fd57d57e90ab))
+  (fp_line (start 1.060306 -0.229999) (end 7.940003 -0.229999) (layer "Dwgs.User") (width 0.1) (tstamp 4cede614-f863-434b-a614-82cce2d82a79))
+  (fp_line (start 1.056272 0.064032) (end -0.043728 0.064032) (layer "Dwgs.User") (width 0.1) (tstamp 4e776fc9-cde0-40d4-aa6b-d1f8bf418fd3))
+  (fp_line (start 9.070001 -0.83) (end 13.248001 -0.83) (layer "Dwgs.User") (width 0.1) (tstamp 50ea647a-461d-46d1-a68b-200b7b148900))
+  (fp_line (start -0.043728 -0.535967) (end -0.043728 0.064032) (layer "Dwgs.User") (width 0.1) (tstamp 52496477-925f-42d9-a5f3-a0a98b37ad57))
+  (fp_line (start 0.506271 -0.535967) (end 0.506271 0.064032) (layer "Dwgs.User") (width 0.1) (tstamp 572ad497-f15c-44e6-b6c4-2db8ed558982))
+  (fp_line (start 8.966275 -0.225968) (end 8.366274 -0.225968) (layer "Dwgs.User") (width 0.1) (tstamp 6b2cd55e-47ba-4025-85fc-1a5af000b6b6))
+  (fp_line (start 1.056272 -0.535967) (end 1.056272 0.064032) (layer "Dwgs.User") (width 0.1) (tstamp 80dbc0e2-3bf5-4816-ab7a-df2c2f52f81d))
+  (fp_line (start 9.566274 -0.575967) (end 7.766275 -0.575967) (layer "Dwgs.User") (width 0.1) (tstamp 8c43b56e-7293-4003-acbb-4722498418ed))
+  (fp_line (start -0.393727 -0.585967) (end -0.393727 0.114032) (layer "Dwgs.User") (width 0.1) (tstamp 950c8a1f-b544-4a09-a49b-c216f476ef50))
+  (fp_line (start 9.216274 -0.525967) (end 9.216274 0.074032) (layer "Dwgs.User") (width 0.1) (tstamp 9f95bf22-6dd4-43b5-95ef-ee3e54d5a6f7))
+  (fp_line (start -4.150999 -0.83) (end 9.070001 -0.83) (layer "Dwgs.User") (width 0.1) (tstamp 9fa301b4-5f2d-4178-a11e-86ed4917803a))
+  (fp_line (start 1.406272 -0.585967) (end -0.393727 -0.585967) (layer "Dwgs.User") (width 0.1) (tstamp a6d07d6f-6e6e-407f-87b4-0897b8473c45))
+  (fp_line (start 8.116274 -0.525967) (end 8.116274 0.074032) (layer "Dwgs.User") (width 0.1) (tstamp b0e411e8-5b62-43c2-9149-9be3939de80b))
+  (fp_line (start 8.666273 -0.525967) (end 8.666273 0.074032) (layer "Dwgs.User") (width 0.1) (tstamp c27f3dbc-2c6f-4766-addb-904e809092bf))
+  (fp_line (start 9.566274 -0.575967) (end 9.566274 0.124032) (layer "Dwgs.User") (width 0.1) (tstamp c57eafd8-e45f-4725-a181-652454161dd9))
+  (fp_line (start 9.216274 0.074032) (end 8.116274 0.074032) (layer "Dwgs.User") (width 0.1) (tstamp ca16ebda-e425-4c62-b1b3-48b40ac5a5d2))
+  (fp_line (start 7.766275 -0.575967) (end 7.766275 0.124032) (layer "Dwgs.User") (width 0.1) (tstamp d44f6aaa-f8db-4ae4-8055-30867637d971))
+  (fp_line (start 1.056272 -0.535967) (end -0.043728 -0.535967) (layer "Dwgs.User") (width 0.1) (tstamp d71ac2cc-4b55-4dd2-81f9-068e18ed3971))
+  (fp_line (start 1.406272 -0.585967) (end 1.406272 0.114032) (layer "Dwgs.User") (width 0.1) (tstamp e9a64594-cb55-4e00-860b-7ee190555404))
+  (fp_line (start 0.806273 -0.235968) (end 0.206272 -0.235968) (layer "Dwgs.User") (width 0.1) (tstamp f697d5ec-18e1-435e-bd54-e790fcf0067d))
+  (fp_line (start 1.406272 0.114032) (end -0.393727 0.114032) (layer "Dwgs.User") (width 0.1) (tstamp fa3996ea-58a5-40c8-b8c5-862af4766ad0))
+  (pad "1" smd roundrect (at 0 -0.25) (size 0.54 0.64) (layers "F.Cu" "F.Paste" "F.Mask") (roundrect_rratio 0.25) (tstamp 90cab02d-267e-45bb-aa34-dd6639e766c6))
+  (pad "2" smd roundrect (at 1.02 -0.25) (size 0.54 0.64) (layers "F.Cu" "F.Paste" "F.Mask") (roundrect_rratio 0.25) (tstamp d9f8136b-635e-4c12-85a2-4ef1f39a8406))
+  (group "" (id 50b98d50-7572-49be-b447-b60bc878f623)
+    (members
+      10927c1b-ebfd-45d5-9120-4867c717f270
+      20eda35d-4099-46fe-b55e-fd57d57e90ab
+      4cede614-f863-434b-a614-82cce2d82a79
+      4e776fc9-cde0-40d4-aa6b-d1f8bf418fd3
+      50ea647a-461d-46d1-a68b-200b7b148900
+      52496477-925f-42d9-a5f3-a0a98b37ad57
+      572ad497-f15c-44e6-b6c4-2db8ed558982
+      6b2cd55e-47ba-4025-85fc-1a5af000b6b6
+      80dbc0e2-3bf5-4816-ab7a-df2c2f52f81d
+      8c43b56e-7293-4003-acbb-4722498418ed
+      950c8a1f-b544-4a09-a49b-c216f476ef50
+      9f95bf22-6dd4-43b5-95ef-ee3e54d5a6f7
+      9fa301b4-5f2d-4178-a11e-86ed4917803a
+      a6d07d6f-6e6e-407f-87b4-0897b8473c45
+      b0e411e8-5b62-43c2-9149-9be3939de80b
+      c27f3dbc-2c6f-4766-addb-904e809092bf
+      c57eafd8-e45f-4725-a181-652454161dd9
+      ca16ebda-e425-4c62-b1b3-48b40ac5a5d2
+      d44f6aaa-f8db-4ae4-8055-30867637d971
+      d71ac2cc-4b55-4dd2-81f9-068e18ed3971
+      e9a64594-cb55-4e00-860b-7ee190555404
+      f697d5ec-18e1-435e-bd54-e790fcf0067d
+      fa3996ea-58a5-40c8-b8c5-862af4766ad0
+    )
+  )
+  (model "${CONECODES_ROOT_DIR}/library/3dmodels/SRCW004_3D.stp.step"
+    (offset (xyz 0 0 0))
+    (scale (xyz 1 1 1))
+    (rotate (xyz 0 0 0))
+  )
+)
