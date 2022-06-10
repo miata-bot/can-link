@@ -634,10 +634,6 @@
       ""
     ],
     [
-      "cc54d552-979d-45e5-8a37-77b089e91e3e",
-      "Pico Remote Proc"
-    ],
-    [
       "9fec575d-5caa-48b8-a384-a8b5485b21d3",
       "SX1276"
     ],
@@ -648,10 +644,6 @@
     [
       "757733fb-8fb0-4a42-ae57-238e8944cf64",
       "External-IO"
-    ],
-    [
-      "190ebd3d-5a9e-49fd-ba77-62b87cc74b11",
-      "Motor-Control"
     ],
     [
       "f5becad4-435f-4c1a-8fa2-8b2b4ba75dd3",
