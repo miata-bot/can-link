@@ -1639,6 +1639,12 @@
     (path "/757733fb-8fb0-4a42-ae57-238e8944cf64/57cd5e0d-4f47-4d7c-b10d-54a65a8dc03e"
       (reference "#PWR0112") (unit 1) (value "GND") (footprint "")
     )
+    (path "/22209dda-b41a-469a-b12c-6db64ed64364/a38a02bc-82b4-4ed0-acec-d0a59f3ca71c"
+      (reference "#PWR0113") (unit 1) (value "+3V3") (footprint "")
+    )
+    (path "/22209dda-b41a-469a-b12c-6db64ed64364/5ffa8733-68de-4144-b7ff-00d656324597"
+      (reference "#PWR0114") (unit 1) (value "GND") (footprint "")
+    )
     (path "/9fec575d-5caa-48b8-a384-a8b5485b21d3/4f9f49a9-0c30-4c9b-8492-85ee4b2dab13"
       (reference "AE2") (unit 1) (value "7488910915") (footprint "ConeCodes:7488910915")
     )
@@ -1806,6 +1812,9 @@
     )
     (path "/757733fb-8fb0-4a42-ae57-238e8944cf64/583f0ced-1398-4944-b740-38673d904b65"
       (reference "C55") (unit 1) (value "0.68μF") (footprint "Capacitor_SMD:C_1206_3216Metric")
+    )
+    (path "/22209dda-b41a-469a-b12c-6db64ed64364/1e4f7d4e-aecf-4032-a73e-20a3eac0ac93"
+      (reference "C56") (unit 1) (value "1uF") (footprint "Capacitor_SMD:C_0402_1005Metric")
     )
     (path "/f5becad4-435f-4c1a-8fa2-8b2b4ba75dd3/81b86889-88ee-47b1-b9b7-fb59eb647133"
       (reference "D2") (unit 1) (value "GRN") (footprint "LED_SMD:LED_0603_1608Metric")
@@ -2008,6 +2017,9 @@
     (path "/757733fb-8fb0-4a42-ae57-238e8944cf64/b3371d75-27d2-44d4-b5f6-54885d8062a2"
       (reference "R37") (unit 1) (value "R_Small") (footprint "Resistor_SMD:R_1206_3216Metric")
     )
+    (path "/22209dda-b41a-469a-b12c-6db64ed64364/7b2e5c6d-6629-4392-ab6b-b87d7d5b3b79"
+      (reference "R38") (unit 1) (value "10k") (footprint "Resistor_SMD:R_0402_1005Metric")
+    )
     (path "/22209dda-b41a-469a-b12c-6db64ed64364/c72532ec-0bbb-47a7-b812-d19a67f9eda2"
       (reference "SW2") (unit 1) (value "SW_Push") (footprint "ConeCodes:SW_RS-032G05A3-SMRT")
     )
@@ -2019,6 +2031,18 @@
     )
     (path "/f5becad4-435f-4c1a-8fa2-8b2b4ba75dd3/de436728-f1f0-4e35-bf8b-d4f95a53373d"
       (reference "TP3") (unit 1) (value "VSENSE") (footprint "TestPoint:TestPoint_Pad_D1.0mm")
+    )
+    (path "/22209dda-b41a-469a-b12c-6db64ed64364/6794f9d6-e6ef-4f5c-a9ff-8aaad253d092"
+      (reference "TP4") (unit 1) (value "MTCK") (footprint "TestPoint:TestPoint_Pad_D1.0mm")
+    )
+    (path "/22209dda-b41a-469a-b12c-6db64ed64364/d24dd745-0767-4c4b-9032-e179c3bccdda"
+      (reference "TP5") (unit 1) (value "MTDO") (footprint "TestPoint:TestPoint_Pad_D1.0mm")
+    )
+    (path "/22209dda-b41a-469a-b12c-6db64ed64364/6ec21cc6-fe36-400e-8468-0cdeb0807efb"
+      (reference "TP6") (unit 1) (value "MTDI") (footprint "TestPoint:TestPoint_Pad_D1.0mm")
+    )
+    (path "/22209dda-b41a-469a-b12c-6db64ed64364/b1a11706-8ba7-4dfe-bb8a-754c60587f7c"
+      (reference "TP7") (unit 1) (value "MTMS") (footprint "TestPoint:TestPoint_Pad_D1.0mm")
     )
     (path "/9fec575d-5caa-48b8-a384-a8b5485b21d3/b9edc125-9da9-4e46-b45b-9d009b855722"
       (reference "U2") (unit 1) (value "PE42421SCAA-Z") (footprint "Package_TO_SOT_SMD:SOT-363_SC-70-6")
