@@ -631,6 +631,10 @@
       "STM32F723ZET6"
     ],
     [
+      "0c98809c-a692-42d0-93f2-681cf2e2d1a0",
+      "AnalogInput"
+    ],
+    [
       "f5becad4-435f-4c1a-8fa2-8b2b4ba75dd3",
       "Power"
     ],
