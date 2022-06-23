@@ -1,0 +1,35 @@
+(kicad_sch (version 20211123) (generator eeschema)
+
+  (uuid 16654023-17a7-488e-b254-aec52fa5428c)
+
+  (paper "A4")
+
+  (lib_symbols
+  )
+
+
+  (hierarchical_label "VDD" (shape input) (at 102.87 72.39 180)
+    (effects (font (size 1.27 1.27)) (justify right))
+    (uuid 287a04c8-f1ef-4128-af21-19a3619a2d9c)
+  )
+  (hierarchical_label "MOSI" (shape input) (at 102.87 80.01 180)
+    (effects (font (size 1.27 1.27)) (justify right))
+    (uuid ba1fbfcc-70fb-46a6-a098-837eaf485808)
+  )
+  (hierarchical_label "SCK" (shape input) (at 102.87 74.93 180)
+    (effects (font (size 1.27 1.27)) (justify right))
+    (uuid bbf59fd9-d0aa-4deb-9b64-dc879d0f944c)
+  )
+  (hierarchical_label "MISO" (shape output) (at 102.87 77.47 180)
+    (effects (font (size 1.27 1.27)) (justify right))
+    (uuid c53cfbcb-4bb2-417f-a673-a364297fd8cb)
+  )
+  (hierarchical_label "NSS1" (shape input) (at 102.87 82.55 180)
+    (effects (font (size 1.27 1.27)) (justify right))
+    (uuid ec20ac56-dd5e-4180-a8cd-3a750a743ace)
+  )
+  (hierarchical_label "NSS2" (shape input) (at 102.87 85.09 180)
+    (effects (font (size 1.27 1.27)) (justify right))
+    (uuid f986e6a8-727f-478d-afce-449395f00c55)
+  )
+)
