@@ -4,3 +4,6 @@
 [submodule "firmware/esp_fw/components/esp-idf-lua"]
 	path = firmware/esp_fw/components/esp-idf-lua
 	url = https://github.com/UncleRus/esp-idf-lua.git
+[submodule "firmware/neopixel-test/esp-idf-lib"]
+	path = firmware/neopixel-test/esp-idf-lib
+	url = git@github.com:UncleRus/esp-idf-lib.git
