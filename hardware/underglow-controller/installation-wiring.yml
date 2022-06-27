@@ -1,223 +1,359 @@
 templates:
-  - &RGB_Con
-    type: RGB
-    subtype: female
-    pinlabels: [+12V, R, G, B]
-    image:
-      src: images/RGB-Female.png
-      height: 70
-  - &RGB_Con_LED
-    type: Strip
-    subtype: female
-    pinlabels: [+12V, R, G, B]
-    image:
-      src: images/RGB_LED.png
-      height: 70
-  - &RGB_Wire
-    gauge: 14 AWG
-    color: BK
-    color_code: DIN
-    colors: [YE, RD, GN, BU]
-    length: 0.2
-    wirecount: 4
-    shield: false
-  
+# Strip
   - &Strip_Con
     type: RGB
     subtype: female
     pinlabels: [+12V, GND, DO, BU]
     image:
-      src: images/RGB-Female.png
+      src: images/wiring/RGB-Female.png
       height: 70
   - &Strip_Con_LED
     type: Strip
     subtype: female
     pinlabels: [+12V, GND, DO, BU]
     image:
-      src: images/WS2812B_LED.png
+      src: images/wiring/WS2812B_LED.png
       height: 70
   - &Strip_Wire
     gauge: 14 AWG
     color: BK
     color_code: DIN
     colors: [YE, BK, LB, VT]
-    length: 0.2
+    wirecount: 4
+    shield: false
+# RGB
+  - &RGB_Con
+    type: RGB
+    subtype: female
+    pinlabels: [+12V, R, G, B]
+    image:
+      src: images/wiring/RGB-Female.png
+      height: 70
+  - &RGB_Con_LED
+    type: Strip
+    subtype: female
+    pinlabels: [+12V, R, G, B]
+    image:
+      src: images/wiring/RGB_LED.png
+      height: 70
+  - &RGB_Wire
+    gauge: 14 AWG
+    color: BK
+    color_code: DIN
+    colors: [YE, RD, GN, BU]
     wirecount: 4
     shield: false
 
 connectors:
   Controller:
-    type:
+    type: Delphi_Sicma_24
     subtype: female
     pins:
       [
-        A1,
-        A2,
-        A3,
-        A4,
-        A5,
-        A6,
-        A7,
-        A8,
-        B1,
-        B2,
-        B3,
-        B4,
-        B5,
-        B6,
-        B7,
-        B8,
-        C1,
-        C2,
-        C3,
-        C4,
-        C5,
-        C6,
-        C7,
-        C8,
+        A1, A2, A3, A4, A5, A6, A7, A8,
+        B1, B2, B3, B4, B5, B6, B7, B8,
+        C1, C2, C3, C4, C5, C6, C7, C8,
       ]
     pinlabels:
       [
-        CH1_GND,
-        CH1_R,
-        CH1_G,
-        CH1_B,
-        CH2_R,
-        CH2_G,
-        CH2_B,
-        CH2_GND,
-        CH2_+12V,
-        IGN,
-        CAH_H,
-        CAN_L,
-        GND,
-        USB_D-,
-        USB_D+,
-        +5V,
-        CH1_+12V,
-        DI_1,
-        DI_2,
-        DI_3,
-        DI_4,
-        CH1_DO,
-        CH2_DO,
-        +12V,
+        CH1_GND,  CH1_R, CH1_G, CH1_B, CH2_R, CH2_G,  CH2_B,  CH2_GND, 
+        CH2_+12V, IGN,   CAN_H, CAN_L, GND,   USB_D-, USB_D+, +5V, 
+        CH1_+12V, DI_1,  DI_2,  DI_3,  DI_4,  CH1_DO, CH2_DO, +12V,
       ]
     image:
-      src: images/Connector-Pinout.png
+      src: images/wiring/Connector-Pinout.png
       height: 70
-  RGB_CH1:
+
+  USB:
+    type: USB_A
+    subtype: female
+    pinlabels: [VBUS, D-, D+, GND]
+    image:
+      src: images/wiring/USB-Connector-Female.png
+      height: 70
+  
+  CAN:
+    type: DTM4
+    subtype: male
+    pinlabels: [CAN_H, CAN_L, IGN, GND]
+    image:
+      src: images/wiring/CAN-DTM-Connector-Male.jpg
+      height: 70
+
+  RGB_CH1_Output:
     <<: *RGB_Con
-  RGB_CH2:
+  RGB_CH2_Output:
     <<: *RGB_Con
 
   # strip 1
-  STRIP_CH1_Output:
+  Strip_CH1_Output:
     <<: *Strip_Con
-  STRIP_CH1_FrontBumper:
+  Strip_CH1_FrontBumper:
     <<: *Strip_Con_LED
-  STRIP_CH1_Extension1:
+  Strip_CH1_Extension1:
     <<: *Strip_Con
-  STRIP_CH1_Side:
+  Strip_CH1_Side:
     <<: *Strip_Con_LED
-  STRIP_CH1_Extension2:
+  Strip_CH1_Extension2:
     <<: *Strip_Con
-  STRIP_CH1_Extension3:
+  Strip_CH1_Extension3:
     <<: *Strip_Con
-  STRIP_CH1_RearBumper:
+  Strip_CH1_RearBumper:
     <<: *Strip_Con_LED
 
   # strip 2
-  STRIP_CH2_Output:
+  Strip_CH2_Output:
     <<: *Strip_Con
-  STRIP_CH2_FrontBumper:
+  Strip_CH2_FrontBumper:
     <<: *Strip_Con_LED
-  STRIP_CH2_Extension1:
+  Strip_CH2_Extension1:
     <<: *Strip_Con
-  STRIP_CH2_Side:
+  Strip_CH2_Side:
     <<: *Strip_Con_LED
-  STRIP_CH2_Extension2:
+  Strip_CH2_Extension2:
     <<: *Strip_Con
-  STRIP_CH2_Extension3:
+  Strip_CH2_Extension3:
     <<: *Strip_Con
-  STRIP_CH2_RearBumper:
+  Strip_CH2_RearBumper:
     <<: *Strip_Con_LED
+
+  # RGB 1
+  RGB_CH1_Output:
+    <<: *RGB_Con
+  RGB_CH1_FrontBumper:
+    <<: *RGB_Con_LED
+  RGB_CH1_Extension1:
+    <<: *RGB_Con
+  RGB_CH1_Side:
+    <<: *RGB_Con_LED
+  RGB_CH1_Extension2:
+    <<: *RGB_Con
+  RGB_CH1_Extension3:
+    <<: *RGB_Con
+  RGB_CH1_RearBumper:
+    <<: *RGB_Con_LED
+
+  # RGB 2
+  RGB_CH2_Output:
+    <<: *RGB_Con
+  RGB_CH2_FrontBumper:
+    <<: *RGB_Con_LED
+  RGB_CH2_Extension1:
+    <<: *RGB_Con
+  RGB_CH2_Side:
+    <<: *RGB_Con_LED
+  RGB_CH2_Extension2:
+    <<: *RGB_Con
+  RGB_CH2_Extension3:
+    <<: *RGB_Con
+  RGB_CH2_RearBumper:
+    <<: *RGB_Con_LED
 
 cables:
+# Power
+  PWR_W1:
+    gauge: 14 AWG
+    color_code: DIN
+    colors: [RDBK, RD, BK]
+    wirecount: 4
+    shield: false
+
+# USB
+  USB_W1:
+    gauge: 14 AWG
+    color: BK
+    color_code: DIN
+    colors: [RDWH, WH, GN, BK]
+    wirecount: 4
+    shield: true
+
+# CAN
+  CAN_W1:
+    gauge: 14 AWG
+    color_code: DIN
+    colors: [BU, WH, RD,BK]
+    wirecount: 4
+    shield: false
+
+# Input
+  DigitalInput_W1:
+    gauge: 14 AWG
+    color_code: DIN
+    colors: [WHGN, WHYE, WHGY, WHPK]
+    wirecount: 4
+    shield: false
+
 # Strip 1
-  CH1_Strip_W1:
+  Strip_CH1_W1:
     <<: *Strip_Wire
-  CH1_Strip_W2:
+  Strip_CH1_W2:
     <<: *Strip_Wire
-  CH1_Strip_W3:
+  Strip_CH1_W3:
     <<: *Strip_Wire
-  CH1_Strip_W4:
+  Strip_CH1_W4:
     <<: *Strip_Wire
-  CH1_Strip_W5:
+  Strip_CH1_W5:
     <<: *Strip_Wire
-  CH1_Strip_W6:
+  Strip_CH1_W6:
     <<: *Strip_Wire
-  CH1_Strip_W7:
+  Strip_CH1_W7:
     <<: *Strip_Wire
 
 # Strip 2
-  CH2_Strip_W1:
+  Strip_CH2_W1:
     <<: *Strip_Wire
-  CH2_Strip_W2:
+  Strip_CH2_W2:
     <<: *Strip_Wire
-  CH2_Strip_W3:
+  Strip_CH2_W3:
     <<: *Strip_Wire
-  CH2_Strip_W4:
+  Strip_CH2_W4:
     <<: *Strip_Wire
-  CH2_Strip_W5:
+  Strip_CH2_W5:
     <<: *Strip_Wire
-  CH2_Strip_W6:
+  Strip_CH2_W6:
     <<: *Strip_Wire
-  CH2_Strip_W7:
+  Strip_CH2_W7:
     <<: *Strip_Wire
+
+# RGB 1
+  RGB_CH1_W1:
+    <<: *RGB_Wire
+  RGB_CH1_W2:
+    <<: *RGB_Wire
+  RGB_CH1_W3:
+    <<: *RGB_Wire
+  RGB_CH1_W4:
+    <<: *RGB_Wire
+  RGB_CH1_W5:
+    <<: *RGB_Wire
+  RGB_CH1_W6:
+    <<: *RGB_Wire
+  RGB_CH1_W7:
+    <<: *RGB_Wire
+
+# RGB 2
+  RGB_CH2_W1:
+    <<: *RGB_Wire
+  RGB_CH2_W2:
+    <<: *RGB_Wire
+  RGB_CH2_W3:
+    <<: *RGB_Wire
+  RGB_CH2_W4:
+    <<: *RGB_Wire
+  RGB_CH2_W5:
+    <<: *RGB_Wire
+  RGB_CH2_W6:
+    <<: *RGB_Wire
+  RGB_CH2_W7:
+    <<: *RGB_Wire
 
 connections:
+# PWR
+  - - Controller: [+12V, IGN, GND]
+    - PWR_W1: [1-3]
+
+# USB
+  - - Controller: [+5V, USB_D-, USB_D+, B5]
+    - USB_W1: [1-4]
+    - USB: [1-4]
+
+# CAN
+  - - Controller: [IGN, CAN_H, CAN_L, B5]
+    - CAN_W1: [1-4]
+    - CAN: [1-4]
+
+# Digital Input
+  - - Controller: [DI_1, DI_2, DI_3, DI_4]
+    - DigitalInput_W1: [1-4]
+
 # Strip 1
   - - Controller: [CH1_+12V, CH1_GND, CH1_DO, CH1_DO]
-    - CH1_Strip_W1: [1, 2, 3, 4]
-    - STRIP_CH1_Output: [+12V, GND, DO, BU]
-  - - STRIP_CH1_Output: [+12V, GND, DO, BU]
-    - CH1_Strip_W2: [1-4]
-    - STRIP_CH1_FrontBumper: [+12V, GND, DO, BU]
-  - - STRIP_CH1_FrontBumper: [+12V, GND, DO, BU]
-    - CH1_Strip_W3: [1-4]
-    - STRIP_CH1_Extension1: [+12V, GND, DO, BU]
-  - - STRIP_CH1_Extension1: [+12V, GND, DO, BU]
-    - CH1_Strip_W4: [1-4]
-    - STRIP_CH1_Extension2: [+12V, GND, DO, BU]
-  - - STRIP_CH1_Extension2: [+12V, GND, DO, BU]
-    - CH1_Strip_W5: [1-4]
-    - STRIP_CH1_Side: [+12V, GND, DO, BU]
-  - - STRIP_CH1_Side: [+12V, GND, DO, BU]
-    - CH1_Strip_W6: [1-4]
-    - STRIP_CH1_Extension3: [+12V, GND, DO, BU]
-  - - STRIP_CH1_Extension3: [+12V, GND, DO, BU]
-    - CH1_Strip_W7: [1-4]
-    - STRIP_CH1_RearBumper: [+12V, GND, DO, BU]
+    - Strip_CH1_W1: [1-4]
+    - Strip_CH1_Output: [+12V, GND, DO, BU]
+  - - Strip_CH1_Output: [+12V, GND, DO, BU]
+    - Strip_CH1_W2: [1-4]
+    - Strip_CH1_FrontBumper: [+12V, GND, DO, BU]
+  - - Strip_CH1_FrontBumper: [+12V, GND, DO, BU]
+    - Strip_CH1_W3: [1-4]
+    - Strip_CH1_Extension1: [+12V, GND, DO, BU]
+  - - Strip_CH1_Extension1: [+12V, GND, DO, BU]
+    - Strip_CH1_W4: [1-4]
+    - Strip_CH1_Extension2: [+12V, GND, DO, BU]
+  - - Strip_CH1_Extension2: [+12V, GND, DO, BU]
+    - Strip_CH1_W5: [1-4]
+    - Strip_CH1_Side: [+12V, GND, DO, BU]
+  - - Strip_CH1_Side: [+12V, GND, DO, BU]
+    - Strip_CH1_W6: [1-4]
+    - Strip_CH1_Extension3: [+12V, GND, DO, BU]
+  - - Strip_CH1_Extension3: [+12V, GND, DO, BU]
+    - Strip_CH1_W7: [1-4]
+    - Strip_CH1_RearBumper: [+12V, GND, DO, BU]
+
 # Strip 2
   - - Controller: [CH2_+12V, CH2_GND, CH2_DO, CH2_DO]
-    - CH2_Strip_W1: [1, 2, 3, 4]
-    - STRIP_CH2_Output: [+12V, GND, DO, BU]
-  - - STRIP_CH2_Output: [+12V, GND, DO, BU]
-    - CH2_Strip_W2: [1-4]
-    - STRIP_CH2_FrontBumper: [+12V, GND, DO, BU]
-  - - STRIP_CH2_FrontBumper: [+12V, GND, DO, BU]
-    - CH2_Strip_W3: [1-4]
-    - STRIP_CH2_Extension1: [+12V, GND, DO, BU]
-  - - STRIP_CH2_Extension1: [+12V, GND, DO, BU]
-    - CH2_Strip_W4: [1-4]
-    - STRIP_CH2_Extension2: [+12V, GND, DO, BU]
-  - - STRIP_CH2_Extension2: [+12V, GND, DO, BU]
-    - CH2_Strip_W5: [1-4]
-    - STRIP_CH2_Side: [+12V, GND, DO, BU]
-  - - STRIP_CH2_Side: [+12V, GND, DO, BU]
-    - CH2_Strip_W6: [1-4]
-    - STRIP_CH2_Extension3: [+12V, GND, DO, BU]
-  - - STRIP_CH2_Extension3: [+12V, GND, DO, BU]
-    - CH2_Strip_W7: [1-4]
-    - STRIP_CH2_RearBumper: [+12V, GND, DO, BU]
+    - Strip_CH2_W1: [1-4]
+    - Strip_CH2_Output: [+12V, GND, DO, BU]
+  - - Strip_CH2_Output: [+12V, GND, DO, BU]
+    - Strip_CH2_W2: [1-4]
+    - Strip_CH2_FrontBumper: [+12V, GND, DO, BU]
+  - - Strip_CH2_FrontBumper: [+12V, GND, DO, BU]
+    - Strip_CH2_W3: [1-4]
+    - Strip_CH2_Extension1: [+12V, GND, DO, BU]
+  - - Strip_CH2_Extension1: [+12V, GND, DO, BU]
+    - Strip_CH2_W4: [1-4]
+    - Strip_CH2_Extension2: [+12V, GND, DO, BU]
+  - - Strip_CH2_Extension2: [+12V, GND, DO, BU]
+    - Strip_CH2_W5: [1-4]
+    - Strip_CH2_Side: [+12V, GND, DO, BU]
+  - - Strip_CH2_Side: [+12V, GND, DO, BU]
+    - Strip_CH2_W6: [1-4]
+    - Strip_CH2_Extension3: [+12V, GND, DO, BU]
+  - - Strip_CH2_Extension3: [+12V, GND, DO, BU]
+    - Strip_CH2_W7: [1-4]
+    - Strip_CH2_RearBumper: [+12V, GND, DO, BU]
+
+# RGB 1
+  - - Controller: [CH1_+12V, CH1_R, CH1_G, CH1_B]
+    - RGB_CH1_W1: [1-4]
+    - RGB_CH1_Output: [+12V, R, G, B]
+  - - RGB_CH1_Output: [+12V, R, G, B]
+    - RGB_CH1_W2: [1-4]
+    - RGB_CH1_FrontBumper: [+12V, R, G, B]
+  - - RGB_CH1_FrontBumper: [+12V, R, G, B]
+    - RGB_CH1_W3: [1-4]
+    - RGB_CH1_Extension1: [+12V, R, G, B]
+  - - RGB_CH1_Extension1: [+12V, R, G, B]
+    - RGB_CH1_W4: [1-4]
+    - RGB_CH1_Extension2: [+12V, R, G, B]
+  - - RGB_CH1_Extension2: [+12V, R, G, B]
+    - RGB_CH1_W5: [1-4]
+    - RGB_CH1_Side: [+12V, R, G, B]
+  - - RGB_CH1_Side: [+12V, R, G, B]
+    - RGB_CH1_W6: [1-4]
+    - RGB_CH1_Extension3: [+12V, R, G, B]
+  - - RGB_CH1_Extension3: [+12V, R, G, B]
+    - RGB_CH1_W7: [1-4]
+    - RGB_CH1_RearBumper: [+12V, R, G, B]
+
+# RGB 2
+  - - Controller: [CH2_+12V, CH2_R, CH2_G, CH2_B]
+    - RGB_CH2_W1: [1-4]
+    - RGB_CH2_Output: [+12V, R, G, B]
+  - - RGB_CH2_Output: [+12V, R, G, B]
+    - RGB_CH2_W2: [1-4]
+    - RGB_CH2_FrontBumper: [+12V, R, G, B]
+  - - RGB_CH2_FrontBumper: [+12V, R, G, B]
+    - RGB_CH2_W3: [1-4]
+    - RGB_CH2_Extension1: [+12V, R, G, B]
+  - - RGB_CH2_Extension1: [+12V, R, G, B]
+    - RGB_CH2_W4: [1-4]
+    - RGB_CH2_Extension2: [+12V, R, G, B]
+  - - RGB_CH2_Extension2: [+12V, R, G, B]
+    - RGB_CH2_W5: [1-4]
+    - RGB_CH2_Side: [+12V, R, G, B]
+  - - RGB_CH2_Side: [+12V, R, G, B]
+    - RGB_CH2_W6: [1-4]
+    - RGB_CH2_Extension3: [+12V, R, G, B]
+  - - RGB_CH2_Extension3: [+12V, R, G, B]
+    - RGB_CH2_W7: [1-4]
+    - RGB_CH2_RearBumper: [+12V, R, G, B]

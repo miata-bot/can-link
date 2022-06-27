@@ -1,3 +1,0 @@
-(fp_lib_table
-  (lib (name "ConeCodes")(type "KiCad")(uri "${CONECODES_ROOT_DIR}/library/footprints/ConeCodes.pretty")(options "")(descr ""))
-)

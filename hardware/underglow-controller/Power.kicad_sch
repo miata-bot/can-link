@@ -5,11 +5,12 @@
   (paper "A5")
 
   (title_block
-    (title "CAN RGB Controller V5")
+    (title "${Title}")
     (date "2022-06-24")
-    (rev "A")
-    (company "cone.codes")
+    (rev "${Revision}")
+    (company "Connor Rigby")
     (comment 1 "https://github.com/miata-bot/can-link")
+    (comment 2 "https://cone.codes")
   )
 
   (lib_symbols

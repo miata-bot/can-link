@@ -1,6 +1,3 @@
-[submodule "firmware/rp2040_fw/pico-sdk"]
-	path = firmware/rp2040_fw/pico-sdk
-	url = https://github.com/raspberrypi/pico-sdk.git
 [submodule "firmware/esp_fw/components/esp-idf-lua"]
 	path = firmware/esp_fw/components/esp-idf-lua
 	url = https://github.com/UncleRus/esp-idf-lua.git

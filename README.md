@@ -1,8 +1,8 @@
 # Underglow Sync Device
 
-Very much work in progress software and hardware project built with [Nerves](https://www.nerves-project.org/), [Flutter](https://flutter.dev/), [Kicad](https://www.kicad.org/), [Zig](https://ziglang.org/), [Lua](https://www.lua.org) and pretty much any other tech buzz word you might want. See [The requirements doc](Requirements.md) for the guts of the project.
+Very much work in progress software and hardware project built with [Kicad](https://www.kicad.org/) for hardware, and C and [Lua](https://www.lua.org) for software. See [The requirements doc](Requirements.md) for the guts of the project.
 
-![render](/hardware/carrier/images/v2-RevA-PCB-Render-Front-Case.png)
+![render](/hardware/underglow-controller/images/v5/v5-Front.png)
 
 ## TLDR
 
@@ -27,4 +27,4 @@ This README acts as a root for all the jillion projects contained within the rep
 | Folder Name | Description | Language | License |
 | ------------| ----------- | -------- | ------- |
 | [hardware](hardware/README.md) | Main hardware designs. Contains schematics, layouts, boms, manufacturing gerbers etc. | KiCad | Creative Commons |
-| [firmware](firmware/README.md) | 2 Main Firmware projects. | C++ | MIT |
+| [firmware](firmware/README.md) | Main Firmware projects. | C++ | MIT |

@@ -33,13 +33,12 @@ Here's the current supported platform matrix:
 
 ~~I've tried this project a few times in the past, and every single time I wish I just started with Linux. I'm sure it's possible to do in an RTOS or even an Arduino system etc. It's just to hard to reason about a system with so much connectivity for me. This puts a much higher price tag because the components selected for the board are just by nature quite a bit more expensive. See the pricing section.~
 
-Designing around a modern SOC right now is just too hard due to the global chip shortage. Maybe I'll try again in the future. For now, I've redesigned the device to use an ESP32-S3 as the "main" chip, and a secondary RP Pico as a coprocessor to do the IO heavy stuff. I'm certain there's better solutions to this but it's what I knew I'd be able to complete without learning a ton of new stuff since I'm on a deadline now.
+Designing around a modern SOC right now is just too hard due to the global chip shortage. Maybe I'll try again in the future. For now, I've redesigned the device to use an ESP32-S3 as the "main" chip. ~~and a secondary RP Pico as a coprocessor to do the IO heavy stuff. I'm certain there's better solutions to this but it's what I knew I'd be able to complete without learning a ton of new stuff since I'm on a deadline now.~~
 
 ## Firmware
 
-There are two firmwares that need to be loaded.
-*) ESP32-S3 firmware - handles comms: RFM69 packet radio, CAN, BLE, WiFi
-*) RP2040 firmware - handles IO: Low side outs
+1) The ESP-32 firmware should not use Arduino
+2) The firmware should allow for custom plugins via a Lua scripting environment
 
 ## Packet Radio
 
