@@ -95,13 +95,19 @@ defmodule TableGenerator.Repo.Migrations.AddNetworksTable do
     # update config table and set the default network to 100
     alter table(:config) do
       add :network_id, references(:networks)
+      add :network_identity_id, references(:network_identity)
+      add :network_leader_id, references(:network_leader)
     end
 
     execute """
     UPDATE config SET network_id = 100;
+    UPDATE config SET network_identity_id = 1;
+    UPDATE config SET network_leader_id = 1;
     UPDATE config SET version = version + 1;
     """, """
     UPDATE config SET network_id = NULL where network_id = 100;
+    UPDATE config SET network_identity_id = NULL;
+    UPDATE config SET network_leader_id = NULL;
     UPDATE config SET version = version - 1;
     """
   end
