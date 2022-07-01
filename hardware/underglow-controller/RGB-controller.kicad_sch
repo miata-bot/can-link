@@ -1565,6 +1565,12 @@
     (path "/757733fb-8fb0-4a42-ae57-238e8944cf64/f5200c5a-442f-45f4-bb5b-1966308abd0f"
       (reference "#PWR0606") (unit 1) (value "+3V3") (footprint "")
     )
+    (path "/757733fb-8fb0-4a42-ae57-238e8944cf64/3ec51e57-3ef0-4632-b8e2-e7775f960613"
+      (reference "#PWR?") (unit 1) (value "+3V3") (footprint "")
+    )
+    (path "/757733fb-8fb0-4a42-ae57-238e8944cf64/f1c9dfc6-fc38-4cea-afae-a33b8b09c125"
+      (reference "#PWR?") (unit 1) (value "+3V3") (footprint "")
+    )
     (path "/22209dda-b41a-469a-b12c-6db64ed64364/6f29220a-e61f-4dc2-af26-d6a5da125dd7"
       (reference "AE101") (unit 1) (value "Antenna_Shield") (footprint "RF_Antenna:Texas_SWRA117D_2.4GHz_Left")
     )
