@@ -1,218 +1,182 @@
 defmodule TableGenerator.Assembler do
   defstruct instructions: [],
             symbols: %{},
-            data_start_address: 0
+            data_start_address: 0,
+            address: 0,
+            bytecode: []
 
-  def assemble(contents) when is_binary(contents) do
-    original = String.split(contents, "\n")
+  @address_size 2
+  @opperand_size 1
+  @immediate_value_size 4
+  @opcode_size 1
+  @start_address 0
 
-    tokens =
-      original
-      |> Enum.zip(1..Enum.count(original))
-      |> strip_comments()
-      |> tokenize([])
+  @op_nop 0x0
+  @op_halt 0x1
+  @op_ld 0x2
+  @op_inc 0x3
+  @op_dec 0x4
 
-    {symbols, data_start_address} =
-      Enum.reduce(tokens, {%{}, 0}, fn
-        {{:identifier, name, _value}, _line}, {symbols, address} ->
-          # {Map.put(symbols, name, address), [{{:identifier, name, value}, line} | instructions],
-          #  address + byte_size(value)}
-          #  {Map.put(symbols, name, address), instructions, address + byte_size(value)}
-           {Map.put(symbols, name, address), address}
+  @op_cls 0x5
+  @op_set_a 0x6
+  @op_set_r 0x7
+  @op_flush 0x8
+  @op_fill  0x9
 
-        {{:instruction, a, b}, line}, {symbols, address} ->
-          instr =
-            {{:instruction, parse_instruction(a, symbols, line),
-              parse_instruction(b, symbols, line)}, line}
+  @op_jp 0xA
+  @op_jpnz 0xB
 
-          size = instr_size(instr)
-          {symbols,  address + size}
-      end)
+  def assemble(tokens)
 
-      instructions = Enum.reduce(tokens,  [], fn
-        {{:instruction, a, b}, line}, instructions ->
-          instr =
-            {{:instruction, parse_instruction(a, symbols, line),
-              parse_instruction(b, symbols, line)}, line}
-
-          [instr | instructions]
-        {{:identifier, _name, _value}, _line}, instructions ->
-          instructions
-      end)
-
-      data_section = Enum.reduce(tokens, {[], 0}, fn
-        {{:instruction, _a, _b}, _line}, {data, address} ->
-          data
-        {{:identifier, name, ""}, _line}, {data, adress} ->
-          data
-        {{:identifier, name, value}, _line}, {data, address} ->
-
-      end)
-
-    %__MODULE__{
-      instructions: Enum.reverse(instructions),
-      symbols: symbols,
-      data_start_address: data_start_address
-    }
-    |> write_file()
+  def assemble(tokens) do
+    %__MODULE__{}
+    |> parse_tokens(tokens)
+    |> assemble_bytecode()
   end
 
-  defp write_file(assembly) do
-    Enum.map(assembly.instructions, fn
-      {{:instruction, a, b}, _} ->
-        assemble_instruction(a) <> assemble_instruction(b)
-    end)
-
+  def parse_tokens(assembler, tokens) do
+    %{assembler | instructions: [], address: @start_address}
+    |> split_instructions(tokens, [])
+    |> evaluate_addresses()
   end
 
-  defp assemble_instruction({:nop, []}), do: <<0x0>>
-  defp assemble_instruction({:halt, []}), do: <<0x1>>
-  defp assemble_instruction({:cls, []}), do: <<0x3>>
-  defp assemble_instruction({:fill, [r1]}), do: <<0x4, assemble_register(r1)>>
-  defp assemble_instruction({:ld, [r1, value]}) when value <= 0xffffffff, do: <<0x5, assemble_register(r1), value::32>>
-  defp assemble_instruction({:flush, []}), do: <<0x6>>
-  defp assemble_instruction({:set, [r1, r2]}) when r1 in [:x, :y, :za, :zb, :tm, :lp], do: <<0x7, assemble_register(r1), assemble_register(r2)>>
-  defp assemble_instruction({:set, [value, r2]}), do: <<0x8, value::8, assemble_register(r2)>>
-  defp assemble_instruction({:inc, [r1]}), do: <<0x9, assemble_register(r1)>>
-  defp assemble_instruction({:dec, [r1]}), do: <<0xA, assemble_register(r1)>>
-  defp assemble_instruction({:jnz, [r1, address]}), do: <<0xB, assemble_register(r1), address::24>>
-
-  defp assemble_register(:x), do: 0x1
-  defp assemble_register(:y), do: 0x2
-  defp assemble_register(:za), do: 0x3
-  defp assemble_register(:zb), do: 0x4
-  defp assemble_register(:tm), do: 0x5
-  defp assemble_register(:lp), do: 0x6
-
-  defp instr_size({{:instruction, a, b}, _line}) do
-    instr_size(a) + instr_size(b)
+  def split_instructions(assembler, [{:mnemonic, _line, m} | rest], buffer) do
+    %{assembler | address: assembler.address + @opcode_size}
+    |> add_instruction(buffer)
+    |> split_instructions(rest, [m])
   end
 
-  defp instr_size({_, operands}) do
-    operand_size =
-      Enum.map(operands, fn
-        register when register in [:x, :y, :za, :zb, :tm, :lp] -> 8
-        value when value <= 0xFFFFFFFF -> 32
-      end)
-      |> Enum.sum()
-
-    operand_size + 8
+  def split_instructions(assembler, [{:opperand, _line, o} | rest], buffer) do
+    %{assembler | address: assembler.address + @opperand_size}
+    |> split_instructions(rest, [o | buffer])
   end
 
-  @registers ~W(X Y ZA ZB TM LP)
-
-  def parse_instruction(["NOP"], _, _line), do: {:nop, []}
-  def parse_instruction(["CLS"], _, _line), do: {:cls, []}
-  def parse_instruction(["HALT"], _, _line), do: {:halt, []}
-
-  def parse_instruction(["FILL", register], _, line) do
-    {:fill, [parse_register(register, line)]}
+  def split_instructions(assembler, [{:address, _line, a} | rest], buffer) do
+    %{assembler | address: assembler.address + @address_size}
+    |> split_instructions(rest, [{:address, a} | buffer])
   end
 
-  def parse_instruction(["LD", register, value], _, line) do
-    {:ld, [parse_register(register, line), parse_value(value, line)]}
+  def split_instructions(assembler, [{:symbol, _line, a} | rest], buffer) do
+    %{assembler | symbols: Map.put(assembler.symbols, a, assembler.address)}
+    |> add_instruction(buffer)
+    |> split_instructions(rest, [])
   end
 
-  def parse_instruction(["FLUSH"], _, _line) do
-    {:flush, []}
+  def split_instructions(assembler, [{:value, _line, v} | rest], buffer) when v <= 0xFFFFFFFF do
+    # updating this function to take the entire assembler
+    %{assembler | address: assembler.address + @immediate_value_size}
+    |> split_instructions(rest, [{:value, v} | buffer])
   end
 
-  def parse_instruction(["SET", r1, r2], _, line) when r1 in @registers and r2 in @registers do
-    {:set, [parse_register(r1, line), parse_register(r2, line)]}
+  def split_instructions(assembler, [], buffer) do
+    assembler
+    |> add_instruction(buffer)
+    |> Map.update(:instructions, [], &Enum.reverse/1)
   end
 
-  def parse_instruction(["SET", value, r2], _, line) when r2 in @registers do
-    {:set, [parse_value(value, line), parse_register(r2, line)]}
+  def add_instruction(assembler, []) do
+    assembler
   end
 
-  def parse_instruction(["INC", r1], _, line) when r1 in @registers do
-    {:inc, [parse_register(r1, line)]}
+  def add_instruction(%{instructions: instructions} = assembler, buffer) do
+    %{assembler | instructions: [Enum.reverse(buffer) | instructions]}
   end
 
-  def parse_instruction(["DEC", r1], _, line) when r1 in @registers do
-    {:dec, [parse_register(r1, line)]}
+  def evaluate_addresses(assembler) do
+    instructions =
+      Enum.map(assembler.instructions, &evaluate_instruction_address(&1, assembler.symbols, []))
+
+    %{assembler | instructions: instructions, data_start_address: assembler.address}
   end
 
-  def parse_instruction(["JNZ", r1, identifier_or_value], symbols, line) when r1 in @registers do
-    {:jnz,
-     [parse_register(r1, line), parse_identifier_or_value(identifier_or_value, symbols, line)]}
+  def evaluate_instruction_address([], _symbols, buffer), do: Enum.reverse(buffer)
+
+  def evaluate_instruction_address([{:address, a} | rest], symbols, buffer) do
+    evaluate_instruction_address(rest, symbols, [{:address, symbols[a]} | buffer])
   end
 
-  def parse_instruction(unk, _symbols, line) do
-    raise "unknown instruction #{Enum.join(unk, " ")} at line #{line}"
+  def evaluate_instruction_address([data | rest], symbols, buffer) do
+    evaluate_instruction_address(rest, symbols, [data | buffer])
   end
 
-  def parse_register("X", _), do: :x
-  def parse_register("Y", _), do: :y
-  def parse_register("ZA", _), do: :za
-  def parse_register("ZB", _), do: :zb
-  def parse_register("TM", _), do: :tm
-  def parse_register("LP", _), do: :lp
-
-  def parse_register(unknown, line),
-    do: raise("failed to parse #{unknown} register at line #{line}")
-
-  def parse_value("#" <> color_code, line) do
-    case Integer.parse(color_code, 16) do
-      {int, ""} -> int
-      _ -> raise "Failed to assemble \##{color_code} as a valid color value at line #{line}"
-    end
+  def assemble_bytecode(assembler) do
+    assemble_bytecode(assembler, assembler.instructions)
   end
 
-  def parse_value("0x" <> value, line) do
-    case Integer.parse(value, 16) do
-      {int, ""} -> int
-      _ -> raise "Failed to assemble \##{value} as a valid value at line #{line}"
-    end
+  def assemble_bytecode(assembler, [[:ld, register, {:value, im}] | rest]) do
+    assembler
+    |> add_bytecode(<<@op_ld, assemble_register(register), im::unsigned-32>>)
+    |> assemble_bytecode(rest)
   end
 
-  def parse_value(value, line) do
-    case Integer.parse(value) do
-      {int, ""} -> int
-      _ -> raise "Failed to assemble \##{value} as a valid value at line #{line}"
-    end
+  def assemble_bytecode(assembler, [[:cls, register]| rest]) do
+    assembler
+    |> add_bytecode(<<@op_cls, assemble_register(register)>>)
+    |> assemble_bytecode(rest)
   end
 
-  def parse_identifier_or_value("." <> identifier, symbols, line) do
-    address = symbols[identifier] || raise "unknown symbol #{identifier} at line #{line}"
-    address
+  def assemble_bytecode(assembler, [[:fill, r1, r2] | rest]) do
+    assembler
+    |> add_bytecode(<<@op_fill, assemble_register(r1), assemble_register(r2)>>)
+    |> assemble_bytecode(rest)
   end
 
-  def parse_identifier_or_value(value, line) do
-    parse_value(value, line)
+  def assemble_bytecode(assembler, [[:nop] | rest]) do
+    assembler
+    |> add_bytecode(<<@op_nop>>)
+    |> assemble_bytecode(rest)
   end
 
-  # don't look too hard at this, sorry
-  defp tokenize([{content, line} | rest], tokens) do
-    case String.trim(content) do
-      "." <> identifier ->
-        [name, value] = String.split(identifier, ":", parts: 2)
-        tokenize(rest, [{{:identifier, String.trim(name), String.trim(value)}, line} | tokens])
-
-      instruction ->
-        [a, b] = String.split(instruction, "-", parts: 2)
-        [a, b] = [String.trim(a), String.trim(b)]
-        [a, b] = [String.split(a, " "), String.split(b, " ")]
-        tokenize(rest, [{{:instruction, a, b}, line} | tokens])
-    end
+  def assemble_bytecode(assembler, [[:flush] | rest]) do
+    assembler
+    |> add_bytecode(<<@op_flush>>)
+    |> assemble_bytecode(rest)
   end
 
-  defp tokenize([], tokens), do: Enum.reverse(tokens)
-
-  defp strip_comments(lines) do
-    Enum.map(lines, fn {content, line} ->
-      {maybe_strip_comment(content, ""), line}
-    end)
-    |> Enum.reject(fn
-      {"", _} -> true
-      _ -> false
-    end)
+  def assemble_bytecode(assembler, [[:halt] | rest]) do
+    assembler
+    |> add_bytecode(<<@op_halt>>)
+    |> assemble_bytecode(rest)
   end
 
-  defp maybe_strip_comment(";" <> _, line), do: line
+  def assemble_bytecode(assembler, [[:inc, register] | rest]) do
+    assembler
+    |> add_bytecode(<<@op_inc, assemble_register(register)>>)
+    |> assemble_bytecode(rest)
+  end
 
-  defp maybe_strip_comment(<<c::binary-1, rest::binary>>, line),
-    do: maybe_strip_comment(rest, line <> c)
+  def assemble_bytecode(assembler, [[:dec, register] | rest]) do
+    assembler
+    |> add_bytecode(<<@op_dec, assemble_register(register)>>)
+    |> assemble_bytecode(rest)
+  end
 
-  defp maybe_strip_comment(<<>>, line), do: line
+  def assemble_bytecode(assembler, [[:set, r1, r2, r3] | rest]) do
+    assembler
+    |> add_bytecode(<<@op_set_r, assemble_register(r1), assemble_register(r2),assemble_register(r3)>>)
+    |> assemble_bytecode(rest)
+  end
+
+  def assemble_bytecode(assembler, [[:jnz, register, {:address, address}] | rest]) do
+    assembler
+    |> add_bytecode(<<@op_jpnz, assemble_register(register), address::unsigned-16>>)
+    |> assemble_bytecode(rest)
+  end
+
+  def assemble_bytecode(assembler, []) do
+    %{assembler | bytecode: Enum.reverse(assembler.bytecode)}
+  end
+
+  def add_bytecode(assembler, bytecode) do
+    %{assembler | bytecode: [bytecode | assembler.bytecode]}
+  end
+
+  def assemble_register(:X), do: 0x0
+  def assemble_register(:Y), do: 0x1
+  def assemble_register(:ZA), do: 0x2
+  def assemble_register(:ZB), do: 0x3
+  def assemble_register(:LP), do: 0x4
+  def assemble_register(:TM), do: 0x5
+  def assemble_register(:CHN), do: 0x6
+
 end

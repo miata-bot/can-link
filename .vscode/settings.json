@@ -1,0 +1,11 @@
+{
+  "files.associations": {
+    "*.lua": "lua",
+    "__locale": "c",
+    "__string": "c",
+    "string_view": "c",
+    "argebee.h": "c",
+    "time.h": "c",
+    "unistd.h": "c"
+  }
+}

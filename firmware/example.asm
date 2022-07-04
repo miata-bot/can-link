@@ -1,16 +1,7 @@
-.creator: "connor"
-.date: "2022-06-28 20:28:41.421534Z"
-.version: 1
-.comment: "Example LED Strip program"
+; SECTION "Header" 0x100
 
 ; Syntax explanation
 ; comments are delimited by ;
-; Each line should contain two instructions split by a -
-; This allows both strips to be updated in lock-step with eachother.
-; If only one channel is needed, a NOP may be put in the other channel's instruction.
-
-; some instructions may only be run on channel 1. In this case the instruction in
-; channel 2 MUST be `NOP`. Failing to do this will result in an assembly error.
 
 ; a pixel [v]alue is expected to be a 32 bit unsigned integer. IE: 0xRRGGBBAA
 ; syntax sugar is provided by the assembler to evaluate html color codes. IE: #ff0000ff
@@ -46,31 +37,64 @@
 ; ZB  - general purpose channel 2 register
 ; LP  - general purpose loop register
 ; TM  - general purpose timer register. decremented once every millisecond
+; CHN - RGB channel to control
 
 .main:
-  CLS            - CLS              ; clear both channels
-  LD X #ff0000ff - LD Y #00ff00ff   ; load red into X and green into Y with full brightness
-  FILL X         - FILL Y           ; fill channel 1 with red, fill channel 2 with green
-  FLUSH          - FLUSH            ; blit both channels
+  LD  CHN 0         ; load 0 into channel register
+  CLS CHN           ; clear channel 0
+  LD  X #ff0000ff   ; load red full brightness into X register
+  FILL CHN X        ; fill channel 0 with red
 
-  CLS            - CLS              ; clear both channels
-  LD X #0000ffff - LD Y #ff0000ff   ; load blue and red
-  SET 0 X        - SET 0 Y          ; set the pixel colors at address 0
-  FLUSH          - FLUSH            ; blit both channels
+  INC CHN           ; increment the channel, works for 2 channels currently
+  CLS CHN           ; clear channel 1
+  LD  Y  #00ff00ff  ; load green into Y with full brightness
+  FILL CHN Y        ; fill channel 1 with green
+
+  FLUSH             ; blit both channels
+
+  LD  CHN 0         ; load 0 into channel register
+  CLS CHN           ; clear channel 0
+  INC CHN           ; increment to channel 1
+  CLS CHN           ; clear channel 1
+
+  LD X #0000ffff    ; load blue into X register
+  LD Y #ff0000ff    ; load red into Y register
+
+  LD ZA 0           ; pixel address
+  LD ZB 0           ; pixel address
+
+  LD  CHN 0         ; load 0 into channel register
+  SET CHN ZA X       ; set pixel address 0 on channel 0
+
+  INC CHN           ; increment to channel 1
+  SET CHN ZB Y       ; set the pixel colors at address 0 on channel 1
+  FLUSH             ; blit both channels
+
+; clear both channels
+  LD  CHN 0         ; load 0 into channel register
+  CLS CHN           ; clear channel 0
+  INC CHN           ; increment to channel 1
+  CLS CHN           ; clear channel 1
 
 ; Routine to fill both channels one pixel at a time
-  CLS            - CLS              ; clear both channels before beginning the loop
-  LD X #ff0000ff - LD Y #ff0000ff   ; load red into both operand registers
-  LD ZA 0        - LD ZB 0          ; load 0 into both general purpose registers
-  LD LP 300      - NOP              ; load 300 into the counter register
-.loop:
-  FLUSH          - FLUSH            ; blit both channels
-  SET ZA X       - SET ZB Y         ; set the pixel referenced in the Z register to red
-  INC ZA         - INC ZB           ; increment Z register
-  DEC LP         - NOP              ; dec counter
-  LD TM 10      - NOP               ; set a timer for 10 ms
-.sleep:
-  JNZ TM .sleep  - NOP              ; sleep until 10 ms timer is up
-  JNZ LP .loop   - NOP              ; jump to the beginning of the loop if LP is not zero
+  LD X #ff0000ff   ; load red into X
+  LD Y #ff0000ff   ; load red into Y
+  LD ZA 0          ; 
+  LD ZB 0          ; load 0 into all general purpose registers
+  LD LP 300        ; load 300 into the counter register
 
-  HALT           - HALT             ; halt both channels
+.loop:
+  FLUSH             ; blit all channels
+  SET CHN ZA X      ; set the pixel referenced in the Z register to red
+  INC CHN           ; increment the channel  
+  SET CHN ZB Y      ; set the pixel referenced in the Z register to red
+  INC ZA            ; 
+  INC ZB            ; increment Z register
+  DEC LP            ; dec counter
+  LD TM 10          ; set a timer for 10 ms
+
+.sleep:
+  ; JNZ TM .sleep     ; sleep until 10 ms timer is up
+  JNZ LP .loop      ; jump to the beginning of the loop if LP is not zero
+
+  HALT              ; halt all channels

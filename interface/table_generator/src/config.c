@@ -1,4 +1,6 @@
 #include <stdint.h>
+#include <string.h>
+
 #include <sqlite3.h>
 
 typedef struct Network {
@@ -6,7 +8,7 @@ typedef struct Network {
   char* key;
 } network_t;
 
-typedef struct node {
+typedef struct Node {
   uint16_t id;
   uint8_t network_id;
   char* name;
