@@ -64,24 +64,28 @@ void app_main()
     // argebee_debug("loading program %d\n", program_size);
     argebee_load_program(engine, ______interface_table_generator_bytecode, ______interface_table_generator_bytecode_len);
     argebee_debug("starting program %p %d\n", engine, engine->halted);
-
-    struct timespec t1;
-    struct timespec t2;
-    if(clock_gettime(CLOCK_MONOTONIC, &t1)) {
-        argebee_debug("failed to get time1");
-    }
+    int64_t t1 = esp_timer_get_time();
+    int64_t t2 = 0;
+    // struct timespec t1;
+    // struct timespec t2;
+    // if(clock_gettime(CLOCK_MONOTONIC, &t1)) {
+    //     argebee_error("failed to get time1");
+    // }
     while(engine->halted == false) {
         vTaskDelay(0);
         argebee_step(engine);
 
-        if(clock_gettime(CLOCK_MONOTONIC, &t2)) {
-            argebee_debug("failed to get time2");
-        }
+        // if(clock_gettime(CLOCK_MONOTONIC, &t2)) {
+        //     argebee_debug("failed to get time2");
+        // }
+        t2 = esp_timer_get_time();
 
-        int elapsedTime = (MILLION * (t2.tv_sec - t1.tv_sec) + t2.tv_nsec - t1.tv_nsec) / 1000;
-        struct timespec diff;
-        sub_timespec(t1, t2, &diff);
+        // int elapsedTime = (MILLION * (t2.tv_sec - t1.tv_sec) + t2.tv_nsec - t1.tv_nsec) / 1000;
+        int elapsedTime = t2 - t1;
+        // struct timespec diff;
+        // sub_timespec(t1, t2, &diff);
         if(elapsedTime > 1000) {
+            t1 = esp_timer_get_time();
             engine->TM-=1;
             // argebee_debug("dec TM %d\n", engine->TM);
             if(engine->TM == 0) {

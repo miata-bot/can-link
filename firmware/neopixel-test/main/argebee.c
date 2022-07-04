@@ -34,7 +34,6 @@ void argebee_init(argebee_cfg_t* cfg, argebee_t** out_engine)
     ESP_ERROR_CHECK(led_strip_init(&strip));
     ESP_ERROR_CHECK(led_strip_fill(&strip, 0, strip.length, colors[0]));
     ESP_ERROR_CHECK(led_strip_flush(&strip));
-    led_strip_t* strips = &strip;
 
     argebee_t* engine = (argebee_t*)malloc(sizeof(argebee_t));
     if(!engine)
@@ -52,7 +51,6 @@ void argebee_init(argebee_cfg_t* cfg, argebee_t** out_engine)
         .TM = 0,
         .CHN = 0,
         .numChannels = 1,
-        .channels = &strips,
         .strip = &strip
     };
     *out_engine = engine;
@@ -68,7 +66,6 @@ void argebee_load_program(argebee_t* engine, uint8_t* program, uint16_t size)
 
 void argebee_step(argebee_t* engine)
 {
-    vTaskDelay(0);
     if(engine->halted) {
         argebee_debug("tried to step while halted\n");
         return;

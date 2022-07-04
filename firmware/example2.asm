@@ -42,10 +42,11 @@
   CLS CHN           ; clear channel 0
   FLUSH
 
+.redBegin:
   LD  X #ff0000ff   ; load red full brightness into X register
   FILL CHN X        ; fill channel 0 with red
   FLUSH             ; blit both channels
-  LD TM 50000         ; set a timer for 100 ms
+  LD TM 1000         ; set a timer for 100 ms
 
 .redDelay:
   JNZ TM .redDelay     ; sleep until 100 ms timer is up
@@ -57,7 +58,7 @@
   FILL CHN X        ; fill channel 0 with green
   FLUSH             ; blit both channels
 
-  LD TM 50000         ; set a timer for 100 ms
+  LD TM 1000         ; set a timer for 100 ms
 .greenDelay:
   JNZ TM .greenDelay     ; sleep until 100 ms timer is up
 
@@ -67,13 +68,15 @@
   LD  X #0000ffff   ; load blue full brightness into X register
   FILL CHN X        ; fill channel 0 with blue
   FLUSH             ; blit both channels
-  LD TM 50000         ; set a timer for 100 ms
+  LD TM 1000         ; set a timer for 100 ms
 .blueDelay:
   JNZ TM .blueDelay     ; sleep until 100 ms timer is up
 
   CLS CHN                ; clear channel 0
   FLUSH
-  HALT
+  LD ZB 1
+  ; JNZ ZB .redBegin
+  ; HALT
 
 ; Routine to fill one pixel at a time
   LD X #ff0000ff   ; load red into X
@@ -85,7 +88,7 @@
   SET CHN ZA X      ; set the pixel referenced in the Z register to red
   INC ZA            ; increment address
   DEC LP            ; decrement loop counter
-  LD TM 10          ; set a timer for 10 ms
+  LD TM 100          ; set a timer for 10 ms
 .fillSleep:
   JNZ TM .fillSleep     ; sleep until 10 ms timer is up
   JNZ LP .fillLoop      ; restart continue running the fill loop until it gets to zero
