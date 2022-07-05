@@ -4,3 +4,6 @@
 [submodule "firmware/neopixel-test/esp-idf-lib"]
 	path = firmware/neopixel-test/esp-idf-lib
 	url = git@github.com:UncleRus/esp-idf-lib.git
+[submodule "firmware/bleprph/esp-idf-lib"]
+	path = firmware/bleprph/esp-idf-lib
+	url = git@github.com:UncleRus/esp-idf-lib.git
