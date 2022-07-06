@@ -1,83 +1,28 @@
-/*
- * Licensed to the Apache Software Foundation (ASF) under one
- * or more contributor license agreements.  See the NOTICE file
- * distributed with this work for additional information
- * regarding copyright ownership.  The ASF licenses this file
- * to you under the Apache License, Version 2.0 (the
- * "License"); you may not use this file except in compliance
- * with the License.  You may obtain a copy of the License at
- *
- *  http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing,
- * software distributed under the License is distributed on an
- * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied.  See the License for the
- * specific language governing permissions and limitations
- * under the License.
- */
-
-#include <assert.h>
-#include <stdio.h>
-#include <string.h>
-#include "host/ble_hs.h"
-#include "host/ble_uuid.h"
-#include "services/gap/ble_svc_gap.h"
-#include "services/gatt/ble_svc_gatt.h"
-#include "bleprph.h"
-#include "services/ans/ble_svc_ans.h"
 #include <led_strip.h>
+#include "gatt_srv.h"
 
-extern led_strip_t strip;
+extern led_strip_t strip_channel_1;
+extern led_strip_t strip_channel_2;
 
-/**
- * The vendor specific security test service consists of two characteristics:
- *     o random-number-generator: generates a random 32-bit number each time
- *       it is read.  This characteristic can only be read over an encrypted
- *       connection.
- *     o static-value: a single-byte characteristic that can always be read,
- *       but can only be written over an encrypted connection.
- */
-
-/* 59462f12-9543-9999-12c8-58b459a2712d */
-static const ble_uuid128_t gatt_svr_svc_sec_test_uuid =
-    BLE_UUID128_INIT(0x2d, 0x71, 0xa2, 0x59, 0xb4, 0x58, 0xc8, 0x12,
-                     0x99, 0x99, 0x43, 0x95, 0x12, 0x2f, 0x46, 0x59);
-
-/* 5c3a659e-897e-45e1-b016-007107c96df6 */
-static const ble_uuid128_t gatt_svr_chr_sec_test_rand_uuid =
-    BLE_UUID128_INIT(0xf6, 0x6d, 0xc9, 0x07, 0x71, 0x00, 0x16, 0xb0,
-                     0xe1, 0x45, 0x7e, 0x89, 0x9e, 0x65, 0x3a, 0x5c);
-
-/* 5c3a659e-897e-45e1-b016-007107c96df7 */
-static const ble_uuid128_t gatt_svr_chr_sec_test_static_uuid =
-    BLE_UUID128_INIT(0xf7, 0x6d, 0xc9, 0x07, 0x71, 0x00, 0x16, 0xb0,
-                     0xe1, 0x45, 0x7e, 0x89, 0x9e, 0x65, 0x3a, 0x5c);
-
-static uint32_t gatt_svr_sec_test_static_val;
-
-static int
-gatt_svr_chr_access_sec_test(uint16_t conn_handle, uint16_t attr_handle,
-                             struct ble_gatt_access_ctxt *ctxt,
-                             void *arg);
+static uint32_t addressable_led_channel_1_color = 0;
+static uint32_t addressable_led_channel_2_color = 0;
 
 static const struct ble_gatt_svc_def gatt_svr_svcs[] = {
     {
         /*** Service: Security test. */
         .type = BLE_GATT_SVC_TYPE_PRIMARY,
-        .uuid = &gatt_svr_svc_sec_test_uuid.u,
+        .uuid = &led_control_service.u,
         .characteristics = (struct ble_gatt_chr_def[])
-        { {
-                /*** Characteristic: Random number generator. */
-                .uuid = &gatt_svr_chr_sec_test_rand_uuid.u,
-                .access_cb = gatt_svr_chr_access_sec_test,
-                .flags = BLE_GATT_CHR_F_READ,
+        {   {
+                /** Characteristic: Addressable LED Channel 1 */
+                .uuid = &addressable_led_channel_1_characteristic.u,
+                .access_cb = addressable_led_access,
+                .flags = BLE_GATT_CHR_F_READ | BLE_GATT_CHR_F_WRITE,
             }, {
-                /*** Characteristic: Static value. */
-                .uuid = &gatt_svr_chr_sec_test_static_uuid.u,
-                .access_cb = gatt_svr_chr_access_sec_test,
-                .flags = BLE_GATT_CHR_F_READ |
-                BLE_GATT_CHR_F_WRITE,
+                /** Characteristic: Addressable LED Channel 2 */
+                .uuid = &addressable_led_channel_2_characteristic.u,
+                .access_cb = addressable_led_access,
+                .flags = BLE_GATT_CHR_F_READ | BLE_GATT_CHR_F_WRITE,
             }, {
                 0, /* No more characteristics in this service. */
             }
@@ -90,84 +35,72 @@ static const struct ble_gatt_svc_def gatt_svr_svcs[] = {
 };
 
 static int
-gatt_svr_chr_write(struct os_mbuf *om, uint16_t min_len, uint16_t max_len,
+addressable_led_handle_write(led_strip_t* strip, struct os_mbuf *om, uint16_t min_len, uint16_t max_len,
                    void *dst, uint16_t *len)
 {
-    ESP_LOGE("BLE", "hello?????\r\n\r\n");
-
     uint16_t om_len;
     int rc;
 
     om_len = OS_MBUF_PKTLEN(om);
-    if (om_len < min_len || om_len > max_len) {
-    ESP_LOGE("BLE", "hehere? %d %d %d\r\n\r\n", om_len, min_len, max_len);
-
+    if (om_len < min_len || om_len > max_len) 
         return BLE_ATT_ERR_INVALID_ATTR_VALUE_LEN;
-    }
 
     rc = ble_hs_mbuf_to_flat(om, dst, max_len, len);
-    if (rc != 0) {
+    if (rc != 0) 
         return BLE_ATT_ERR_UNLIKELY;
-    }
 
     uint8_t* color = (uint8_t*)dst;
     rgb_t color_;
     color_.red = color[1];
     color_.green = color[0];
     color_.blue = color[2];
-    // uint32_t colorrrrr =0;
-    //     colorrrrr |= color[0] << 24;
-    //     colorrrrr |= color[1] << 16;
-    //     colorrrrr |= color[2] << 8;
-    //     colorrrrr |= color[3];
-    // rgb_t color_;
-    // color_.blue = (colorrrrr >> 8) & 0xff; // green
-    // color_.red = (colorrrrr >> 16) & 0xff; // red
-    // color_.green = (colorrrrr >> 24) & 0xff; // a
-    // ESP_LOGE("Data :", "%04X ", color);
-    ESP_LOGE("Data :", "%02X %02X %02X %02X", color[0], color[1], color[2], color[3]);
-    ESP_LOGE("Data :", "%02X %02X %02X", color_.red, color_.green, color_.blue);
-    led_strip_fill(&strip, 0, strip.length, color_);
-    led_strip_flush(&strip);
+    led_strip_fill(strip, 0, strip->length, color_);
+    led_strip_flush(strip);
     return 0;
 }
 
 static int
-gatt_svr_chr_access_sec_test(uint16_t conn_handle, uint16_t attr_handle,
+addressable_led_access(uint16_t conn_handle, uint16_t attr_handle,
                              struct ble_gatt_access_ctxt *ctxt,
                              void *arg)
 {
-    const ble_uuid_t *uuid;
-    int rand_num;
+    const ble_uuid_t *uuid = ctxt->chr->uuid;
     int rc;
 
-    uuid = ctxt->chr->uuid;
-
-    /* Determine which characteristic is being accessed by examining its
-     * 128-bit UUID.
-     */
-
-    if (ble_uuid_cmp(uuid, &gatt_svr_chr_sec_test_rand_uuid.u) == 0) {
-        assert(ctxt->op == BLE_GATT_ACCESS_OP_READ_CHR);
-
-        /* Respond with a 32-bit random number. */
-        rand_num = rand();
-        rc = os_mbuf_append(ctxt->om, &rand_num, sizeof rand_num);
-        return rc == 0 ? 0 : BLE_ATT_ERR_INSUFFICIENT_RES;
-    }
-
-    if (ble_uuid_cmp(uuid, &gatt_svr_chr_sec_test_static_uuid.u) == 0) {
+    // channel 1
+    if (ble_uuid_cmp(uuid, &addressable_led_channel_1_characteristic.u) == 0) {
         switch (ctxt->op) {
         case BLE_GATT_ACCESS_OP_READ_CHR:
-            rc = os_mbuf_append(ctxt->om, &gatt_svr_sec_test_static_val,
-                                sizeof gatt_svr_sec_test_static_val);
+            rc = os_mbuf_append(ctxt->om, &addressable_led_channel_1_color,
+                                sizeof addressable_led_channel_1_color);
             return rc == 0 ? 0 : BLE_ATT_ERR_INSUFFICIENT_RES;
 
         case BLE_GATT_ACCESS_OP_WRITE_CHR:
-            rc = gatt_svr_chr_write(ctxt->om,
-                                    sizeof gatt_svr_sec_test_static_val,
-                                    sizeof gatt_svr_sec_test_static_val,
-                                    &gatt_svr_sec_test_static_val, NULL);
+            rc = addressable_led_handle_write(&strip_channel_1, ctxt->om,
+                                    sizeof addressable_led_channel_1_color,
+                                    sizeof addressable_led_channel_1_color,
+                                    &addressable_led_channel_1_color, NULL);
+            return rc;
+
+        default:
+            assert(0);
+            return BLE_ATT_ERR_UNLIKELY;
+        }
+    }
+
+    // channel 2
+    if (ble_uuid_cmp(uuid, &addressable_led_channel_2_characteristic.u) == 0) {
+        switch (ctxt->op) {
+        case BLE_GATT_ACCESS_OP_READ_CHR:
+            rc = os_mbuf_append(ctxt->om, &addressable_led_channel_2_color,
+                                sizeof addressable_led_channel_2_color);
+            return rc == 0 ? 0 : BLE_ATT_ERR_INSUFFICIENT_RES;
+
+        case BLE_GATT_ACCESS_OP_WRITE_CHR:
+            rc = addressable_led_handle_write(&strip_channel_2, ctxt->om,
+                                    sizeof addressable_led_channel_2_color,
+                                    sizeof addressable_led_channel_2_color,
+                                    &addressable_led_channel_2_color, NULL);
             return rc;
 
         default:
