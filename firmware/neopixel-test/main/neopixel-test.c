@@ -12,22 +12,22 @@
 #define LEDC_LS_TIMER          LEDC_TIMER_1
 #define LEDC_LS_MODE           LEDC_LOW_SPEED_MODE
 
-#define LEDC_LS_CH0_GPIO       (9) // red
+#define LEDC_LS_CH0_GPIO       (1) // red
 #define LEDC_LS_CH0_CHANNEL    LEDC_CHANNEL_0
 
-#define LEDC_LS_CH1_GPIO       (34) // green
+#define LEDC_LS_CH1_GPIO       (2) // green
 #define LEDC_LS_CH1_CHANNEL    LEDC_CHANNEL_1
 
-#define LEDC_LS_CH2_GPIO       (4) // blue
+#define LEDC_LS_CH2_GPIO       (3) // blue
 #define LEDC_LS_CH2_CHANNEL    LEDC_CHANNEL_2
 
-#define LEDC_LS_CH3_GPIO       (5) // red
+#define LEDC_LS_CH3_GPIO       (4) // red
 #define LEDC_LS_CH3_CHANNEL    LEDC_CHANNEL_3
 
 #define LEDC_LS_CH4_GPIO       (5) // green
 #define LEDC_LS_CH4_CHANNEL    LEDC_CHANNEL_4
 
-#define LEDC_LS_CH5_GPIO       (5) // blue
+#define LEDC_LS_CH5_GPIO       (12) // blue
 #define LEDC_LS_CH5_CHANNEL    LEDC_CHANNEL_5
 
 #define LEDC_TEST_CH_NUM       (6)
@@ -125,7 +125,7 @@ void app_main()
      * that will be used by LED Controller
      */
     ledc_timer_config_t ledc_timer = {
-        .duty_resolution = LEDC_TIMER_13_BIT, // resolution of PWM duty
+        .duty_resolution = LEDC_TIMER_8_BIT,  // resolution of PWM duty
         .freq_hz = 5000,                      // frequency of PWM signal
         .speed_mode = LEDC_LS_MODE,           // timer mode
         .timer_num = LEDC_LS_TIMER,            // timer index
@@ -155,7 +155,7 @@ void app_main()
             .speed_mode = LEDC_LS_MODE,
             .hpoint     = 0,
             .timer_sel  = LEDC_LS_TIMER,
-            .flags.output_invert = 1
+            .flags.output_invert = 0
         },
         { // green
             .channel    = LEDC_LS_CH1_CHANNEL,
@@ -164,7 +164,7 @@ void app_main()
             .speed_mode = LEDC_LS_MODE,
             .hpoint     = 0,
             .timer_sel  = LEDC_LS_TIMER,
-            .flags.output_invert = 0
+            .flags.output_invert = 1
         },
         { // blue
             .channel    = LEDC_LS_CH2_CHANNEL,
@@ -219,6 +219,40 @@ void app_main()
     for (ch = 0; ch < LEDC_TEST_CH_NUM; ch++) {
         ledc_cb_register(ledc_channel[ch].speed_mode, ledc_channel[ch].channel, &callbacks, (void *) counting_sem);
     }
+
+    for (ch = 0; ch < LEDC_TEST_CH_NUM; ch++) {
+        ledc_stop(ledc_channel[ch].speed_mode, ledc_channel[ch].channel, 1);
+    }
+
+    // red
+    ESP_ERROR_CHECK(ledc_set_duty(ledc_channel[0].speed_mode, ledc_channel[0].channel, 0));
+    ESP_ERROR_CHECK(ledc_update_duty(ledc_channel[0].speed_mode, ledc_channel[0].channel));
+
+    // green
+    ESP_ERROR_CHECK(ledc_set_duty(ledc_channel[1].speed_mode, ledc_channel[1].channel, 255));
+    ESP_ERROR_CHECK(ledc_update_duty(ledc_channel[1].speed_mode, ledc_channel[1].channel));
+
+    // blue
+    ESP_ERROR_CHECK(ledc_set_duty(ledc_channel[2].speed_mode, ledc_channel[2].channel, 255));
+    ESP_ERROR_CHECK(ledc_update_duty(ledc_channel[2].speed_mode, ledc_channel[2].channel));
+
+    printf("starting fade soon\n");
+    vTaskDelay(1500 / portTICK_PERIOD_MS);
+    printf("starting fade ok\n");
+    for(uint16_t i = 0; i < 0xffff; i++) {
+        ESP_ERROR_CHECK(ledc_set_duty(ledc_channel[0].speed_mode, ledc_channel[0].channel, i));
+        ESP_ERROR_CHECK(ledc_update_duty(ledc_channel[0].speed_mode, ledc_channel[0].channel));
+        vTaskDelay(100 / portTICK_PERIOD_MS);
+    }
+    printf("fade done\n");
+    
+    while(true) {
+        for (int i = 0; i < LEDC_TEST_CH_NUM; i++) {
+            xSemaphoreTake(counting_sem, portMAX_DELAY);
+        }
+        vTaskDelay(1);
+    }
+
 
     while (1) {
         printf("1. LEDC fade up to duty = %d\n", LEDC_TEST_DUTY);
