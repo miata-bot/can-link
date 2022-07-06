@@ -9,7 +9,6 @@ static uint32_t addressable_led_channel_2_color = 0;
 
 static const struct ble_gatt_svc_def gatt_svr_svcs[] = {
     {
-        /*** Service: Security test. */
         .type = BLE_GATT_SVC_TYPE_PRIMARY,
         .uuid = &led_control_service.u,
         .characteristics = (struct ble_gatt_chr_def[])
@@ -30,23 +29,39 @@ static const struct ble_gatt_svc_def gatt_svr_svcs[] = {
     },
 
     {
+        .type = BLE_GATT_SVC_TYPE_SECONDARY,
+        .uuid = &config_service.u,
+        .characteristics = (struct ble_gatt_chr_def[])
+        {   {
+                /** Characteristic:  */
+                .uuid = &asdf.u,
+                .access_cb = asdf,
+                .flags = BLE_GATT_CHR_F_READ | BLE_GATT_CHR_F_WRITE,
+            }, 
+            {
+                0, /* No more characteristics in this service. */
+            }
+        },
+    },
+
+    {
         0, /* No more services. */
     },
 };
 
 static int
 addressable_led_handle_write(led_strip_t* strip, struct os_mbuf *om, uint16_t min_len, uint16_t max_len,
-                   void *dst, uint16_t *len)
+                             void *dst, uint16_t *len)
 {
     uint16_t om_len;
     int rc;
 
     om_len = OS_MBUF_PKTLEN(om);
-    if (om_len < min_len || om_len > max_len) 
+    if (om_len < min_len || om_len > max_len)
         return BLE_ATT_ERR_INVALID_ATTR_VALUE_LEN;
 
     rc = ble_hs_mbuf_to_flat(om, dst, max_len, len);
-    if (rc != 0) 
+    if (rc != 0)
         return BLE_ATT_ERR_UNLIKELY;
 
     uint8_t* color = (uint8_t*)dst;
@@ -61,8 +76,8 @@ addressable_led_handle_write(led_strip_t* strip, struct os_mbuf *om, uint16_t mi
 
 static int
 addressable_led_access(uint16_t conn_handle, uint16_t attr_handle,
-                             struct ble_gatt_access_ctxt *ctxt,
-                             void *arg)
+                       struct ble_gatt_access_ctxt *ctxt,
+                       void *arg)
 {
     const ble_uuid_t *uuid = ctxt->chr->uuid;
     int rc;
@@ -77,9 +92,9 @@ addressable_led_access(uint16_t conn_handle, uint16_t attr_handle,
 
         case BLE_GATT_ACCESS_OP_WRITE_CHR:
             rc = addressable_led_handle_write(&strip_channel_1, ctxt->om,
-                                    sizeof addressable_led_channel_1_color,
-                                    sizeof addressable_led_channel_1_color,
-                                    &addressable_led_channel_1_color, NULL);
+                                              sizeof addressable_led_channel_1_color,
+                                              sizeof addressable_led_channel_1_color,
+                                              &addressable_led_channel_1_color, NULL);
             return rc;
 
         default:
@@ -98,9 +113,9 @@ addressable_led_access(uint16_t conn_handle, uint16_t attr_handle,
 
         case BLE_GATT_ACCESS_OP_WRITE_CHR:
             rc = addressable_led_handle_write(&strip_channel_2, ctxt->om,
-                                    sizeof addressable_led_channel_2_color,
-                                    sizeof addressable_led_channel_2_color,
-                                    &addressable_led_channel_2_color, NULL);
+                                              sizeof addressable_led_channel_2_color,
+                                              sizeof addressable_led_channel_2_color,
+                                              &addressable_led_channel_2_color, NULL);
             return rc;
 
         default:

@@ -11,16 +11,26 @@
 
 #define LEDC_LS_TIMER          LEDC_TIMER_1
 #define LEDC_LS_MODE           LEDC_LOW_SPEED_MODE
-#define LEDC_LS_CH0_GPIO       (9)
+
+#define LEDC_LS_CH0_GPIO       (9) // red
 #define LEDC_LS_CH0_CHANNEL    LEDC_CHANNEL_0
-#define LEDC_LS_CH1_GPIO       (34)
+
+#define LEDC_LS_CH1_GPIO       (34) // green
 #define LEDC_LS_CH1_CHANNEL    LEDC_CHANNEL_1
-#define LEDC_LS_CH2_GPIO       (4)
+
+#define LEDC_LS_CH2_GPIO       (4) // blue
 #define LEDC_LS_CH2_CHANNEL    LEDC_CHANNEL_2
-#define LEDC_LS_CH3_GPIO       (5)
+
+#define LEDC_LS_CH3_GPIO       (5) // red
 #define LEDC_LS_CH3_CHANNEL    LEDC_CHANNEL_3
 
-#define LEDC_TEST_CH_NUM       (2)
+#define LEDC_LS_CH4_GPIO       (5) // green
+#define LEDC_LS_CH4_CHANNEL    LEDC_CHANNEL_4
+
+#define LEDC_LS_CH5_GPIO       (5) // blue
+#define LEDC_LS_CH5_CHANNEL    LEDC_CHANNEL_5
+
+#define LEDC_TEST_CH_NUM       (6)
 #define LEDC_TEST_DUTY         (8191)
 #define LEDC_TEST_FADE_TIME    (1000)
 
@@ -53,11 +63,9 @@ static bool cb_ledc_fade_end_event(const ledc_cb_param_t *param, void *user_arg)
     return (taskAwoken == pdTRUE);
 }
 
-
-void app_main()
+void argebee_test()
 {
-    ESP_LOGI("ASD", "HELLOL");
-    argebee_cfg_t cfg = {};
+       argebee_cfg_t cfg = {};
     argebee_t* engine;
     argebee_init(&cfg, &engine);
 
@@ -102,6 +110,12 @@ void app_main()
     while(1) {
         vTaskDelay(1000);
     }
+}
+
+
+void app_main()
+{
+    // argebee_test();
     // xTaskCreate(test, "test", configMINIMAL_STACK_SIZE * 5, NULL, 5, NULL);
 
     int ch;
@@ -134,7 +148,7 @@ void app_main()
      *         will be the same
      */
     ledc_channel_config_t ledc_channel[LEDC_TEST_CH_NUM] = {
-        {
+        { // red
             .channel    = LEDC_LS_CH0_CHANNEL,
             .duty       = 0,
             .gpio_num   = LEDC_LS_CH0_GPIO,
@@ -143,7 +157,7 @@ void app_main()
             .timer_sel  = LEDC_LS_TIMER,
             .flags.output_invert = 1
         },
-        {
+        { // green
             .channel    = LEDC_LS_CH1_CHANNEL,
             .duty       = 0,
             .gpio_num   = LEDC_LS_CH1_GPIO,
@@ -152,24 +166,42 @@ void app_main()
             .timer_sel  = LEDC_LS_TIMER,
             .flags.output_invert = 0
         },
-        // {
-        //     .channel    = LEDC_LS_CH2_CHANNEL,
-        //     .duty       = 0,
-        //     .gpio_num   = LEDC_LS_CH2_GPIO,
-        //     .speed_mode = LEDC_LS_MODE,
-        //     .hpoint     = 0,
-        //     .timer_sel  = LEDC_LS_TIMER,
-        //     .flags.output_invert = 1
-        // },
-        // {
-        //     .channel    = LEDC_LS_CH3_CHANNEL,
-        //     .duty       = 0,
-        //     .gpio_num   = LEDC_LS_CH3_GPIO,
-        //     .speed_mode = LEDC_LS_MODE,
-        //     .hpoint     = 0,
-        //     .timer_sel  = LEDC_LS_TIMER,
-        //     .flags.output_invert = 1
-        // },
+        { // blue
+            .channel    = LEDC_LS_CH2_CHANNEL,
+            .duty       = 0,
+            .gpio_num   = LEDC_LS_CH2_GPIO,
+            .speed_mode = LEDC_LS_MODE,
+            .hpoint     = 0,
+            .timer_sel  = LEDC_LS_TIMER,
+            .flags.output_invert = 1
+        },
+        { // red
+            .channel    = LEDC_LS_CH3_CHANNEL,
+            .duty       = 0,
+            .gpio_num   = LEDC_LS_CH3_GPIO,
+            .speed_mode = LEDC_LS_MODE,
+            .hpoint     = 0,
+            .timer_sel  = LEDC_LS_TIMER,
+            .flags.output_invert = 1
+        },
+        { // green
+            .channel    = LEDC_LS_CH4_CHANNEL,
+            .duty       = 0,
+            .gpio_num   = LEDC_LS_CH4_GPIO,
+            .speed_mode = LEDC_LS_MODE,
+            .hpoint     = 0,
+            .timer_sel  = LEDC_LS_TIMER,
+            .flags.output_invert = 1
+        },
+        { // blue
+            .channel    = LEDC_LS_CH5_CHANNEL,
+            .duty       = 0,
+            .gpio_num   = LEDC_LS_CH5_GPIO,
+            .speed_mode = LEDC_LS_MODE,
+            .hpoint     = 0,
+            .timer_sel  = LEDC_LS_TIMER,
+            .flags.output_invert = 1
+        },
     };
 
     // Set LED Controller with previously prepared configuration
@@ -213,19 +245,19 @@ void app_main()
             xSemaphoreTake(counting_sem, portMAX_DELAY);
         }
 
-        // printf("3. LEDC set duty = %d without fade\n", LEDC_TEST_DUTY);
-        // for (ch = 0; ch < LEDC_TEST_CH_NUM; ch++) {
-        //     ledc_set_duty(ledc_channel[ch].speed_mode, ledc_channel[ch].channel, LEDC_TEST_DUTY);
-        //     ledc_update_duty(ledc_channel[ch].speed_mode, ledc_channel[ch].channel);
-        // }
-        // vTaskDelay(1000 / portTICK_PERIOD_MS);
+        printf("3. LEDC set duty = %d without fade\n", LEDC_TEST_DUTY);
+        for (ch = 0; ch < LEDC_TEST_CH_NUM; ch++) {
+            ledc_set_duty(ledc_channel[ch].speed_mode, ledc_channel[ch].channel, LEDC_TEST_DUTY);
+            ledc_update_duty(ledc_channel[ch].speed_mode, ledc_channel[ch].channel);
+        }
+        vTaskDelay(1000 / portTICK_PERIOD_MS);
 
-        // printf("4. LEDC set duty = 0 without fade");
-        // for (ch = 0; ch < LEDC_TEST_CH_NUM; ch++) {
-        //     ledc_set_duty(ledc_channel[ch].speed_mode, ledc_channel[ch].channel, 0);
-        //     ledc_update_duty(ledc_channel[ch].speed_mode, ledc_channel[ch].channel);
-        // }
-        // vTaskDelay(1000 / portTICK_PERIOD_MS);
+        printf("4. LEDC set duty = 0 without fade");
+        for (ch = 0; ch < LEDC_TEST_CH_NUM; ch++) {
+            ledc_set_duty(ledc_channel[ch].speed_mode, ledc_channel[ch].channel, 0);
+            ledc_update_duty(ledc_channel[ch].speed_mode, ledc_channel[ch].channel);
+        }
+        vTaskDelay(1000 / portTICK_PERIOD_MS);
     }
 }
 

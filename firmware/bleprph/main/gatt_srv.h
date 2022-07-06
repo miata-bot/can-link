@@ -29,4 +29,10 @@ static const ble_uuid128_t addressable_led_channel_2_characteristic =
 static int addressable_led_access(uint16_t conn_handle, uint16_t attr_handle,
                              struct ble_gatt_access_ctxt *ctxt,
                              void *arg);
+
+/* cb80f936-a431-4170-a2d4-b937b883c2c5 */
+static const ble_uuid128_t config_service =
+    BLE_UUID128_INIT(0xC5,0xC2,0x83,0xB8,0x37,0xB9,0xD4,0xA2,
+                     0x70,0x41,0x31,0xA4,0x36,0xF9,0x80,0xCB);
+
 #endif
