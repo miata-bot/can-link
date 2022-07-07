@@ -3,10 +3,12 @@
 
 #include "gatt_srv.h"
 
-extern led_strip_t strip_channel_1;
-extern led_strip_t strip_channel_2;
+extern led_strip_t strip;
 
-extern ledc_channel_config_t ledc_channel[6];
+// led_strip_t strip_channel_1;
+// led_strip_t strip_channel_2;
+
+ledc_channel_config_t ledc_channel[6];
 
 static uint32_t addressable_led_channel_1_color = 0;
 static uint32_t addressable_led_channel_2_color = 0;
@@ -24,22 +26,23 @@ static const struct ble_gatt_svc_def gatt_svr_svcs[] = {
                 .uuid = &addressable_led_channel_1_characteristic.u,
                 .access_cb = led_access,
                 .flags = BLE_GATT_CHR_F_READ | BLE_GATT_CHR_F_WRITE,
-            }, {
-                /** Characteristic: Addressable LED Channel 2 */
-                .uuid = &addressable_led_channel_2_characteristic.u,
-                .access_cb = led_access,
-                .flags = BLE_GATT_CHR_F_READ | BLE_GATT_CHR_F_WRITE,
-            }, {
-                /** Characteristic: Addressable RGB Channel 1 */
-                .uuid = &rgb_led_channel_1_characteristic.u,
-                .access_cb = led_access,
-                .flags = BLE_GATT_CHR_F_READ | BLE_GATT_CHR_F_WRITE,
-            }, {
-                /** Characteristic: Addressable RGB Channel 2 */
-                .uuid = &rgb_led_channel_2_characteristic.u,
-                .access_cb = led_access,
-                .flags = BLE_GATT_CHR_F_READ | BLE_GATT_CHR_F_WRITE,
-            }, 
+            },
+            //  {
+            //     /** Characteristic: Addressable LED Channel 2 */
+            //     .uuid = &addressable_led_channel_2_characteristic.u,
+            //     .access_cb = led_access,
+            //     .flags = BLE_GATT_CHR_F_READ | BLE_GATT_CHR_F_WRITE,
+            // }, {
+            //     /** Characteristic: Addressable RGB Channel 1 */
+            //     .uuid = &rgb_led_channel_1_characteristic.u,
+            //     .access_cb = led_access,
+            //     .flags = BLE_GATT_CHR_F_READ | BLE_GATT_CHR_F_WRITE,
+            // }, {
+            //     /** Characteristic: Addressable RGB Channel 2 */
+            //     .uuid = &rgb_led_channel_2_characteristic.u,
+            //     .access_cb = led_access,
+            //     .flags = BLE_GATT_CHR_F_READ | BLE_GATT_CHR_F_WRITE,
+            // }, 
             {
                 0, /* No more characteristics in this service. */
             }
@@ -81,12 +84,14 @@ addressable_led_handle_write(led_strip_t* strip, struct os_mbuf *om, uint16_t mi
     rc = ble_hs_mbuf_to_flat(om, dst, max_len, len);
     if (rc != 0)
         return BLE_ATT_ERR_UNLIKELY;
+    
 
     uint8_t* color = (uint8_t*)dst;
     rgb_t color_;
     color_.red = color[1];
     color_.green = color[0];
     color_.blue = color[2];
+    ESP_LOGE("LED", "fill %02X %02X %02X", color_.red, color_.green, color_.blue);
     led_strip_fill(strip, 0, strip->length, color_);
     led_strip_flush(strip);
     return 0;
@@ -140,7 +145,7 @@ led_access(uint16_t conn_handle, uint16_t attr_handle,
             return rc == 0 ? 0 : BLE_ATT_ERR_INSUFFICIENT_RES;
 
         case BLE_GATT_ACCESS_OP_WRITE_CHR:
-            rc = addressable_led_handle_write(&strip_channel_1, ctxt->om,
+            rc = addressable_led_handle_write(&strip, ctxt->om,
                                               sizeof addressable_led_channel_1_color,
                                               sizeof addressable_led_channel_1_color,
                                               &addressable_led_channel_1_color, NULL);
@@ -161,7 +166,7 @@ led_access(uint16_t conn_handle, uint16_t attr_handle,
             return rc == 0 ? 0 : BLE_ATT_ERR_INSUFFICIENT_RES;
 
         case BLE_GATT_ACCESS_OP_WRITE_CHR:
-            rc = addressable_led_handle_write(&strip_channel_2, ctxt->om,
+            rc = addressable_led_handle_write(&strip, ctxt->om,
                                               sizeof addressable_led_channel_2_color,
                                               sizeof addressable_led_channel_2_color,
                                               &addressable_led_channel_2_color, NULL);
@@ -274,6 +279,7 @@ gatt_svr_init(void)
     if (rc != 0) {
         return rc;
     }
+    ESP_LOGE("BLE", "ble init ok");
 
     return 0;
 }
