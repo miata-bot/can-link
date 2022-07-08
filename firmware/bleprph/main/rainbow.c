@@ -1,25 +1,12 @@
 #include <led_strip.h>
 extern led_strip_t strip;
 
-typedef struct AAA {
-  uint8_t   effect;
-  uint8_t   effects;
-  uint16_t  effStep;
-  unsigned long effStart;
-} aaa_t;
+typedef struct StripState {uint8_t effect; uint8_t effects; uint16_t effStep; unsigned long effStart;} strip_state_t;
+typedef struct StripLoop { uint8_t currentChild; uint8_t childs; bool timeBased; uint16_t cycles; uint16_t currentTime;} strip_loop_t;
+strip_state_t strip_0;
+strip_loop_t strip0loop0;
 
-typedef struct Loop {
-  uint8_t currentChild;
-  uint8_t childs;
-  bool timeBased;
-  uint16_t cycles;
-  uint16_t currentTime;
-} loop_t;
-
-aaa_t strip_0;
-loop_t strip0loop0;
-
-void aaa_loop_init(loop_t* loop, uint8_t totchilds, bool timebased, uint16_t tottime) {
+void strip_state_loop_init(strip_loop_t* loop, uint8_t totchilds, bool timebased, uint16_t tottime) {
   loop->currentTime=0;
   loop->currentChild=0;
   loop->childs=totchilds;
@@ -27,19 +14,19 @@ void aaa_loop_init(loop_t* loop, uint8_t totchilds, bool timebased, uint16_t tot
   loop->cycles=tottime;
 }
 
-void aaa_reset(aaa_t* aaa)
+void strip_state_reset(strip_state_t* strip_state)
 {
-    aaa->effStep = 0;
-    aaa->effect = (aaa->effect + 1) % aaa->effects;
-    aaa->effStart = esp_timer_get_time();
+    strip_state->effStep = 0;
+    strip_state->effect = (strip_state->effect + 1) % strip_state->effects;
+    strip_state->effStart = esp_timer_get_time();
 }
 
-void aaa_init(uint8_t toteffects)
+void strip_state_init(uint8_t toteffects)
 {
   strip_0.effect = -1;
   strip_0.effects = toteffects;
-  aaa_loop_init(&strip0loop0, 1, false, 1);
-  aaa_reset(&strip_0);
+  strip_state_loop_init(&strip0loop0, 1, false, 1);
+  strip_state_reset(&strip_0);
 }
 
 uint8_t strip0_loop0_eff0();
@@ -100,7 +87,7 @@ uint8_t strip0_loop0_eff0() {
               break;
     }
   }
-  if(strip_0.effStep >= 122) {aaa_reset(&strip_0); return 0x03; }
+  if(strip_0.effStep >= 122) {strip_state_reset(&strip_0); return 0x03; }
   else strip_0.effStep++;
   return 0x01;
 }

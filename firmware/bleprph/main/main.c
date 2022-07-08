@@ -431,7 +431,7 @@ app_main(void)
     ESP_ERROR_CHECK(led_strip_fill(&strip, 0, strip.length, color));
     ESP_ERROR_CHECK(led_strip_flush(&strip));
 
-    aaa_init(1);
+    strip_state_init(1);
     while(true) {
         strips_loop();
         vTaskDelay(0);
