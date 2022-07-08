@@ -30,6 +30,7 @@
 #include "bleprph.h"
 #include <led_strip.h>
 #include <esp_system.h>
+#include "rainbow.h"
 
 #if CONFIG_EXAMPLE_EXTENDED_ADV
 static uint8_t ext_adv_pattern_1[] = {
@@ -418,7 +419,8 @@ app_main(void)
     strip = (led_strip_t) {
         .type = LED_STRIP_WS2812,
         .is_rgbw = false,
-        .length = 80,
+        // .length = 80 + 40 + 30,
+        .length = 80 + 40,
         .gpio = 23,
         .buf = NULL,
         .brightness = 255,
@@ -428,6 +430,24 @@ app_main(void)
     rgb_t color = {.red = 0, .green = 0, .blue = 0};
     ESP_ERROR_CHECK(led_strip_fill(&strip, 0, strip.length, color));
     ESP_ERROR_CHECK(led_strip_flush(&strip));
+
+    aaa_init(1);
+    while(true) {
+        strips_loop();
+        vTaskDelay(0);
+    }
+
+    rgb_t blue = {.red = 0, .green = 0, .blue = 255};
+// esp_err_t led_strip_fill(led_strip_t *strip, size_t start, size_t len, rgb_t color)
+
+    for(size_t i = 0; i < strip.length; i++) {
+        led_strip_fill(&strip, 0, i-2, color);
+        led_strip_set_pixel(&strip, i, blue);
+        led_strip_set_pixel(&strip, i+1, blue);
+        led_strip_set_pixel(&strip, i+2, blue);
+        led_strip_flush(&strip);
+        vTaskDelay(pdMS_TO_TICKS(10));
+    }
 
     int rc;
 

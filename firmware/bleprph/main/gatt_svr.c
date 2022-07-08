@@ -91,9 +91,44 @@ addressable_led_handle_write(led_strip_t* strip, struct os_mbuf *om, uint16_t mi
     color_.red = color[1];
     color_.green = color[0];
     color_.blue = color[2];
-    ESP_LOGE("LED", "fill %02X %02X %02X", color_.red, color_.green, color_.blue);
-    led_strip_fill(strip, 0, strip->length, color_);
-    led_strip_flush(strip);
+    // ESP_LOGE("LED", "fill %02X %02X %02X", color_.red, color_.green, color_.blue);
+    // led_strip_fill(strip, 0, strip->length, color_);
+    // led_strip_flush(strip);
+    rgb_t colors[7] = {
+     {.green = 255, .red = 0, .blue = 0}, // red
+     {.green = 255, .red = 127, .blue = 0}, // orange
+     {.green = 255, .red = 255, .blue = 0}, // yellow
+     {.green = 0, .red = 255, .blue = 0}, // green
+     {.green = 0, .red = 0, .blue = 255}, // blue
+     {.green = 75, .red = 0, .blue = 130}, // indigo
+     {.green = 148, .red = 0, .blue = 211}, // violet
+    };
+
+    int k = 0;
+    // while(k < 120) {
+        for(int i = 0, j = 0; i < 7; i++) {
+            led_strip_fill(strip, j+k, j+k+12, colors[i]);
+            led_strip_flush(strip);
+            led_strip_wait(strip, 1000);
+            vTaskDelay(pdMS_TO_TICKS(100));
+            j+=13;
+        }
+    //     k+=2;
+
+    // }
+
+    // chase
+    // for(size_t i = 0; i < strip->length; i++) {
+    //     led_strip_fill(strip, 0, i-2, color_);
+    //     led_strip_set_pixel(strip, i, blue);
+    //     // led_strip_set_pixel(strip, i+1, blue);
+    //     // led_strip_set_pixel(strip, i+2, blue);
+    //     led_strip_flush(strip);
+    //     led_strip_wait(strip, 1000);
+    //     vTaskDelay(pdMS_TO_TICKS(10));
+    // }
+
+
     return 0;
 }
 
