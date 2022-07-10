@@ -7,3 +7,9 @@
 [submodule "firmware/bleprph/esp-idf-lib"]
 	path = firmware/bleprph/esp-idf-lib
 	url = git@github.com:UncleRus/esp-idf-lib.git
+[submodule "firmware/spect/components/esp-idf-lua"]
+	path = firmware/spect/components/esp-idf-lua
+	url = https://github.com/UncleRus/esp-idf-lua.git
+[submodule "firmware/spect/components/esp-idf-sqlite3"]
+	path = firmware/spect/components/esp-idf-sqlite3
+	url = git@github.com:siara-cc/esp32-idf-sqlite3.git
