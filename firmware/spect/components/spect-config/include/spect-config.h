@@ -8,7 +8,7 @@
 typedef struct spect_config_cfg 
 {
   const char* path;
-} spect_config_cfg;
+} spect_config_cfg_t;
 
 typedef struct SpectNetwork {
   uint8_t id;
@@ -38,8 +38,8 @@ typedef struct SpectNetworkLeader {
   spect_network_t* network;
 } spect_network_leader_t;
 
-typedef struct SPectConfig {
-  spect_config_cfg* cfg;
+typedef struct SpectConfig {
+  spect_config_cfg_t* cfg;
   sqlite3* db;
   // meta
   uint8_t version;
@@ -66,4 +66,4 @@ typedef struct SPectConfig {
   spect_network_leader_t* network_leader;
 } spect_config_t;
 
-esp_err_t spect_config_init(spect_config_cfg* cfg, spect_config_t** out_ctx);
+esp_err_t spect_config_init(spect_config_cfg_t* cfg, spect_config_t** out_ctx);
