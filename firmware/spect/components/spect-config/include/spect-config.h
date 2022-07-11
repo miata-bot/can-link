@@ -5,11 +5,6 @@
 
 #include <sqlite3.h>
 
-typedef struct spect_config_cfg 
-{
-  const char* path;
-} spect_config_cfg_t;
-
 typedef struct SpectNetwork {
   uint8_t id;
   char* key;
@@ -39,8 +34,6 @@ typedef struct SpectNetworkLeader {
 } spect_network_leader_t;
 
 typedef struct SpectConfig {
-  spect_config_cfg_t* cfg;
-  sqlite3* db;
   // meta
   uint8_t version;
 
@@ -66,4 +59,17 @@ typedef struct SpectConfig {
   spect_network_leader_t* network_leader;
 } spect_config_t;
 
-esp_err_t spect_config_init(spect_config_cfg_t* cfg, spect_config_t** out_ctx);
+typedef struct spect_config_cfg 
+{
+  const char* path;
+} spect_config_cfg_t;
+
+typedef struct spect_config_context
+{
+  spect_config_cfg_t* cfg;
+  sqlite3* db;
+
+  spect_config_t* config;
+} spect_config_context_t;
+
+esp_err_t spect_config_init(spect_config_cfg_t* cfg, spect_config_context_t** out_ctx);

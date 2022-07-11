@@ -5,14 +5,14 @@
 
 static const char *TAG = "SPECT-CONFIG";
 
-esp_err_t spect_config_init(spect_config_cfg_t* cfg, spect_config_t** out_ctx)
+esp_err_t spect_config_init(spect_config_cfg_t* cfg, spect_config_context_t** out_ctx)
 {    
   sqlite3_initialize();
   ESP_LOGI(TAG, "config init");
-  spect_config_t* ctx = (spect_config_t*)malloc(sizeof(spect_config_t));
+  spect_config_context_t* ctx = (spect_config_context_t*)malloc(sizeof(spect_config_context_t));
   if (!ctx) return ESP_ERR_NO_MEM;
 
-  *ctx = (spect_config_t){
+  *ctx = (spect_config_context_t){
     .cfg = cfg
   };
 
