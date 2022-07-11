@@ -40,7 +40,7 @@ typedef struct SpectNetworkLeader {
 
 typedef struct SPectConfig {
   spect_config_cfg* cfg;
-  sqlite3 db;
+  sqlite3* db;
   // meta
   uint8_t version;
 

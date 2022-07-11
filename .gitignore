@@ -9,3 +9,4 @@ zig*
 *.out
 speeduino.ini
 /*/*backups/
+build

@@ -1,9 +1,11 @@
 #include <stdint.h>
-#include <sdkconfig.h>
 
+#include <driver/gpio.h>
 #include <driver/ledc.h>
 
 #include <led_strip.h>
+
+#include "freertos/semphr.h"
 
 #define LEDC_CHANNEL_R 0
 #define LEDC_CHANNEL_G 1
@@ -38,13 +40,13 @@ esp_err_t spect_rgb_install();
  * 
  * @return esp_err_t 
  */
-esp_err_t spect_rgb_initialize(spect_rgb_config_t*, spect_rgb_t**);
+esp_err_t spect_rgb_initialize(spect_rgb_config_t* cfg, spect_rgb_t** out_ctx);
 
-esp_err_t spect_rgb_enable_pwm(spect_rgb_t*);
-esp_err_t spect_rgb_disable_pwm(spect_rgb_t*);
+esp_err_t spect_rgb_enable_pwm(spect_rgb_t* ctx);
+esp_err_t spect_rgb_disable_pwm(spect_rgb_t* ctx);
 
-esp_err_t spect_rgb_enable_strip(spect_rgb_t*);
-esp_err_t spect_rgb_disable_strip(spect_rgb_t*);
+esp_err_t spect_rgb_enable_strip(spect_rgb_t* ctx);
+esp_err_t spect_rgb_disable_strip(spect_rgb_t* ctx);
 
 /**
  * @brief set the color of the strip

@@ -9,7 +9,7 @@
 static bool cb_ledc_fade_end_event(const ledc_cb_param_t *param, void *user_arg)
 {
   portBASE_TYPE taskAwoken = pdFALSE;
-  spect_rgb_t* ctx = (spect_rgb_t*)usr_arg;
+  spect_rgb_t* ctx = (spect_rgb_t*)user_arg;
 
   if (param->event == LEDC_FADE_END_EVT) {
     xSemaphoreGiveFromISR(ctx->counting_sem, &taskAwoken);
@@ -28,7 +28,7 @@ esp_err_t spect_rgb_install()
     .duty_resolution = LEDC_TIMER_8_BIT,  // resolution of PWM duty
     .freq_hz = 5000,                      // frequency of PWM signal
     .speed_mode = LEDC_LOW_SPEED_MODE,           // timer mode
-    .timer_num = LEDC_LS_TIMER,            // timer index
+    .timer_num = LEDC_TIMER_1,            // timer index
     .clk_cfg = LEDC_AUTO_CLK,              // Auto select the source clock
   };
   // Set configuration of timer0 for high speed channels
@@ -59,34 +59,34 @@ esp_err_t spect_rgb_initialize(spect_rgb_config_t* config, spect_rgb_t** out_ctx
     .cfg = config,
     .ledc_channels = {
       {
-        .channel    = ledc_channel_offset,
+        .channel    = config->ledc_channel_offset,
         .duty       = 0,
-        .gpio_num   = config->led_red_channel,
-        .speed_mode = LEDC_LS_MODE,
+        .gpio_num   = config->led_red_gpio,
+        .speed_mode = LEDC_LOW_SPEED_MODE,
         .hpoint     = 0,
-        .timer_sel  = LEDC_LS_TIMER,
+        .timer_sel  = LEDC_TIMER_1,
         .flags.output_invert = 0
       },
       {
-        .channel    = ledc_channel_offset+1,
+        .channel    = config->ledc_channel_offset+1,
         .duty       = 0,
-        .gpio_num   = config->led_green_channel,
-        .speed_mode = LEDC_LS_MODE,
+        .gpio_num   = config->led_green_gpio,
+        .speed_mode = LEDC_LOW_SPEED_MODE,
         .hpoint     = 0,
-        .timer_sel  = LEDC_LS_TIMER,
+        .timer_sel  = LEDC_TIMER_1,
         .flags.output_invert = 0
       },
       {
-        .channel    = ledc_channel_offset+2,
+        .channel    = config->ledc_channel_offset+2,
         .duty       = 0,
-        .gpio_num   = config->led_blue_channel,
-        .speed_mode = LEDC_LS_MODE,
+        .gpio_num   = config->led_blue_gpio,
+        .speed_mode = LEDC_LOW_SPEED_MODE,
         .hpoint     = 0,
-        .timer_sel  = LEDC_LS_TIMER,
+        .timer_sel  = LEDC_TIMER_1,
         .flags.output_invert = 0
       }
     }
-  }
+  };
   ctx->counting_sem = xSemaphoreCreateCounting(3, 0);
 
   ledc_channel_config(&ctx->ledc_channels[LEDC_CHANNEL_R]);
@@ -108,17 +108,23 @@ esp_err_t spect_rgb_initialize(spect_rgb_config_t* config, spect_rgb_t** out_ctx
   return ESP_OK;
 }
 
-esp_err_t spect_rgb_enable_pwm(spect_rgb_t* spect_rgb){ return ESP_OK; }
+esp_err_t spect_rgb_enable_pwm(spect_rgb_t* ctx){ return ESP_OK; }
 
-esp_err_t spect_rgb_disable_pwm(spect_rgb_t* spect_rgb){ return ESP_OK; }
+esp_err_t spect_rgb_disable_pwm(spect_rgb_t* ctx){ return ESP_OK; }
 
-esp_err_t spect_rgb_enable_strip(spect_rgb_t* spect_rgb){ return ESP_OK; }
+esp_err_t spect_rgb_enable_strip(spect_rgb_t* ctx){ return ESP_OK; }
 
-esp_err_t spect_rgb_disable_strip(spect_rgb_t* spect_rgb){ return ESP_OK; }
+esp_err_t spect_rgb_disable_strip(spect_rgb_t* ctx){ return ESP_OK; }
 
-esp_err_t spect_rgb_set_color(spect_rgb_t* spect_rgb, rgb_t color)
+esp_err_t spect_rgb_set_color(spect_rgb_t* ctx, rgb_t color)
 {
-  esp_err_t err = ledc_set_duty(ctx->ledc_channels[LEDC_CHANNEL_R].speed_mode, ledc_channel[LEDC_CHANNEL_R].channel, color.r);
+  esp_err_t err = ledc_set_duty(ctx->ledc_channels[LEDC_CHANNEL_R].speed_mode, ctx->ledc_channels[LEDC_CHANNEL_R].channel, color.r);
+  if(err != ESP_OK)
+    return err;
+  err = ledc_set_duty(ctx->ledc_channels[LEDC_CHANNEL_G].speed_mode, ctx->ledc_channels[LEDC_CHANNEL_G].channel, color.g);
+  if(err != ESP_OK)
+    return err;
+  err = ledc_set_duty(ctx->ledc_channels[LEDC_CHANNEL_B].speed_mode, ctx->ledc_channels[LEDC_CHANNEL_B].channel, color.b);
   return err;
 }
 
@@ -142,18 +148,18 @@ esp_err_t spect_rgb_blit(spect_rgb_t* spect_rgb)
 
 esp_err_t spect_rgb_wait(spect_rgb_t* ctx)
 {
-  esp_err_t err = led_strip_wait(ctx, portMAX_DELAY);
+  esp_err_t err = led_strip_wait(ctx->strip, portMAX_DELAY);
   if(err != ESP_OK)
     return err;
 
-  err = ledc_update_duty(strip->ledc_channels[LEDC_CHANNEL_R].speed_mode, strip->ledc_channels[LEDC_CHANNEL_R].channel);
+  err = ledc_update_duty(ctx->ledc_channels[LEDC_CHANNEL_R].speed_mode, ctx->ledc_channels[LEDC_CHANNEL_R].channel);
   if(err != ESP_OK)
     return err;
   
-  err = ledc_update_duty(strip->ledc_channels[LEDC_CHANNEL_G].speed_mode, strip->ledc_channels[LEDC_CHANNEL_G].channel);
+  err = ledc_update_duty(ctx->ledc_channels[LEDC_CHANNEL_G].speed_mode, ctx->ledc_channels[LEDC_CHANNEL_G].channel);
   if(err != ESP_OK)
     return err;
 
-  err = ledc_update_duty(strip->ledc_channels[LEDC_CHANNEL_B].speed_mode, strip->ledc_channels[LEDC_CHANNEL_B].channel);
+  err = ledc_update_duty(ctx->ledc_channels[LEDC_CHANNEL_B].speed_mode, ctx->ledc_channels[LEDC_CHANNEL_B].channel);
   return err;
 }

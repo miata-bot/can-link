@@ -1,4 +1,4 @@
-#include <sdkconfig.h>
+#include <driver/gpio.h>
 
 typedef enum SpectRegulatorState {
   SPECT_REGULATOR_OFF=0x0,

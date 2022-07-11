@@ -4,6 +4,7 @@
 # CMakeLists in this exact order for cmake to work correctly
 cmake_minimum_required(VERSION 3.5)
 
+set(EXTRA_COMPONENT_DIRS $ENV{PWD}/components/esp-idf-lib/components)
 include($ENV{IDF_PATH}/tools/cmake/project.cmake)
 project(spect)
 fatfs_create_spiflash_image(storage flash_image FLASH_IN_PROJECT)
@@ -16,6 +17,6 @@ else()
 endif()
 
 # Workaround for Vendor class. ESP-IDF v4.3 doesn't support it directly through its tinyusb "additions" layer.
-target_compile_definitions(${tinyusb_name} PUBLIC CFG_TUD_VENDOR=1)
-target_compile_definitions(${tinyusb_name} PUBLIC CFG_TUD_VENDOR_RX_BUFSIZE=64)
-target_compile_definitions(${tinyusb_name} PUBLIC CFG_TUD_VENDOR_TX_BUFSIZE=64)
+# target_compile_definitions(${tinyusb_name} PUBLIC CFG_TUD_VENDOR=1)
+# target_compile_definitions(${tinyusb_name} PUBLIC CFG_TUD_VENDOR_RX_BUFSIZE=64)
+# target_compile_definitions(${tinyusb_name} PUBLIC CFG_TUD_VENDOR_TX_BUFSIZE=64)
