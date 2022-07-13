@@ -63,7 +63,7 @@ uint8_t strip0_loop0_eff0() {
     // Steps: 122 - Delay: 20
     // Colors: 3 (255.0.0, 0.255.0, 0.0.255)
     // Options: rainbowlen=120, toLeft=true, 
-  if(esp_timer_get_time() - strip_0.effStart < 20 * (strip_0.effStep)) return 0x00;
+  if(esp_timer_get_time() - strip_0.effStart < 500 * (strip_0.effStep)) return 0x00;
   float factor1, factor2;
   uint16_t ind;
   rgb_t color;

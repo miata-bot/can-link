@@ -19,6 +19,7 @@
 
 #include "esp_log.h"
 #include "nvs_flash.h"
+
 /* BLE */
 #include "esp_nimble_hci.h"
 #include "nimble/nimble_port.h"
@@ -30,7 +31,14 @@
 #include "bleprph.h"
 #include <led_strip.h>
 #include <esp_system.h>
+
+// gpio
+#include "freertos/queue.h"
+#include "freertos/task.h"
+#include "driver/gpio.h"
+
 #include "rainbow.h"
+#include "pins.h"
 
 #if CONFIG_EXAMPLE_EXTENDED_ADV
 static uint8_t ext_adv_pattern_1[] = {
@@ -412,95 +420,476 @@ void bleprph_host_task(void *param)
     nimble_port_freertos_deinit();
 }
 
-led_strip_t strip;
-void
-app_main(void)
+static QueueHandle_t gpio_evt_queue = NULL;
+static void gpio_task_example(void* arg)
 {
+    uint32_t io_num;
+    for(;;) {
+        if(xQueueReceive(gpio_evt_queue, &io_num, portMAX_DELAY)) {
+            printf("GPIO[%d] intr, val: %d\n", io_num, gpio_get_level(io_num));
+        }
+    }
+}
+
+static void IRAM_ATTR gpio_isr_handler(void* arg)
+{
+    uint32_t gpio_num = (uint32_t) arg;
+    xQueueSendFromISR(gpio_evt_queue, &gpio_num, NULL);
+}
+
+#define LEDC_TEST_DUTY         (8191)
+#define LEDC_TEST_FADE_TIME    (1000)
+
+/*
+ * This callback function will be called when fade operation has ended
+ * Use callback only if you are aware it is being called inside an ISR
+ * Otherwise, you can use a semaphore to unblock tasks
+ */
+static bool cb_ledc_fade_end_event(const ledc_cb_param_t *param, void *user_arg)
+{
+    portBASE_TYPE taskAwoken = pdFALSE;
+
+    if (param->event == LEDC_FADE_END_EVT) {
+        SemaphoreHandle_t counting_sem = (SemaphoreHandle_t) user_arg;
+        xSemaphoreGiveFromISR(counting_sem, &taskAwoken);
+    }
+
+    return (taskAwoken == pdTRUE);
+}
+
+#include "esp_task_wdt.h"
+
+ 
+void wdt_task(void* param)
+{
+    while(true) {
+        esp_task_wdt_reset();
+        vTaskDelay(pdMS_TO_TICKS(100));
+    }
+}
+#define STACK_SIZE 2048
+
+#include "SX1231.h"
+
+led_strip_t strip;
+led_strip_t strip1;
+SX1231_t* sx1231;
+
+static void spi_init()
+{
+    spi_bus_config_t buscfg = {
+        .miso_io_num = 37,
+        .mosi_io_num = 36,
+        .sclk_io_num = 35,
+        .quadwp_io_num = -1,
+        .quadhd_io_num = -1,
+        .max_transfer_sz = 4000,
+    };
+
+    // Initialize the SPI bus in HSPI mode. DMA channel might need changing later?
+    esp_err_t ret = spi_bus_initialize(SPI2_HOST, &buscfg, SPI_DMA_CH_AUTO);
+
+    switch (ret)
+    {
+    case ESP_OK:
+        break;
+    case ESP_FAIL:
+        ESP_LOGE("spi", "Failed to initialize HSPI Host");
+        abort();
+        break;
+    case ESP_ERR_NOT_FOUND:
+        ESP_LOGE("spi", "Failed to initialize HSPI Host: not found");
+        abort();
+        break;
+    default:
+        ESP_LOGE("spi", "Failed to initialize HSPI Host (%s)", esp_err_to_name(ret));
+        abort();
+    }
+}
+
+void radio_init()
+{
+    SX1231_config_t cfg = {
+        .gpio_cs = 0,
+        .gpio_int = 1,
+        .gpio_reset = 2,
+        .freqBand = RF69_915MHZ,
+        .nodeID = 5, 
+        .networkID = 100,
+        .isRFM69HW_HCW = true,
+        .host = SPI2_HOST
+    };
+    esp_err_t err = sx1231_initialize(&cfg,  &sx1231);
+    if(err != ESP_OK) {
+        ESP_LOGE("radio", "Failed to initialize radio (%s)", esp_err_to_name(err));
+        abort();
+    }
+    ESP_LOGI("radio", "Initalized radio");
+}
+
+void app_main(void)
+{
+    static uint8_t ucParameterToPass;
+    TaskHandle_t xHandle = NULL;
+
+    // Create the task, storing the handle.  Note that the passed parameter ucParameterToPass
+    // must exist for the lifetime of the task, so in this case is declared static.  If it was just an
+    // an automatic stack variable it might no longer exist, or at least have been corrupted, by the time
+    // the new task attempts to access it.
+    xTaskCreate( wdt_task, "NAME", STACK_SIZE, &ucParameterToPass, tskIDLE_PRIORITY, &xHandle );
+    configASSERT( xHandle );
+
+    // Use the handle to delete the task.
+    // if( xHandle != NULL )
+    // {
+    //     vTaskDelete( xHandle );
+    // }
+
+    ESP_LOGI("init", "spi init");
+    spi_init();
+
+    // ESP_LOGI("init", "radio init");
+    // radio_init();
+
+    //zero-initialize the config structure.
+    gpio_config_t io_conf = {};
+    //disable interrupt
+    io_conf.intr_type = GPIO_INTR_DISABLE;
+    //set as output mode
+    io_conf.mode = GPIO_MODE_OUTPUT;
+    //bit mask of the pins that you want to set,e.g.GPIO18/19
+    io_conf.pin_bit_mask = GPIO_OUTPUT_PIN_SEL;
+    //disable pull-down mode
+    io_conf.pull_down_en = 0;
+    // disable pull-up mode
+    io_conf.pull_up_en = 0;
+    //configure GPIO with the given settings
+    gpio_config(&io_conf);
+
+    gpio_set_level(GPIO_NUM_RGB0_EN, 1);
+    gpio_set_level(GPIO_NUM_RGB0_R, 1);
+    gpio_set_level(GPIO_NUM_RGB0_G, 1);
+    gpio_set_level(GPIO_NUM_RGB0_B, 1);
+
+    //interrupt of rising edge
+    io_conf.intr_type = GPIO_INTR_ANYEDGE;
+    //bit mask of the pins, use GPIO4/5 here
+    io_conf.pin_bit_mask = GPIO_INPUT_PIN_SEL;
+    //set as input mode
+    io_conf.mode = GPIO_MODE_INPUT;
+    //enable pull-up mode
+    io_conf.pull_up_en = 0;
+    gpio_config(&io_conf);
+
+    //create a queue to handle gpio event from isr
+    gpio_evt_queue = xQueueCreate(10, sizeof(uint32_t));
+    //start gpio task
+    xTaskCreate(gpio_task_example, "gpio_task_example", 2048, NULL, 10, NULL);
+
+    //install gpio isr service
+    gpio_install_isr_service(ESP_INTR_FLAG_DEFAULT);
+    //hook isr handler for specific gpio pin
+    gpio_isr_handler_add(GPIO_NUM_DI1, gpio_isr_handler, (void*) GPIO_NUM_DI1);
+    gpio_isr_handler_add(GPIO_NUM_DI2, gpio_isr_handler, (void*) GPIO_NUM_DI2);
+    gpio_isr_handler_add(GPIO_NUM_DI3, gpio_isr_handler, (void*) GPIO_NUM_DI3);
+    gpio_isr_handler_add(GPIO_NUM_DI4, gpio_isr_handler, (void*) GPIO_NUM_DI4);
+
+    ESP_LOGI("init", "Minimum free heap size: %d bytes\n", esp_get_minimum_free_heap_size());
+
+    ESP_LOGI("init", "strip init");
+
     strip = (led_strip_t) {
         .type = LED_STRIP_WS2812,
         .is_rgbw = false,
-        // .length = 80 + 40 + 30,
-        .length = 80 + 40,
-        .gpio = 23,
+        .length = 30,
+        // .length = 80 + 40,
+        .gpio = GPIO_NUM_STRIP0,
         .buf = NULL,
         .brightness = 255,
+        .channel = 0,
+    };
+    strip1 = (led_strip_t) {
+        .type = LED_STRIP_WS2812,
+        .is_rgbw = false,
+        .length = 30,
+        // .length = 80 + 40,
+        .gpio = GPIO_NUM_STRIP1,
+        .buf = NULL,
+        .brightness = 255,
+        .channel=1,
     };
     led_strip_install();
     ESP_ERROR_CHECK(led_strip_init(&strip));
+    ESP_ERROR_CHECK(led_strip_init(&strip1));
     rgb_t color = {.red = 0, .green = 0, .blue = 0};
     ESP_ERROR_CHECK(led_strip_fill(&strip, 0, strip.length, color));
+    ESP_ERROR_CHECK(led_strip_fill(&strip1, 0, strip.length, color));
     ESP_ERROR_CHECK(led_strip_flush(&strip));
-
+    ESP_ERROR_CHECK(led_strip_flush(&strip1));
+    // color.red=255;
+    // for(int i = 0; i < strip.length; i++) {
+    //     ESP_ERROR_CHECK(led_strip_set_pixel(&strip, i, color));
+    //     ESP_ERROR_CHECK(led_strip_flush(&strip));
+    //     vTaskDelay(pdMS_TO_TICKS(500));
+    // }
+    ESP_LOGI("init", "strip ok");
     strip_state_init(1);
+    gpio_set_level(GPIO_NUM_RGB0_EN, 1);
+    gpio_set_level(GPIO_NUM_RGB1_EN, 1);
+    unsigned long start = esp_timer_get_time();
     while(true) {
         strips_loop();
-        vTaskDelay(0);
+        vTaskDelay(pdMS_TO_TICKS(0));
+        // if(esp_timer_get_time() - start > 10000) {
+        //     ESP_LOGE("loop", "stopping regulators");
+        //     gpio_set_level(GPIO_NUM_RGB0_EN, 0);
+        //     gpio_set_level(GPIO_NUM_RGB1_EN, 0);
+        //     break;
+        // }
     }
 
-    rgb_t blue = {.red = 0, .green = 0, .blue = 255};
-// esp_err_t led_strip_fill(led_strip_t *strip, size_t start, size_t len, rgb_t color)
+    /*
+     * Prepare and set configuration of timers
+     * that will be used by LED Controller
+     */
+    ledc_timer_config_t ledc_timer = {
+        .duty_resolution = LEDC_TIMER_13_BIT,  // resolution of PWM duty
+        .freq_hz = 5000,                      // frequency of PWM signal
+        .speed_mode = LEDC_LS_MODE,           // timer mode
+        .timer_num = LEDC_LS_TIMER,            // timer index
+        .clk_cfg = LEDC_AUTO_CLK,              // Auto select the source clock
+    };
+    // Set configuration of timer0 for high speed channels
+    ledc_timer_config(&ledc_timer);
 
-    for(size_t i = 0; i < strip.length; i++) {
-        led_strip_fill(&strip, 0, i-2, color);
-        led_strip_set_pixel(&strip, i, blue);
-        led_strip_set_pixel(&strip, i+1, blue);
-        led_strip_set_pixel(&strip, i+2, blue);
-        led_strip_flush(&strip);
-        vTaskDelay(pdMS_TO_TICKS(10));
+    /*
+     * Prepare individual configuration
+     * for each channel of LED Controller
+     * by selecting:
+     * - controller's channel number
+     * - output duty cycle, set initially to 0
+     * - GPIO number where LED is connected to
+     * - speed mode, either high or low
+     * - timer servicing selected channel
+     *   Note: if different channels use one timer,
+     *         then frequency and bit_num of these channels
+     *         will be the same
+     */
+    ledc_channel_config_t ledc_channel[LEDC_TEST_CH_NUM] = {
+        { // red
+            .channel    = LEDC_LS_CH0_CHANNEL,
+            .duty       = 0,
+            .gpio_num   = LEDC_LS_CH0_GPIO,
+            .speed_mode = LEDC_LS_MODE,
+            .hpoint     = 0,
+            .timer_sel  = LEDC_LS_TIMER,
+            .flags.output_invert = 0
+        },
+        { // green
+            .channel    = LEDC_LS_CH1_CHANNEL,
+            .duty       = 0,
+            .gpio_num   = LEDC_LS_CH1_GPIO,
+            .speed_mode = LEDC_LS_MODE,
+            .hpoint     = 0,
+            .timer_sel  = LEDC_LS_TIMER,
+            .flags.output_invert = 0
+        },
+        { // blue
+            .channel    = LEDC_LS_CH2_CHANNEL,
+            .duty       = 0,
+            .gpio_num   = LEDC_LS_CH2_GPIO,
+            .speed_mode = LEDC_LS_MODE,
+            .hpoint     = 0,
+            .timer_sel  = LEDC_LS_TIMER,
+            .flags.output_invert = 0
+        },
+        { // red
+            .channel    = LEDC_LS_CH3_CHANNEL,
+            .duty       = 0,
+            .gpio_num   = LEDC_LS_CH3_GPIO,
+            .speed_mode = LEDC_LS_MODE,
+            .hpoint     = 0,
+            .timer_sel  = LEDC_LS_TIMER,
+            .flags.output_invert = 0
+        },
+        { // green
+            .channel    = LEDC_LS_CH4_CHANNEL,
+            .duty       = 0,
+            .gpio_num   = LEDC_LS_CH4_GPIO,
+            .speed_mode = LEDC_LS_MODE,
+            .hpoint     = 0,
+            .timer_sel  = LEDC_LS_TIMER,
+            .flags.output_invert = 0
+        },
+        { // blue
+            .channel    = LEDC_LS_CH5_CHANNEL,
+            .duty       = 0,
+            .gpio_num   = LEDC_LS_CH5_GPIO,
+            .speed_mode = LEDC_LS_MODE,
+            .hpoint     = 0,
+            .timer_sel  = LEDC_LS_TIMER,
+            .flags.output_invert = 0
+        },
+    };
+    uint8_t ch=0;
+
+    // Set LED Controller with previously prepared configuration
+    for (ch = 0; ch < LEDC_TEST_CH_NUM; ch++) {
+        ledc_channel_config(&ledc_channel[ch]);
     }
 
-    int rc;
+    // Initialize fade service.
+    ledc_fade_func_install(0);
+    ledc_cbs_t callbacks = {
+        .fade_cb = cb_ledc_fade_end_event
+    };
+    SemaphoreHandle_t counting_sem = xSemaphoreCreateCounting(LEDC_TEST_CH_NUM, 0);
 
-    /* Initialize NVS — it is used to store PHY calibration data */
-    esp_err_t ret = nvs_flash_init();
-    if (ret == ESP_ERR_NVS_NO_FREE_PAGES || ret == ESP_ERR_NVS_NEW_VERSION_FOUND) {
-        ESP_ERROR_CHECK(nvs_flash_erase());
-        ret = nvs_flash_init();
+    for (ch = 0; ch < LEDC_TEST_CH_NUM; ch++) {
+        ledc_cb_register(ledc_channel[ch].speed_mode, ledc_channel[ch].channel, &callbacks, (void *) counting_sem);
     }
-    ESP_ERROR_CHECK(ret);
 
-    ESP_ERROR_CHECK(esp_nimble_hci_and_controller_init());
-
-    nimble_port_init();
-    /* Initialize the NimBLE host configuration. */
-    ble_hs_cfg.reset_cb = bleprph_on_reset;
-    ble_hs_cfg.sync_cb = bleprph_on_sync;
-    ble_hs_cfg.gatts_register_cb = gatt_svr_register_cb;
-    ble_hs_cfg.store_status_cb = ble_store_util_status_rr;
-
-    ble_hs_cfg.sm_io_cap = CONFIG_EXAMPLE_IO_TYPE;
-#ifdef CONFIG_EXAMPLE_BONDING
-    ble_hs_cfg.sm_bonding = 1;
-#endif
-#ifdef CONFIG_EXAMPLE_MITM
-    ble_hs_cfg.sm_mitm = 1;
-#endif
-#ifdef CONFIG_EXAMPLE_USE_SC
-    ble_hs_cfg.sm_sc = 1;
-#else
-    ble_hs_cfg.sm_sc = 0;
-#endif
-#ifdef CONFIG_EXAMPLE_BONDING
-    ble_hs_cfg.sm_our_key_dist = 1;
-    ble_hs_cfg.sm_their_key_dist = 1;
-#endif
-
-
-    rc = gatt_svr_init();
-    assert(rc == 0);
-
-    /* Set the default device name. */
-    rc = ble_svc_gap_device_name_set("nimble-bleprph");
-    assert(rc == 0);
-
-    /* XXX Need to have template for store */
-    ble_store_config_init();
-
-    nimble_port_freertos_init(bleprph_host_task);
-
-    /* Initialize command line interface to accept input from user */
-    // rc = scli_init();
-    // if (rc != ESP_OK) {
-    //     ESP_LOGE(tag, "scli_init() failed");
+    // for (ch = 0; ch < LEDC_TEST_CH_NUM; ch++) {
+    //     ledc_stop(ledc_channel[ch].speed_mode, ledc_channel[ch].channel, 1);
     // }
+
+    // red
+    // printf("red\n");
+    // ESP_ERROR_CHECK(ledc_set_duty(ledc_channel[0].speed_mode, ledc_channel[0].channel, 255));
+    // ESP_ERROR_CHECK(ledc_update_duty(ledc_channel[0].speed_mode, ledc_channel[0].channel));
+    // vTaskDelay(pdMS_TO_TICKS(2000));
+
+
+    // // green
+    // printf("green\n");
+    // ESP_ERROR_CHECK(ledc_set_duty(ledc_channel[1].speed_mode, ledc_channel[1].channel, 255));
+    // ESP_ERROR_CHECK(ledc_update_duty(ledc_channel[1].speed_mode, ledc_channel[1].channel));
+    // vTaskDelay(pdMS_TO_TICKS(2000));
+
+    // // blue
+    // printf("blue\n");
+    // ESP_ERROR_CHECK(ledc_set_duty(ledc_channel[2].speed_mode, ledc_channel[2].channel, 255));
+    // ESP_ERROR_CHECK(ledc_update_duty(ledc_channel[2].speed_mode, ledc_channel[2].channel));
+    // vTaskDelay(pdMS_TO_TICKS(2000));
+
+    // printf("ok\n");
+    // // gpio_set_level(GPIO_NUM_RGB0_EN, 0);
+
+    ledc_set_duty(ledc_channel[0].speed_mode, ledc_channel[0].channel, 0);
+    ledc_update_duty(ledc_channel[0].speed_mode, ledc_channel[0].channel);
+    ledc_set_duty(ledc_channel[1].speed_mode, ledc_channel[1].channel, LEDC_TEST_DUTY);
+    ledc_update_duty(ledc_channel[1].speed_mode, ledc_channel[1].channel);
+    ledc_set_duty(ledc_channel[2].speed_mode, ledc_channel[2].channel, LEDC_TEST_DUTY);
+    ledc_update_duty(ledc_channel[2].speed_mode, ledc_channel[2].channel);
+    while(true) {
+        vTaskDelay(pdMS_TO_TICKS(100));
+    }
+
+    // strip_state_init(1);
+    while(true) {
+        printf("1. LEDC fade up to duty = %d\n", LEDC_TEST_DUTY);
+        for (ch = 0; ch < LEDC_TEST_CH_NUM; ch++) {
+            ledc_set_fade_with_time(ledc_channel[ch].speed_mode,
+                    ledc_channel[ch].channel, LEDC_TEST_DUTY, LEDC_TEST_FADE_TIME);
+            ledc_fade_start(ledc_channel[ch].speed_mode,
+                    ledc_channel[ch].channel, LEDC_FADE_NO_WAIT);
+        }
+
+        for (int i = 0; i < LEDC_TEST_CH_NUM; i++) {
+            xSemaphoreTake(counting_sem, portMAX_DELAY);
+        }
+
+        printf("2. LEDC fade down to duty = 0\n");
+        for (ch = 0; ch < LEDC_TEST_CH_NUM; ch++) {
+            ledc_set_fade_with_time(ledc_channel[ch].speed_mode,
+                    ledc_channel[ch].channel, 0, LEDC_TEST_FADE_TIME);
+            ledc_fade_start(ledc_channel[ch].speed_mode,
+                    ledc_channel[ch].channel, LEDC_FADE_NO_WAIT);
+        }
+
+        for (int i = 0; i < LEDC_TEST_CH_NUM; i++) {
+            xSemaphoreTake(counting_sem, portMAX_DELAY);
+        }
+
+        printf("3. LEDC set duty = %d without fade\n", LEDC_TEST_DUTY);
+        for (ch = 0; ch < LEDC_TEST_CH_NUM; ch++) {
+            ledc_set_duty(ledc_channel[ch].speed_mode, ledc_channel[ch].channel, LEDC_TEST_DUTY);
+            ledc_update_duty(ledc_channel[ch].speed_mode, ledc_channel[ch].channel);
+        }
+        vTaskDelay(1000 / portTICK_PERIOD_MS);
+
+        printf("4. LEDC set duty = 0 without fade\n");
+        for (ch = 0; ch < LEDC_TEST_CH_NUM; ch++) {
+            ledc_set_duty(ledc_channel[ch].speed_mode, ledc_channel[ch].channel, 0);
+            ledc_update_duty(ledc_channel[ch].speed_mode, ledc_channel[ch].channel);
+        }
+        vTaskDelay(1000 / portTICK_PERIOD_MS);
+    }
+
+//     rgb_t blue = {.red = 0, .green = 0, .blue = 255};
+// // esp_err_t led_strip_fill(led_strip_t *strip, size_t start, size_t len, rgb_t color)
+
+//     for(size_t i = 0; i < strip.length; i++) {
+//         led_strip_fill(&strip, 0, i-2, color);
+//         led_strip_set_pixel(&strip, i, blue);
+//         led_strip_set_pixel(&strip, i+1, blue);
+//         led_strip_set_pixel(&strip, i+2, blue);
+//         led_strip_flush(&strip);
+//         vTaskDelay(pdMS_TO_TICKS(10));
+//     }
+
+//     int rc;
+
+//     /* Initialize NVS — it is used to store PHY calibration data */
+//     esp_err_t ret = nvs_flash_init();
+//     if (ret == ESP_ERR_NVS_NO_FREE_PAGES || ret == ESP_ERR_NVS_NEW_VERSION_FOUND) {
+//         ESP_ERROR_CHECK(nvs_flash_erase());
+//         ret = nvs_flash_init();
+//     }
+//     ESP_ERROR_CHECK(ret);
+
+//     ESP_ERROR_CHECK(esp_nimble_hci_and_controller_init());
+
+//     nimble_port_init();
+//     /* Initialize the NimBLE host configuration. */
+//     ble_hs_cfg.reset_cb = bleprph_on_reset;
+//     ble_hs_cfg.sync_cb = bleprph_on_sync;
+//     ble_hs_cfg.gatts_register_cb = gatt_svr_register_cb;
+//     ble_hs_cfg.store_status_cb = ble_store_util_status_rr;
+
+//     ble_hs_cfg.sm_io_cap = CONFIG_EXAMPLE_IO_TYPE;
+// #ifdef CONFIG_EXAMPLE_BONDING
+//     ble_hs_cfg.sm_bonding = 1;
+// #endif
+// #ifdef CONFIG_EXAMPLE_MITM
+//     ble_hs_cfg.sm_mitm = 1;
+// #endif
+// #ifdef CONFIG_EXAMPLE_USE_SC
+//     ble_hs_cfg.sm_sc = 1;
+// #else
+//     ble_hs_cfg.sm_sc = 0;
+// #endif
+// #ifdef CONFIG_EXAMPLE_BONDING
+//     ble_hs_cfg.sm_our_key_dist = 1;
+//     ble_hs_cfg.sm_their_key_dist = 1;
+// #endif
+
+
+//     rc = gatt_svr_init();
+//     assert(rc == 0);
+
+//     /* Set the default device name. */
+//     rc = ble_svc_gap_device_name_set("nimble-bleprph");
+//     assert(rc == 0);
+
+//     /* XXX Need to have template for store */
+//     ble_store_config_init();
+
+//     nimble_port_freertos_init(bleprph_host_task);
+
+//     /* Initialize command line interface to accept input from user */
+//     // rc = scli_init();
+//     // if (rc != ESP_OK) {
+//     //     ESP_LOGE(tag, "scli_init() failed");
+//     // }
 }
