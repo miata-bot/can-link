@@ -9,6 +9,10 @@ defmodule TableGenerator.Repo.Migrations.AddConfigTable do
     end
 
     execute """
+    PRAGMA journal_mode = 'DELETE';
+    """
+
+    execute """
     CREATE TRIGGER config_no_insert
     BEFORE INSERT ON config
     WHEN (SELECT COUNT(*) FROM config) >= 1

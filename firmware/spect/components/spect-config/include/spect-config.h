@@ -1,3 +1,6 @@
+#ifndef SPECT_CONFIG_H
+#define SPECT_CONFIG_H
+
 #include <stdint.h>
 #include <string.h>
 
@@ -36,6 +39,42 @@ typedef struct SpectNetwork {
   spect_network_identity_t* identity;
 } spect_network_t;
 
+typedef enum SpectMode {
+  SPECT_MODE_EFFECT_SOLID   = 0x0,
+  SPECT_MODE_EFFECT_RAINBOW = 0x1,
+  SPECT_MODE_EFFECT_PULSE   = 0x2,
+  SPECT_MODE_RADIO          = 0x3,
+  SPECT_MODE_SCRIPTED       = 0x4,
+  SPECT_MODE_MAX
+} __attribute__ ((__packed__)) spect_mode_t;
+
+typedef struct SpectModeSolidData
+{
+  uint32_t channel0;
+  uint32_t channel1; 
+} spect_mode_solid_data_t;
+
+typedef struct SpectModeRainbowData
+{
+  uint32_t length;
+  uint32_t delay_time;
+} spect_mode_rainbow_data_t;
+
+typedef struct SpectModePulseData
+{
+  uint32_t length;
+  uint32_t pulsewidth;
+} spect_mode_pulse_data_t;
+
+typedef struct SpectState {
+  spect_mode_t mode;
+  union {
+    spect_mode_solid_data_t   solid;
+    spect_mode_rainbow_data_t rainbow;
+    spect_mode_pulse_data_t   pulse;
+  } data;
+} spect_state_t;
+
 typedef struct SpectConfig {
   // meta
   uint8_t version;
@@ -60,6 +99,8 @@ typedef struct SpectConfig {
 
   uint16_t network_leader_id;
   spect_network_leader_t* network_leader;
+
+  spect_state_t* state;
 } spect_config_t;
 
 typedef struct spect_config_cfg 
@@ -77,5 +118,11 @@ typedef struct spect_config_context
 
 esp_err_t spect_config_init(spect_config_cfg_t* cfg, spect_config_context_t** out_ctx);
 esp_err_t spect_config_load(spect_config_context_t* ctx);
+esp_err_t spect_set_mode(spect_config_context_t* ctx, spect_mode_t mode);
+const char* spect_mode_to_string(spect_mode_t mode);
+esp_err_t spect_set_state(spect_config_context_t* ctx);
 
-void console_main();
+// private
+int spect_config_load_state(spect_config_context_t* ctx);
+
+#endif

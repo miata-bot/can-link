@@ -9,18 +9,11 @@
 #include "filesystem.h"
 
 #include "spect-config.h"
-// #include <spect-rgb-channel.h>
-// #include <spect-regulator.h>
+#include "spect-ble.h"
 
 static const char *TAG = "SPECT";
 
-spect_config_context_t* config;
-
-// spect_regulator_t reg0;
-// spect_regulator_t reg1;
-
-// spect_rgb_t rgb0;
-// spect_rgb_t rgb1;
+spect_config_context_t* config_ctx;
 
 void app_main(void)
 {
@@ -37,17 +30,33 @@ void app_main(void)
   cfg = (spect_config_cfg_t){
     .path="/flash/config.db",
   };
-  err = spect_config_init(&cfg, &config);
+  err = spect_config_init(&cfg, &config_ctx);
   ESP_ERROR_CHECK(err);
   ESP_LOGI(TAG, "config init ok");
 
-  err = spect_config_load(config);
+  err = spect_config_load(config_ctx);
   ESP_ERROR_CHECK(err);
   ESP_LOGI(TAG, "config load ok");
 
   ESP_LOGI(TAG, "loaded db");
 
   ESP_LOGI(TAG, "free memory=%d", esp_get_minimum_free_heap_size());
+  ESP_LOGI(TAG, "mode=%d", config_ctx->config->state->mode);
+
+  ESP_LOGI(TAG, "ble init");
+  err = spect_ble_init(config_ctx);
+  ESP_ERROR_CHECK(err);
+  ESP_LOGI(TAG, "ble init ok");
+
+  ESP_LOGI(TAG, "mode=%s", spect_mode_to_string(config_ctx->config->state->mode));
+
+  ESP_LOGI(TAG, "solid config, %d %d", config_ctx->config->state->data.solid.channel0, config_ctx->config->state->data.solid.channel1);
+  // err = spect_set_state(config_ctx);
+  // ESP_ERROR_CHECK(err);
+
+  err = spect_set_mode(config_ctx, SPECT_MODE_EFFECT_RAINBOW);
+  ESP_ERROR_CHECK(err);
+  ESP_LOGI(TAG, "rainbow config, %d %d", config_ctx->config->state->data.solid.channel0, config_ctx->config->state->data.solid.channel1);
   
   while(true) {
     vTaskDelay(pdMS_TO_TICKS(100));
