@@ -3,29 +3,24 @@
 
 #include "spect-config.h"
 
-static const char *TAG = "SPECT-CONFIG";
+static const char *TAG = "CONFIG";
 
-/*
-SELECT c0."id", c0."version", c0."rgb_channel_1_enable", c0."rgb_channel_2_enable", c0."strip_channel_1_enable", c0."strip_channel_2_enable", c0."digital_input_1_enable", c0."digital_input_2_enable", c0."digital_input_3_enable", c0."digital_input_4_enable", c0."inserted_at", c0."updated_at" FROM "config" AS c0;
-SELECT n0."id", n0."config_id", n0."key", n0."config_id" FROM "networks" AS n0 WHERE (n0."config_id" = 0) ORDER BY n0."config_id";
-SELECT s0."id", s0."config_id", s0."mode", s0."rgb_channel_1_color", s0."rgb_channel_1_brightness", s0."rgb_channel_2_color", s0."rgb_channel_2_brightness", s0."config_id" FROM "state" AS s0 WHERE (s0."config_id" = 0);
-SELECT n0."id", n0."network_id", n0."name", n0."network_id" FROM "nodes" AS n0 WHERE (n0."network_id" = 100) ORDER BY n0."id"
-*/
-
-esp_err_t spect_config_load(spect_config_context_t* ctx)
+int spect_config_load_config(spect_config_context_t* ctx)
 {
+  ESP_LOGI(TAG, "loading config");
   int rc;
   sqlite3_stmt *res;
-  rc = sqlite3_prepare_v2(ctx->db, "SELECT c0.\"id\", c0.\"version\", c0.\"rgb_channel_1_enable\", c0.\"rgb_channel_2_enable\", c0.\"strip_channel_1_enable\", c0.\"strip_channel_2_enable\", c0.\"digital_input_1_enable\", c0.\"digital_input_2_enable\", c0.\"digital_input_3_enable\", c0.\"digital_input_4_enable\", c0.\"inserted_at\", c0.\"updated_at\" FROM \"config\" AS c0;", -1, &res, 0);    
+  rc = sqlite3_prepare_v2(ctx->db, "SELECT c0.id , c0.version , c0.rgb_channel_1_enable , c0.rgb_channel_2_enable , c0.strip_channel_1_enable , c0.strip_channel_2_enable , c0.digital_input_1_enable , c0.digital_input_2_enable , c0.digital_input_3_enable , c0.digital_input_4_enable , c0.network_identity_id , c0.network_leader_id , c0.network_id  FROM  config  AS c0;", -1, &res, 0);
   if (rc != SQLITE_OK) {
-    ESP_LOGE("config", "Failed to fetch data: %s\n", sqlite3_errmsg(ctx->db));
-    return ESP_ERR_INVALID_ARG;
-  }    
-    
+    ESP_LOGI(TAG, "Failed to fetch config: %s\n", sqlite3_errmsg(ctx->db));
+    return rc;
+  }
+  ESP_LOGI(TAG, "step");
   rc = sqlite3_step(res);
+  ESP_LOGI(TAG, "step ok");
   
   if (rc == SQLITE_ROW) {
-    //id=0
+    ESP_LOGI(TAG, "SQLITE_ROW");
     ctx->config->version = sqlite3_column_int(res, 1);
     ctx->config->rgb_channel_1_enable = sqlite3_column_int(res, 2);
     ctx->config->rgb_channel_2_enable = sqlite3_column_int(res, 3);
@@ -35,26 +30,234 @@ esp_err_t spect_config_load(spect_config_context_t* ctx)
     ctx->config->digital_input_2_enable = sqlite3_column_int(res, 7);
     ctx->config->digital_input_3_enable = sqlite3_column_int(res, 8);
     ctx->config->digital_input_4_enable = sqlite3_column_int(res, 9);
-    // inserted_at
-    // updated_at
-    ESP_LOGI("config", "loaded\n");
+    ctx->config->network_identity_id = sqlite3_column_int(res, 10);
+    ctx->config->network_leader_id = sqlite3_column_int(res, 11);
+    ctx->config->network_id = sqlite3_column_int(res, 12);
+    rc = SQLITE_OK;
+  } else {
+    ESP_LOGI(TAG, "Failed to fetch config: %s\n", sqlite3_errmsg(ctx->db));
   }
   
   sqlite3_finalize(res);
+  return rc;
+}
+
+int spect_config_load_network(spect_config_context_t* ctx)
+{
+  sqlite3_stmt *res;
+  int rc = 0;
+  rc = sqlite3_prepare_v2(ctx->db, "SELECT n0.id, n0.config_id, n0.key, n0.config_id FROM networks AS n0 WHERE (n0.id = ?1) ORDER BY n0.config_id;", -1, &res, 0);    
+  if (rc != SQLITE_OK) {
+    ESP_LOGI(TAG, "Failed to fetch network: %s\n", sqlite3_errmsg(ctx->db));
+    return rc;
+  }
+
+  rc = sqlite3_bind_int(res, 1, ctx->config->network_id);
+  if (rc != SQLITE_OK) {
+    ESP_LOGI(TAG, "Failed to bind network\n");
+    return rc;
+  }
+
+  rc = sqlite3_step(res);
+
+  if (rc == SQLITE_ROW) {
+    ctx->config->network->id = sqlite3_column_int(res, 0);
+    int key_length = sqlite3_column_bytes(res, 2)+1;
+    if(key_length > 1) {
+      ctx->config->network->key = malloc(sizeof(unsigned char) * key_length);
+      strncpy(ctx->config->network->key, (const char*)sqlite3_column_text(res, 2), key_length);
+      ctx->config->network->key[key_length] = '\0';
+      ESP_LOGI(TAG, "network_key[%d]=%s", key_length, sqlite3_column_text(res, 2));
+    } else {
+      ctx->config->network->key = NULL;
+    }
+    rc = SQLITE_OK;
+  } else {
+    ESP_LOGI(TAG, "Failed to fetch network %d: %s\n", ctx->config->network_id, sqlite3_errmsg(ctx->db));
+  }
+
+  sqlite3_finalize(res);
+  return rc;
+}
+
+int spect_config_load_network_identity(spect_config_context_t* ctx)
+{
+  int rc=0;
+  sqlite3_stmt *res;
+  
+  rc = sqlite3_prepare_v2(ctx->db, "SELECT n0.id , n0.network_id , n0.node_id  FROM  network_identity AS n0 WHERE (n0.network_id = ?1);", -1, &res, 0);
+  if (rc != SQLITE_OK) {
+    ESP_LOGI(TAG, "Failed to fetch network identity: %s\n", sqlite3_errmsg(ctx->db));
+    return rc;
+  }
+
+  rc = sqlite3_bind_int(res, 1, ctx->config->network_id);
+  if (rc != SQLITE_OK) {
+    ESP_LOGI(TAG, "Failed to bind network identity\n");
+    return rc;
+  }
+
+  rc = sqlite3_step(res);
+
+  if (rc == SQLITE_ROW) {
+    ctx->config->network->identity->network = ctx->config->network;
+    ctx->config->network->identity->id = sqlite3_column_int(res, 0);
+    ctx->config->network->identity->network_id = sqlite3_column_int(res, 1);
+    ctx->config->network->identity->node_id = sqlite3_column_int(res, 2);
+    rc = SQLITE_OK;
+  } else {
+    ESP_LOGI(TAG, "Failed to fetch network identity: %s\n", sqlite3_errmsg(ctx->db));
+  }
+
+  sqlite3_finalize(res);
+  return rc;
+}
+
+int spect_config_load_network_leader(spect_config_context_t* ctx)
+{
+  int rc=0;
+  sqlite3_stmt *res;
+
+  rc = spect_config_load_network_identity(ctx);
+  if(rc != SQLITE_OK)
+    return rc;
+
+  rc = sqlite3_prepare_v2(ctx->db, "SELECT n0.id, n0.network_id, n0.node_id FROM network_leader AS n0 WHERE (n0.network_id = ?1);", -1, &res, 0);
+  if (rc != SQLITE_OK) {
+    ESP_LOGI(TAG, "Failed to fetch network leader: %s\n", sqlite3_errmsg(ctx->db));
+    return rc;
+  }
+
+  rc = sqlite3_bind_int(res, 1, ctx->config->network_id);
+  if (rc != SQLITE_OK) {
+    ESP_LOGI(TAG, "Failed to bind network leader\n");
+    return rc;
+  }
+
+  rc = sqlite3_step(res);
+
+  if (rc == SQLITE_ROW) {
+    ctx->config->network->leader->network = ctx->config->network;
+    ctx->config->network->leader->id = sqlite3_column_int(res, 0);
+    ctx->config->network->leader->network_id = sqlite3_column_int(res, 1);
+    ctx->config->network->leader->node_id = sqlite3_column_int(res, 2);
+    rc = SQLITE_OK;
+  } else {
+    ESP_LOGI(TAG, "Failed to fetch network leader: %s\n", sqlite3_errmsg(ctx->db));
+  }
+
+  sqlite3_finalize(res);
+  return rc;
+}
+
+int spect_config_load_nodes(spect_config_context_t* ctx)
+{
+  int rc=0;
+  sqlite3_stmt *res;
+
+  rc = sqlite3_prepare_v2(ctx->db, "SELECT n0.id, n0.network_id, n0.name, n0.network_id FROM nodes AS n0 WHERE (n0.network_id = ?1) ORDER BY n0.id;", -1, &res, 0);
+  if (rc != SQLITE_OK) {
+    ESP_LOGI(TAG, "Failed to fetch nodes: %s\n", sqlite3_errmsg(ctx->db));
+    return rc;
+  }
+  rc = sqlite3_bind_int(res, 1, ctx->config->network_id);
+  if (rc != SQLITE_OK) {
+    ESP_LOGI(TAG, "Failed to bind nodes\n");
+    return rc;
+  }
+  int i = 0;
+
+  do {
+    rc = sqlite3_step(res);
+    if(rc != SQLITE_ROW) break;
+
+    ctx->config->network->nodes[i].network = ctx->config->network;
+    ctx->config->network->nodes[i].id = sqlite3_column_int(res, 0);
+
+    if(ctx->config->network->nodes[i].id == ctx->config->network->identity->node_id) {
+      ctx->config->network->identity->node = &ctx->config->network->nodes[i];
+    }
+
+    if(ctx->config->network->nodes[i].id == ctx->config->network->leader->node_id) {
+      ctx->config->network->leader->node = &ctx->config->network->nodes[i];
+    }
+
+    ctx->config->network->nodes[i].network_id = sqlite3_column_int(res, 1);
+    int name_length = sqlite3_column_bytes(res, 2) + 1;
+    if(name_length > 1) {
+      ctx->config->network->nodes[i].name = malloc((sizeof(unsigned char) * name_length));
+      strncpy(ctx->config->network->nodes[i].name, (const char*)sqlite3_column_text(res, 2), name_length);
+      ctx->config->network->nodes[i].name[name_length] = '\0';
+      ESP_LOGI(TAG, "node.name[%d]=%s", name_length, sqlite3_column_text(res, 2));
+    } else {
+      ctx->config->network->nodes[i].name = NULL;
+      ESP_LOGI(TAG, "unnamed node");
+    }
+    ESP_LOGI(TAG, 
+"\
+node[%d]={\
+id=%d \
+network_id=%d \
+name=%s}\
+", i, ctx->config->network->nodes[i].id, ctx->config->network->nodes[i].network_id, ctx->config->network->nodes[i].name ? ctx->config->network->nodes[i].name : "[null]");
+    i++;
+  } while(rc == SQLITE_ROW);
+  rc = SQLITE_OK;
+
+  // ESP_LOGI(TAG, "Failed to fetch nodes %d: %s\n", ctx->config->network_id, sqlite3_errmsg(ctx->db));
+  sqlite3_finalize(res);
+  return rc;
+}
+
+esp_err_t spect_config_load(spect_config_context_t* ctx)
+{
+  int rc = 0;
+  rc = spect_config_load_config(ctx);
+  if(rc != SQLITE_OK)
+    return ESP_ERR_INVALID_ARG;
+
+  ESP_LOGI(TAG, "loaded config={\n\
+  .rgb_channel_1_enable=%d\n\
+  .rgb_channel_2_enable=%d\n\
+  .strip_channel_1_enable=%d\n\
+  .strip_channel_2_enable=%d\n\
+  .digital_input_1_enable=%d\n\
+  .digital_input_2_enable=%d\n\
+  .digital_input_3_enable=%d\n\
+  .digital_input_4_enable=%d\n\
+  .network_id=%d\n\
+  .network_identity_id=%d\n\
+  .network_leader_id=%d\r\n}\
+",
+    ctx->config->rgb_channel_1_enable,
+    ctx->config->rgb_channel_2_enable,
+    ctx->config->strip_channel_1_enable,
+    ctx->config->strip_channel_2_enable,
+    ctx->config->digital_input_1_enable,
+    ctx->config->digital_input_2_enable,
+    ctx->config->digital_input_3_enable,
+    ctx->config->digital_input_4_enable,
+    ctx->config->network_id,
+    ctx->config->network_identity_id,
+    ctx->config->network_leader_id
+  );
+
+  rc = spect_config_load_network(ctx);
+  if(rc != SQLITE_OK) return ESP_ERR_INVALID_STATE;
+  ESP_LOGI(TAG, "network={.id=%d, .key=%s}", ctx->config->network->id, ctx->config->network->key ? ctx->config->network->key : "[null]");
+
+  rc = spect_config_load_network_identity(ctx);
+  if(rc != SQLITE_OK) return ESP_ERR_INVALID_STATE;
+  ESP_LOGI(TAG, "network_identity={.id=%d, .network_id=%d, .node_id=%d}", ctx->config->network->identity->id, ctx->config->network->identity->network_id, ctx->config->network->identity->node_id);
+
+  rc = spect_config_load_network_leader(ctx);
+  if(rc != SQLITE_OK) return ESP_ERR_INVALID_STATE;
+  ESP_LOGI(TAG, "network_leader={.id=%d, .network_id=%d, .node_id=%d}", ctx->config->network->leader->id, ctx->config->network->leader->network_id, ctx->config->network->leader->node_id);
+
+  rc = spect_config_load_nodes(ctx);
+  if(rc != SQLITE_OK) return ESP_ERR_INVALID_STATE;
+
   return ESP_OK;
-
-  // rc = sqlite3_prepare_v2(ctx->db, "SELECT n0.\"id\", n0.\"config_id\", n0.\"key\", n0.\"config_id\" FROM \"networks\" AS n0 WHERE (n0.\"config_id\" = 0) ORDER BY n0.\"config_id\";", -1, &res, 0);    
-  // if (rc != SQLITE_OK) {
-  //   ESP_LOGE("config", "Failed to fetch network: %s\n", sqlite3_errmsg(db));
-  //   return ESP_ERR_INVALID_ARG;
-  // }
-
-  // if (rc == SQLITE_ROW) {
-  //   // id=0
-  //   // config_id=0
-  //   ctx->config->network->id = sqlite3_column_int(res, 9);
-  //   ESP_LOGI("config", "loaded network");
-  // }
 }
 
 esp_err_t spect_config_init(spect_config_cfg_t* cfg, spect_config_context_t** out_ctx)
@@ -62,35 +265,35 @@ esp_err_t spect_config_init(spect_config_cfg_t* cfg, spect_config_context_t** ou
   sqlite3_initialize();
   ESP_LOGI(TAG, "config init");
   spect_network_t* network;
-  spect_node_t** nodes;
+  spect_node_t* nodes;
   spect_network_identity_t* identity;
   spect_network_leader_t* leader;
   spect_config_t* config;
   spect_config_context_t* ctx;
 
   ctx = (spect_config_context_t*)malloc(sizeof(spect_config_context_t));
-  if (!ctx) return ESP_ERR_NO_MEM;
+  if (!ctx) {ESP_LOGI(TAG, "failed to allocate"); return ESP_ERR_NO_MEM;}
 
   config = (spect_config_t*)malloc(sizeof(spect_config_t));
-  if(!config) return ESP_ERR_NO_MEM;
+  if(!config) {ESP_LOGI(TAG, "failed to allocate"); return ESP_ERR_NO_MEM;}
 
   network = (spect_network_t*)malloc(sizeof(spect_network_t));
-  if(!network) return ESP_ERR_NO_MEM;
+  if(!network) {ESP_LOGI(TAG, "failed to allocate"); return ESP_ERR_NO_MEM;}
   config->network = network;
 
   leader = (spect_network_leader_t*)malloc(sizeof(spect_network_leader_t));
-  if(!leader) return ESP_ERR_NO_MEM;
+  if(!leader) {ESP_LOGI(TAG, "failed to allocate"); return ESP_ERR_NO_MEM;}
   config->network->leader = leader;
 
   identity = (spect_network_identity_t*)malloc(sizeof(spect_network_identity_t));
-  if(!identity) return ESP_ERR_NO_MEM;
+  if(!identity) {ESP_LOGI(TAG, "failed to allocate"); return ESP_ERR_NO_MEM;}
   config->network->identity = identity;
 
   // this will limit the max number of nodes in a network
   // far below the technical max, but there's no way this will work
   // with more 10 nodes anyway
-  nodes = (spect_node_t**)malloc(sizeof(spect_node_t)*10);
-  if(!nodes) return ESP_ERR_NO_MEM;
+  nodes = malloc(10 * sizeof(struct SpectNetwork));
+  if(!nodes) {ESP_LOGI(TAG, "failed to allocate"); return ESP_ERR_NO_MEM;}
   config->network->nodes = nodes;
 
   *ctx = (spect_config_context_t){
@@ -101,11 +304,10 @@ esp_err_t spect_config_init(spect_config_cfg_t* cfg, spect_config_context_t** ou
   ESP_LOGI(TAG, "db init %s", cfg->path);
   int rc = sqlite3_open(cfg->path, &ctx->db);
   if(rc) {
-    ESP_LOGE(TAG, "failed to open DB %s", sqlite3_errmsg(ctx->db));
-    return ESP_ERR_INVALID_RESPONSE;
+    ESP_LOGI(TAG, "failed to open DB %s", sqlite3_errmsg(ctx->db));
+    return ESP_ERR_INVALID_STATE;
   }
   ESP_LOGI(TAG, "db init ok");
-
   *out_ctx = ctx;
   return ESP_OK;
 }

@@ -9,7 +9,7 @@ defmodule TableGenerator.Repo.Migrations.AddNetworksTable do
     end
 
     execute """
-    INSERT INTO networks(id, config_id) VALUES(100, 0);
+    INSERT INTO networks(id, config_id, key) VALUES(100, 0, 'testkey');
     """,
     """
     DELETE FROM networks;
@@ -57,8 +57,7 @@ defmodule TableGenerator.Repo.Migrations.AddNetworksTable do
     INSERT INTO nodes(id, network_id) VALUES(10, 100);
     """
 
-    create table(:network_leader, primary_key: false) do
-      add :id, :tinyint, null: false, primary_key: true
+    create table(:network_leader) do
       add :network_id, references(:networks), null: false
       add :node_id, references(:nodes), null: false
     end
@@ -116,14 +115,15 @@ defmodule TableGenerator.Repo.Migrations.AddNetworksTable do
 
     execute """
     UPDATE config SET network_id = 100;
+    """
+    execute """
     UPDATE config SET network_identity_id = 1;
+    """
+    execute """
     UPDATE config SET network_leader_id = 1;
+    """
+    execute """
     UPDATE config SET version = version + 1;
-    """, """
-    UPDATE config SET network_id = NULL where network_id = 100;
-    UPDATE config SET network_identity_id = NULL;
-    UPDATE config SET network_leader_id = NULL;
-    UPDATE config SET version = version - 1;
     """
   end
 end

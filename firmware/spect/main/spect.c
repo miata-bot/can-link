@@ -25,6 +25,7 @@ spect_config_context_t* config;
 void app_main(void)
 {
   ESP_LOGI(TAG, "app boot");
+  ESP_LOGI(TAG, "free memory=%d", esp_get_minimum_free_heap_size());
 
   esp_err_t err;
   err = flash_init();
@@ -38,11 +39,16 @@ void app_main(void)
   };
   err = spect_config_init(&cfg, &config);
   ESP_ERROR_CHECK(err);
+  ESP_LOGI(TAG, "config init ok");
 
   err = spect_config_load(config);
   ESP_ERROR_CHECK(err);
+  ESP_LOGI(TAG, "config load ok");
 
   ESP_LOGI(TAG, "loaded db");
+
+  ESP_LOGI(TAG, "free memory=%d", esp_get_minimum_free_heap_size());
+  
   while(true) {
     vTaskDelay(pdMS_TO_TICKS(100));
   }

@@ -5,5 +5,6 @@ defmodule SpectNetwork do
     belongs_to :config, SpectConfig
     field :key, :string
     has_many :nodes, SpectNode, foreign_key: :network_id
+    has_one :network_identity, SpectNetworkIdentity, foreign_key: :network_id
   end
 end

@@ -4,7 +4,6 @@
 #include "esp_vfs_fat.h"
 
 #include <string.h>
-// #include "ff.h"
 #include <dirent.h>
 static const char *TAG = "SPECT-FS";
 

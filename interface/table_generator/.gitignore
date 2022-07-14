@@ -26,3 +26,4 @@ table_generator-*.tar
 /tmp/
 
 *.db
+sqlite
