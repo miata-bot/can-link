@@ -1,4 +1,5 @@
 #include <led_strip.h>
+extern led_strip_t strip;
 
 typedef struct StripState {uint8_t effect; uint8_t effects; uint16_t effStep; unsigned long effStart;} strip_state_t;
 typedef struct StripLoop { uint8_t currentChild; uint8_t childs; bool timeBased; uint16_t cycles; uint16_t currentTime;} strip_loop_t;
@@ -31,18 +32,18 @@ void strip_state_init(uint8_t toteffects)
 uint8_t strip0_loop0_eff0();
 uint8_t strip0_loop0();
 
-void strips_loop(led_strip_t* strip) {
+void strips_loop() {
   if(strip0_loop0() & 0x01) {
-    led_strip_flush(strip);
-    led_strip_wait(strip, 1000);
+    led_strip_flush(&strip);
+    led_strip_wait(&strip, 1000);
   }
 }
 
-uint8_t strip0_loop0(led_strip_t* strip) {
+uint8_t strip0_loop0() {
   uint8_t ret = 0x00;
   switch(strip0loop0.currentChild) {
     case 0: 
-           ret = strip0_loop0_eff0(strip);break;
+           ret = strip0_loop0_eff0();break;
   }
   if(ret & 0x02) {
     ret &= 0xfd;
@@ -57,7 +58,7 @@ uint8_t strip0_loop0(led_strip_t* strip) {
   return ret;
 }
 
-uint8_t strip0_loop0_eff0(led_strip_t strip) {
+uint8_t strip0_loop0_eff0() {
     // Strip ID: 0 - Effect: Rainbow - LEDS: 120
     // Steps: 122 - Delay: 20
     // Colors: 3 (255.0.0, 0.255.0, 0.0.255)
@@ -72,17 +73,17 @@ uint8_t strip0_loop0_eff0(led_strip_t strip) {
       case 0: factor1 = 1.0 - ((float)(ind % 122 - 0 * 40.666666666666664) / 40.666666666666664);
               factor2 = (float)((int)(ind - 0) % 122) / 40.666666666666664;
               color = (rgb_t){.green=255 * factor1 + 0 * factor2, .red=0 * factor1 + 255 * factor2, .blue=0 * factor1 + 0 * factor2};
-              led_strip_set_pixel(strip, j, color);
+              led_strip_set_pixel(&strip, j, color);
               break;
       case 1: factor1 = 1.0 - ((float)(ind % 122 - 1 * 40.666666666666664) / 40.666666666666664);
               factor2 = (float)((int)(ind - 40.666666666666664) % 122) / 40.666666666666664;
               color = (rgb_t){.green=0 * factor1 + 0 * factor2, .red= 255 * factor1 + 0 * factor2, .blue=0 * factor1 + 255 * factor2};
-              led_strip_set_pixel(strip, j, color);
+              led_strip_set_pixel(&strip, j, color);
               break;
       case 2: factor1 = 1.0 - ((float)(ind % 122 - 2 * 40.666666666666664) / 40.666666666666664);
               factor2 = (float)((int)(ind - 81.33333333333333) % 122) / 40.666666666666664;
               color = (rgb_t){.green=0 * factor1 + 255 * factor2, .red=0 * factor1 + 0 * factor2, .blue=255 * factor1 + 0 * factor2};
-              led_strip_set_pixel(strip, j, color);
+              led_strip_set_pixel(&strip, j, color);
               break;
     }
   }

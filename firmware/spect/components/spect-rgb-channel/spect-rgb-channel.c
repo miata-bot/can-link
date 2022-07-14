@@ -42,14 +42,27 @@ esp_err_t spect_rgb_initialize(spect_rgb_config_t* config, spect_rgb_t** out_ctx
 {
   esp_err_t err = ESP_OK;
 
-  led_strip_t strip = {
-    .type = LED_STRIP_WS2812,
-    .length = config->num_leds,
-    .gpio = config->led_strip_gpio,
-    .buf = NULL,
+  led_strip_t* strip;
+  strip = malloc(sizeof(led_strip_t));
+  if(!strip)
+    return ESP_ERR_NO_MEM;
+
+  *strip = (led_strip_t){
+    // .type = LED_STRIP_WS2812,
+    // .length = config->num_leds,
+    // .gpio = config->led_strip_gpio,
+    // .buf = NULL,
     // .brightness = 255,
+        .type = LED_STRIP_WS2812,
+        .is_rgbw = false,
+        .length = 30,
+        // .length = 80 + 40,
+        .gpio = 9,
+        .buf = NULL,
+        .brightness = 255,
+        .channel = 0,
   };
-  err = led_strip_init(&strip);
+  err = led_strip_init(strip);
   if(err != ESP_OK)
     return err;
 
@@ -57,6 +70,8 @@ esp_err_t spect_rgb_initialize(spect_rgb_config_t* config, spect_rgb_t** out_ctx
   if (!ctx) return ESP_ERR_NO_MEM;
   *ctx = (spect_rgb_t){
     .cfg = config,
+    .strip = strip
+  };
   //   .ledc_channels = {
   //     {
   //       .channel    = config->ledc_channel_offset,
@@ -86,7 +101,7 @@ esp_err_t spect_rgb_initialize(spect_rgb_config_t* config, spect_rgb_t** out_ctx
   //       .flags.output_invert = 0
   //     }
   //   }
-  };
+  // };
   // ctx->counting_sem = xSemaphoreCreateCounting(3, 0);
 
   // ledc_channel_config(&ctx->ledc_channels[LEDC_CHANNEL_R]);
@@ -152,14 +167,14 @@ esp_err_t spect_rgb_wait(spect_rgb_t* ctx)
   if(err != ESP_OK)
     return err;
 
-  err = ledc_update_duty(ctx->ledc_channels[LEDC_CHANNEL_R].speed_mode, ctx->ledc_channels[LEDC_CHANNEL_R].channel);
-  if(err != ESP_OK)
-    return err;
+  // err = ledc_update_duty(ctx->ledc_channels[LEDC_CHANNEL_R].speed_mode, ctx->ledc_channels[LEDC_CHANNEL_R].channel);
+  // if(err != ESP_OK)
+  //   return err;
   
-  err = ledc_update_duty(ctx->ledc_channels[LEDC_CHANNEL_G].speed_mode, ctx->ledc_channels[LEDC_CHANNEL_G].channel);
-  if(err != ESP_OK)
-    return err;
+  // err = ledc_update_duty(ctx->ledc_channels[LEDC_CHANNEL_G].speed_mode, ctx->ledc_channels[LEDC_CHANNEL_G].channel);
+  // if(err != ESP_OK)
+  //   return err;
 
-  err = ledc_update_duty(ctx->ledc_channels[LEDC_CHANNEL_B].speed_mode, ctx->ledc_channels[LEDC_CHANNEL_B].channel);
+  // err = ledc_update_duty(ctx->ledc_channels[LEDC_CHANNEL_B].speed_mode, ctx->ledc_channels[LEDC_CHANNEL_B].channel);
   return err;
 }

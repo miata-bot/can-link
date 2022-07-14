@@ -32,7 +32,7 @@ uint8_t strip0_loop0_eff0();
 uint8_t strip0_loop0();
 
 void strips_loop(led_strip_t* strip) {
-  if(strip0_loop0() & 0x01) {
+  if(strip0_loop0(strip) & 0x01) {
     led_strip_flush(strip);
     led_strip_wait(strip, 1000);
   }

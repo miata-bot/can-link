@@ -75,7 +75,7 @@ void app_main(void)
   spect_rgb_config_t rgb_cfg;
   rgb_cfg = (spect_rgb_config_t) {
     .num_leds=30,
-    .led_strip_gpio=GPIO_NUM_STRIP1,
+    .led_strip_gpio=GPIO_NUM_STRIP0,
     .ledc_channel_offset=0,
     .led_red_gpio=GPIO_NUM_RGB0_B,
     .led_green_gpio=GPIO_NUM_RGB0_G,
@@ -86,7 +86,10 @@ void app_main(void)
 
   err = spect_rgb_initialize(&rgb_cfg, &channel0);
   ESP_ERROR_CHECK(err);
-  rgb_t color = {.red=0, .green=0, .blue=0};
+  err = spect_rgb_enable_strip(channel0);
+  ESP_ERROR_CHECK(err);
+
+  rgb_t color = {.red=255, .green=0, .blue=0};
   spect_rgb_fill(channel0, 0, channel0->strip->length, color);
   spect_rgb_blit(channel0);
   spect_rgb_wait(channel0);
@@ -101,16 +104,19 @@ void app_main(void)
   xTaskCreate( watchdog_task, "NAME", 1024, &ucParameterToPass, tskIDLE_PRIORITY, &xHandle );
   configASSERT( xHandle );
 
-  spect_rgb_enable_strip(channel0);
-  strip_state_init(1);
+  // ESP_LOGI(TAG, "Starting rainbow");
+  // strip_state_init(1);
 
-  while(true) {
-    strips_loop(channel0->strip);
-    vTaskDelay(1);
-  }
+  // while(true) {
+  //   strips_loop(channel0->strip);
+  //   vTaskDelay(0);
+  // }
 
 main_loop:
-  if(current_mode == SPECT_MODE_EFFECT_RAINBOW) strip_state_init(1);
+  if(current_mode == SPECT_MODE_EFFECT_RAINBOW)  {
+    ESP_LOGI(TAG, "Starting rainbow");
+    strip_state_init(1);
+  }
 
   while(config_ctx->config->state->mode == current_mode) {
     if(current_mode == SPECT_MODE_EFFECT_RAINBOW) 
