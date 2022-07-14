@@ -106,12 +106,13 @@ addressable_led_handle_write(led_strip_t* strip, struct os_mbuf *om, uint16_t mi
         return BLE_ATT_ERR_UNLIKELY;
     
 
-    uint8_t* color = (uint8_t*)dst;
-    rgb_t color_;
-    color_.red = color[1];
-    color_.green = color[0];
-    color_.blue = color[2];
-    ESP_LOGE("LED", "fill %02X %02X %02X", color_.red, color_.green, color_.blue);
+    // uint8_t* color = (uint8_t*)dst;
+    // rgb_t color_;
+    // color_.red = color[1];
+    // color_.green = color[0];
+    // color_.blue = color[2];
+    // ESP_LOGE("LED", "fill %02X %02X %02X", color_.red, color_.green, color_.blue);
+    // led_strip_set_pixel(config_ctx->)
     return 0;
 }
 
