@@ -107,13 +107,14 @@ esp_err_t spect_set_mode(spect_config_context_t* ctx, spect_mode_t mode)
     ESP_LOGE(TAG, "Failed to update mode: %s\n", sqlite3_errmsg(ctx->db));
     return ESP_ERR_INVALID_STATE;
   } 
+  ESP_LOGI(TAG, "mode=%s (%d) => %s (%d)", mode_map[ctx->config->state->mode], ctx->config->state->mode, mode_map[mode], mode);
+  
   rc = spect_config_load_state(ctx);
   if(rc != SQLITE_OK) {
     ESP_LOGE(TAG, "Failed to reload state");
     return ESP_ERR_INVALID_STATE;
   }
 
-  ESP_LOGI(TAG, "mode=%s (%d) => %s (%d)", mode_map[ctx->config->state->mode], ctx->config->state->mode, mode_map[mode], mode);
   return ESP_OK;
 }
 

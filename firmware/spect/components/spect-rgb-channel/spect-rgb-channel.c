@@ -57,52 +57,52 @@ esp_err_t spect_rgb_initialize(spect_rgb_config_t* config, spect_rgb_t** out_ctx
   if (!ctx) return ESP_ERR_NO_MEM;
   *ctx = (spect_rgb_t){
     .cfg = config,
-    .ledc_channels = {
-      {
-        .channel    = config->ledc_channel_offset,
-        .duty       = 0,
-        .gpio_num   = config->led_red_gpio,
-        .speed_mode = LEDC_LOW_SPEED_MODE,
-        .hpoint     = 0,
-        .timer_sel  = LEDC_TIMER_1,
-        .flags.output_invert = 0
-      },
-      {
-        .channel    = config->ledc_channel_offset+1,
-        .duty       = 0,
-        .gpio_num   = config->led_green_gpio,
-        .speed_mode = LEDC_LOW_SPEED_MODE,
-        .hpoint     = 0,
-        .timer_sel  = LEDC_TIMER_1,
-        .flags.output_invert = 0
-      },
-      {
-        .channel    = config->ledc_channel_offset+2,
-        .duty       = 0,
-        .gpio_num   = config->led_blue_gpio,
-        .speed_mode = LEDC_LOW_SPEED_MODE,
-        .hpoint     = 0,
-        .timer_sel  = LEDC_TIMER_1,
-        .flags.output_invert = 0
-      }
-    }
+  //   .ledc_channels = {
+  //     {
+  //       .channel    = config->ledc_channel_offset,
+  //       .duty       = 0,
+  //       .gpio_num   = config->led_red_gpio,
+  //       .speed_mode = LEDC_LOW_SPEED_MODE,
+  //       .hpoint     = 0,
+  //       .timer_sel  = LEDC_TIMER_1,
+  //       .flags.output_invert = 0
+  //     },
+  //     {
+  //       .channel    = config->ledc_channel_offset+1,
+  //       .duty       = 0,
+  //       .gpio_num   = config->led_green_gpio,
+  //       .speed_mode = LEDC_LOW_SPEED_MODE,
+  //       .hpoint     = 0,
+  //       .timer_sel  = LEDC_TIMER_1,
+  //       .flags.output_invert = 0
+  //     },
+  //     {
+  //       .channel    = config->ledc_channel_offset+2,
+  //       .duty       = 0,
+  //       .gpio_num   = config->led_blue_gpio,
+  //       .speed_mode = LEDC_LOW_SPEED_MODE,
+  //       .hpoint     = 0,
+  //       .timer_sel  = LEDC_TIMER_1,
+  //       .flags.output_invert = 0
+  //     }
+  //   }
   };
-  ctx->counting_sem = xSemaphoreCreateCounting(3, 0);
+  // ctx->counting_sem = xSemaphoreCreateCounting(3, 0);
 
-  ledc_channel_config(&ctx->ledc_channels[LEDC_CHANNEL_R]);
-  ledc_channel_config(&ctx->ledc_channels[LEDC_CHANNEL_G]);
-  ledc_channel_config(&ctx->ledc_channels[LEDC_CHANNEL_B]);
+  // ledc_channel_config(&ctx->ledc_channels[LEDC_CHANNEL_R]);
+  // ledc_channel_config(&ctx->ledc_channels[LEDC_CHANNEL_G]);
+  // ledc_channel_config(&ctx->ledc_channels[LEDC_CHANNEL_B]);
 
-  ledc_cbs_t callbacks = {
-    .fade_cb = cb_ledc_fade_end_event
-  };
-  ledc_cb_register(ctx->ledc_channels[LEDC_CHANNEL_R].speed_mode, ctx->ledc_channels[LEDC_CHANNEL_R].channel, &callbacks, (void *)ctx);
-  ledc_cb_register(ctx->ledc_channels[LEDC_CHANNEL_G].speed_mode, ctx->ledc_channels[LEDC_CHANNEL_B].channel, &callbacks, (void *)ctx);
-  ledc_cb_register(ctx->ledc_channels[LEDC_CHANNEL_B].speed_mode, ctx->ledc_channels[LEDC_CHANNEL_B].channel, &callbacks, (void *)ctx);
+  // ledc_cbs_t callbacks = {
+  //   .fade_cb = cb_ledc_fade_end_event
+  // };
+  // ledc_cb_register(ctx->ledc_channels[LEDC_CHANNEL_R].speed_mode, ctx->ledc_channels[LEDC_CHANNEL_R].channel, &callbacks, (void *)ctx);
+  // ledc_cb_register(ctx->ledc_channels[LEDC_CHANNEL_G].speed_mode, ctx->ledc_channels[LEDC_CHANNEL_B].channel, &callbacks, (void *)ctx);
+  // ledc_cb_register(ctx->ledc_channels[LEDC_CHANNEL_B].speed_mode, ctx->ledc_channels[LEDC_CHANNEL_B].channel, &callbacks, (void *)ctx);
 
-  ledc_stop(ctx->ledc_channels[LEDC_CHANNEL_R].speed_mode, ctx->ledc_channels[LEDC_CHANNEL_R].channel, 1);
-  ledc_stop(ctx->ledc_channels[LEDC_CHANNEL_G].speed_mode, ctx->ledc_channels[LEDC_CHANNEL_G].channel, 1);
-  ledc_stop(ctx->ledc_channels[LEDC_CHANNEL_B].speed_mode, ctx->ledc_channels[LEDC_CHANNEL_B].channel, 1);
+  // ledc_stop(ctx->ledc_channels[LEDC_CHANNEL_R].speed_mode, ctx->ledc_channels[LEDC_CHANNEL_R].channel, 1);
+  // ledc_stop(ctx->ledc_channels[LEDC_CHANNEL_G].speed_mode, ctx->ledc_channels[LEDC_CHANNEL_G].channel, 1);
+  // ledc_stop(ctx->ledc_channels[LEDC_CHANNEL_B].speed_mode, ctx->ledc_channels[LEDC_CHANNEL_B].channel, 1);
 
   *out_ctx = ctx;
   return ESP_OK;

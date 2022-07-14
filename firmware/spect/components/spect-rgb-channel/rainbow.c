@@ -57,7 +57,7 @@ uint8_t strip0_loop0(led_strip_t* strip) {
   return ret;
 }
 
-uint8_t strip0_loop0_eff0(led_strip_t strip) {
+uint8_t strip0_loop0_eff0(led_strip_t* strip) {
     // Strip ID: 0 - Effect: Rainbow - LEDS: 120
     // Steps: 122 - Delay: 20
     // Colors: 3 (255.0.0, 0.255.0, 0.0.255)
@@ -90,4 +90,3 @@ uint8_t strip0_loop0_eff0(led_strip_t strip) {
   else strip_0.effStep++;
   return 0x01;
 }
-
