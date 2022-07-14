@@ -2,8 +2,8 @@ defmodule TableGenerator.Repo.Migrations.AddStateTable do
   use Ecto.Migration
 
   def change do
-    create table(:state, primary_key: false) do
-      add :id, :tinyint, null: false, default: 0, primary_key: true
+    create table(:state) do
+      add :config_id, references(:config), null: false
 
       # should probably add a constraint for mode
       add :mode, :tinyint, null: false, default: 0
@@ -28,7 +28,7 @@ defmodule TableGenerator.Repo.Migrations.AddStateTable do
     """
 
     execute """
-    INSERT INTO state(id) VALUES(0);
+    INSERT INTO state(id, config_id) VALUES(0, 0);
     """,
     """
     DELETE FROM state;

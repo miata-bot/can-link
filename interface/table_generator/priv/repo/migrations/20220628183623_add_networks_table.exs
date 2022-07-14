@@ -3,19 +3,19 @@ defmodule TableGenerator.Repo.Migrations.AddNetworksTable do
 
   def change do
     create table(:networks, primary_key: false) do
+      add :config_id, references(:config), null: false
       add :id, :tinyint, null: false, default: 100, primary_key: true
       add :key, :string
     end
 
     execute """
-    INSERT INTO networks(id) VALUES(100);
+    INSERT INTO networks(id, config_id) VALUES(100, 0);
     """,
     """
     DELETE FROM networks;
     """
 
-    create table(:nodes, primary_key: false) do
-      add :id, :int, null: false, primary_key: true
+    create table(:nodes) do
       add :network_id, references(:networks), null: false
       add :name, :string
     end
@@ -27,19 +27,34 @@ defmodule TableGenerator.Repo.Migrations.AddNetworksTable do
     # preload the intital topology
     execute """
     INSERT INTO nodes(id, network_id, name) VALUES(1, 100, 'cone');
-    INSERT INTO nodes(id, network_id, name) VALUES(2, 100, '9');
-    INSERT INTO nodes(id, network_id, name) VALUES(3, 100, 'jake');
-    INSERT INTO nodes(id, network_id, name) VALUES(4, 100, 'dax');
-    INSERT INTO nodes(id, network_id, name) VALUES(5, 100, 'kyler');
-    INSERT INTO nodes(id, network_id, name) VALUES(6, 100, 'tyler');
-    INSERT INTO nodes(id, network_id, name) VALUES(7, 100, 'dibs');
-    INSERT INTO nodes(id, network_id, name) VALUES(8, 100, 'easyy');
-    -- two empty slots for gen1
-    INSERT INTO nodes(id, network_id) VALUES(9, 100);
-    INSERT INTO nodes(id, network_id) VALUES(10, 100);
-    """,
     """
-    DELETE FROM nodes;
+    execute """
+    INSERT INTO nodes(id, network_id, name) VALUES(2, 100, '9');
+    """
+    execute """
+    INSERT INTO nodes(id, network_id, name) VALUES(3, 100, 'jake');
+    """
+    execute """
+    INSERT INTO nodes(id, network_id, name) VALUES(4, 100, 'dax');
+    """
+    execute """
+    INSERT INTO nodes(id, network_id, name) VALUES(5, 100, 'kyler');
+    """
+    execute """
+    INSERT INTO nodes(id, network_id, name) VALUES(6, 100, 'tyler');
+    """
+    execute """
+    INSERT INTO nodes(id, network_id, name) VALUES(7, 100, 'dibs');
+    """
+    execute """
+    INSERT INTO nodes(id, network_id, name) VALUES(8, 100, 'easyy');
+    """
+    # -- two empty slots for gen1
+    execute """
+    INSERT INTO nodes(id, network_id) VALUES(9, 100);
+    """
+    execute """
+    INSERT INTO nodes(id, network_id) VALUES(10, 100);
     """
 
     create table(:network_leader, primary_key: false) do

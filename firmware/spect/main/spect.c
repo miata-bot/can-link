@@ -14,7 +14,7 @@
 
 static const char *TAG = "SPECT";
 
-spect_config_t* config;
+spect_config_context_t* config;
 
 // spect_regulator_t reg0;
 // spect_regulator_t reg1;
@@ -34,9 +34,12 @@ void app_main(void)
 
   spect_config_cfg_t cfg;
   cfg = (spect_config_cfg_t){
-    .path=STORAGE_BASE_PATH"/config.db",
+    .path="/flash/config.db",
   };
   err = spect_config_init(&cfg, &config);
+  ESP_ERROR_CHECK(err);
+
+  err = spect_config_load(config);
   ESP_ERROR_CHECK(err);
 
   ESP_LOGI(TAG, "loaded db");

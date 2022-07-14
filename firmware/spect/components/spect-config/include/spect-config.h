@@ -5,16 +5,11 @@
 
 #include <sqlite3.h>
 
-typedef struct SpectNetwork {
-  uint8_t id;
-  char* key;
-} spect_network_t;
-
 typedef struct SpectNode {
   uint16_t id;
   uint8_t network_id;
   char* name;
-  spect_network_t* network;
+  struct spect_network_t* network;
 } spect_node_t;
 
 typedef struct SpectNetworkIdentity {
@@ -22,7 +17,7 @@ typedef struct SpectNetworkIdentity {
   uint16_t node_id;
   uint8_t network_id;
   spect_node_t* node;
-  spect_network_t* network;
+  struct spect_network_t* network;
 } spect_network_identity_t;
 
 typedef struct SpectNetworkLeader {
@@ -30,8 +25,16 @@ typedef struct SpectNetworkLeader {
   uint16_t node_id;
   uint8_t network_id;
   spect_node_t* node;
-  spect_network_t* network;
+  struct spect_network_t* network;
 } spect_network_leader_t;
+
+typedef struct SpectNetwork {
+  uint8_t id;
+  char* key;
+  spect_node_t** nodes;
+  spect_network_leader_t* leader;
+  spect_network_identity_t* identity;
+} spect_network_t;
 
 typedef struct SpectConfig {
   // meta
@@ -73,3 +76,4 @@ typedef struct spect_config_context
 } spect_config_context_t;
 
 esp_err_t spect_config_init(spect_config_cfg_t* cfg, spect_config_context_t** out_ctx);
+esp_err_t spect_config_load(spect_config_context_t* ctx);
