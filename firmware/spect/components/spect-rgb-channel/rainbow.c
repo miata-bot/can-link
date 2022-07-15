@@ -58,35 +58,45 @@ uint8_t strip0_loop0(led_strip_t* strip) {
 }
 
 uint8_t strip0_loop0_eff0(led_strip_t* strip) {
-    // Strip ID: 0 - Effect: Rainbow - LEDS: 120
-    // Steps: 122 - Delay: 20
+    // Strip ID: 0 - Effect: Rainbow - LEDS: 150
+    // Steps: 150 - Delay: 20
     // Colors: 3 (255.0.0, 0.255.0, 0.0.255)
-    // Options: rainbowlen=120, toLeft=true, 
-  if(esp_timer_get_time() - strip_0.effStart < 500 * (strip_0.effStep)) return 0x00;
+    // Options: rainbowlen=75, toLeft=false, 
+  if(esp_timer_get_time() - strip_0.effStart < 20 * (strip_0.effStep)) return 0x00;
   float factor1, factor2;
   uint16_t ind;
   rgb_t color;
-  for(uint16_t j=0;j<120;j++) {
-    ind = strip_0.effStep + j * 1.0166666666666666;
-    switch((int)((ind % 122) / 40.666666666666664)) {
-      case 0: factor1 = 1.0 - ((float)(ind % 122 - 0 * 40.666666666666664) / 40.666666666666664);
-              factor2 = (float)((int)(ind - 0) % 122) / 40.666666666666664;
-              color = (rgb_t){.green=255 * factor1 + 0 * factor2, .red=0 * factor1 + 255 * factor2, .blue=0 * factor1 + 0 * factor2};
+  for(uint16_t j=0;j<150;j++) {
+    ind = 60 - (uint16_t)(strip_0.effStep - j * 0.8) % 60;
+    switch((int)((ind % 60) / 20)) {
+      case 0: factor1 = 1.0 - ((float)(ind % 60 - 0 * 20) / 20);
+              factor2 = (float)((int)(ind - 0) % 60) / 20;
+              color = (rgb_t){
+                .green=255 * factor1 + 0 * factor2, 
+                .red=0 * factor1 + 255 * factor2, 
+                .blue=0 * factor1 + 0 * factor2
+              };
               led_strip_set_pixel(strip, j, color);
               break;
-      case 1: factor1 = 1.0 - ((float)(ind % 122 - 1 * 40.666666666666664) / 40.666666666666664);
-              factor2 = (float)((int)(ind - 40.666666666666664) % 122) / 40.666666666666664;
-              color = (rgb_t){.green=0 * factor1 + 0 * factor2, .red= 255 * factor1 + 0 * factor2, .blue=0 * factor1 + 255 * factor2};
+      case 1: factor1 = 1.0 - ((float)(ind % 60 - 1 * 20) / 20);
+              factor2 = (float)((int)(ind - 20) % 60) / 20;
+              color = (rgb_t){
+                .green=0 * factor1 + 0 * factor2, 
+                .red= 255 * factor1 + 0 * factor2, 
+                .blue=0 * factor1 + 255 * factor2};
               led_strip_set_pixel(strip, j, color);
               break;
-      case 2: factor1 = 1.0 - ((float)(ind % 122 - 2 * 40.666666666666664) / 40.666666666666664);
-              factor2 = (float)((int)(ind - 81.33333333333333) % 122) / 40.666666666666664;
-              color = (rgb_t){.green=0 * factor1 + 255 * factor2, .red=0 * factor1 + 0 * factor2, .blue=255 * factor1 + 0 * factor2};
+      case 2: factor1 = 1.0 - ((float)(ind % 60 - 2 * 20) / 20);
+              factor2 = (float)((int)(ind - 40) % 60) / 20;
+              color = (rgb_t){
+                .green=0 * factor1 + 255 * factor2, 
+                .red=0 * factor1 + 0 * factor2, 
+                .blue=255 * factor1 + 0 * factor2};
               led_strip_set_pixel(strip, j, color);
               break;
     }
   }
-  if(strip_0.effStep >= 122) {strip_state_reset(&strip_0); return 0x03; }
+  if(strip_0.effStep >= 150) {strip_state_reset(&strip_0); return 0x03; }
   else strip_0.effStep++;
   return 0x01;
 }
