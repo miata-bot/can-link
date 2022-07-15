@@ -105,7 +105,6 @@ addressable_led_handle_write(led_strip_t* strip, struct os_mbuf *om, uint16_t mi
     if (rc != 0)
         return BLE_ATT_ERR_UNLIKELY;
     
-
     // uint8_t* color = (uint8_t*)dst;
     // rgb_t color_;
     // color_.red = color[1];
