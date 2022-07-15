@@ -1,3 +1,6 @@
+#ifndef SPECT_RGB_CHANNEL_H
+#define SPECT_RGB_CHANNEL_H
+
 #include <stdint.h>
 
 #include <driver/gpio.h>
@@ -59,3 +62,5 @@ esp_err_t spect_rgb_set_pixel(spect_rgb_t* ctx, uint16_t address, rgb_t color);
 esp_err_t spect_rgb_fill(spect_rgb_t* ctx, uint16_t start, uint16_t end, rgb_t color);
 esp_err_t spect_rgb_blit(spect_rgb_t* ctx);
 esp_err_t spect_rgb_wait(spect_rgb_t* ctx);
+
+#endif

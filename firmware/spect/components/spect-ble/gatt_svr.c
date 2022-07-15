@@ -79,7 +79,12 @@ static const struct ble_gatt_svc_def gatt_svr_svcs[] = {
                 .uuid = &state_mode_characteristic.u,
                 .access_cb = state_mode_access,
                 .flags = BLE_GATT_CHR_F_READ | BLE_GATT_CHR_F_WRITE,
-            },
+            }, {
+                /** Characteristic: Addressable RGB Channel 1 */
+                .uuid = &addressable_led_channel_1_characteristic.u,
+                .access_cb = led_access,
+                .flags = BLE_GATT_CHR_F_READ | BLE_GATT_CHR_F_WRITE,
+            }, 
             {
                 0, /* No more characteristics in this service. */
             }
@@ -105,13 +110,17 @@ addressable_led_handle_write(led_strip_t* strip, struct os_mbuf *om, uint16_t mi
     if (rc != 0)
         return BLE_ATT_ERR_UNLIKELY;
     
-    // uint8_t* color = (uint8_t*)dst;
-    // rgb_t color_;
-    // color_.red = color[1];
-    // color_.green = color[0];
-    // color_.blue = color[2];
-    // ESP_LOGE("LED", "fill %02X %02X %02X", color_.red, color_.green, color_.blue);
-    // led_strip_set_pixel(config_ctx->)
+    uint8_t* color = (uint8_t*)dst;
+    config_ctx->config->state->data.solid.channel0 = color[0] + (color[1] << 8) + (color[2] << 16) + (color[3] << 24);
+    spect_set_state(config_ctx);
+    rgb_t color_;
+    color_.red = color[1];
+    color_.green = color[0];
+    color_.blue = color[2];
+    ESP_LOGE("LED", "fill %02X %02X %02X", color_.red, color_.green, color_.blue);
+    led_strip_fill(config_ctx->rgb0->strip, 0, config_ctx->rgb0->strip->length, color_);
+    led_strip_wait(config_ctx->rgb0->strip, 1000);
+    led_strip_flush(config_ctx->rgb0->strip);
     return 0;
 }
 

@@ -88,6 +88,7 @@ void app_main(void)
   ESP_ERROR_CHECK(err);
   err = spect_rgb_enable_strip(channel0);
   ESP_ERROR_CHECK(err);
+  config_ctx->rgb0 = channel0;
 
   rgb_t color = {.red=0, .green=0, .blue=0};
   spect_rgb_fill(channel0, 0, channel0->strip->length, color);
@@ -117,35 +118,29 @@ main_loop:
     ESP_LOGI(TAG, "Starting rainbow");
     strip_state_init(1);
   }
-
   if(current_mode == SPECT_MODE_EFFECT_SOLID) {
-    ESP_LOGI(TAG, "Starting solid");
-    color.red = config_ctx->config->state->data.solid.channel0 & 0xff;
-    color.green = (config_ctx->config->state->data.solid.channel0 >> 8) & 0xff;
-    color.blue = (config_ctx->config->state->data.solid.channel0 >> 16) & 0xff;
-    spect_rgb_fill(channel0, 0, channel0->strip->length, color);
-    spect_rgb_blit(channel0);
-    spect_rgb_wait(channel0);
+    uint8_t a[4] = {0};
+    a[0] = config_ctx->config->state->data.solid.channel0;
+    a[1] = config_ctx->config->state->data.solid.channel0 >>  8;
+    a[2] = config_ctx->config->state->data.solid.channel0 >> 16;
+    a[3] = config_ctx->config->state->data.solid.channel0 >> 24;
+    rgb_t color_;
+
+    color_.red = a[1];
+    color_.green = a[0];
+    color_.blue = a[2];
+    ESP_LOGE("LED", "fill %02X %02X %02X", color_.red, color_.green, color_.blue);
+    led_strip_fill(config_ctx->rgb0->strip, 0, config_ctx->rgb0->strip->length, color_);
+    led_strip_wait(config_ctx->rgb0->strip, 1000);
+    led_strip_flush(config_ctx->rgb0->strip);
   }
+
 
   while(config_ctx->config->state->mode == current_mode) {
     if(current_mode == SPECT_MODE_EFFECT_RAINBOW) 
       strips_loop(channel0->strip);
 
-    if(current_mode == SPECT_MODE_EFFECT_SOLID) {
-      if(color.red != ((config_ctx->config->state->data.solid.channel0) & 0xff))
-        color.red = config_ctx->config->state->data.solid.channel0 & 0xff;
-
-      if(color.green != ((config_ctx->config->state->data.solid.channel0 >> 8) & 0xff))
-        color.green = (config_ctx->config->state->data.solid.channel0 >> 8) & 0xff;
-
-      if(color.blue != ((config_ctx->config->state->data.solid.channel0 >> 16) & 0xff))
-        color.blue = (config_ctx->config->state->data.solid.channel0 >> 16) & 0xff;
-      
-      spect_rgb_fill(channel0, 0, channel0->strip->length, color);
-      spect_rgb_blit(channel0);
-      spect_rgb_wait(channel0);
-    }
+    if(current_mode == SPECT_MODE_EFFECT_SOLID) {}
 
     vTaskDelay(1);
   }

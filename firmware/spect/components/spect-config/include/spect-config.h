@@ -8,6 +8,8 @@
 
 #include <sqlite3.h>
 
+#include "spect-rgb-channel.h"
+
 typedef struct SpectNode {
   uint16_t id;
   uint8_t network_id;
@@ -114,6 +116,7 @@ typedef struct spect_config_context
   sqlite3* db;
 
   spect_config_t* config;
+  spect_rgb_t* rgb0;
 } spect_config_context_t;
 
 esp_err_t spect_config_init(spect_config_cfg_t* cfg, spect_config_context_t** out_ctx);
