@@ -69,8 +69,8 @@ void app_main(void)
   // err = spect_set_state(config_ctx);
   // ESP_ERROR_CHECK(err);
 
-  // err = spect_set_mode(config_ctx, SPECT_MODE_EFFECT_RAINBOW);
-  // ESP_ERROR_CHECK(err);
+  err = spect_set_mode(config_ctx, SPECT_MODE_EFFECT_RAINBOW);
+  ESP_ERROR_CHECK(err);
   // ESP_LOGI(TAG, "rainbow config, %d %d", config_ctx->config->state->data.solid.channel0, config_ctx->config->state->data.solid.channel1);
   spect_rgb_config_t rgb_cfg;
   rgb_cfg = (spect_rgb_config_t) {
@@ -105,18 +105,10 @@ void app_main(void)
   xTaskCreate( watchdog_task, "NAME", 1024, &ucParameterToPass, tskIDLE_PRIORITY, &xHandle );
   configASSERT( xHandle );
 
-  // ESP_LOGI(TAG, "Starting rainbow");
-  // strip_state_init(1);
-
-  // while(true) {
-  //   strips_loop(channel0->strip);
-  //   vTaskDelay(0);
-  // }
-
 main_loop:
   if(current_mode == SPECT_MODE_EFFECT_RAINBOW)  {
     ESP_LOGI(TAG, "Starting rainbow");
-    strip_state_init(1);
+    rainbow_state_init(channel0, channel0->strip->length, 100);
   }
   if(current_mode == SPECT_MODE_EFFECT_SOLID) {
     uint8_t a[4] = {0};
@@ -138,7 +130,7 @@ main_loop:
 
   while(config_ctx->config->state->mode == current_mode) {
     if(current_mode == SPECT_MODE_EFFECT_RAINBOW) 
-      strips_loop(channel0->strip);
+      rainbow_loop(channel0);
 
     if(current_mode == SPECT_MODE_EFFECT_SOLID) {}
 
