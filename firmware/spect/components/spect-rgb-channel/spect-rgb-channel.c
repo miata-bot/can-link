@@ -49,13 +49,13 @@ esp_err_t spect_rgb_initialize(spect_rgb_config_t* config, spect_rgb_t** out_ctx
 
   *strip = (led_strip_t){
     // .type = LED_STRIP_WS2812,
-    // .length = config->num_leds,
+    .length = config->num_leds,
     // .gpio = config->led_strip_gpio,
     // .buf = NULL,
     // .brightness = 255,
         .type = LED_STRIP_WS2812,
         .is_rgbw = false,
-        .length = 30,
+        // .length = 30,
         // .length = 80 + 40,
         .gpio = 9,
         .buf = NULL,

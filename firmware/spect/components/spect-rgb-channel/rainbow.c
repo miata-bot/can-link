@@ -96,7 +96,7 @@ uint8_t strip0_loop0_eff0(led_strip_t* strip) {
               break;
     }
   }
-  if(strip_0.effStep >= 150) {strip_state_reset(&strip_0); return 0x03; }
+  if(strip_0.effStep >= 75) {strip_state_reset(&strip_0); return 0x03; }
   else strip_0.effStep++;
   return 0x01;
 }

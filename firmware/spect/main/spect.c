@@ -74,7 +74,7 @@ void app_main(void)
   // ESP_LOGI(TAG, "rainbow config, %d %d", config_ctx->config->state->data.solid.channel0, config_ctx->config->state->data.solid.channel1);
   spect_rgb_config_t rgb_cfg;
   rgb_cfg = (spect_rgb_config_t) {
-    .num_leds=30,
+    .num_leds=config_ctx->config->strip_channel_1_length,
     .led_strip_gpio=GPIO_NUM_STRIP0,
     .ledc_channel_offset=0,
     .led_red_gpio=GPIO_NUM_RGB0_B,

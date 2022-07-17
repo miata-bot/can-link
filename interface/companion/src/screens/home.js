@@ -77,7 +77,7 @@ export const HomeScreen = () => {
         }} />
 
       <DeviceListComponent />
-      <TriangleColorPicker
+      {/* <TriangleColorPicker
         onColorSelected={color => {
           // console.log("color selected", color)
           // console.log("connected=", connected.characteristics);
@@ -91,7 +91,7 @@ export const HomeScreen = () => {
             BleManager.writeWithoutResponse(connected.id, "59462f12-9543-9999-12c8-58b459a2712d", "5c3a659e-897e-45e1-b016-007107c96df7", payload);
         }}
         style={{flex: 1}}
-      />
+      /> */}
     </View>
   );
 }

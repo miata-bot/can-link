@@ -87,6 +87,9 @@ typedef struct SpectConfig {
   bool strip_channel_1_enable;
   bool strip_channel_2_enable;
 
+  uint16_t strip_channel_1_length;
+  uint16_t strip_channel_2_length;
+
   bool digital_input_1_enable;
   bool digital_input_2_enable;
   bool digital_input_3_enable;
@@ -124,8 +127,10 @@ esp_err_t spect_config_load(spect_config_context_t* ctx);
 esp_err_t spect_set_mode(spect_config_context_t* ctx, spect_mode_t mode);
 const char* spect_mode_to_string(spect_mode_t mode);
 esp_err_t spect_set_state(spect_config_context_t* ctx);
+esp_err_t spect_set_config(spect_config_context_t* ctx);
 
 // private
 int spect_config_load_state(spect_config_context_t* ctx);
+int spect_config_load_config(spect_config_context_t* ctx);
 
 #endif

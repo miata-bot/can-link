@@ -1,4 +1,4 @@
-#include <led_strip.h>
+ #include <led_strip.h>
 #include <driver/ledc.h>
 
 #include "gatt_srv.h"
@@ -89,11 +89,45 @@ static const struct ble_gatt_svc_def gatt_svr_svcs[] = {
                 0, /* No more characteristics in this service. */
             }
         },
-    },
-    {
+    }, {
+        .type = BLE_GATT_SVC_TYPE_PRIMARY,
+        .uuid = &config_service.u,
+        .characteristics = (struct ble_gatt_chr_def[])
+        {   {
+                /** Characteristic: strip length */
+                .uuid = &config_strip_length_characteristic.u,
+                .access_cb = config_access,
+                .flags = BLE_GATT_CHR_F_READ | BLE_GATT_CHR_F_WRITE,
+            }, 
+            {
+                0, /* No more characteristics in this service. */
+            }
+        },
+    }, {
         0, /* No more services. */
     },
 };
+
+static int
+config_handle_write(struct os_mbuf *om, uint16_t min_len, uint16_t max_len,
+                             void *dst, uint16_t *len)
+{
+    uint16_t om_len;
+    int rc;
+
+    om_len = OS_MBUF_PKTLEN(om);
+    if (om_len < min_len || om_len > max_len)
+        return BLE_ATT_ERR_INVALID_ATTR_VALUE_LEN;
+
+    rc = ble_hs_mbuf_to_flat(om, dst, max_len, len);
+    if (rc != 0)
+        return BLE_ATT_ERR_UNLIKELY;
+
+    ESP_LOGI("BLE", "config set");
+    esp_err_t err = spect_set_config(config_ctx);
+    ESP_ERROR_CHECK(err);
+    return 0;
+}
 
 static int
 addressable_led_handle_write(led_strip_t* strip, struct os_mbuf *om, uint16_t min_len, uint16_t max_len,
@@ -203,6 +237,7 @@ led_access(uint16_t conn_handle, uint16_t attr_handle,
             return rc == 0 ? 0 : BLE_ATT_ERR_INSUFFICIENT_RES;
 
         case BLE_GATT_ACCESS_OP_WRITE_CHR:
+            if(config_ctx->config->state->mode != SPECT_MODE_EFFECT_SOLID) return BLE_ATT_ERR_INSUFFICIENT_RES;
             rc = rgb_led_handle_write(NULL, NULL, NULL, 
                                               ctxt->om,
                                               sizeof rgb_led_channel_1_color,
@@ -238,6 +273,40 @@ led_access(uint16_t conn_handle, uint16_t attr_handle,
         }
     }
 
+    /* Unknown characteristic; the nimble stack should not have called this
+     * function.
+     */
+    assert(0);
+    return BLE_ATT_ERR_UNLIKELY;
+}
+
+static int config_access(uint16_t conn_handle, uint16_t attr_handle,
+                             struct ble_gatt_access_ctxt *ctxt,
+                             void *arg)
+{
+    const ble_uuid_t *uuid = ctxt->chr->uuid;
+    int rc;
+
+    // addressable channel 1
+    if (ble_uuid_cmp(uuid, &config_strip_length_characteristic.u) == 0) {
+        switch (ctxt->op) {
+        case BLE_GATT_ACCESS_OP_READ_CHR:
+            rc = os_mbuf_append(ctxt->om, &config_ctx->config->strip_channel_1_length,
+                                sizeof config_ctx->config->strip_channel_1_length);
+            return rc == 0 ? 0 : BLE_ATT_ERR_INSUFFICIENT_RES;
+
+        case BLE_GATT_ACCESS_OP_WRITE_CHR:
+            rc = config_handle_write(ctxt->om,
+                                     sizeof(uint8_t),
+                                     sizeof config_ctx->config->strip_channel_1_length,
+                                     &config_ctx->config->strip_channel_1_length, NULL);
+            return rc;
+
+        default:
+            assert(0);
+            return BLE_ATT_ERR_UNLIKELY;
+        }
+    }
     /* Unknown characteristic; the nimble stack should not have called this
      * function.
      */

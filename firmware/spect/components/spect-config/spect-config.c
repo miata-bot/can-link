@@ -118,6 +118,57 @@ esp_err_t spect_set_mode(spect_config_context_t* ctx, spect_mode_t mode)
   return ESP_OK;
 }
 
+esp_err_t spect_set_config(spect_config_context_t* ctx) 
+{
+  int rc;
+  sqlite3_stmt *res;
+
+  rc = sqlite3_prepare_v2(ctx->db, 
+  "UPDATE config SET rgb_channel_1_enable=?1, rgb_channel_2_enable=?2, strip_channel_1_enable=?3, strip_channel_2_enable=?4, strip_channel_1_length=?5, strip_channel_2_length=?6, digital_input_1_enable=?7, digital_input_2_enable=?8, digital_input_3_enable=?9, digital_input_4_enable=?10;",
+  -1, &res, 0);
+
+  if (rc != SQLITE_OK) {
+    ESP_LOGE(TAG, "Failed to update state: %s\n", sqlite3_errmsg(ctx->db));
+    return ESP_ERR_INVALID_STATE;
+  }
+
+  rc = sqlite3_bind_int(res, 1, ctx->config->rgb_channel_1_enable);
+  if (rc != SQLITE_OK) return ESP_ERR_INVALID_STATE;
+  rc = sqlite3_bind_int(res, 2, ctx->config->rgb_channel_2_enable);
+  if (rc != SQLITE_OK) return ESP_ERR_INVALID_STATE;
+  rc = sqlite3_bind_int(res, 3, ctx->config->strip_channel_1_enable);
+  if (rc != SQLITE_OK) return ESP_ERR_INVALID_STATE;
+  rc = sqlite3_bind_int(res, 4, ctx->config->strip_channel_2_enable);
+  if (rc != SQLITE_OK) return ESP_ERR_INVALID_STATE;
+  rc = sqlite3_bind_int(res, 5, ctx->config->strip_channel_1_length);
+  if (rc != SQLITE_OK) return ESP_ERR_INVALID_STATE;
+  rc = sqlite3_bind_int(res, 6, ctx->config->strip_channel_2_length);
+  if (rc != SQLITE_OK) return ESP_ERR_INVALID_STATE;
+  rc = sqlite3_bind_int(res, 7, ctx->config->digital_input_1_enable);
+  if (rc != SQLITE_OK) return ESP_ERR_INVALID_STATE;
+  rc = sqlite3_bind_int(res, 8, ctx->config->digital_input_2_enable);
+  if (rc != SQLITE_OK) return ESP_ERR_INVALID_STATE;
+  rc = sqlite3_bind_int(res, 9, ctx->config->digital_input_3_enable);
+  if (rc != SQLITE_OK) return ESP_ERR_INVALID_STATE;
+  rc = sqlite3_bind_int(res, 10, ctx->config->digital_input_4_enable);
+  if (rc != SQLITE_OK) return ESP_ERR_INVALID_STATE;
+
+  rc = sqlite3_step(res);
+
+  if (rc != SQLITE_DONE) {
+    ESP_LOGE(TAG, "Failed to update config: %s\n", sqlite3_errmsg(ctx->db));
+    return ESP_ERR_INVALID_STATE;
+  }
+
+  rc = spect_config_load_config(ctx);
+  if(rc != SQLITE_OK) {
+    ESP_LOGE(TAG, "Failed to reload config");
+    return ESP_ERR_INVALID_STATE;
+  }
+
+  return ESP_OK;
+}
+
 int spect_config_load_state(spect_config_context_t* ctx)
 {
   int rc;
@@ -166,7 +217,10 @@ int spect_config_load_config(spect_config_context_t* ctx)
   ESP_LOGI(TAG, "loading config");
   int rc;
   sqlite3_stmt *res;
-  rc = sqlite3_prepare_v2(ctx->db, "SELECT c0.id , c0.version , c0.rgb_channel_1_enable , c0.rgb_channel_2_enable , c0.strip_channel_1_enable , c0.strip_channel_2_enable , c0.digital_input_1_enable , c0.digital_input_2_enable , c0.digital_input_3_enable , c0.digital_input_4_enable , c0.network_identity_id , c0.network_leader_id , c0.network_id  FROM  config  AS c0;", -1, &res, 0);
+  rc = sqlite3_prepare_v2(ctx->db, 
+  "SELECT c0.id, c0.version, c0.rgb_channel_1_enable, c0.rgb_channel_2_enable, c0.strip_channel_1_enable, c0.strip_channel_2_enable, c0.digital_input_1_enable, c0.digital_input_2_enable, c0.digital_input_3_enable, c0.digital_input_4_enable, c0.network_identity_id, c0.network_leader_id, c0.network_id, c0.strip_channel_1_length, c0.strip_channel_2_length FROM config AS c0;",
+  -1, &res, 0);
+
   if (rc != SQLITE_OK) {
     ESP_LOGE(TAG, "Failed to fetch config: %s\n", sqlite3_errmsg(ctx->db));
     return rc;
@@ -186,6 +240,8 @@ int spect_config_load_config(spect_config_context_t* ctx)
     ctx->config->network_identity_id = sqlite3_column_int(res, 10);
     ctx->config->network_leader_id = sqlite3_column_int(res, 11);
     ctx->config->network_id = sqlite3_column_int(res, 12);
+    ctx->config->strip_channel_1_length = sqlite3_column_int(res, 13);
+    ctx->config->strip_channel_2_length = sqlite3_column_int(res, 14);
     rc = SQLITE_OK;
   } else {
     ESP_LOGE(TAG, "Failed to fetch config: %s\n", sqlite3_errmsg(ctx->db));
@@ -238,7 +294,7 @@ int spect_config_load_network_identity(spect_config_context_t* ctx)
   int rc=0;
   sqlite3_stmt *res;
   
-  rc = sqlite3_prepare_v2(ctx->db, "SELECT n0.id , n0.network_id , n0.node_id  FROM  network_identity AS n0 WHERE (n0.network_id = ?1);", -1, &res, 0);
+  rc = sqlite3_prepare_v2(ctx->db, "SELECT n0.id, n0.network_id, n0.node_id  FROM  network_identity AS n0 WHERE (n0.network_id = ?1);", -1, &res, 0);
   if (rc != SQLITE_OK) {
     ESP_LOGE(TAG, "Failed to fetch network identity: %s\n", sqlite3_errmsg(ctx->db));
     return rc;

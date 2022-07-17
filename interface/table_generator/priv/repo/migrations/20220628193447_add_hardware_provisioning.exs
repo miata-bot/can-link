@@ -11,6 +11,10 @@ defmodule TableGenerator.Repo.Migrations.AddHardwareProvisioning do
       add :strip_channel_1_enable, :boolean, default: true, null: false
       add :strip_channel_2_enable, :boolean, default: false, null: false
 
+      # strip length
+      add :strip_channel_1_length, :integer, default: 150, null: false
+      add :strip_channel_2_length, :integer, default: 150, null: false
+
       # digital input
       add :digital_input_1_enable, :boolean, default: false, null: false
       add :digital_input_2_enable, :boolean, default: false, null: false
