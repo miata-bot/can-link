@@ -15,7 +15,6 @@
 
 /**
  * @brief Select Array for Digital Input
- * 
  */
 #define GPIO_INPUT_PIN_SEL  ((1ULL<<GPIO_NUM_DI3) | \
                              (1ULL<<GPIO_NUM_DI1) | \

@@ -190,15 +190,21 @@ int spect_config_load_state(spect_config_context_t* ctx)
         ctx->config->state->data.solid.channel1 = sqlite3_column_int(res, 2);
       } break;
       case SPECT_MODE_EFFECT_RAINBOW: {
+        ESP_LOGI(TAG, "loading rainbow state");
         ctx->config->state->data.rainbow.length = sqlite3_column_int(res, 3);
         ctx->config->state->data.rainbow.delay_time = sqlite3_column_int(res, 4);
       } break;
       case SPECT_MODE_EFFECT_PULSE: {
+        ESP_LOGI(TAG, "loading pulse state");
         ctx->config->state->data.pulse.length = sqlite3_column_int(res, 5);
         ctx->config->state->data.pulse.pulsewidth = sqlite3_column_int(res, 6);
       } break;
-      // case SPECT_MODE_RADIO: {} break;
-      // case SPECT_MODE_SCRIPTED: {} break;
+      case SPECT_MODE_RADIO: {
+        ESP_LOGI(TAG, "loading radio state");
+      } break;
+      case SPECT_MODE_SCRIPTED: {
+        ESP_LOGI(TAG, "loading script state");
+      } break;
       default:
         ESP_LOGE(TAG, "unknown mode!!");
         break;
@@ -420,9 +426,11 @@ name=%s}\
 
 esp_err_t spect_config_load(spect_config_context_t* ctx)
 {
+  ESP_LOGI(TAG, "config load");
   int rc = 0;
   rc = spect_config_load_state(ctx);
   if(rc != SQLITE_OK) return ESP_ERR_INVALID_ARG;
+  ESP_LOGI(TAG, "state load ok");
   
   rc = spect_config_load_config(ctx);
   if(rc != SQLITE_OK) return ESP_ERR_INVALID_ARG;
@@ -438,8 +446,9 @@ esp_err_t spect_config_load(spect_config_context_t* ctx)
   .digital_input_4_enable=%d\n\
   .network_id=%d\n\
   .network_identity_id=%d\n\
-  .network_leader_id=%d\r\n}\
-",
+  .network_leader_id=%d\n\
+  .strip_channel_1_length=%d\n\
+  .strip_channel_2_length=%d}",
     ctx->config->rgb_channel_1_enable,
     ctx->config->rgb_channel_2_enable,
     ctx->config->strip_channel_1_enable,
@@ -450,7 +459,9 @@ esp_err_t spect_config_load(spect_config_context_t* ctx)
     ctx->config->digital_input_4_enable,
     ctx->config->network_id,
     ctx->config->network_identity_id,
-    ctx->config->network_leader_id
+    ctx->config->network_leader_id,
+    ctx->config->strip_channel_1_length,
+    ctx->config->strip_channel_2_length
   );
 
   rc = spect_config_load_network(ctx);

@@ -5,6 +5,7 @@
 #include "sx1231.h"
 
 SX1231_t* sx1231;
+
 typedef struct
 {
   int version;
@@ -13,17 +14,16 @@ typedef struct
 
 } configuration;
 
-
-esp_err_t spect_initialize(spect_config_context_t* config_ctx, SX1231_config_t* cfg)
+esp_err_t spect_radio_initialize(spect_config_context_t* config_ctx, SX1231_config_t* cfg)
 {
   esp_err_t err;
-  err = sx1231_initialize(&cfg,  &sx1231);
+  err = sx1231_initialize(cfg,  &sx1231);
   ESP_ERROR_CHECK(err);
   ESP_LOGI("RADIO", "Initalized radio");
   return ESP_OK;
 }
 
-esp_err_t spect_loop(spect_config_context_t* config_ctx)
+esp_err_t spect_radio_loop(spect_config_context_t* config_ctx)
 {
   // if(sx1231_sendWithRetry(sx1231, 2, "ABCD", 4, 3, 10)) {
   //     ESP_LOGI("RADIO", "got ack");

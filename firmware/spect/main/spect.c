@@ -24,32 +24,10 @@ static const char *TAG = "SPECT";
 spect_config_context_t* config_ctx;
 spect_rgb_t* channel0;
 
-void watchdog_task(void* params)
-{
-  while(true) {
-    esp_task_wdt_reset();
-    vTaskDelay(pdMS_TO_TICKS(100));
-  }
-}
-
 void app_main(void)
 {
   ESP_LOGI(TAG, "app boot");
   ESP_LOGI(TAG, "free memory=%d", esp_get_minimum_free_heap_size());
-  
-  /* start the watchdog task. It's possible this bad boy should probably
-   * be after the initialization of everything?
-   */ 
-  static uint8_t ucParameterToPass;
-  TaskHandle_t xHandle = NULL;
-
-  /* Create the watchdog task, storing the handle.  Note that the passed parameter ucParameterToPass
-   * must exist for the lifetime of the task, so in this case is declared static.  If it was just an
-   * an automatic stack variable it might no longer exist, or at least have been corrupted, by the time
-   * the new task attempts to access it.
-  */
-  xTaskCreate(watchdog_task, "WATCHDOG", 1024, &ucParameterToPass, tskIDLE_PRIORITY, &xHandle);
-  configASSERT(xHandle);
 
   esp_err_t err;
 
@@ -130,6 +108,7 @@ void app_main(void)
   /* rgb initializing */
   err = spect_rgb_initialize(&rgb_cfg, &channel0);
   ESP_ERROR_CHECK(err);
+  config_ctx->rgb0 = channel0;
   err = spect_rgb_enable_strip(channel0);
   ESP_ERROR_CHECK(err);
 
@@ -141,13 +120,15 @@ void app_main(void)
   SX1231_config_t radio_cfg = {
       .gpio_cs = GPIO_NUM_SX1231_CSN,
       .gpio_int = GPIO_NUM_SX1231_IRQ,
-      .gpio_reset = PIN_NUM_SX1231_RESET,
+      .gpio_reset = GPIO_NUM_SX1231_RESET,
       .freqBand = RF69_915MHZ,
       .nodeID = 100, 
       .networkID = 100,
       .isRFM69HW_HCW = true,
       .host = SPI2_HOST
   };
+  err = spect_radio_initialize(config_ctx, &radio_cfg);
+  ESP_ERROR_CHECK(err);
 
 /* VERY IMPORTANT!!!!!! DO NOT CREATE MORE STACK VARIABLES HERE U FOOL!!! */
 main_loop_init:
@@ -164,15 +145,18 @@ main_loop_init:
     a[1] = config_ctx->config->state->data.solid.channel0 >>  8;
     a[2] = config_ctx->config->state->data.solid.channel0 >> 16;
     a[3] = config_ctx->config->state->data.solid.channel0 >> 24;
-    rgb_t color_; // FIX THIS!!
+    rgb_t color_ = {0}; // FIX THIS!!
 
     color_.red = a[1];
     color_.green = a[0];
     color_.blue = a[2];
-    ESP_LOGE("LED", "fill %02X %02X %02X", color_.red, color_.green, color_.blue);
-    led_strip_fill(config_ctx->rgb0->strip, 0, config_ctx->rgb0->strip->length, color_);
-    led_strip_wait(config_ctx->rgb0->strip, 1000);
-    led_strip_flush(config_ctx->rgb0->strip);
+    ESP_LOGE("LED", "fill[%d] %02X %02X %02X", 
+      config_ctx->rgb0->strip->length, 
+      color_.red, color_.green, color_.blue
+    );
+    spect_rgb_fill(channel0, 0, config_ctx->rgb0->strip->length, color_);
+    spect_rgb_blit(channel0);
+    spect_rgb_wait(channel0);
   }
 
   if(current_mode == SPECT_MODE_EFFECT_PULSE) {
@@ -182,7 +166,6 @@ main_loop_init:
 
   if(current_mode == SPECT_MODE_RADIO) {
     ESP_LOGI("RADIO", "SPECT_MODE_RADIO init");
-    spect_radio_initialize(config_ctx, &radio_cfg);
   }
 
   /* Main loop begins here. */
@@ -198,7 +181,8 @@ main_loop_init:
     if(current_mode == SPECT_MODE_EFFECT_RAINBOW) rainbow_loop(channel0);
     if(current_mode == SPECT_MODE_EFFECT_PULSE) {}
     if(current_mode == SPECT_MODE_RADIO) spect_radio_loop(config_ctx);
-    esp_task_wdt_reset();
+    vTaskDelay(pdMS_TO_TICKS(10));
+    // ESP_LOGI(TAG, "LOOP done");
   }
   ESP_LOGW(TAG, "mode changed from %s to %s", spect_mode_to_string(current_mode), spect_mode_to_string(config_ctx->config->state->mode));
   /* do not reset any other state here. all initialization should 

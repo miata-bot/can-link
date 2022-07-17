@@ -91,11 +91,9 @@ esp_err_t sx1231_initialize(SX1231_config_t *cfg, SX1231_t** out_ctx)
 
     //Attach the radio to the SPI bus
     err = spi_bus_add_device(cfg->host, &devcfg, &spi);
+    ESP_ERROR_CHECK(err);
 
-    if (err != ESP_OK)  {
-        ESP_LOGE(TAG, "Could not create SPI device");
-        return err;
-    } // TODO: should cleanup here
+    ESP_LOGI(TAG, "spi_bus_add_device ok");
 
     SX1231_t* ctx = (SX1231_t*)malloc(sizeof(SX1231_t));
     if (!ctx) return ESP_ERR_NO_MEM;
@@ -109,6 +107,7 @@ esp_err_t sx1231_initialize(SX1231_config_t *cfg, SX1231_t** out_ctx)
         .spi = spi
     };
     sx1231_reset(ctx);
+    ESP_LOGI(TAG, "RESET");
 
     // this is a lot of data. maybe put it in flash?
     const uint8_t CONFIG[][2] =
@@ -156,15 +155,17 @@ esp_err_t sx1231_initialize(SX1231_config_t *cfg, SX1231_t** out_ctx)
     };
 
     // esp timer is actually a uint64_t
-    uint64_t start = (esp_timer_get_time() / 1000);
-    uint8_t timeout = 50;
+    uint64_t start = esp_timer_get_time();
+    uint64_t timeout = 1000000; // one second
 
     do sx1231_writeReg(ctx, REG_SYNCVALUE1, 0xAA);
-    while (sx1231_readReg(ctx, REG_SYNCVALUE1) != 0xAA && (esp_timer_get_time() / 1000)-start < timeout);
-    start = (esp_timer_get_time() / 1000);
+    while (sx1231_readReg(ctx, REG_SYNCVALUE1) != 0xAA && esp_timer_get_time()-start < timeout);
+    start = esp_timer_get_time();
     do sx1231_writeReg(ctx, REG_SYNCVALUE1, 0x55);
-    while (sx1231_readReg(ctx, REG_SYNCVALUE1) != 0x55 && (esp_timer_get_time() / 1000)-start < timeout);
+    while (sx1231_readReg(ctx, REG_SYNCVALUE1) != 0x55 && esp_timer_get_time()-start < timeout);
     ESP_LOGI(TAG, "Radio sync");
+    // todo check for timeout
+    sx1231_print_regs(ctx);
 
     for (uint8_t i = 0; CONFIG[i][0] != 255; i++)
         sx1231_writeReg(ctx, CONFIG[i][0], CONFIG[i][1]);
@@ -175,18 +176,18 @@ esp_err_t sx1231_initialize(SX1231_config_t *cfg, SX1231_t** out_ctx)
 
     sx1231_setHighPower(ctx, cfg->isRFM69HW_HCW); // called regardless if it's a RFM69W or RFM69HW (at this point _isRFM69HW may not be explicitly set by constructor and setHighPower() may not have been called yet (ie called after initialize() call)
     sx1231_setMode(ctx, RF69_MODE_STANDBY);
-    start = (esp_timer_get_time() / 1000);
+    start = esp_timer_get_time();
 
-    while (((sx1231_readReg(ctx, REG_IRQFLAGS1) & RF_IRQFLAGS1_MODEREADY) == 0x00) && (esp_timer_get_time() / 1000)-start < timeout); // wait for ModeReady
+    while (((sx1231_readReg(ctx, REG_IRQFLAGS1) & RF_IRQFLAGS1_MODEREADY) == 0x00) && esp_timer_get_time()-start < timeout); // wait for ModeReady
 
-    if ((esp_timer_get_time() / 1000)-start >= timeout)
-        return -1;
+    uint64_t elapsed_time = esp_timer_get_time()-start;
+    if (elapsed_time >= timeout) {
+        ESP_LOGE(TAG, "timeout waiting for radio %llu", elapsed_time);
+        return ESP_ERR_TIMEOUT;
+    }
 
     err = sx1231_install_interrupts(ctx);
-    if(err != ESP_OK) {
-        ESP_LOGE(TAG, "Could not attach interrupts");
-        return err;
-    }
+    ESP_ERROR_CHECK(err);
 
     *out_ctx = ctx;
     return ESP_OK;
@@ -212,8 +213,8 @@ bool sx1231_canSend(SX1231_t *sx1231) {
 
 void sx1231_send(SX1231_t *sx1231, uint16_t toAddress, const void* buffer, uint8_t bufferSize, bool requestACK) {
     sx1231_writeReg(sx1231, REG_PACKETCONFIG2, (sx1231_readReg(sx1231, REG_PACKETCONFIG2) & 0xFB) | RF_PACKET2_RXRESTART); // avoid RX deadlocks
-    uint32_t now = (esp_timer_get_time() / 1000);
-    while (!sx1231_canSend(sx1231) && (esp_timer_get_time() / 1000) - now < RF69_CSMA_LIMIT_MS) {
+    uint32_t now = esp_timer_get_time();
+    while (!sx1231_canSend(sx1231) && esp_timer_get_time() - now < RF69_CSMA_LIMIT_MS) {
         sx1231_receiveDone(sx1231);
     }
     sx1231_sendFrame(sx1231, toAddress, buffer, bufferSize, requestACK, false);
@@ -230,8 +231,8 @@ bool sx1231_sendWithRetry(SX1231_t *sx1231, uint16_t toAddress, const void* buff
     for (uint8_t i = 0; i <= retries; i++)
     {
         sx1231_send(sx1231, toAddress, buffer, bufferSize, true);
-        sentTime = (esp_timer_get_time() / 1000);
-        while ((esp_timer_get_time() / 1000) - sentTime < retryWaitTime)
+        sentTime = esp_timer_get_time();
+        while (esp_timer_get_time() - sentTime < retryWaitTime)
         {
             if (sx1231_ACKReceived(sx1231, toAddress)) return true;
             vTaskDelay(1);
@@ -278,8 +279,8 @@ void sx1231_sendACK(SX1231_t *sx1231, const void* buffer, uint8_t bufferSize) {
     uint16_t sender = sx1231->SENDERID;
     int16_t _RSSI = sx1231->RSSI; // save payload received RSSI value
     sx1231_writeReg(sx1231, REG_PACKETCONFIG2, (sx1231_readReg(sx1231, REG_PACKETCONFIG2) & 0xFB) | RF_PACKET2_RXRESTART); // avoid RX deadlocks
-    uint32_t now = (esp_timer_get_time() / 1000);
-    while (!sx1231_canSend(sx1231) && (esp_timer_get_time() / 1000) - now < RF69_CSMA_LIMIT_MS) {
+    uint32_t now = esp_timer_get_time();
+    while (!sx1231_canSend(sx1231) && esp_timer_get_time() - now < RF69_CSMA_LIMIT_MS) {
         sx1231_receiveDone(sx1231);
     }
     sx1231->SENDERID = sender;    // TWS: Restore SenderID after it gets wiped out by receiveDone()
@@ -541,6 +542,29 @@ void sx1231_setMode(SX1231_t *sx1231, uint8_t newMode) {
     while (sx1231->_mode == RF69_MODE_SLEEP && (sx1231_readReg(sx1231, REG_IRQFLAGS1) & RF_IRQFLAGS1_MODEREADY) == 0x00); // wait for ModeReady
 
     sx1231->_mode = newMode;
+}
+
+void sx1231_print_regs(SX1231_t* ctx)
+{
+  // Print the header row and first register entry
+  fprintf(stderr, "\n     ");
+  for ( uint8_t reg = 0x00; reg<0x10; reg++ ) {
+    fprintf(stderr, "%02X   ", reg);
+  }
+  fprintf(stderr, "\n");
+  fprintf(stderr, "00: -- ");
+
+  // Loop over the registers from 0x01 to 0x7F and print their values
+  for ( uint8_t reg = 0x01; reg<0x80; reg++ ) {
+    if ( reg % 16 == 0 ) {    // Print the header column entries
+        fprintf(stderr, "\n%02X:   ", reg);
+    }
+
+    // Print the actual register values
+    uint8_t ret = sx1231_readReg(ctx, reg);
+    if ( ret < 0x10 ) fprintf(stderr, "0");  // Handle values less than 10
+    fprintf(stderr, "%02X:   ", ret);
+  }
 }
 
 void sx1231_select(SX1231_t *sx1231) {

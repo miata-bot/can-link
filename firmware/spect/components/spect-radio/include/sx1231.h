@@ -103,8 +103,9 @@ uint8_t sx1231_setLNA(SX1231_t *sx1231, uint8_t newReg);
 // allow hacking registers by making these public
 uint8_t sx1231_readReg(SX1231_t *sx1231, uint8_t addr);
 void sx1231_writeReg(SX1231_t *sx1231, uint8_t addr, uint8_t val);
-void sx1231_readAllRegs(SX1231_t *sx1231);
-void sx1231_readAllRegsCompact(SX1231_t *sx1231);
+// void sx1231_readAllRegs(SX1231_t *sx1231);
+// void sx1231_readAllRegsCompact(SX1231_t *sx1231);
+void sx1231_print_regs(SX1231_t* sx1231);
 
 // ListenMode sleep/timer
 void sx1231_listenModeSleep(SX1231_t *sx1231, uint16_t millisInterval);
