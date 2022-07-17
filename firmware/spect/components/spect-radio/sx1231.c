@@ -1,4 +1,4 @@
-#include "SX1231.h"
+#include "sx1231.h"
 #include "SX1231_Registers.h"
 
 #include <stdio.h>
