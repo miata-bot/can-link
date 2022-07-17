@@ -1,11 +1,28 @@
-#include <led_strip.h>
+#include "spect-rgb-channel.h"
+#include "rainbow.h"
 
-typedef struct StripState {uint8_t effect; uint8_t effects; uint16_t effStep; unsigned long effStart;} strip_state_t;
-typedef struct StripLoop { uint8_t currentChild; uint8_t childs; bool timeBased; uint16_t cycles; uint16_t currentTime;} strip_loop_t;
-strip_state_t strip_0;
-strip_loop_t strip0loop0;
+rainbow_state_t rainbow_state;
+rainbow_loop_t  loop_state;
+rgb_t color = {.red=0, .green=0, .blue=0};
 
-void strip_state_loop_init(strip_loop_t* loop, uint8_t totchilds, bool timebased, uint16_t tottime) {
+void rainbow_state_init(spect_rgb_t* rgb, uint16_t num_steps, uint16_t delay)
+{
+  rainbow_state.effects = 1;
+  rainbow_loop_init(&loop_state, 1, false, 1);
+  rainbow_state_reset(&rainbow_state, num_steps, delay);
+  spect_rgb_fill(rgb, 0, rgb->strip->length, color);
+  spect_rgb_blit(rgb);
+  spect_rgb_wait(rgb);
+}
+
+void rainbow_loop(spect_rgb_t* rgb) {
+  if(rainbow_step_loop(rgb) & 0x01) {
+    spect_rgb_blit(rgb);
+    spect_rgb_wait(rgb);
+  }
+}
+
+void rainbow_loop_init(rainbow_loop_t* loop, uint8_t totchilds, bool timebased, uint16_t tottime) {
   loop->currentTime=0;
   loop->currentChild=0;
   loop->childs=totchilds;
@@ -13,90 +30,73 @@ void strip_state_loop_init(strip_loop_t* loop, uint8_t totchilds, bool timebased
   loop->cycles=tottime;
 }
 
-void strip_state_reset(strip_state_t* strip_state)
+void rainbow_state_reset(rainbow_state_t* rainbow_state, uint16_t num_steps, uint16_t delay)
 {
-    strip_state->effStep = 0;
-    strip_state->effect = (strip_state->effect + 1) % strip_state->effects;
-    strip_state->effStart = esp_timer_get_time();
+  rainbow_state->effStep = 0;
+  rainbow_state->effect = (rainbow_state->effect + 1) % rainbow_state->effects;
+  rainbow_state->effStart = esp_timer_get_time();
+  rainbow_state->numSteps = num_steps;
+  rainbow_state->delay = delay;
 }
 
-void strip_state_init(uint8_t toteffects)
-{
-  strip_0.effect = -1;
-  strip_0.effects = toteffects;
-  strip_state_loop_init(&strip0loop0, 1, false, 1);
-  strip_state_reset(&strip_0);
-}
-
-uint8_t strip0_loop0_eff0();
-uint8_t strip0_loop0();
-
-void strips_loop(led_strip_t* strip) {
-  if(strip0_loop0(strip) & 0x01) {
-    led_strip_flush(strip);
-    led_strip_wait(strip, 1000);
-  }
-}
-
-uint8_t strip0_loop0(led_strip_t* strip) {
+uint8_t rainbow_step_loop(spect_rgb_t* rgb) {
   uint8_t ret = 0x00;
-  switch(strip0loop0.currentChild) {
+  switch(loop_state.currentChild) {
     case 0: 
-           ret = strip0_loop0_eff0(strip);break;
+           ret = rainbow_step(rgb);break;
   }
   if(ret & 0x02) {
     ret &= 0xfd;
-    if(strip0loop0.currentChild + 1 >= strip0loop0.childs) {
-      strip0loop0.currentChild = 0;
-      if(++strip0loop0.currentTime >= strip0loop0.cycles) {strip0loop0.currentTime = 0; ret |= 0x02;}
+    if(loop_state.currentChild + 1 >= loop_state.childs) {
+      loop_state.currentChild = 0;
+      if(++loop_state.currentTime >= loop_state.cycles) {loop_state.currentTime = 0; ret |= 0x02;}
     }
     else {
-      strip0loop0.currentChild++;
+      loop_state.currentChild++;
     }
   };
   return ret;
 }
 
-uint8_t strip0_loop0_eff0(led_strip_t* strip) {
-    // Strip ID: 0 - Effect: Rainbow - LEDS: 150
-    // Steps: 150 - Delay: 20
-    // Colors: 3 (255.0.0, 0.255.0, 0.0.255)
-    // Options: rainbowlen=75, toLeft=false, 
-  if(esp_timer_get_time() - strip_0.effStart < 20 * (strip_0.effStep)) return 0x00;
+uint8_t rainbow_step(spect_rgb_t* rgb) {
+  uint16_t num_steps = 146;
+  float steps_per_color = num_steps / 3;
+  uint16_t delay = 99;
+  if(esp_timer_get_time() - rainbow_state.effStart < delay * (rainbow_state.effStep)) return 0x00;
   float factor1, factor2;
   uint16_t ind;
   rgb_t color;
-  for(uint16_t j=0;j<150;j++) {
-    ind = 60 - (uint16_t)(strip_0.effStep - j * 0.8) % 60;
-    switch((int)((ind % 60) / 20)) {
-      case 0: factor1 = 1.0 - ((float)(ind % 60 - 0 * 20) / 20);
-              factor2 = (float)((int)(ind - 0) % 60) / 20;
+  for(uint16_t j=0; j<rgb->strip->length; j++) {
+    ind = num_steps - (uint16_t)(rainbow_state.effStep - j * 1) % num_steps;
+    switch((int)((ind % num_steps) / steps_per_color)) {
+      case 0: factor1 = 1.0 - ((float)(ind % num_steps - 0 * steps_per_color) / steps_per_color);
+              factor2 = (float)((int)(ind) % num_steps) / steps_per_color;
               color = (rgb_t){
                 .green=255 * factor1 + 0 * factor2, 
                 .red=0 * factor1 + 255 * factor2, 
                 .blue=0 * factor1 + 0 * factor2
               };
-              led_strip_set_pixel(strip, j, color);
+              spect_rgb_set_pixel(rgb, j, color);
               break;
-      case 1: factor1 = 1.0 - ((float)(ind % 60 - 1 * 20) / 20);
-              factor2 = (float)((int)(ind - 20) % 60) / 20;
+      case 1: factor1 = 1.0 - ((float)(ind % num_steps - 1 * steps_per_color) / steps_per_color);
+              factor2 = (float)((int)(ind - steps_per_color) % num_steps) / steps_per_color;
               color = (rgb_t){
                 .green=0 * factor1 + 0 * factor2, 
                 .red= 255 * factor1 + 0 * factor2, 
                 .blue=0 * factor1 + 255 * factor2};
-              led_strip_set_pixel(strip, j, color);
+              spect_rgb_set_pixel(rgb, j, color);
               break;
-      case 2: factor1 = 1.0 - ((float)(ind % 60 - 2 * 20) / 20);
-              factor2 = (float)((int)(ind - 40) % 60) / 20;
+      case 2: factor1 = 1.0 - ((float)(ind % num_steps - 2 * steps_per_color) / steps_per_color);
+              factor2 = (float)((int)(ind - (2 * steps_per_color)) % num_steps) / steps_per_color;
               color = (rgb_t){
                 .green=0 * factor1 + 255 * factor2, 
                 .red=0 * factor1 + 0 * factor2, 
                 .blue=255 * factor1 + 0 * factor2};
-              led_strip_set_pixel(strip, j, color);
+              spect_rgb_set_pixel(rgb, j, color);
               break;
     }
   }
-  if(strip_0.effStep >= 75) {strip_state_reset(&strip_0); return 0x03; }
-  else strip_0.effStep++;
+  if(rainbow_state.effStep >= rgb->strip->length) {rainbow_state_reset(&rainbow_state, num_steps, delay); return 0x03; }
+  else rainbow_state.effStep++;
   return 0x01;
 }
