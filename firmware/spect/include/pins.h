@@ -7,6 +7,7 @@
 
 #define GPIO_NUM_SX1231_CSN (0)
 #define GPIO_NUM_SX1231_IRQ (1)
+#define GPIO_NUM_SX1231_RESET (2)
 #define GPIO_NUM_DI3 (3)
 #define GPIO_NUM_DI1 (4)
 #define GPIO_NUM_DI4 (5)
