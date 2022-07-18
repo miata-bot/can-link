@@ -10,6 +10,8 @@
 
 #include "spect-rgb-channel.h"
 
+typedef uint16_t spect_node_id_t;
+
 typedef struct SpectNode {
   uint16_t id;
   uint8_t network_id;
@@ -17,22 +19,35 @@ typedef struct SpectNode {
   struct SpectNetwork* network;
 } spect_node_t;
 
+/**
+ * @brief the current node's identity. 
+ * loaded on boot, should never change.
+ */
 typedef struct SpectNetworkIdentity {
   uint16_t id;
-  uint16_t node_id;
+  spect_node_id_t node_id;
   uint8_t network_id;
   spect_node_t* node;
   struct SpectNetwork* network;
 } spect_network_identity_t;
 
+/**
+ * @brief the current network's leader.
+ * There can only be one leader per network, each device must be
+ * configured with the same leader. Can change dynamically.
+ */
 typedef struct SpectNetworkLeader {
-  uint16_t id;
-  uint16_t node_id;
+  spect_node_id_t id;
+  spect_node_id_t node_id;
   uint8_t network_id;
   spect_node_t* node;
   struct SpectNetwork* network;
 } spect_network_leader_t;
 
+/**
+ * @brief Current device's network. The database can technically contain
+ * many of these, but changing networks is not implemented.
+ */
 typedef struct SpectNetwork {
   uint8_t id;
   char* key;
