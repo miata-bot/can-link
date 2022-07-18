@@ -52,8 +52,13 @@ typedef struct SpectNetworkLeader {
  */
 typedef struct SpectNetwork {
   uint8_t id;
+
+  /* encryption key */
   char* key;
+
+  /* array of SPECT_MAX_NODES nodes. Dynamically allocated */
   spect_node_t* nodes;
+
   spect_network_leader_t* leader;
   spect_network_identity_t* identity;
 } spect_network_t;
@@ -112,16 +117,13 @@ typedef struct SpectConfig {
   bool digital_input_3_enable;
   bool digital_input_4_enable;
 
+  // SQL ID's not network id
+  uint16_t network_identity_id;
+  uint16_t network_leader_id;
+
   // radio network
   uint8_t network_id;
   spect_network_t* network;
-
-  uint16_t network_identity_id;
-  spect_network_identity_t* network_identity;
-
-  uint16_t network_leader_id;
-  spect_network_leader_t* network_leader;
-
   spect_state_t* state;
 } spect_config_t;
 

@@ -4,17 +4,29 @@
 #include "spect-radio.h"
 #include "sx1231.h"
 
-SX1231_t* sx1231;
-spect_radio_packet_t* packet;
-
 const char* TAG = "RADIO";
 
-typedef struct
-{
-  int version;
-  uint8_t node_id;
-  uint8_t network_id;
-} configuration;
+/**
+ * @brief Gloabal radio handle. Should not be shared
+ */
+SX1231_t* sx1231;
+
+/**
+ * @brief current packet for send/receive
+ */
+spect_radio_packet_t* packet;
+
+/**
+ * @brief Current network leader. 
+ * this data is stored in the config context, but needs to be validated
+ * on every boot. 
+ */
+spect_node_id_t leader_id = 0;
+
+/**
+ * @brief state machine sigil. Changes when events come/go
+ */
+spect_radio_state_t radio_state;
 
 esp_err_t spect_packet_decode_init(spect_radio_packet_t** packet)
 {
@@ -31,6 +43,11 @@ esp_err_t spect_packet_decode(spect_config_context_t* config_ctx,
                               spect_radio_packet_t*   packet
 )
 {
+  if(!packet) {
+    ESP_LOGE(TAG, "packet not initialized");
+    return ESP_ERR_INVALID_ARG;
+  }
+
   memset(&packet->data, 0, sizeof(spect_radio_packet_data_t));
 
   /* Load the node from the database. If not found, error */
@@ -62,6 +79,16 @@ esp_err_t spect_packet_decode(spect_config_context_t* config_ctx,
       packet->data.fill._unused = data[5];
     } break;
 
+    // packet currently has no data assosiated with it.
+    case SPECT_RADIO_NETWORK_REQ_CURRENT_LEADER: {
+      assert(length == sizeof(spect_radio_network_request_current_leader_t) + 1);
+    } break;
+
+    case SPECT_RADIO_NETWORK_RESP_CURRENT_LEADER: {
+      assert(length == sizeof(spect_radio_network_response_current_leader_t) + 1);
+      packet->data.response_current_leader.node_id = data[2] | (data[1] << 8);
+    } break;
+
     default: 
       ESP_LOGI(TAG, "unknown packet opcode %02X", data[0]);
       return ESP_ERR_INVALID_ARG;
@@ -72,14 +99,20 @@ esp_err_t spect_packet_decode(spect_config_context_t* config_ctx,
 esp_err_t spect_radio_initialize(spect_config_context_t* config_ctx, SX1231_config_t* cfg)
 {
   esp_err_t err;
+  radio_state = SPECT_RADIO_STATE_INIT;
+
   err = sx1231_initialize(cfg,  &sx1231);
   if(err != ESP_OK) return err;
 
   err = spect_packet_decode_init(&packet);
   if(err != ESP_OK) return err;
 
+  // clear out state before entering the main loop
+  radio_state = SPECT_RADIO_STATE_REQUEST_LEADER;
+  leader_id = 0;
+  memset(&packet->data, 0, sizeof(spect_radio_packet_data_t));
+  
   ESP_LOGI("RADIO", "Initalized radio");
-
   return ESP_OK;
 }
 
@@ -101,14 +134,37 @@ esp_err_t spect_radio_initialize(spect_config_context_t* config_ctx, SX1231_conf
  */
 esp_err_t spect_radio_loop(spect_config_context_t* config_ctx)
 {
+  if(!packet) {
+    ESP_LOGE(TAG, "packet not initialized");
+    return ESP_ERR_INVALID_ARG;
+  }
+
   esp_err_t err;
+  if(radio_state == SPECT_RADIO_STATE_REQUEST_LEADER) {
+    memset(&packet->data, 0, sizeof(spect_radio_packet_data_t));
+    packet->sender = config_ctx->config->network->identity->node;
+    packet->opcode = SPECT_RADIO_NETWORK_REQ_CURRENT_LEADER;
+    // packet->data = {0};
+    // packet->rssi = 0;
+    err = spect_radio_send_packet(packet);
+    if(err != ESP_OK) return err;
+    radio_state = SPECT_RADIO_STATE_WAIT_RESPONSE;
+
+    // return early, next loop() will probably
+    // have a packet available.
+    return ESP_OK; 
+  }
+
+  if(radio_state == SPECT_RADIO_STATE_WAIT_RESPONSE) {
+    ESP_LOGE(TAG, "waiting for leader...");
+  }
 
   // if(sx1231_sendWithRetry(sx1231, 2, "ABCD", 4, 3, 10)) {
   //     ESP_LOGI("RADIO", "got ack");
   // }
   if(sx1231_receiveDone(sx1231)) {
     ESP_LOGI("RADIO", "SENDER=%d RSSI=%d dbm", sx1231->SENDERID, sx1231->RSSI);
-    ESP_LOG_BUFFER_HEXDUMP("radio payload", sx1231->DATA, sx1231->DATALEN, ESP_LOG_INFO);
+    ESP_LOG_BUFFER_HEXDUMP("radio payload in", sx1231->DATA, sx1231->DATALEN, ESP_LOG_INFO);
     err = spect_packet_decode(config_ctx,
                               sx1231->DATA, 
                               sx1231->DATALEN, 
@@ -119,25 +175,54 @@ esp_err_t spect_radio_loop(spect_config_context_t* config_ctx)
     if(err != ESP_OK) return err;
 
     // is this even possible?
-    bool packet_comes_from_self   = packet->sender->id == config_ctx->config->network_identity->node_id;
-    (void)packet_comes_from_self;
+    bool packet_comes_from_self   = packet->sender->id == config_ctx->config->network->identity->node_id;
+    if(packet_comes_from_self) return ESP_OK;
 
     // command can only come from the leader.
     // TODO: how to change leader when leader offline?
-    bool packet_comes_from_leader = packet->sender->id == config_ctx->config->network_leader->node_id;
+    bool packet_comes_from_leader = packet->sender->id == config_ctx->config->network->leader->node_id;
     
     // if this device is the leader, what do?
-    bool current_node_is_leader   = config_ctx->config->network_identity->node_id == config_ctx->config->network_leader->node_id;
+    bool current_node_is_leader   = config_ctx->config->network->identity->node_id == config_ctx->config->network->leader->node_id;
 
     switch(packet->opcode) {
+      case SPECT_RADIO_NETWORK_REQ_CURRENT_LEADER: {
+        // only respond to this packet if we know the current leader
+        // idea: respond with 0 if the leader is unknown so the node
+        // who sent this request can know about the topology?
+        if(radio_state > SPECT_RADIO_STATE_WAIT_RESPONSE) {
+          memset(&packet->data, 0, sizeof(spect_radio_packet_data_t));
+          packet->sender = config_ctx->config->network->identity->node;
+          packet->opcode = SPECT_RADIO_NETWORK_RESP_CURRENT_LEADER;
+          packet->data.response_current_leader.node_id = leader_id;
+          // packet->rssi = 0;
+          err = spect_radio_send_packet(packet);
+          if(err != ESP_OK) return err;
+        } else {
+          ESP_LOGE(TAG, "Request for leader, but don't know the leader");
+        }
+      } break;
+
+      case SPECT_RADIO_NETWORK_RESP_CURRENT_LEADER: {
+        ESP_LOGI(TAG, "got network leader");
+
+        // todo: save this to DB
+        leader_id = packet->data.response_current_leader.node_id;
+        
+        // if this node is the leader (is this possible?)
+        if(leader_id == config_ctx->config->network->identity->node_id) {
+          ESP_LOGI(TAG, "current node is leader!");
+          radio_state = SPECT_RADIO_LEADER;
+        } else {
+          ESP_LOGI(TAG, "leader=%d", packet->data.response_current_leader.node_id);
+          radio_state = SPECT_RADIO_CLIENT;
+        }
+      } break;
+
       case SPECT_RADIO_NETWORK_UPDATE_NEW_LEADER: {
         /* update the current network leader, this essential changes the mode of 
          * radio operation. */
-        if(current_node_is_leader) {
-          ESP_LOGE(TAG, "new leader request? [currently leader]");
-        } else {
-          ESP_LOGE(TAG, "new leader request? [not currently leader]");
-        }
+        ESP_LOGE(TAG, "new leader request?");
       } break;
 
       case SPECT_RADIO_RGB_FILL: {
@@ -154,5 +239,67 @@ esp_err_t spect_radio_loop(spect_config_context_t* config_ctx)
         break;
     }
   }
+  return ESP_OK;
+}
+
+esp_err_t spect_radio_send_packet(spect_radio_packet_t* packet)
+{
+  if(!packet) {
+    ESP_LOGE(TAG, "packet not initialized");
+    return ESP_ERR_INVALID_ARG;
+  }
+
+  if(packet->rssi != 0) {
+    ESP_LOGE(TAG, "packet does not seem to be zero'd out. Probably memset first.");
+    return ESP_ERR_INVALID_ARG;
+  }
+
+  switch(packet->opcode) {
+    case SPECT_RADIO_NETWORK_UPDATE_NEW_LEADER: {
+      packet->payload_length = sizeof(spect_radio_network_update_new_leader_t) + 1;
+      packet->payload[0] = SPECT_RADIO_NETWORK_UPDATE_NEW_LEADER;
+      packet->payload[1] = packet->data.new_leader.new_node_id & 0xFF;
+      packet->payload[2] = (packet->data.new_leader.new_node_id >> 8);
+    } break;
+
+    case SPECT_RADIO_NETWORK_REQ_CURRENT_LEADER: {
+      packet->payload_length = sizeof(spect_radio_network_request_current_leader_t) + 1;
+      packet->payload[0] = SPECT_RADIO_NETWORK_REQ_CURRENT_LEADER;
+    } break;
+
+    case SPECT_RADIO_NETWORK_RESP_CURRENT_LEADER: {
+      packet->payload_length = sizeof(spect_radio_network_response_current_leader_t) + 1;
+      packet->payload[0] = SPECT_RADIO_NETWORK_RESP_CURRENT_LEADER;
+      packet->payload[1] = packet->data.response_current_leader.node_id & 0xFF;
+      packet->payload[2] = (packet->data.response_current_leader.node_id >> 8);
+    } break;
+
+    case SPECT_RADIO_RGB_FILL: {
+      packet->payload_length = sizeof(spect_radio_rgb_fill_t) + 1;
+      packet->payload[0] = SPECT_RADIO_RGB_FILL;
+      packet->payload[1] = packet->data.fill.channel;
+      packet->payload[2] = packet->data.fill.red;
+      packet->payload[3] = packet->data.fill.green;
+      packet->payload[4] = packet->data.fill.blue;
+      packet->payload[5] = packet->data.fill._unused;
+    } break;
+
+    default:
+      ESP_LOGE(TAG, "unknown packet type %d. not sending", packet->opcode);
+      return ESP_ERR_INVALID_ARG;
+  }
+
+  ESP_LOG_BUFFER_HEXDUMP("radio payload out", 
+                         packet->payload, 
+                         packet->payload_length, 
+                         ESP_LOG_INFO);
+  sx1231_send(sx1231, 
+              SPECT_RADIO_BROADCAST_ADDR, 
+              packet->payload, 
+              packet->payload_length, 
+              false);
+
+  /* Not sure about acking on the broadcast address */
+  // sx1231_sendWithRetry();
   return ESP_OK;
 }
