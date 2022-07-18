@@ -115,14 +115,34 @@ esp_err_t spect_radio_loop(spect_config_context_t* config_ctx)
     );
     if(err != ESP_OK) return err;
 
+    // is this even possible?
+    bool packet_comes_from_self   = packet->sender->id == config_ctx->config->network_identity->node_id;
+
+    // command can only come from the leader.
+    // TODO: how to change leader when leader offline?
+    bool packet_comes_from_leader = packet->sender->id == config_ctx->config->network_leader->node_id;
+    
+    // if this device is the leader, what do?
+    bool current_node_is_leader   = config_ctx->config->network_identity->node_id == config_ctx->config->network_leader->node_id;
+
     switch(packet.opcode) {
       case SPECT_RADIO_NETWORK_UPDATE_NEW_LEADER: {
         /* update the current network leader, this essential changes the mode of 
          * radio operation. */
+        if(current_node_is_leader) {
+          ESP_LOGE(TAG, "new leader request? [currently leader]");
+        } else {
+          ESP_LOGE(TAG, "new leader request? [not currently leader]");
+        }
       } break;
 
       case SPECT_RADIO_RGB_FILL: {
-        /* only execute this if this node is the leader */
+        /* only execute this if this node is a client node and packet comes from leader */
+        if(packet_comes_from_leader && !current_node_is_leader) {
+          ESP_LOGI(TAG, "accepting fill command");
+        } else {
+          ESP_LOGE(TAG, "not accepting comand: packet_comes_from_leader=%d current_node_is_leader=%d", packet_comes_from_leader, current_node_is_leader);
+        }
       } break;
 
       default:
