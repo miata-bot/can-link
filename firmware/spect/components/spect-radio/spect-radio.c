@@ -7,6 +7,8 @@
 SX1231_t* sx1231;
 spect_radio_packet_t* packet;
 
+const char* TAG = "RADIO";
+
 typedef struct
 {
   int version;
@@ -22,19 +24,20 @@ esp_err_t spect_packet_decode_init(spect_radio_packet_t** packet)
 }
 
 esp_err_t spect_packet_decode(spect_config_context_t* config_ctx,
-                              char* data, 
-                              uint8_t length, 
-                              spect_node_id_t sender_id,
-                              spect_radio_packet_t* packet
+                              uint8_t*                data, 
+                              uint8_t                 length, 
+                              spect_node_id_t         sender_id,
+                              uint16_t                rssi,
+                              spect_radio_packet_t*   packet
 )
 {
-  memset(packet->data, sizeof(spect_radio_packet_data_t));
+  memset(&packet->data, 0, sizeof(spect_radio_packet_data_t));
 
   /* Load the node from the database. If not found, error */
   spect_node_t* node = spect_config_lookup_node(config_ctx, sender_id);
   if(!node) {
     ESP_LOGE(TAG, "Unknown node %d", sender_id);
-    return ESP_ERROR_INVALID_STATE;
+    return ESP_ERR_INVALID_STATE;
   }
   packet->sender = node;
   
@@ -56,7 +59,7 @@ esp_err_t spect_packet_decode(spect_config_context_t* config_ctx,
       packet->data.fill.red     = data[2];
       packet->data.fill.green   = data[3];
       packet->data.fill.blue    = data[4];
-      packet->data.fill.unused  = data[5];
+      packet->data.fill._unused = data[5];
     } break;
 
     default: 
@@ -117,6 +120,7 @@ esp_err_t spect_radio_loop(spect_config_context_t* config_ctx)
 
     // is this even possible?
     bool packet_comes_from_self   = packet->sender->id == config_ctx->config->network_identity->node_id;
+    (void)packet_comes_from_self;
 
     // command can only come from the leader.
     // TODO: how to change leader when leader offline?
@@ -125,7 +129,7 @@ esp_err_t spect_radio_loop(spect_config_context_t* config_ctx)
     // if this device is the leader, what do?
     bool current_node_is_leader   = config_ctx->config->network_identity->node_id == config_ctx->config->network_leader->node_id;
 
-    switch(packet.opcode) {
+    switch(packet->opcode) {
       case SPECT_RADIO_NETWORK_UPDATE_NEW_LEADER: {
         /* update the current network leader, this essential changes the mode of 
          * radio operation. */

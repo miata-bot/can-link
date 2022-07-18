@@ -10,6 +10,8 @@
 
 #include "spect-rgb-channel.h"
 
+#define SPECT_MAX_NODES 10
+
 typedef uint16_t spect_node_id_t;
 
 typedef struct SpectNode {
@@ -143,6 +145,8 @@ esp_err_t spect_set_mode(spect_config_context_t* ctx, spect_mode_t mode);
 const char* spect_mode_to_string(spect_mode_t mode);
 esp_err_t spect_set_state(spect_config_context_t* ctx);
 esp_err_t spect_set_config(spect_config_context_t* ctx);
+
+spect_node_t* spect_config_lookup_node(spect_config_context_t* ctx, spect_node_id_t node_id);
 
 // private
 int spect_config_load_state(spect_config_context_t* ctx);

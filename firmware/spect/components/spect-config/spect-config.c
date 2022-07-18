@@ -519,7 +519,7 @@ esp_err_t spect_config_init(spect_config_cfg_t* cfg, spect_config_context_t** ou
   // this will limit the max number of nodes in a network
   // far below the technical max, but there's no way this will work
   // with more 10 nodes anyway
-  nodes = malloc(10 * sizeof(struct SpectNetwork));
+  nodes = malloc(SPECT_MAX_NODES * sizeof(struct SpectNetwork));
   if(!nodes) {ESP_LOGI(TAG, "failed to allocate"); return ESP_ERR_NO_MEM;}
   config->network->nodes = nodes;
 
@@ -537,4 +537,14 @@ esp_err_t spect_config_init(spect_config_cfg_t* cfg, spect_config_context_t** ou
   ESP_LOGI(TAG, "db init ok");
   *out_ctx = ctx;
   return ESP_OK;
+}
+
+spect_node_t* spect_config_lookup_node(spect_config_context_t* ctx, spect_node_id_t node_id)
+{
+  for(spect_node_id_t i = 0; i < SPECT_MAX_NODES; i++) {
+    if(ctx->config->network->nodes[i].id == node_id)
+      return &ctx->config->network->nodes[i];
+  }
+  ESP_LOGE(TAG, "node %d not found", node_id);
+  return NULL;
 }

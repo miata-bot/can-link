@@ -38,7 +38,7 @@ esp_err_t spect_radio_loop(spect_config_context_t* config_ctx);
 
 esp_err_t spect_packet_decode_init(spect_radio_packet_t** packet);
 esp_err_t spect_packet_decode(spect_config_context_t*     config_ctx, 
-                              char*                       data, 
+                              uint8_t*                    data, 
                               uint8_t                     length, 
                               spect_node_id_t             sender_node_id,
                               uint16_t                    rssi,
