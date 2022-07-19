@@ -1,6 +1,7 @@
 # This file was generated using idf.py save-defconfig. It can be edited manually.
 # Espressif IoT Development Framework (ESP-IDF) Project Minimal Configuration
 #
+CONFIG_IDF_TARGET="esp32s3"
 CONFIG_ESPTOOLPY_FLASHSIZE_16MB=y
 CONFIG_PARTITION_TABLE_CUSTOM=y
 CONFIG_BT_ENABLED=y
@@ -10,3 +11,6 @@ CONFIG_ESP_SYSTEM_PANIC_PRINT_HALT=y
 # CONFIG_MQTT_PROTOCOL_311 is not set
 # CONFIG_MQTT_TRANSPORT_SSL is not set
 # CONFIG_MQTT_TRANSPORT_WEBSOCKET is not set
+CONFIG_TINYUSB=y
+CONFIG_TINYUSB_MSC_ENABLED=y
+CONFIG_TINYUSB_CDC_ENABLED=y
