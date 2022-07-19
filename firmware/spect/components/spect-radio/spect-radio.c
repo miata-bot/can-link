@@ -4,7 +4,7 @@
 #include "spect-radio.h"
 #include "sx1231.h"
 
-const char* TAG = "RADIO";
+static const char* TAG = "RADIO";
 
 /**
  * @brief Gloabal radio handle. Should not be shared
