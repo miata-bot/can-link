@@ -1,8 +1,30 @@
 #include "usb_acm.h"
+#include "esp_ota_ops.h"
 
 static const char *TAG = "ACM";
 
+typedef enum {
+  SVR_CHR_OTA_CONTROL_NOP=0x0,
+  SVR_CHR_OTA_CONTROL_REQUEST,
+  SVR_CHR_OTA_CONTROL_REQUEST_ACK,
+  SVR_CHR_OTA_CONTROL_REQUEST_NAK,
+  SVR_CHR_OTA_CONTROL_DONE,
+  SVR_CHR_OTA_CONTROL_DONE_ACK,
+  SVR_CHR_OTA_CONTROL_DONE_NAK,
+  SVR_CHR_OTA_WRITE
+} svr_chr_ota_control_val_t;
+
 static uint8_t buf[CFG_TUD_CDC_RX_BUFSIZE + 1];
+
+uint16_t ota_control_val_handle;
+uint16_t ota_data_val_handle;
+
+const esp_partition_t *update_partition;
+esp_ota_handle_t update_handle;
+bool updating = false;
+uint16_t num_pkgs_received = 0;
+uint16_t packet_size = 0;
+svr_chr_ota_control_val_t ctrl;
 
 void tinyusb_cdc_rx_callback(int itf, cdcacm_event_t *event)
 {
@@ -16,11 +38,101 @@ void tinyusb_cdc_rx_callback(int itf, cdcacm_event_t *event)
         ESP_LOG_BUFFER_HEXDUMP(TAG, buf, rx_size, ESP_LOG_INFO);
     } else {
         ESP_LOGE(TAG, "Read error");
+        return;
     }
 
+    ctrl = buf[0];
+     // check which value has been received
+    switch (ctrl) {
+    case SVR_CHR_OTA_CONTROL_REQUEST:
+      // OTA request
+      ESP_LOGI(TAG, "OTA has been requested");
+      // get the next free OTA partition
+      update_partition = esp_ota_get_next_update_partition(NULL);
+      // start the ota update
+      ret = esp_ota_begin(update_partition, OTA_WITH_SEQUENTIAL_WRITES,
+                          &update_handle);
+      if (ret != ESP_OK) {
+        ESP_LOGE(TAG, "esp_ota_begin failed (%s)", esp_err_to_name(ret));
+        esp_ota_abort(update_handle);
+        ctrl = SVR_CHR_OTA_CONTROL_REQUEST_NAK;
+      } else {
+        ctrl = SVR_CHR_OTA_CONTROL_REQUEST_ACK;
+        updating = true;
+
+        // retrieve the packet size from OTA data
+        packet_size = (buf[2] << 8) + buf[1];
+        assert(packet_size < CFG_TUD_CDC_RX_BUFSIZE+1);
+        ESP_LOGI(TAG, "Packet size is: %d", packet_size);
+
+        num_pkgs_received = 0;
+      }
+
+      // notify the client via BLE that the OTA has been acknowledged (or not)
+
+      ESP_LOGI(TAG, "OTA request acknowledgement has been sent.");
+
+      break;
+
+    case SVR_CHR_OTA_CONTROL_DONE:
+
+      updating = false;
+
+      // end the OTA and start validation
+      ret = esp_ota_end(update_handle);
+      if (ret != ESP_OK) {
+        if (ret == ESP_ERR_OTA_VALIDATE_FAILED) {
+          ESP_LOGE(TAG,
+                   "Image validation failed, image is corrupted!");
+        } else {
+          ESP_LOGE(TAG, "esp_ota_end failed (%s)!",
+                   esp_err_to_name(ret));
+        }
+      } else {
+        // select the new partition for the next boot
+        ret = esp_ota_set_boot_partition(update_partition);
+        if (ret != ESP_OK) {
+          ESP_LOGE(TAG, "esp_ota_set_boot_partition failed (%s)!",
+                   esp_err_to_name(ret));
+        }
+      }
+
+      // set the control value
+      if (ret != ESP_OK) {
+        ctrl = SVR_CHR_OTA_CONTROL_DONE_NAK;
+      } else {
+        ctrl = SVR_CHR_OTA_CONTROL_DONE_ACK;
+      }
+
+      // notify the client via BLE that DONE has been acknowledged
+    
+      ESP_LOGI(TAG, "OTA DONE acknowledgement has been sent.");
+
+      // restart the ESP to finish the OTA
+      if (ret == ESP_OK) {
+        ESP_LOGI(TAG, "Preparing to restart!");
+        vTaskDelay(pdMS_TO_TICKS(500));
+        esp_restart();
+      }
+
+      break;
+    case SVR_CHR_OTA_WRITE:
+      if (updating) {
+        ret = esp_ota_write(update_handle, (const void *)buf+1, packet_size);
+        if (ret != ESP_OK) {
+        ESP_LOGE(TAG, "esp_ota_write failed (%s)!", esp_err_to_name(ret));}
+        num_pkgs_received++;
+        ESP_LOGI(TAG, "Received packet %d", num_pkgs_received);
+      }
+      break;
+
+    default:
+      break;
+  }
+
     /* write back */
-    tinyusb_cdcacm_write_queue(itf, buf, rx_size);
-    tinyusb_cdcacm_write_flush(itf, 0);
+    // tinyusb_cdcacm_write_queue(itf, buf, rx_size);
+    // tinyusb_cdcacm_write_flush(itf, 0);
 }
 
 void tinyusb_cdc_line_state_changed_callback(int itf, cdcacm_event_t *event)

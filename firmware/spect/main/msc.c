@@ -104,8 +104,8 @@ int32_t tud_msc_write10_cb(uint8_t lun, uint32_t lba, uint32_t offset, uint8_t *
     // Linux and Windows write files differently. Windows also creates system volume information files on the first
     // mount. In an ideal case, FAT and ROOT content would be analyzed and the flash file detected.
     // However, the only reliable way to detect files for flashing is look at the content.
-    ESP_LOGD(TAG, "tud_msc_write10_cb() invoked, lun=%d, lba=%d, offset=%d, bufsize=%d", lun, lba, offset, bufsize);
-    ESP_LOG_BUFFER_HEXDUMP("tud_msc_write10_cb", buffer, bufsize, ESP_LOG_DEBUG);
+    // ESP_LOGD(TAG, "tud_msc_write10_cb() invoked, lun=%d, lba=%d, offset=%d, bufsize=%d", lun, lba, offset, bufsize);
+    // ESP_LOG_BUFFER_HEXDUMP("tud_msc_write10_cb", buffer, bufsize, ESP_LOG_DEBUG);
 
     esp_err_t err = wl_erase_range(wl_handle, lba * wl_sector_size(wl_handle) + offset, bufsize);
     ESP_ERROR_CHECK(err);

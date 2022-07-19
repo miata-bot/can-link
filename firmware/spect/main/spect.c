@@ -212,9 +212,7 @@ static void usb_configure_pins(usb_hal_context_t *usb)
 
 static void tusb_device_task(void *pvParameters)
 {
-    while (1) {
-        tud_task();
-    }
+    while (1) tud_task();
     vTaskDelete(NULL);
 }
 

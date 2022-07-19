@@ -21,7 +21,8 @@ defmodule TableGenerator.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:ecto_sqlite3, "~> 0.7.7"}
+      {:ecto_sqlite3, "~> 0.7.7"},
+      {:circuits_uart, "~> 1.4"}
     ]
   end
 end
