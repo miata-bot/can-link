@@ -25,6 +25,7 @@ esp_err_t spect_set_state(spect_config_context_t* ctx)
   sqlite3_stmt *res;
 
   switch(ctx->config->state->mode) {
+    case SPECT_MODE_RADIO:
     case SPECT_MODE_EFFECT_SOLID: {
       ESP_LOGI(TAG, "saving solid effect state %d, %d", ctx->config->state->data.solid.channel0, ctx->config->state->data.solid.channel1);
       rc = sqlite3_prepare_v2(ctx->db, "UPDATE state SET mode_solid_channel0 = ?1, mode_solid_channel1 = ?2;", -1, &res, 0);
@@ -201,6 +202,8 @@ int spect_config_load_state(spect_config_context_t* ctx)
       } break;
       case SPECT_MODE_RADIO: {
         ESP_LOGI(TAG, "loading radio state");
+        ctx->config->state->data.radio.channel0 = sqlite3_column_int(res, 1);
+        ctx->config->state->data.radio.channel1 = sqlite3_column_int(res, 2);
       } break;
       case SPECT_MODE_SCRIPTED: {
         ESP_LOGI(TAG, "loading script state");

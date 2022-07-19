@@ -165,7 +165,7 @@ esp_err_t sx1231_initialize(SX1231_config_t *cfg, SX1231_t** out_ctx)
     while (sx1231_readReg(ctx, REG_SYNCVALUE1) != 0x55 && esp_timer_get_time()-start < timeout);
     ESP_LOGI(TAG, "Radio sync");
     // todo check for timeout
-    sx1231_print_regs(ctx);
+    // sx1231_print_regs(ctx);
 
     for (uint8_t i = 0; CONFIG[i][0] != 255; i++)
         sx1231_writeReg(ctx, CONFIG[i][0], CONFIG[i][1]);

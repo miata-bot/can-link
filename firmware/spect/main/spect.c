@@ -239,7 +239,6 @@ static void usb_init()
     acm_init();
 }
 
-
 void app_main(void)
 {
   ESP_LOGI(TAG, "app boot");
@@ -349,8 +348,11 @@ void app_main(void)
       .isRFM69HW_HCW = true,
       .host = SPI2_HOST
   };
-//   err = spect_radio_initialize(config_ctx, &radio_cfg);
-//   ESP_ERROR_CHECK(err);
+  err = spect_radio_initialize(config_ctx, &radio_cfg);
+  ESP_ERROR_CHECK(err);
+
+uint8_t color_buffer[4] = {0};
+rgb_t color_            = {0};
 
 /* VERY IMPORTANT!!!!!! DO NOT CREATE MORE STACK VARIABLES HERE U FOOL!!! */
 main_loop_init:
@@ -361,17 +363,18 @@ main_loop_init:
                        config_ctx->config->state->data.rainbow.delay_time);
   }
 
-  if(current_mode == SPECT_MODE_EFFECT_SOLID) {
-    uint8_t a[4] = {0}; // FIX THIS!!!
-    a[0] = config_ctx->config->state->data.solid.channel0;
-    a[1] = config_ctx->config->state->data.solid.channel0 >>  8;
-    a[2] = config_ctx->config->state->data.solid.channel0 >> 16;
-    a[3] = config_ctx->config->state->data.solid.channel0 >> 24;
-    rgb_t color_ = {0}; // FIX THIS!!
+  if(current_mode == SPECT_MODE_EFFECT_SOLID || current_mode == SPECT_MODE_RADIO) {
+    memset(color_buffer, 0, 4);
+    memset(&color_, 0, sizeof(rgb_t));
 
-    color_.red = a[1];
-    color_.green = a[0];
-    color_.blue = a[2];
+    color_buffer[0] = config_ctx->config->state->data.solid.channel0;
+    color_buffer[1] = config_ctx->config->state->data.solid.channel0 >>  8;
+    color_buffer[2] = config_ctx->config->state->data.solid.channel0 >> 16;
+    color_buffer[3] = config_ctx->config->state->data.solid.channel0 >> 24;
+
+    color_.red   = color_buffer[1];
+    color_.green = color_buffer[0];
+    color_.blue  = color_buffer[2];
     ESP_LOGE("LED", "fill[%d] %02X %02X %02X", 
       config_ctx->rgb0->strip->length, 
       color_.red, color_.green, color_.blue
@@ -401,7 +404,25 @@ main_loop_init:
      * UX will suffer */
     if(current_mode == SPECT_MODE_EFFECT_SOLID) {};
     if(current_mode == SPECT_MODE_EFFECT_RAINBOW) rainbow_loop(channel0);
-    if(current_mode == SPECT_MODE_EFFECT_PULSE) {}
+    if(current_mode == SPECT_MODE_EFFECT_SOLID || current_mode == SPECT_MODE_RADIO) {
+        color_buffer[0] = config_ctx->config->state->data.solid.channel0;
+        color_buffer[1] = config_ctx->config->state->data.solid.channel0 >>  8;
+        color_buffer[2] = config_ctx->config->state->data.solid.channel0 >> 16;
+        color_buffer[3] = config_ctx->config->state->data.solid.channel0 >> 24;
+        if(color_.red != color_buffer[1] || color_.green != color_buffer[0] || color_.blue != color_buffer[2]) {
+            color_.red   = color_buffer[1];
+            color_.green = color_buffer[0];
+            color_.blue  = color_buffer[2];
+            ESP_LOGI("LED change", "fill[%d] %02X %02X %02X", 
+                config_ctx->rgb0->strip->length, 
+                color_.red, color_.green, color_.blue
+            );
+            spect_rgb_fill(channel0, 0, config_ctx->rgb0->strip->length, color_);
+            spect_rgb_blit(channel0);
+            spect_rgb_wait(channel0);
+            spect_radio_broadcast_state(config_ctx, &color_);
+        }
+    }
     if(current_mode == SPECT_MODE_RADIO) spect_radio_loop(config_ctx);
     vTaskDelay(pdMS_TO_TICKS(10));
     // ESP_LOGI(TAG, "LOOP done");

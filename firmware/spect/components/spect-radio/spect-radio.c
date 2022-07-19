@@ -27,11 +27,32 @@ spect_node_id_t leader_id = 0;
  * @brief state machine sigil. Changes when events come/go
  */
 spect_radio_state_t radio_state;
+uint64_t timeout;
 
-esp_err_t spect_packet_decode_init(spect_radio_packet_t** packet)
+esp_err_t spect_radio_broadcast_state(spect_config_context_t* config_ctx, rgb_t* rgb)
 {
-  packet = malloc(sizeof(spect_radio_packet_t));
-  if(!packet) return ESP_ERR_NO_MEM;
+  // bool current_node_is_leader   = config_ctx->config->network->identity->node_id == config_ctx->config->network->leader->node_id;
+  bool current_node_is_leader   = config_ctx->config->network->identity->node_id == leader_id;
+  if(current_node_is_leader) {
+    memset(packet, 0, sizeof(spect_radio_packet_t));
+    packet->opcode = SPECT_RADIO_RGB_FILL;
+    packet->data.fill.channel = 0;
+    packet->data.fill.red     = rgb->red;
+    packet->data.fill.green   = rgb->green;
+    packet->data.fill.blue    = rgb->blue;
+    packet->data.fill._unused = 0;
+    return spect_radio_send_packet(packet);
+  } else {
+    ESP_LOGE(TAG, "not leader, no state broadcast");
+    return ESP_ERR_INVALID_STATE;
+  }
+}
+
+esp_err_t spect_packet_decode_init(spect_radio_packet_t** out_packet)
+{
+  spect_radio_packet_t* ctx = malloc(sizeof(spect_radio_packet_t));
+  if(!ctx) return ESP_ERR_NO_MEM;
+  *out_packet = ctx;
   return ESP_OK;
 }
 
@@ -59,8 +80,11 @@ esp_err_t spect_packet_decode(spect_config_context_t* config_ctx,
   packet->sender = node;
   
   /* unlikely, but opcode might not fit in data in a currupt packet */
-  assert(length > 1);
+  assert(length >= 1);
   spect_radio_opcode_t opcode = data[0];
+  ESP_LOGI(TAG, "got opcode=%d", data[0]);
+  if(opcode >= SPECT_RADIO_OP_MAX) return ESP_ERR_INVALID_STATE;
+  packet->opcode = opcode;
 
   /* each opcode has it's own data, decode it */
   switch(opcode)
@@ -70,7 +94,9 @@ esp_err_t spect_packet_decode(spect_config_context_t* config_ctx,
       packet->data.new_leader.new_node_id = data[2] | (data[1] << 8);
     } break;
 
-    case SPECT_RADIO_RGB_FILL: {
+    // careful with this, it only happens to work
+    case SPECT_RADIO_RGB_FILL:
+    case SPECT_RADIO_RGB_PIXEL: {
       assert(length == sizeof(spect_radio_rgb_fill_t) + 1);
       packet->data.fill.channel = data[1];
       packet->data.fill.red     = data[2];
@@ -101,15 +127,16 @@ esp_err_t spect_radio_initialize(spect_config_context_t* config_ctx, SX1231_conf
   esp_err_t err;
   radio_state = SPECT_RADIO_STATE_INIT;
 
-  err = sx1231_initialize(cfg,  &sx1231);
+  err = spect_packet_decode_init(&packet);
   if(err != ESP_OK) return err;
 
-  err = spect_packet_decode_init(&packet);
+  err = sx1231_initialize(cfg,  &sx1231);
   if(err != ESP_OK) return err;
 
   // clear out state before entering the main loop
   radio_state = SPECT_RADIO_STATE_REQUEST_LEADER;
   leader_id = 0;
+  memset(packet->payload, 0, SPECT_RADIO_MAX_DATA_LENGTH);
   memset(&packet->data, 0, sizeof(spect_radio_packet_data_t));
   
   ESP_LOGI("RADIO", "Initalized radio");
@@ -141,6 +168,7 @@ esp_err_t spect_radio_loop(spect_config_context_t* config_ctx)
 
   esp_err_t err;
   if(radio_state == SPECT_RADIO_STATE_REQUEST_LEADER) {
+    memset(packet, 0, sizeof(spect_radio_packet_t));
     memset(&packet->data, 0, sizeof(spect_radio_packet_data_t));
     packet->sender = config_ctx->config->network->identity->node;
     packet->opcode = SPECT_RADIO_NETWORK_REQ_CURRENT_LEADER;
@@ -149,6 +177,7 @@ esp_err_t spect_radio_loop(spect_config_context_t* config_ctx)
     err = spect_radio_send_packet(packet);
     if(err != ESP_OK) return err;
     radio_state = SPECT_RADIO_STATE_WAIT_RESPONSE;
+    timeout = esp_timer_get_time();
 
     // return early, next loop() will probably
     // have a packet available.
@@ -156,12 +185,12 @@ esp_err_t spect_radio_loop(spect_config_context_t* config_ctx)
   }
 
   if(radio_state == SPECT_RADIO_STATE_WAIT_RESPONSE) {
-    ESP_LOGE(TAG, "waiting for leader...");
+    if((esp_timer_get_time() - timeout) > 5e+6) {
+      ESP_LOGE(TAG, "timeout waiting for leader... trying again");
+      radio_state = SPECT_RADIO_STATE_REQUEST_LEADER;
+    }
   }
 
-  // if(sx1231_sendWithRetry(sx1231, 2, "ABCD", 4, 3, 10)) {
-  //     ESP_LOGI("RADIO", "got ack");
-  // }
   if(sx1231_receiveDone(sx1231)) {
     ESP_LOGI("RADIO", "SENDER=%d RSSI=%d dbm", sx1231->SENDERID, sx1231->RSSI);
     ESP_LOG_BUFFER_HEXDUMP("radio payload in", sx1231->DATA, sx1231->DATALEN, ESP_LOG_INFO);
@@ -180,10 +209,13 @@ esp_err_t spect_radio_loop(spect_config_context_t* config_ctx)
 
     // command can only come from the leader.
     // TODO: how to change leader when leader offline?
-    bool packet_comes_from_leader = packet->sender->id == config_ctx->config->network->leader->node_id;
+    // bool packet_comes_from_leader = packet->sender->id == config_ctx->config->network->leader->node_id;
+    bool packet_comes_from_leader = packet->sender->id == leader_id;
     
     // if this device is the leader, what do?
-    bool current_node_is_leader   = config_ctx->config->network->identity->node_id == config_ctx->config->network->leader->node_id;
+    // bool current_node_is_leader   = config_ctx->config->network->identity->node_id == config_ctx->config->network->leader->node_id;
+    bool current_node_is_leader   = config_ctx->config->network->identity->node_id == leader_id;
+    ESP_LOGI(TAG, "packet from node=%d current node=%d leader=%d", packet->sender->id, config_ctx->config->network->identity->node_id, config_ctx->config->network->leader->node_id);
 
     switch(packet->opcode) {
       case SPECT_RADIO_NETWORK_REQ_CURRENT_LEADER: {
@@ -203,6 +235,7 @@ esp_err_t spect_radio_loop(spect_config_context_t* config_ctx)
         }
       } break;
 
+      case SPECT_RADIO_NETWORK_UPDATE_NEW_LEADER:
       case SPECT_RADIO_NETWORK_RESP_CURRENT_LEADER: {
         ESP_LOGI(TAG, "got network leader");
 
@@ -219,16 +252,19 @@ esp_err_t spect_radio_loop(spect_config_context_t* config_ctx)
         }
       } break;
 
-      case SPECT_RADIO_NETWORK_UPDATE_NEW_LEADER: {
-        /* update the current network leader, this essential changes the mode of 
-         * radio operation. */
-        ESP_LOGE(TAG, "new leader request?");
-      } break;
-
       case SPECT_RADIO_RGB_FILL: {
         /* only execute this if this node is a client node and packet comes from leader */
         if(packet_comes_from_leader && !current_node_is_leader) {
-          ESP_LOGI(TAG, "accepting fill command");
+          ESP_LOGI(TAG, "accepting fill command channel=%02X red=%02X green=%02X blue=%02X", 
+            packet->data.fill.channel,
+            packet->data.fill.red,
+            packet->data.fill.green,
+            packet->data.fill.blue
+          );
+          rgb_t color = {.green=packet->data.fill.red, .red=packet->data.fill.green, .blue=packet->data.fill.blue};
+          spect_rgb_fill(config_ctx->rgb0, 0, config_ctx->rgb0->strip->length, color);
+          spect_rgb_wait(config_ctx->rgb0);
+          spect_rgb_blit(config_ctx->rgb0);
         } else {
           ESP_LOGE(TAG, "not accepting comand: packet_comes_from_leader=%d current_node_is_leader=%d", packet_comes_from_leader, current_node_is_leader);
         }

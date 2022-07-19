@@ -90,12 +90,19 @@ typedef struct SpectModePulseData
   uint32_t pulsewidth;
 } spect_mode_pulse_data_t;
 
+typedef struct SpectModeRadioData
+{
+  uint32_t channel0;
+  uint32_t channel1; 
+} spect_mode_radio_data_t;
+
 typedef struct SpectState {
   spect_mode_t mode;
   union {
     spect_mode_solid_data_t   solid;
     spect_mode_rainbow_data_t rainbow;
     spect_mode_pulse_data_t   pulse;
+    spect_mode_radio_data_t   radio;
   } data;
 } spect_state_t;
 

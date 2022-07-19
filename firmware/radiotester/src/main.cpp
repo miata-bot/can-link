@@ -1,6 +1,7 @@
 #include <Arduino.h>
 #include <RFM69.h>
 #include <RFM69registers.h>
+#include "HexDump.h"
 
 #if defined(ARDUINO_SAMD_ZERO) && defined(SERIAL_PORT_USBVIRTUAL)
 // Required for Serial on Zero based boards
@@ -70,16 +71,39 @@ void loop() {
     uint8_t inByte = Serial.read();
     if(inByte == 49) {
       Serial.println("set_color(red)");
-      payload[0] = 4;
-      payload[1] = 255;
-      payload[2] = 0;
-      payload[3] = 0;
-      radio.send(0, &payload, 4, false);
+      // payload[0] = 4;
+      // payload[1] = 255;
+      // payload[2] = 0;
+      // payload[3] = 0;
+      char payload[] = {0x20, 0x0, 0xff, 0x00, 0x00, 0x00};
+      radio.send(0, &payload, 6, false);
+    }
+
+    if(inByte == 50) {
+      char payload[] = {0x11};
+      radio.send(0, &payload, 1, false);
+    }
+
+    if(inByte == 51) {
+      uint16_t new_leader_id = 1;
+      char payload[] = {0x10, 0, 0};
+      payload[2] = new_leader_id & 0xFF;
+      payload[1] = (new_leader_id >> 8);
+      radio.send(0, &payload, 3, false);
+    } 
+
+    if(inByte == 52) {
+      uint16_t leader_id = 2;
+      char payload[] = {0x12, 0, 0};
+      payload[2] = leader_id & 0xFF;
+      payload[1] = (leader_id >> 8);
+      radio.send(0, payload, 3, false);
     }
   }
   if(radio.receiveDone()) {
     Serial.print('[');Serial.print(radio.SENDERID);Serial.print("] ");
-    Serial.print((char*)radio.DATA);
+    // Serial.print((char*)radio.DATA);
+    HexDump(Serial, radio.DATA, radio.DATALEN);
     Serial.print("   [RX_RSSI:");Serial.print(radio.RSSI);Serial.print("]");
 
     if (radio.ACKRequested())
@@ -88,6 +112,15 @@ void loop() {
       Serial.println(" - ACK sent");
     } else {
       Serial.println();
+    }
+
+    // leader request
+    if(radio.DATA[0] == 0x11) {
+      uint16_t leader_id = 2;
+      char payload[] = {0x12, 0, 0};
+      payload[2] = leader_id & 0xFF;
+      payload[1] = (leader_id >> 8);
+      radio.send(0, payload, 3, false);
     }
   }
   radio.receiveDone();

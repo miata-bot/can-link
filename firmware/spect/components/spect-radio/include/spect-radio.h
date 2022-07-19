@@ -22,6 +22,7 @@ typedef enum SpectRadioOpcode {
   SPECT_RADIO_NETWORK_REQ_CURRENT_LEADER     = 0x11,
   SPECT_RADIO_NETWORK_RESP_CURRENT_LEADER    = 0x12,
   SPECT_RADIO_RGB_FILL                       = 0x20,
+  SPECT_RADIO_RGB_PIXEL                      = 0x21,
   SPECT_RADIO_OP_MAX
 } __attribute__ ((__packed__)) spect_radio_opcode_t;
 
@@ -66,11 +67,20 @@ typedef struct SpectRadioRGBFill {
   uint8_t _unused;
 } __attribute__ ((__packed__)) spect_radio_rgb_fill_t;
 
+typedef struct SpectRadioRGBPixel {
+  uint8_t address;
+  uint8_t red;
+  uint8_t green;
+  uint8_t blue;
+  uint8_t _unused;
+} __attribute__ ((__packed__)) spect_radio_rgb_pixel_t;
+
 typedef union {
   spect_radio_network_update_new_leader_t       new_leader;
   spect_radio_network_request_current_leader_t  request_current_leader;
   spect_radio_network_response_current_leader_t response_current_leader;
   spect_radio_rgb_fill_t                        fill;
+  spect_radio_rgb_pixel_t                       pixel;
 } spect_radio_packet_data_t;
 
 typedef struct SpectRadioPacket {
@@ -80,8 +90,8 @@ typedef struct SpectRadioPacket {
   uint16_t                  rssi;
 
   // private:
-  uint8_t                   payload[SPECT_RADIO_MAX_DATA_LENGTH];
   uint8_t                   payload_length;
+  uint8_t                   payload[SPECT_RADIO_MAX_DATA_LENGTH];
 } spect_radio_packet_t;
 
 esp_err_t spect_radio_initialize(spect_config_context_t* config_ctx, SX1231_config_t* cfg);
@@ -96,6 +106,6 @@ esp_err_t spect_packet_decode(spect_config_context_t*     config_ctx,
                               spect_radio_packet_t*       packet
 );
 esp_err_t spect_radio_send_packet(spect_radio_packet_t* packet);
-
+esp_err_t spect_radio_broadcast_state(spect_config_context_t* config_ctx, rgb_t* rgb);
 
 #endif
