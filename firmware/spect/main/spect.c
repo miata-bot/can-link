@@ -351,8 +351,8 @@ void app_main(void)
       .isRFM69HW_HCW = true,
       .host = SPI2_HOST
   };
-  err = spect_radio_initialize(config_ctx, &radio_cfg);
-  ESP_ERROR_CHECK(err);
+//   err = spect_radio_initialize(config_ctx, &radio_cfg);
+//   ESP_ERROR_CHECK(err);
 
 /* VERY IMPORTANT!!!!!! DO NOT CREATE MORE STACK VARIABLES HERE U FOOL!!! */
 main_loop_init:
