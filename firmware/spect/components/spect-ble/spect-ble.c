@@ -302,7 +302,7 @@ esp_err_t spect_ble_init(spect_config_context_t* config_ctx)
   assert(rc == 0);
 
   /* Set the default device name. */
-  rc = ble_svc_gap_device_name_set("spect");
+  rc = ble_svc_gap_device_name_set("ConeRGB");
   assert(rc == 0);
 
   /* XXX Need to have template for store */
