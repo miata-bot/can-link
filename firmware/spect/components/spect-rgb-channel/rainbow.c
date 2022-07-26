@@ -77,6 +77,7 @@ uint8_t rainbow_step(spect_rgb_t* rgb) {
                 .blue=0 * factor1 + 0 * factor2
               };
               spect_rgb_set_pixel(rgb, j, color);
+              spect_rgb_set_color(rgb, color);
               break;
       case 1: factor1 = 1.0 - ((float)(ind % num_steps - 1 * steps_per_color) / steps_per_color);
               factor2 = (float)((int)(ind - steps_per_color) % num_steps) / steps_per_color;
@@ -85,6 +86,7 @@ uint8_t rainbow_step(spect_rgb_t* rgb) {
                 .red= 255 * factor1 + 0 * factor2, 
                 .blue=0 * factor1 + 255 * factor2};
               spect_rgb_set_pixel(rgb, j, color);
+              spect_rgb_set_color(rgb, color);
               break;
       case 2: factor1 = 1.0 - ((float)(ind % num_steps - 2 * steps_per_color) / steps_per_color);
               factor2 = (float)((int)(ind - (2 * steps_per_color)) % num_steps) / steps_per_color;
@@ -93,6 +95,7 @@ uint8_t rainbow_step(spect_rgb_t* rgb) {
                 .red=0 * factor1 + 0 * factor2, 
                 .blue=255 * factor1 + 0 * factor2};
               spect_rgb_set_pixel(rgb, j, color);
+              spect_rgb_set_color(rgb, color);
               break;
     }
   }

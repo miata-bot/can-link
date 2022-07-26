@@ -318,9 +318,9 @@ void app_main(void)
     .num_leds=config_ctx->config->strip_channel_1_length,
     .led_strip_gpio=GPIO_NUM_STRIP0,
     .ledc_channel_offset=0,
-    .led_red_gpio=GPIO_NUM_RGB0_B,
+    .led_red_gpio=GPIO_NUM_RGB0_R,
     .led_green_gpio=GPIO_NUM_RGB0_G,
-    .led_blue_gpio=GPIO_NUM_RGB0_R,
+    .led_blue_gpio=GPIO_NUM_RGB0_B,
   };
   err = spect_rgb_install();
   ESP_ERROR_CHECK(err);
@@ -335,6 +335,7 @@ void app_main(void)
 
   rgb_t color = {.red=0, .green=0, .blue=0};
   spect_rgb_fill(channel0, 0, channel0->strip->length, color);
+  spect_rgb_set_color(channel0, color);
   spect_rgb_blit(channel0);
   spect_rgb_wait(channel0);
 
@@ -352,7 +353,7 @@ void app_main(void)
   ESP_ERROR_CHECK(err);
 
 uint8_t color_buffer[4] = {0};
-rgb_t color_            = {0};
+rgb_t   color_          = {0};
 
 /* VERY IMPORTANT!!!!!! DO NOT CREATE MORE STACK VARIABLES HERE U FOOL!!! */
 main_loop_init:
@@ -372,10 +373,17 @@ main_loop_init:
     color_buffer[2] = config_ctx->config->state->data.solid.channel0 >> 16;
     color_buffer[3] = config_ctx->config->state->data.solid.channel0 >> 24;
 
+    // LEDC uses RGB
+    color_.red   = color_buffer[0];
+    color_.green = color_buffer[1];
+    color_.blue  = color_buffer[2];
+    spect_rgb_set_color(channel0, color_);
+
+    // Strip uses GRB
     color_.red   = color_buffer[1];
     color_.green = color_buffer[0];
     color_.blue  = color_buffer[2];
-    ESP_LOGE("LED", "fill[%d] %02X %02X %02X", 
+    ESP_LOGE("LED INIT", "fill[%d] %02X %02X %02X", 
       config_ctx->rgb0->strip->length, 
       color_.red, color_.green, color_.blue
     );
@@ -409,7 +417,15 @@ main_loop_init:
         color_buffer[1] = config_ctx->config->state->data.solid.channel0 >>  8;
         color_buffer[2] = config_ctx->config->state->data.solid.channel0 >> 16;
         color_buffer[3] = config_ctx->config->state->data.solid.channel0 >> 24;
-        if(color_.red != color_buffer[1] || color_.green != color_buffer[0] || color_.blue != color_buffer[2]) {
+
+        if((color_.red != color_buffer[1]) || (color_.green != color_buffer[0]) || (color_.blue != color_buffer[2])) {
+            // LEDC uses RGB
+            color_.red   = color_buffer[0];
+            color_.green = color_buffer[1];
+            color_.blue  = color_buffer[2];
+            spect_rgb_set_color(channel0, color_);
+
+            // Strip uses GRB
             color_.red   = color_buffer[1];
             color_.green = color_buffer[0];
             color_.blue  = color_buffer[2];

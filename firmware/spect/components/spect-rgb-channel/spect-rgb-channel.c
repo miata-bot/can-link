@@ -1,4 +1,7 @@
 #include <stdio.h>
+
+#include "esp_log.h"
+
 #include "spect-rgb-channel.h"
 
 /*
@@ -25,11 +28,11 @@ esp_err_t spect_rgb_install()
   * that will be used by LED Controller
   */
   ledc_timer_config_t ledc_timer = {
-    .duty_resolution = LEDC_TIMER_8_BIT,  // resolution of PWM duty
-    .freq_hz = 5000,                      // frequency of PWM signal
-    .speed_mode = LEDC_LOW_SPEED_MODE,           // timer mode
-    .timer_num = LEDC_TIMER_1,            // timer index
-    .clk_cfg = LEDC_AUTO_CLK,              // Auto select the source clock
+    .duty_resolution = LEDC_TIMER_8_BIT,       // resolution of PWM duty
+    .freq_hz         = 5000,                   // frequency of PWM signal
+    .speed_mode      = LEDC_LOW_SPEED_MODE,    // timer mode
+    .timer_num       = LEDC_TIMER_1,           // timer index
+    .clk_cfg         = LEDC_AUTO_CLK,          // Auto select the source clock
   };
   // Set configuration of timer0 for high speed channels
   ledc_timer_config(&ledc_timer);
@@ -48,19 +51,14 @@ esp_err_t spect_rgb_initialize(spect_rgb_config_t* config, spect_rgb_t** out_ctx
     return ESP_ERR_NO_MEM;
 
   *strip = (led_strip_t){
-    // .type = LED_STRIP_WS2812,
     .length = config->num_leds,
-    // .gpio = config->led_strip_gpio,
-    // .buf = NULL,
+    .type = LED_STRIP_WS2812,
+    .is_rgbw = false,
+    .gpio = 9,
+    .buf = NULL,
+    .brightness = 255,
+    .channel = 0
     // .brightness = 255,
-        .type = LED_STRIP_WS2812,
-        .is_rgbw = false,
-        // .length = 30,
-        // .length = 80 + 40,
-        .gpio = 9,
-        .buf = NULL,
-        .brightness = 255,
-        .channel = 0,
   };
   err = led_strip_init(strip);
   if(err != ESP_OK)
@@ -70,55 +68,59 @@ esp_err_t spect_rgb_initialize(spect_rgb_config_t* config, spect_rgb_t** out_ctx
   if (!ctx) return ESP_ERR_NO_MEM;
   *ctx = (spect_rgb_t){
     .cfg = config,
-    .strip = strip
+    .strip = strip,
+    .ledc_channels = {
+      {
+        .channel    = LEDC_CHANNEL_0,
+        .duty       = 0,
+        .gpio_num   = config->led_red_gpio,
+        .speed_mode = LEDC_LOW_SPEED_MODE,
+        .hpoint     = 0,
+        .timer_sel  = LEDC_TIMER_1,
+        .flags.output_invert = 0
+      },
+      {
+        .channel    = LEDC_CHANNEL_1,
+        .duty       = 0,
+        .gpio_num   = config->led_green_gpio,
+        .speed_mode = LEDC_LOW_SPEED_MODE,
+        .hpoint     = 0,
+        .timer_sel  = LEDC_TIMER_1,
+        .flags.output_invert = 0
+      },
+      {
+        .channel    = LEDC_CHANNEL_2,
+        .duty       = 0,
+        .gpio_num   = config->led_blue_gpio,
+        .speed_mode = LEDC_LOW_SPEED_MODE,
+        .hpoint     = 0,
+        .timer_sel  = LEDC_TIMER_1,
+        .flags.output_invert = 0
+      }
+    }
   };
-  //   .ledc_channels = {
-  //     {
-  //       .channel    = config->ledc_channel_offset,
-  //       .duty       = 0,
-  //       .gpio_num   = config->led_red_gpio,
-  //       .speed_mode = LEDC_LOW_SPEED_MODE,
-  //       .hpoint     = 0,
-  //       .timer_sel  = LEDC_TIMER_1,
-  //       .flags.output_invert = 0
-  //     },
-  //     {
-  //       .channel    = config->ledc_channel_offset+1,
-  //       .duty       = 0,
-  //       .gpio_num   = config->led_green_gpio,
-  //       .speed_mode = LEDC_LOW_SPEED_MODE,
-  //       .hpoint     = 0,
-  //       .timer_sel  = LEDC_TIMER_1,
-  //       .flags.output_invert = 0
-  //     },
-  //     {
-  //       .channel    = config->ledc_channel_offset+2,
-  //       .duty       = 0,
-  //       .gpio_num   = config->led_blue_gpio,
-  //       .speed_mode = LEDC_LOW_SPEED_MODE,
-  //       .hpoint     = 0,
-  //       .timer_sel  = LEDC_TIMER_1,
-  //       .flags.output_invert = 0
-  //     }
-  //   }
-  // };
-  // ctx->counting_sem = xSemaphoreCreateCounting(3, 0);
+  ctx->counting_sem = xSemaphoreCreateCounting(3, 0);
 
-  // ledc_channel_config(&ctx->ledc_channels[LEDC_CHANNEL_R]);
-  // ledc_channel_config(&ctx->ledc_channels[LEDC_CHANNEL_G]);
-  // ledc_channel_config(&ctx->ledc_channels[LEDC_CHANNEL_B]);
+  err = ledc_channel_config(&ctx->ledc_channels[LEDC_CHANNEL_R]);
+  ESP_ERROR_CHECK(err);
+  err = ledc_channel_config(&ctx->ledc_channels[LEDC_CHANNEL_G]);
+  ESP_ERROR_CHECK(err);
+  err = ledc_channel_config(&ctx->ledc_channels[LEDC_CHANNEL_B]);
+  ESP_ERROR_CHECK(err);
 
-  // ledc_cbs_t callbacks = {
-  //   .fade_cb = cb_ledc_fade_end_event
-  // };
-  // ledc_cb_register(ctx->ledc_channels[LEDC_CHANNEL_R].speed_mode, ctx->ledc_channels[LEDC_CHANNEL_R].channel, &callbacks, (void *)ctx);
-  // ledc_cb_register(ctx->ledc_channels[LEDC_CHANNEL_G].speed_mode, ctx->ledc_channels[LEDC_CHANNEL_B].channel, &callbacks, (void *)ctx);
-  // ledc_cb_register(ctx->ledc_channels[LEDC_CHANNEL_B].speed_mode, ctx->ledc_channels[LEDC_CHANNEL_B].channel, &callbacks, (void *)ctx);
+  ledc_cbs_t callbacks = {.fade_cb = cb_ledc_fade_end_event};
+  err = ledc_cb_register(ctx->ledc_channels[LEDC_CHANNEL_R].speed_mode, ctx->ledc_channels[LEDC_CHANNEL_R].channel, &callbacks, (void *)ctx);
+  ESP_ERROR_CHECK(err);
 
-  // ledc_stop(ctx->ledc_channels[LEDC_CHANNEL_R].speed_mode, ctx->ledc_channels[LEDC_CHANNEL_R].channel, 1);
-  // ledc_stop(ctx->ledc_channels[LEDC_CHANNEL_G].speed_mode, ctx->ledc_channels[LEDC_CHANNEL_G].channel, 1);
-  // ledc_stop(ctx->ledc_channels[LEDC_CHANNEL_B].speed_mode, ctx->ledc_channels[LEDC_CHANNEL_B].channel, 1);
+  err = ledc_cb_register(ctx->ledc_channels[LEDC_CHANNEL_G].speed_mode, ctx->ledc_channels[LEDC_CHANNEL_G].channel, &callbacks, (void *)ctx);
+  ESP_ERROR_CHECK(err);
 
+  err = ledc_cb_register(ctx->ledc_channels[LEDC_CHANNEL_B].speed_mode, ctx->ledc_channels[LEDC_CHANNEL_B].channel, &callbacks, (void *)ctx);
+  ESP_ERROR_CHECK(err);
+
+  ledc_stop(ctx->ledc_channels[LEDC_CHANNEL_R].speed_mode, ctx->ledc_channels[LEDC_CHANNEL_R].channel, 0);
+  ledc_stop(ctx->ledc_channels[LEDC_CHANNEL_G].speed_mode, ctx->ledc_channels[LEDC_CHANNEL_G].channel, 0);
+  ledc_stop(ctx->ledc_channels[LEDC_CHANNEL_B].speed_mode, ctx->ledc_channels[LEDC_CHANNEL_B].channel, 0);
   *out_ctx = ctx;
   return ESP_OK;
 }
@@ -136,11 +138,16 @@ esp_err_t spect_rgb_set_color(spect_rgb_t* ctx, rgb_t color)
   esp_err_t err = ledc_set_duty(ctx->ledc_channels[LEDC_CHANNEL_R].speed_mode, ctx->ledc_channels[LEDC_CHANNEL_R].channel, color.r);
   if(err != ESP_OK)
     return err;
+
   err = ledc_set_duty(ctx->ledc_channels[LEDC_CHANNEL_G].speed_mode, ctx->ledc_channels[LEDC_CHANNEL_G].channel, color.g);
   if(err != ESP_OK)
     return err;
+
   err = ledc_set_duty(ctx->ledc_channels[LEDC_CHANNEL_B].speed_mode, ctx->ledc_channels[LEDC_CHANNEL_B].channel, color.b);
-  return err;
+  if(err != ESP_OK)
+    return err;
+
+  return ESP_OK;
 }
 
 esp_err_t spect_rgb_set_pixel(spect_rgb_t* spect_rgb, uint16_t address, rgb_t color)
@@ -167,14 +174,17 @@ esp_err_t spect_rgb_wait(spect_rgb_t* ctx)
   if(err != ESP_OK)
     return err;
 
-  // err = ledc_update_duty(ctx->ledc_channels[LEDC_CHANNEL_R].speed_mode, ctx->ledc_channels[LEDC_CHANNEL_R].channel);
-  // if(err != ESP_OK)
-  //   return err;
+  err = ledc_update_duty(ctx->ledc_channels[LEDC_CHANNEL_R].speed_mode, ctx->ledc_channels[LEDC_CHANNEL_R].channel);
+  if(err != ESP_OK)
+    return err;
   
-  // err = ledc_update_duty(ctx->ledc_channels[LEDC_CHANNEL_G].speed_mode, ctx->ledc_channels[LEDC_CHANNEL_G].channel);
-  // if(err != ESP_OK)
-  //   return err;
+  err = ledc_update_duty(ctx->ledc_channels[LEDC_CHANNEL_G].speed_mode, ctx->ledc_channels[LEDC_CHANNEL_G].channel);
+  if(err != ESP_OK)
+    return err;
 
-  // err = ledc_update_duty(ctx->ledc_channels[LEDC_CHANNEL_B].speed_mode, ctx->ledc_channels[LEDC_CHANNEL_B].channel);
-  return err;
+  err = ledc_update_duty(ctx->ledc_channels[LEDC_CHANNEL_B].speed_mode, ctx->ledc_channels[LEDC_CHANNEL_B].channel);
+  if(err != ESP_OK)
+    return err;
+
+  return ESP_OK;
 }
