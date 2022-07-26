@@ -6,6 +6,12 @@
 
 const char* TAG = "RADIO";
 
+#define SPECT_RADIO_INITIAL_STATE SPECT_RADIO_STATE_REQUEST_LEADER
+#define SPECT_RADIO_INITIAL_LEADER 0
+
+// #define SPECT_RADIO_INITIAL_STATE SPECT_RADIO_LEADER
+// #define SPECT_RADIO_INITIAL_LEADER 1
+
 /**
  * @brief Gloabal radio handle. Should not be shared
  */
@@ -21,7 +27,7 @@ spect_radio_packet_t* packet;
  * this data is stored in the config context, but needs to be validated
  * on every boot. 
  */
-spect_node_id_t leader_id = 0;
+spect_node_id_t leader_id = SPECT_RADIO_INITIAL_LEADER;
 
 /**
  * @brief state machine sigil. Changes when events come/go
@@ -112,7 +118,7 @@ esp_err_t spect_packet_decode(spect_config_context_t* config_ctx,
 
     case SPECT_RADIO_NETWORK_RESP_CURRENT_LEADER: {
       assert(length == sizeof(spect_radio_network_response_current_leader_t) + 1);
-      packet->data.response_current_leader.node_id = data[2] | (data[1] << 8);
+      packet->data.response_current_leader.node_id = data[1] | (data[2] << 8);
     } break;
 
     default: 
@@ -125,8 +131,6 @@ esp_err_t spect_packet_decode(spect_config_context_t* config_ctx,
 esp_err_t spect_radio_initialize(spect_config_context_t* config_ctx, SX1231_config_t* cfg)
 {
   esp_err_t err;
-  radio_state = SPECT_RADIO_STATE_INIT;
-
   err = spect_packet_decode_init(&packet);
   if(err != ESP_OK) return err;
 
@@ -134,8 +138,8 @@ esp_err_t spect_radio_initialize(spect_config_context_t* config_ctx, SX1231_conf
   if(err != ESP_OK) return err;
 
   // clear out state before entering the main loop
-  radio_state = SPECT_RADIO_STATE_REQUEST_LEADER;
-  leader_id = 0;
+  radio_state = SPECT_RADIO_INITIAL_STATE;
+  leader_id = SPECT_RADIO_INITIAL_LEADER;
   memset(packet->payload, 0, SPECT_RADIO_MAX_DATA_LENGTH);
   memset(&packet->data, 0, sizeof(spect_radio_packet_data_t));
   
@@ -165,6 +169,12 @@ esp_err_t spect_radio_loop(spect_config_context_t* config_ctx)
     ESP_LOGE(TAG, "packet not initialized");
     return ESP_ERR_INVALID_ARG;
   }
+  // char payload[8] = {0};
+  // sx1231_send(sx1231, 
+  //             SPECT_RADIO_BROADCAST_ADDR, 
+  //             payload, 
+  //             8, 
+  //             false);
 
   esp_err_t err;
   if(radio_state == SPECT_RADIO_STATE_REQUEST_LEADER) {
@@ -204,8 +214,8 @@ esp_err_t spect_radio_loop(spect_config_context_t* config_ctx)
     if(err != ESP_OK) return err;
 
     // is this even possible?
-    bool packet_comes_from_self   = packet->sender->id == config_ctx->config->network->identity->node_id;
-    if(packet_comes_from_self) return ESP_OK;
+    // bool packet_comes_from_self   = packet->sender->id == config_ctx->config->network->identity->node_id;
+    // if(packet_comes_from_self) return ESP_OK;
 
     // command can only come from the leader.
     // TODO: how to change leader when leader offline?
@@ -282,11 +292,6 @@ esp_err_t spect_radio_send_packet(spect_radio_packet_t* packet)
 {
   if(!packet) {
     ESP_LOGE(TAG, "packet not initialized");
-    return ESP_ERR_INVALID_ARG;
-  }
-
-  if(packet->rssi != 0) {
-    ESP_LOGE(TAG, "packet does not seem to be zero'd out. Probably memset first.");
     return ESP_ERR_INVALID_ARG;
   }
 

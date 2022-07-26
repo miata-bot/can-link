@@ -38,6 +38,7 @@ state_mode_handle_write(struct os_mbuf *om, uint16_t min_len, uint16_t max_len, 
 
 static int state_mode_access(uint16_t conn_handle, uint16_t attr_handle, struct ble_gatt_access_ctxt *ctxt, void *arg)
 {
+    ESP_LOGI("BLE", "state_mode_access");
     const ble_uuid_t *uuid = ctxt->chr->uuid;
     int rc;
 
@@ -75,12 +76,12 @@ static const struct ble_gatt_svc_def gatt_svr_svcs[] = {
         .uuid = &state_service.u,
         .characteristics = (struct ble_gatt_chr_def[])
         {   {
-                /** Characteristic: Addressable LED Channel 1 */
+                /** Characteristic: mode */
                 .uuid = &state_mode_characteristic.u,
                 .access_cb = state_mode_access,
                 .flags = BLE_GATT_CHR_F_READ | BLE_GATT_CHR_F_WRITE,
             }, {
-                /** Characteristic: Addressable RGB Channel 1 */
+                /** Characteristic: Addressable+RGB Channel 1 */
                 .uuid = &addressable_led_channel_1_characteristic.u,
                 .access_cb = led_access,
                 .flags = BLE_GATT_CHR_F_READ | BLE_GATT_CHR_F_WRITE,
@@ -188,6 +189,7 @@ led_access(uint16_t conn_handle, uint16_t attr_handle,
            struct ble_gatt_access_ctxt *ctxt,
            void *arg)
 {
+    ESP_LOGI("BLE", "led_access");
     const ble_uuid_t *uuid = ctxt->chr->uuid;
     int rc;
 

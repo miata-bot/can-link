@@ -8,20 +8,31 @@ import { useSelector, useDispatch } from 'react-redux'
 import BleManager from 'react-native-ble-manager';
 
 import store from "./store";
-import {bleScanStart, bleScanStop, blePeripheralDiscovered, blePeripheralConnected, blePeripheralDisconnected} from './bleSlice';
+import {bleScanStart, bleScanStop, blePeripheralDiscovered, blePeripheralConnected, blePeripheralDisconnected, blePeripheralModeChange} from './bleSlice';
 
 const BleManagerModule = NativeModules.BleManager;
 const bleManagerEmitter = new NativeEventEmitter(BleManagerModule);
 
 class ConeBleManager {
-  constructor() {}
+  constructor() {
+    let connected = false;
+  }
 
   connectPeripheral = (peripheral) => {
     BleManager.connect(peripheral.id).then(() => {
       setTimeout(() => {
         BleManager.retrieveServices(peripheral.id).then((peripheralData) => {
-          console.log('Retrieved peripheral services', peripheralData);
           store.dispatch(blePeripheralConnected(peripheralData))
+
+          BleManager.read(peripheral.id, "b7528e5d-1f1e-4ee6-a3a2-2b3f45a7ca8e", "733ec5d8-5775-434d-852c-a4e7cb282a10")
+          .then(result => {
+            console.log("mode=" + result);
+            store.dispatch(blePeripheralModeChange(result))
+          }).catch(error => {
+            console.error("failed to read mode", error);
+          })
+
+          // console.log('Retrieved peripheral services', JSON.stringify(peripheralData));
           // BleManager.readRSSI(peripheral.id).then((rssi) => {
           //   console.log('Retrieved actual RSSI value', rssi);
           // });
@@ -110,6 +121,26 @@ class ConeBleManager {
         store.dispatch(blePeripheralConnected(peripheral))
       })
     }).catch((error) => {console.error("failed to get connected peripherals", error)});
+  }
+
+  changeMode = (connected, mode) => {
+    BleManager.write(connected.id, "b7528e5d-1f1e-4ee6-a3a2-2b3f45a7ca8e", "733ec5d8-5775-434d-852c-a4e7cb282a10", [mode], 1)
+    .then((result) => {
+      console.log("mode write complete", result);
+      store.dispatch(blePeripheralModeChange(mode))
+    }).catch((error) => {
+      console.log("mode write error", error);
+    })
+  }
+
+  disable = (connected) => {
+    this.changeMode(connected, 0x0);
+    BleManager.write(connected.id, "b7528e5d-1f1e-4ee6-a3a2-2b3f45a7ca8e", "5c3a659e-897e-45e1-b016-007107c96df7", [0,0,0,0], 4)
+    .then((result) => {
+      console.log("color write complete", result);
+    }).catch((error) => {
+      console.log("color write error", error);
+    })
   }
 }
 

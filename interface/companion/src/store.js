@@ -7,21 +7,19 @@ import {all, fork} from 'redux-saga/effects';
 
 import counterSlice from './counterSlice'
 import bluetoothReducer from './bleSlice';
-import bleSaga from './bleSaga';
 
 const sagaMiddleware = createSagaMiddleware();
-const rootSaga = function* rootSaga() {
-  yield all([
-    fork(bleSaga)
-  ])
-}
+const rootSaga = function* rootSaga() {yield all([])}
 
 export default store = configureStore({
   reducer: {
     counter: counterSlice,
     bluetooth: bluetoothReducer
   },
-  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(logger).concat(sagaMiddleware),
+  middleware: (getDefaultMiddleware) => 
+    getDefaultMiddleware()
+    // .concat(logger)
+    .concat(sagaMiddleware),
   devTools: true
 })
 sagaMiddleware.run(rootSaga)

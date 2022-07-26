@@ -5,7 +5,8 @@ const bluetoothReducer = createSlice({
   initialState: {
     scanning: false,
     availableDevices: [],
-    connected: null
+    connected: null,
+    mode: null,
   },
   reducers: {
     bleScanStart: (state, action) => {
@@ -29,6 +30,9 @@ const bluetoothReducer = createSlice({
     },
     blePeripheralDisconnected: (state, action) => {
       state.connected = null;
+    },
+    blePeripheralModeChange: (state, action) => {
+      state.mode = action.payload;
     }
   },
 });
@@ -38,7 +42,8 @@ export const {
     bleScanStop,
     blePeripheralDiscovered,
     blePeripheralConnected,
-    blePeripheralDisconnected
+    blePeripheralDisconnected,
+    blePeripheralModeChange
 } = bluetoothReducer.actions
 
 export default bluetoothReducer.reducer

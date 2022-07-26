@@ -344,7 +344,7 @@ void app_main(void)
       .gpio_int = GPIO_NUM_SX1231_IRQ,
       .gpio_reset = GPIO_NUM_SX1231_RESET,
       .freqBand = RF69_915MHZ,
-      .nodeID = 100, 
+      .nodeID = config_ctx->config->network->identity->node->id, 
       .networkID = 100,
       .isRFM69HW_HCW = true,
       .host = SPI2_HOST
@@ -364,7 +364,7 @@ main_loop_init:
                        config_ctx->config->state->data.rainbow.delay_time);
   }
 
-  if(current_mode == SPECT_MODE_EFFECT_SOLID || current_mode == SPECT_MODE_RADIO) {
+  if(current_mode == SPECT_MODE_EFFECT_SOLID) {
     memset(color_buffer, 0, 4);
     memset(&color_, 0, sizeof(rgb_t));
 
@@ -412,7 +412,7 @@ main_loop_init:
      * UX will suffer */
     if(current_mode == SPECT_MODE_EFFECT_SOLID) {};
     if(current_mode == SPECT_MODE_EFFECT_RAINBOW) rainbow_loop(channel0);
-    if(current_mode == SPECT_MODE_EFFECT_SOLID || current_mode == SPECT_MODE_RADIO) {
+    if(current_mode == SPECT_MODE_EFFECT_SOLID) {
         color_buffer[0] = config_ctx->config->state->data.solid.channel0;
         color_buffer[1] = config_ctx->config->state->data.solid.channel0 >>  8;
         color_buffer[2] = config_ctx->config->state->data.solid.channel0 >> 16;
@@ -439,7 +439,7 @@ main_loop_init:
             spect_radio_broadcast_state(config_ctx, &color_);
         }
     }
-    if(current_mode == SPECT_MODE_RADIO) spect_radio_loop(config_ctx);
+    spect_radio_loop(config_ctx);
     vTaskDelay(pdMS_TO_TICKS(10));
     // ESP_LOGI(TAG, "LOOP done");
   }
