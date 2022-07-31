@@ -13,6 +13,7 @@
 #include "host/util/util.h"
 #include "console/console.h"
 #include "services/gap/ble_svc_gap.h"
+#include "esp_bt.h"
 
 #include "spect-ble.h"
 #include "bleprph.h"
@@ -269,7 +270,8 @@ bleprph_on_sync(void)
 
 void bleprph_host_task(void *param)
 {
-    ESP_LOGI(tag, "BLE Host Task Started");
+    esp_power_level_t power = esp_ble_tx_power_get(ESP_BLE_PWR_TYPE_ADV);
+    ESP_LOGI(tag, "BLE Host Task Started %d", power);
     /* This function will return only when nimble_port_stop() is executed */
     nimble_port_run();
 
@@ -289,6 +291,9 @@ esp_err_t spect_ble_init(spect_config_context_t* config_ctx)
   ESP_ERROR_CHECK(ret);
 
   ESP_ERROR_CHECK(esp_nimble_hci_and_controller_init());
+  ESP_ERROR_CHECK(esp_ble_tx_power_set(ESP_BLE_PWR_TYPE_ADV, ESP_PWR_LVL_P9));
+  ESP_ERROR_CHECK(esp_ble_tx_power_set(ESP_BLE_PWR_TYPE_SCAN, ESP_PWR_LVL_P9));
+  ESP_ERROR_CHECK(esp_ble_tx_power_set(ESP_BLE_PWR_TYPE_DEFAULT, ESP_PWR_LVL_P9));
 
   nimble_port_init();
   /* Initialize the NimBLE host configuration. */

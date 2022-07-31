@@ -101,7 +101,7 @@ esp_err_t sx1231_initialize(SX1231_config_t *cfg, SX1231_t** out_ctx)
     *ctx = (SX1231_t) {
         .cfg = *cfg,
         ._mode = RF69_MODE_STANDBY,
-        ._powerLevel = 31,
+        ._powerLevel = 255,
         ._dataAvailable = false,
         ._address = cfg->nodeID,
         .spi = spi
@@ -128,7 +128,7 @@ esp_err_t sx1231_initialize(SX1231_config_t *cfg, SX1231_t** out_ctx)
         // +13dBm formula: Pout = -18 + OutputPower (with PA0 or PA1**)
         // +17dBm formula: Pout = -14 + OutputPower (with PA1 and PA2)**
         // +20dBm formula: Pout = -11 + OutputPower (with PA1 and PA2)** and high power PA settings (section 3.3.7 in datasheet)
-        ///* 0x11 */ { REG_PALEVEL, RF_PALEVEL_PA0_ON | RF_PALEVEL_PA1_OFF | RF_PALEVEL_PA2_OFF | RF_PALEVEL_OUTPUTPOWER_11111},
+        /* 0x11 */ { REG_PALEVEL, RF_PALEVEL_PA0_ON | RF_PALEVEL_PA1_OFF | RF_PALEVEL_PA2_OFF | RF_PALEVEL_OUTPUTPOWER_11111},
         ///* 0x13 */ { REG_OCP, RF_OCP_ON | RF_OCP_TRIM_95 }, // over current protection (default is 95mA)
 
         // RXBW defaults are { REG_RXBW, RF_RXBW_DCCFREQ_010 | RF_RXBW_MANT_24 | RF_RXBW_EXP_5} (RxBw: 10.4KHz)

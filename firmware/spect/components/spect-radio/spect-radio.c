@@ -6,11 +6,11 @@
 
 const char* TAG = "RADIO";
 
-#define SPECT_RADIO_INITIAL_STATE SPECT_RADIO_STATE_REQUEST_LEADER
-#define SPECT_RADIO_INITIAL_LEADER 0
+// #define SPECT_RADIO_INITIAL_STATE SPECT_RADIO_STATE_REQUEST_LEADER
+// #define SPECT_RADIO_INITIAL_LEADER 0
 
-// #define SPECT_RADIO_INITIAL_STATE SPECT_RADIO_LEADER
-// #define SPECT_RADIO_INITIAL_LEADER 1
+#define SPECT_RADIO_INITIAL_STATE SPECT_RADIO_LEADER
+#define SPECT_RADIO_INITIAL_LEADER 1
 
 /**
  * @brief Gloabal radio handle. Should not be shared
@@ -143,7 +143,7 @@ esp_err_t spect_radio_initialize(spect_config_context_t* config_ctx, SX1231_conf
   memset(packet->payload, 0, SPECT_RADIO_MAX_DATA_LENGTH);
   memset(&packet->data, 0, sizeof(spect_radio_packet_data_t));
   
-  ESP_LOGI("RADIO", "Initalized radio");
+  ESP_LOGI("RADIO", "Initalized radio %d", sx1231_getFrequency(sx1231));
   return ESP_OK;
 }
 
@@ -195,7 +195,7 @@ esp_err_t spect_radio_loop(spect_config_context_t* config_ctx)
   }
 
   if(radio_state == SPECT_RADIO_STATE_WAIT_RESPONSE) {
-    if((esp_timer_get_time() - timeout) > 5e+6) {
+    if((esp_timer_get_time() - timeout) > 3000000) {
       ESP_LOGE(TAG, "timeout waiting for leader... trying again");
       radio_state = SPECT_RADIO_STATE_REQUEST_LEADER;
     }

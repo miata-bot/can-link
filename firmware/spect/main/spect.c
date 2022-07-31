@@ -346,7 +346,7 @@ void app_main(void)
       .freqBand = RF69_915MHZ,
       .nodeID = config_ctx->config->network->identity->node->id, 
       .networkID = 100,
-      .isRFM69HW_HCW = true,
+      .isRFM69HW_HCW = config_ctx->config->network->id,
       .host = SPI2_HOST
   };
   err = spect_radio_initialize(config_ctx, &radio_cfg);
