@@ -7,6 +7,7 @@
 #include <driver/spi_master.h>
 #include <driver/gpio.h>
 #include <sdkconfig.h>
+#include <esp_timer.h>
 
 #define RF69_MAX_DATA_LEN       61 // to take advantage of the built in AES/CRC we want to limit the frame size to the internal FIFO size (66 bytes - 3 bytes overhead - 2 bytes crc)
 #define CSMA_LIMIT              -90 // upper RX signal sensitivity threshold in dBm for carrier sense access
@@ -115,7 +116,7 @@ void sx1231_select(SX1231_t *sx1231);
 void sx1231_unselect(SX1231_t *sx1231);
 
 // Private API
-void IRAM_ATTR sx1231_isr(void* arg);
+void sx1231_isr(void* arg);
 void sx1231_isr_task(void* arg);
 
 esp_err_t sx1231_install_interrupts(SX1231_t *sx1231);

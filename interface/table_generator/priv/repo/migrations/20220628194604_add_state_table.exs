@@ -8,14 +8,11 @@ defmodule TableGenerator.Repo.Migrations.AddStateTable do
       # should probably add a constraint for mode
       add :mode, :tinyint, null: false, default: 0
 
-      add :mode_solid_channel0, :integer, null: false, default: 0
+      add :mode_solid_channel0, :integer, null: false, default: 0xff00ff00
       add :mode_solid_channel1, :integer, null: false, default: 0
 
       add :mode_rainbow_length, :integer, null: false, default: 150
       add :mode_rainbow_delay_time, :integer, null: false, default: 500
-
-      add :mode_pulse_length, :integer, null: false, default: 500
-      add :mode_pulse_pulsewidth, :integer, null: false, default: 1000
     end
 
     execute """

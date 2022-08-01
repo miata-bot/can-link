@@ -1,12 +1,7 @@
 #include <stdio.h>
-
-
 #include "esp_log.h"
-#include "nvs_flash.h"
-// #include "freertos/queue.h"
 
 /* BLE */
-#include "esp_nimble_hci.h"
 #include "nimble/nimble_port.h"
 #include "nimble/nimble_port_freertos.h"
 #include "host/ble_hs.h"
@@ -14,6 +9,7 @@
 #include "console/console.h"
 #include "services/gap/ble_svc_gap.h"
 #include "esp_bt.h"
+#include "esp_nimble_hci.h"
 
 #include "spect-ble.h"
 #include "bleprph.h"
@@ -21,6 +17,7 @@
 static const char *tag = "BLE";
 static int bleprph_gap_event(struct ble_gap_event *event, void *arg);
 static uint8_t own_addr_type;
+static const char* name_base = "ConeRGB-";
 
 void ble_store_config_init(void);
 
@@ -281,21 +278,12 @@ void bleprph_host_task(void *param)
 esp_err_t spect_ble_init(spect_config_context_t* config_ctx)
 {
   int rc;
-
-  /* Initialize NVS — it is used to store PHY calibration data */
-  esp_err_t ret = nvs_flash_init();
-  if (ret == ESP_ERR_NVS_NO_FREE_PAGES || ret == ESP_ERR_NVS_NEW_VERSION_FOUND) {
-      ESP_ERROR_CHECK(nvs_flash_erase());
-      ret = nvs_flash_init();
-  }
-  ESP_ERROR_CHECK(ret);
-
-  ESP_ERROR_CHECK(esp_nimble_hci_and_controller_init());
+  nimble_port_init();
+//   ESP_ERROR_CHECK(esp_nimble_hci_and_controller_init());
   ESP_ERROR_CHECK(esp_ble_tx_power_set(ESP_BLE_PWR_TYPE_ADV, ESP_PWR_LVL_P9));
   ESP_ERROR_CHECK(esp_ble_tx_power_set(ESP_BLE_PWR_TYPE_SCAN, ESP_PWR_LVL_P9));
   ESP_ERROR_CHECK(esp_ble_tx_power_set(ESP_BLE_PWR_TYPE_DEFAULT, ESP_PWR_LVL_P9));
 
-  nimble_port_init();
   /* Initialize the NimBLE host configuration. */
   ble_hs_cfg.reset_cb = bleprph_on_reset;
   ble_hs_cfg.sync_cb = bleprph_on_sync;
@@ -307,7 +295,18 @@ esp_err_t spect_ble_init(spect_config_context_t* config_ctx)
   assert(rc == 0);
 
   /* Set the default device name. */
-  rc = ble_svc_gap_device_name_set("ConeRGB");
+
+  char* name_buffer = malloc(255);
+  memset(name_buffer, 0, 255);
+  strcpy(name_buffer, name_base);
+  ESP_LOGI("BLE", "name=%s", name_buffer);
+  strcpy(
+    name_buffer+strlen(name_base),
+    config_ctx->config->network->identity->node->name
+  );
+  ESP_LOGI("BLE", "name=%s", name_buffer);
+  rc = ble_svc_gap_device_name_set(name_buffer);
+  free(name_buffer);
   assert(rc == 0);
 
   /* XXX Need to have template for store */

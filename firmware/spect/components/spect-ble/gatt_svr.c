@@ -1,11 +1,10 @@
- #include <led_strip.h>
 #include <driver/ledc.h>
 
 #include "gatt_srv.h"
 
 #include "spect-config.h"
 
-spect_config_context_t* config_ctx;
+static spect_config_context_t* config_ctx;
 
 static uint32_t addressable_led_channel_1_color = 0;
 static uint32_t addressable_led_channel_2_color = 0;
@@ -131,7 +130,7 @@ config_handle_write(struct os_mbuf *om, uint16_t min_len, uint16_t max_len,
 }
 
 static int
-addressable_led_handle_write(led_strip_t* strip, struct os_mbuf *om, uint16_t min_len, uint16_t max_len,
+addressable_led_handle_write(struct os_mbuf *om, uint16_t min_len, uint16_t max_len,
                              void *dst, uint16_t *len)
 {
     uint16_t om_len;
@@ -145,7 +144,10 @@ addressable_led_handle_write(led_strip_t* strip, struct os_mbuf *om, uint16_t mi
     if (rc != 0)
         return BLE_ATT_ERR_UNLIKELY;
 
-    if(config_ctx->config->state->mode != SPECT_MODE_EFFECT_SOLID && config_ctx->config->state->mode != SPECT_MODE_RADIO) {
+    if(config_ctx->config->state->mode != SPECT_MODE_EFFECT_SOLID && 
+       config_ctx->config->state->mode != SPECT_MODE_EFFECT_PULSE &&
+       config_ctx->config->state->mode != SPECT_MODE_EFFECT_CHASE
+    ) {
         ESP_LOGE("BLE", "invalid state: %s", spect_mode_to_string(config_ctx->config->state->mode));
         return BLE_ATT_ERR_WRITE_NOT_PERMITTED;
     }
@@ -153,14 +155,6 @@ addressable_led_handle_write(led_strip_t* strip, struct os_mbuf *om, uint16_t mi
     uint8_t* color = (uint8_t*)dst;
     config_ctx->config->state->data.solid.channel0 = color[0] + (color[1] << 8) + (color[2] << 16) + (color[3] << 24);
     spect_set_state(config_ctx);
-    // rgb_t color_;
-    // color_.red = color[1];
-    // color_.green = color[0];
-    // color_.blue = color[2];
-    // ESP_LOGE("LED", "fill %02X %02X %02X", color_.red, color_.green, color_.blue);
-    // led_strip_fill(config_ctx->rgb0->strip, 0, config_ctx->rgb0->strip->length, color_);
-    // led_strip_wait(config_ctx->rgb0->strip, 1000);
-    // led_strip_flush(config_ctx->rgb0->strip);
     return 0;
 }
 
@@ -202,7 +196,7 @@ led_access(uint16_t conn_handle, uint16_t attr_handle,
             return rc == 0 ? 0 : BLE_ATT_ERR_INSUFFICIENT_RES;
 
         case BLE_GATT_ACCESS_OP_WRITE_CHR:
-            rc = addressable_led_handle_write(NULL, ctxt->om,
+            rc = addressable_led_handle_write(ctxt->om,
                                               sizeof addressable_led_channel_1_color,
                                               sizeof addressable_led_channel_1_color,
                                               &addressable_led_channel_1_color, NULL);
@@ -223,7 +217,7 @@ led_access(uint16_t conn_handle, uint16_t attr_handle,
             return rc == 0 ? 0 : BLE_ATT_ERR_INSUFFICIENT_RES;
 
         case BLE_GATT_ACCESS_OP_WRITE_CHR:
-            rc = addressable_led_handle_write(NULL, ctxt->om,
+            rc = addressable_led_handle_write(ctxt->om,
                                               sizeof addressable_led_channel_2_color,
                                               sizeof addressable_led_channel_2_color,
                                               &addressable_led_channel_2_color, NULL);

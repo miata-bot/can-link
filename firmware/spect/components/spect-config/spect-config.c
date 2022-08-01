@@ -11,6 +11,7 @@ static const char *mode_map[] = {
   "PULSE",
   "RADIO",
   "SCRIPTED",
+  "CHASE"
 };
 
 const char* spect_mode_to_string(spect_mode_t mode)
@@ -49,14 +50,25 @@ esp_err_t spect_set_state(spect_config_context_t* ctx)
       if(rc != ESP_OK) return ESP_ERR_INVALID_STATE;
     } break;
     case SPECT_MODE_EFFECT_PULSE: {
-      ESP_LOGI(TAG, "saving pulse effect state %d, %d", ctx->config->state->data.pulse.length, ctx->config->state->data.pulse.pulsewidth);
-      rc = sqlite3_prepare_v2(ctx->db, "UPDATE state SET mode_pulse_length = ?1, mode_pulse_pulsewidth = ?2;", -1, &res, 0);
+      ESP_LOGI(TAG, "saving pulse effect state %d, %d", ctx->config->state->data.pulse.channel0, ctx->config->state->data.pulse.channel1);
+      rc = sqlite3_prepare_v2(ctx->db, "UPDATE state SET mode_solid_channel0 = ?1, mode_solid_channel1 = ?2;", -1, &res, 0);
       if(rc != ESP_OK) return ESP_ERR_INVALID_STATE;
       
-      rc = sqlite3_bind_int(res, 1, ctx->config->state->data.pulse.length);
+      rc = sqlite3_bind_int(res, 1, ctx->config->state->data.pulse.channel0);
       if(rc != ESP_OK) return ESP_ERR_INVALID_STATE;
       
-      rc = sqlite3_bind_int(res, 2, ctx->config->state->data.pulse.pulsewidth);
+      rc = sqlite3_bind_int(res, 2, ctx->config->state->data.pulse.channel1);
+      if(rc != ESP_OK) return ESP_ERR_INVALID_STATE;
+    } break;
+    case SPECT_MODE_EFFECT_CHASE: {
+      ESP_LOGI(TAG, "saving solid effect state %d, %d", ctx->config->state->data.chase.channel0, ctx->config->state->data.chase.channel1);
+      rc = sqlite3_prepare_v2(ctx->db, "UPDATE state SET mode_solid_channel0 = ?1, mode_solid_channel1 = ?2;", -1, &res, 0);
+      if(rc != ESP_OK) return ESP_ERR_INVALID_STATE;
+      
+      rc = sqlite3_bind_int(res, 1, ctx->config->state->data.chase.channel0);
+      if(rc != ESP_OK) return ESP_ERR_INVALID_STATE;
+      
+      rc = sqlite3_bind_int(res, 2, ctx->config->state->data.chase.channel1);
       if(rc != ESP_OK) return ESP_ERR_INVALID_STATE;
     } break;
     default: {
@@ -175,7 +187,7 @@ int spect_config_load_state(spect_config_context_t* ctx)
   int rc;
   sqlite3_stmt *res;
   
-  rc = sqlite3_prepare_v2(ctx->db, "SELECT c0.mode, c0.mode_solid_channel0, c0.mode_solid_channel1, c0.mode_rainbow_length, c0.mode_rainbow_delay_time, c0.mode_pulse_length, c0.mode_pulse_pulsewidth FROM state AS c0;", -1, &res, 0);
+  rc = sqlite3_prepare_v2(ctx->db, "SELECT c0.mode, c0.mode_solid_channel0, c0.mode_solid_channel1, c0.mode_rainbow_length, c0.mode_rainbow_delay_time FROM state AS c0;", -1, &res, 0);
   if (rc != SQLITE_OK) {
     ESP_LOGE(TAG, "Failed to fetch state: %s\n", sqlite3_errmsg(ctx->db));
     return rc;
@@ -197,8 +209,8 @@ int spect_config_load_state(spect_config_context_t* ctx)
       } break;
       case SPECT_MODE_EFFECT_PULSE: {
         ESP_LOGI(TAG, "loading pulse state");
-        ctx->config->state->data.pulse.length = sqlite3_column_int(res, 5);
-        ctx->config->state->data.pulse.pulsewidth = sqlite3_column_int(res, 6);
+        ctx->config->state->data.pulse.channel0 = sqlite3_column_int(res, 1);
+        ctx->config->state->data.pulse.channel1 = sqlite3_column_int(res, 2);
       } break;
       case SPECT_MODE_RADIO: {
         ESP_LOGI(TAG, "loading radio state");
@@ -207,6 +219,11 @@ int spect_config_load_state(spect_config_context_t* ctx)
       } break;
       case SPECT_MODE_SCRIPTED: {
         ESP_LOGI(TAG, "loading script state");
+      } break;
+      case SPECT_MODE_EFFECT_CHASE: {
+        ESP_LOGI(TAG, "loading chase state");
+        ctx->config->state->data.chase.channel0 = sqlite3_column_int(res, 1);
+        ctx->config->state->data.chase.channel1 = sqlite3_column_int(res, 2);
       } break;
       default:
         ESP_LOGE(TAG, "unknown mode!!");

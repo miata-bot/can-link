@@ -37,6 +37,7 @@ uint64_t timeout;
 
 esp_err_t spect_radio_broadcast_state(spect_config_context_t* config_ctx, rgb_t* rgb)
 {
+  if(sx1231 == NULL) return ESP_OK;
   // bool current_node_is_leader   = config_ctx->config->network->identity->node_id == config_ctx->config->network->leader->node_id;
   bool current_node_is_leader   = config_ctx->config->network->identity->node_id == leader_id;
   if(current_node_is_leader) {
@@ -135,7 +136,11 @@ esp_err_t spect_radio_initialize(spect_config_context_t* config_ctx, SX1231_conf
   if(err != ESP_OK) return err;
 
   err = sx1231_initialize(cfg,  &sx1231);
-  if(err != ESP_OK) return err;
+  if(err != ESP_OK) {
+    // should probably free this?
+    sx1231 = NULL;
+    return err;
+  };
 
   // clear out state before entering the main loop
   radio_state = SPECT_RADIO_INITIAL_STATE;
@@ -165,6 +170,8 @@ esp_err_t spect_radio_initialize(spect_config_context_t* config_ctx, SX1231_conf
  */
 esp_err_t spect_radio_loop(spect_config_context_t* config_ctx)
 {
+  if(sx1231 == NULL) return ESP_OK;
+
   if(!packet) {
     ESP_LOGE(TAG, "packet not initialized");
     return ESP_ERR_INVALID_ARG;

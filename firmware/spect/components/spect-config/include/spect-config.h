@@ -69,6 +69,7 @@ typedef enum SpectMode {
   SPECT_MODE_EFFECT_PULSE   = 0x2,
   SPECT_MODE_RADIO          = 0x3,
   SPECT_MODE_SCRIPTED       = 0x4,
+  SPECT_MODE_EFFECT_CHASE   = 0x5,
   SPECT_MODE_MAX
 } __attribute__ ((__packed__)) spect_mode_t;
 
@@ -86,8 +87,8 @@ typedef struct SpectModeRainbowData
 
 typedef struct SpectModePulseData
 {
-  uint32_t length;
-  uint32_t pulsewidth;
+  uint32_t channel0;
+  uint32_t channel1; 
 } spect_mode_pulse_data_t;
 
 typedef struct SpectModeRadioData
@@ -96,6 +97,12 @@ typedef struct SpectModeRadioData
   uint32_t channel1; 
 } spect_mode_radio_data_t;
 
+typedef struct SpectModeChaseData
+{
+  uint32_t channel0;
+  uint32_t channel1; 
+} spect_mode_chase_data_t;
+
 typedef struct SpectState {
   spect_mode_t mode;
   union {
@@ -103,6 +110,7 @@ typedef struct SpectState {
     spect_mode_rainbow_data_t rainbow;
     spect_mode_pulse_data_t   pulse;
     spect_mode_radio_data_t   radio;
+    spect_mode_chase_data_t   chase;
   } data;
 } spect_state_t;
 

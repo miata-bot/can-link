@@ -4,11 +4,16 @@
 
 #include <freertos/FreeRTOS.h>
 #include <freertos/task.h>
+#include <nvs_flash.h>
 
+// #define SPECT_FEATURE_USB
+#ifdef SPECT_FEATURE_USB
 #include "tusb.h"
 #include "msc.h"
 #include "hal/usb_hal.h"
 #include "soc/usb_periph.h"
+#include "usb_acm.h"
+#endif
 
 #include "esp_chip_info.h"
 #include "esp_log.h"
@@ -24,7 +29,6 @@
 
 #include "pins.h"
 #include "util.h"
-#include "usb_acm.h"
 
 #include "filesystem.h"
 #include "spect-config.h"
@@ -32,6 +36,8 @@
 
 #include "spect-rgb-channel.h"
 #include "rainbow.h"
+#include "chase.h"
+#include "pulse.h"
 
 #include "spect-radio.h"
 
@@ -50,6 +56,7 @@ static const char *TAG = "SPECT";
 spect_config_context_t* config_ctx;
 spect_rgb_t* channel0;
 
+#ifdef SPECT_FEATURE_USB
 #define EPNUM_CDC       2
 #define EPNUM_VENDOR    3
 #define EPNUM_MSC       4
@@ -114,8 +121,6 @@ static uint8_t const desc_configuration[] = {
     TUD_MSC_DESCRIPTOR(ITF_NUM_MSC, 6, EPNUM_MSC, 0x80 | EPNUM_MSC, 64),
 };
 
-#define MAC_BYTES       6
-
 static char serial_descriptor[MAC_BYTES * 2 + 1] = {'\0'}; // 2 chars per hexnumber + '\0'
 
 static char const *string_desc_arr[] = {
@@ -138,7 +143,9 @@ uint8_t const *tud_descriptor_device_cb(void)
 {
     return (uint8_t const *) &descriptor_config;
 }
+#endif // SPECT_FEATURE_USB
 
+#define MAC_BYTES       6
 static void serial_number_init(void)
 {
     uint8_t m[MAC_BYTES] = {0};
@@ -148,11 +155,13 @@ static void serial_number_init(void)
         ESP_LOGD(TAG, "Cannot read MAC address and set the device serial number");
         eub_abort();
     }
-
+#ifdef SPECT_FEATURE_USB
     snprintf(serial_descriptor, sizeof(serial_descriptor),
              "%02X%02X%02X%02X%02X%02X", m[0], m[1], m[2], m[3], m[4], m[5]);
+#endif // SPECT_FEATURE_USB
 }
 
+#ifdef SPECT_FEATURE_USB
 uint16_t const *tud_descriptor_string_cb(const uint8_t index, const uint16_t langid)
 {
     uint8_t chr_count;
@@ -238,18 +247,28 @@ static void usb_init()
     xTaskCreate(msc_task, "msc_task", 4 * 1024, NULL, 5, NULL);
     acm_init();
 }
+#endif // SPECT_FEATURE_USB
 
 void app_main(void)
 {
   ESP_LOGI(TAG, "app boot");
   ESP_LOGI(TAG, "free memory=%d", esp_get_minimum_free_heap_size());
 
+  /* Initialize NVS — it is used to store PHY calibration data */
+  esp_err_t ret = nvs_flash_init();
+  if (ret == ESP_ERR_NVS_NO_FREE_PAGES || ret == ESP_ERR_NVS_NEW_VERSION_FOUND) {
+      ESP_ERROR_CHECK(nvs_flash_erase());
+      ret = nvs_flash_init();
+  }
+  ESP_ERROR_CHECK(ret);
+
   esp_chip_info_t chip_info;
   esp_chip_info(&chip_info);
 
   serial_number_init();
+#ifdef SPECT_FEATURE_USB
   usb_init();
-
+#endif
   esp_err_t err;
 
   ESP_LOGI(TAG, "SPI init");
@@ -350,15 +369,17 @@ void app_main(void)
       .host = SPI2_HOST
   };
   err = spect_radio_initialize(config_ctx, &radio_cfg);
-  ESP_ERROR_CHECK(err);
+  if(err != ESP_OK) {
+    ESP_LOGE(TAG, "Radio init fail. continuing without radio features");
+  }
 
-uint8_t color_buffer[4] = {0};
-rgb_t   color_          = {0};
+  uint8_t color_buffer[4] = {0};
+  rgb_t   color_          = {0};
 
 /* VERY IMPORTANT!!!!!! DO NOT CREATE MORE STACK VARIABLES HERE U FOOL!!! */
 main_loop_init:
   if(current_mode == SPECT_MODE_EFFECT_RAINBOW)  {
-    ESP_LOGI(TAG, "Starting rainbow");
+    ESP_LOGI(TAG, "SPECT_MODE_EFFECT_RAINBOW init");
     rainbow_state_init(channel0, 
                        channel0->strip->length, 
                        config_ctx->config->state->data.rainbow.delay_time);
@@ -387,14 +408,24 @@ main_loop_init:
       config_ctx->rgb0->strip->length, 
       color_.red, color_.green, color_.blue
     );
-    spect_rgb_fill(channel0, 0, config_ctx->rgb0->strip->length, color_);
+    for(uint32_t i = 0; i < config_ctx->rgb0->strip->length; i++) {
+        spect_rgb_set_pixel(channel0, i,color_);
+        spect_rgb_wait(channel0);
+        spect_rgb_blit(channel0);
+    }
+    // spect_rgb_fill(channel0, 0, config_ctx->rgb0->strip->length, color_);
     spect_rgb_blit(channel0);
     spect_rgb_wait(channel0);
   }
 
   if(current_mode == SPECT_MODE_EFFECT_PULSE) {
-    ESP_LOGE("LED", "SPECT_MODE_EFFECT_PULSE not implemented");
-    abort();
+    ESP_LOGE("LED", "SPECT_MODE_EFFECT_PULSE init");
+    pulse_init(channel0, config_ctx->config->state->data.pulse.channel0, config_ctx->config->state->data.pulse.channel1);
+  }
+
+  if(current_mode == SPECT_MODE_EFFECT_CHASE) {
+    ESP_LOGI(TAG, "SPECT_MODE_EFFECT_CHASE init");
+    chase_init(channel0, config_ctx->config->state->data.solid.channel0, config_ctx->config->state->data.solid.channel1);
   }
 
   if(current_mode == SPECT_MODE_RADIO) {
@@ -410,7 +441,6 @@ main_loop_init:
      * all control flow is handled in this way, meaning if 
      * a mode takes too long to "step" it's state, the entire
      * UX will suffer */
-    if(current_mode == SPECT_MODE_EFFECT_SOLID) {};
     if(current_mode == SPECT_MODE_EFFECT_RAINBOW) rainbow_loop(channel0);
     if(current_mode == SPECT_MODE_EFFECT_SOLID) {
         color_buffer[0] = config_ctx->config->state->data.solid.channel0;
@@ -433,11 +463,54 @@ main_loop_init:
                 config_ctx->rgb0->strip->length, 
                 color_.red, color_.green, color_.blue
             );
-            spect_rgb_fill(channel0, 0, config_ctx->rgb0->strip->length, color_);
-            spect_rgb_blit(channel0);
-            spect_rgb_wait(channel0);
             spect_radio_broadcast_state(config_ctx, &color_);
+            for(uint32_t i = 0; i < config_ctx->rgb0->strip->length; i++) {
+                spect_rgb_set_pixel(channel0, i,color_);
+                spect_rgb_wait(channel0);
+                spect_rgb_blit(channel0);
+            }
+            // spect_rgb_fill(channel0, 0, config_ctx->rgb0->strip->length, color_);
         }
+    }
+    if(current_mode == SPECT_MODE_EFFECT_PULSE) {
+        color_buffer[0] = config_ctx->config->state->data.pulse.channel0;
+        color_buffer[1] = config_ctx->config->state->data.pulse.channel0 >>  8;
+        color_buffer[2] = config_ctx->config->state->data.pulse.channel0 >> 16;
+        color_buffer[3] = config_ctx->config->state->data.pulse.channel0 >> 24;
+
+        if((color_.red != color_buffer[1]) || (color_.green != color_buffer[0]) || (color_.blue != color_buffer[2])) {
+            // Strip uses GRB
+            color_.red   = color_buffer[1];
+            color_.green = color_buffer[0];
+            color_.blue  = color_buffer[2];
+            ESP_LOGI("LED change", "pulse[%d] %02X %02X %02X", 
+                config_ctx->rgb0->strip->length, 
+                color_.red, color_.green, color_.blue
+            );
+            pulse_init(channel0, config_ctx->config->state->data.solid.channel0, 
+                                 config_ctx->config->state->data.solid.channel1);
+        }
+        pulse_loop(channel0);
+    }
+    if(current_mode == SPECT_MODE_EFFECT_CHASE) {
+        color_buffer[0] = config_ctx->config->state->data.chase.channel0;
+        color_buffer[1] = config_ctx->config->state->data.chase.channel0 >>  8;
+        color_buffer[2] = config_ctx->config->state->data.chase.channel0 >> 16;
+        color_buffer[3] = config_ctx->config->state->data.chase.channel0 >> 24;
+
+        if((color_.red != color_buffer[1]) || (color_.green != color_buffer[0]) || (color_.blue != color_buffer[2])) {
+            // Strip uses GRB
+            color_.red   = color_buffer[1];
+            color_.green = color_buffer[0];
+            color_.blue  = color_buffer[2];
+            ESP_LOGI("LED change", "chase[%d] %02X %02X %02X", 
+                config_ctx->rgb0->strip->length, 
+                color_.red, color_.green, color_.blue
+            );
+            chase_init(channel0, config_ctx->config->state->data.solid.channel0, 
+                                 config_ctx->config->state->data.solid.channel1);
+        }
+        chase_loop(channel0);
     }
     spect_radio_loop(config_ctx);
     vTaskDelay(pdMS_TO_TICKS(10));
@@ -447,5 +520,13 @@ main_loop_init:
   /* do not reset any other state here. all initialization should 
    * be done at the next address */
   current_mode = config_ctx->config->state->mode;
+  color_.red = 0;
+  color_.green = 0;
+  color_.blue = 0;
+  for(uint32_t i = 0; i < config_ctx->rgb0->strip->length; i++) {
+    spect_rgb_set_pixel(channel0, i,color_);
+    spect_rgb_wait(channel0);
+    spect_rgb_blit(channel0);
+  }
   goto main_loop_init;
 }

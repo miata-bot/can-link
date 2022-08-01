@@ -59,47 +59,44 @@ uint8_t rainbow_step_loop(spect_rgb_t* rgb) {
 }
 
 uint8_t rainbow_step(spect_rgb_t* rgb) {
-  uint16_t num_steps = 146;
-  float steps_per_color = num_steps / 3;
-  uint16_t delay = 99;
-  if(esp_timer_get_time() - rainbow_state.effStart < delay * (rainbow_state.effStep)) return 0x00;
+  // Strip ID: 0 - Effect: Rainbow - LEDS: 300
+  // Steps: 300 - Delay: 20
+  // Colors: 3 (255.0.0, 0.255.0, 0.0.255)
+  // Options: rainbowlen=300, toLeft=false, 
+  if(esp_timer_get_time() - rainbow_state.effStart < 20 * (rainbow_state.effStep)) return 0x00;
   float factor1, factor2;
   uint16_t ind;
   rgb_t color;
-  for(uint16_t j=0; j<rgb->strip->length; j++) {
-    ind = num_steps - (uint16_t)(rainbow_state.effStep - j * 1) % num_steps;
-    switch((int)((ind % num_steps) / steps_per_color)) {
-      case 0: factor1 = 1.0 - ((float)(ind % num_steps - 0 * steps_per_color) / steps_per_color);
-              factor2 = (float)((int)(ind) % num_steps) / steps_per_color;
-              color = (rgb_t){
-                .green=255 * factor1 + 0 * factor2, 
-                .red=0 * factor1 + 255 * factor2, 
-                .blue=0 * factor1 + 0 * factor2
-              };
+  for(uint16_t j=0;j<300;j++) {
+    ind = 300 - (uint16_t)(rainbow_state.effStep - j * 1) % 300;
+    switch((int)((ind % 300) / 100)) {
+      case 0: factor1 = 1.0 - ((float)(ind % 300 - 0 * 100) / 100);
+              factor2 = (float)((int)(ind - 0) % 300) / 100;
+              color.green = 255 * factor1 + 0 * factor2;
+              color.red = 0 * factor1 + 255 * factor2;
+              color.blue = 0 * factor1 + 0 * factor2;
               spect_rgb_set_pixel(rgb, j, color);
               spect_rgb_set_color(rgb, color);
               break;
-      case 1: factor1 = 1.0 - ((float)(ind % num_steps - 1 * steps_per_color) / steps_per_color);
-              factor2 = (float)((int)(ind - steps_per_color) % num_steps) / steps_per_color;
-              color = (rgb_t){
-                .green=0 * factor1 + 0 * factor2, 
-                .red= 255 * factor1 + 0 * factor2, 
-                .blue=0 * factor1 + 255 * factor2};
+      case 1: factor1 = 1.0 - ((float)(ind % 300 - 1 * 100) / 100);
+              factor2 = (float)((int)(ind - 100) % 300) / 100;
+              color.green = 0 * factor1 + 0 * factor2;
+              color.red = 255 * factor1 + 0 * factor2;
+              color.blue = 0 * factor1 + 255 * factor2;
               spect_rgb_set_pixel(rgb, j, color);
               spect_rgb_set_color(rgb, color);
               break;
-      case 2: factor1 = 1.0 - ((float)(ind % num_steps - 2 * steps_per_color) / steps_per_color);
-              factor2 = (float)((int)(ind - (2 * steps_per_color)) % num_steps) / steps_per_color;
-              color = (rgb_t){
-                .green=0 * factor1 + 255 * factor2, 
-                .red=0 * factor1 + 0 * factor2, 
-                .blue=255 * factor1 + 0 * factor2};
+      case 2: factor1 = 1.0 - ((float)(ind % 300 - 2 * 100) / 100);
+              factor2 = (float)((int)(ind - 200) % 300) / 100;
+              color.green = 0 * factor1 + 255 * factor2;
+              color.red = 0 * factor1 + 0 * factor2;
+              color.blue = 255 * factor1 + 0 * factor2;
               spect_rgb_set_pixel(rgb, j, color);
               spect_rgb_set_color(rgb, color);
               break;
     }
   }
-  if(rainbow_state.effStep >= rgb->strip->length) {rainbow_state_reset(&rainbow_state, num_steps, delay); return 0x03; }
+  if(rainbow_state.effStep >= 300) {rainbow_state_reset(&rainbow_state, rainbow_state.numSteps, rainbow_state.delay); return 0x03; }
   else rainbow_state.effStep++;
   return 0x01;
 }
