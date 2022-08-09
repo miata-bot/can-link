@@ -45,7 +45,7 @@
         "silk_text_upright": false,
         "zones": {
           "45_degree_only": false,
-          "min_clearance": 0.0
+          "min_clearance": 0.19999999999999998
         }
       },
       "diff_pair_dimensions": [
@@ -452,7 +452,7 @@
     "page_layout_descr_file": ""
   },
   "schematic": {
-    "annotate_start_num": 100,
+    "annotate_start_num": 600,
     "drawing": {
       "default_line_thickness": 6.0,
       "default_text_size": 50.0,
@@ -519,8 +519,8 @@
       "External-IO"
     ],
     [
-      "faf1df09-e756-404d-a7ad-c3057352a8f3",
-      "Microphone"
+      "5e5537b0-5c16-4f8b-aed2-0a461f40803a",
+      "USB-UART"
     ]
   ],
   "text_variables": {
