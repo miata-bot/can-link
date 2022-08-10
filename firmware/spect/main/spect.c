@@ -409,7 +409,7 @@ main_loop_init:
       color_.red, color_.green, color_.blue
     );
     for(uint32_t i = 0; i < config_ctx->rgb0->strip->length; i++) {
-        spect_rgb_set_pixel(channel0, i,color_);
+        spect_rgb_set_pixel(channel0, i, color_);
         spect_rgb_wait(channel0);
         spect_rgb_blit(channel0);
     }

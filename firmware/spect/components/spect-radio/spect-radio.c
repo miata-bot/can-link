@@ -6,11 +6,11 @@
 
 const char* TAG = "RADIO";
 
-// #define SPECT_RADIO_INITIAL_STATE SPECT_RADIO_STATE_REQUEST_LEADER
-// #define SPECT_RADIO_INITIAL_LEADER 0
-
-#define SPECT_RADIO_INITIAL_STATE SPECT_RADIO_LEADER
+#define SPECT_RADIO_INITIAL_STATE SPECT_RADIO_STATE_REQUEST_LEADER
 #define SPECT_RADIO_INITIAL_LEADER 1
+
+// #define SPECT_RADIO_INITIAL_STATE SPECT_RADIO_LEADER
+// #define SPECT_RADIO_INITIAL_LEADER 1
 
 /**
  * @brief Gloabal radio handle. Should not be shared
@@ -278,10 +278,13 @@ esp_err_t spect_radio_loop(spect_config_context_t* config_ctx)
             packet->data.fill.green,
             packet->data.fill.blue
           );
-          rgb_t color = {.green=packet->data.fill.red, .red=packet->data.fill.green, .blue=packet->data.fill.blue};
-          spect_rgb_fill(config_ctx->rgb0, 0, config_ctx->rgb0->strip->length, color);
-          spect_rgb_wait(config_ctx->rgb0);
-          spect_rgb_blit(config_ctx->rgb0);
+          rgb_t color = {.green=packet->data.fill.green, .red=packet->data.fill.red, .blue=packet->data.fill.blue};
+          // spect_rgb_fill(config_ctx->rgb0, 0, config_ctx->rgb0->strip->length, color);
+          for(uint8_t i = 0; i < config_ctx->rgb0->strip->length; i++) {
+            spect_rgb_set_pixel(config_ctx->rgb0, i, color);
+            spect_rgb_wait(config_ctx->rgb0);
+            spect_rgb_blit(config_ctx->rgb0);
+          }
         } else {
           ESP_LOGE(TAG, "not accepting comand: packet_comes_from_leader=%d current_node_is_leader=%d", packet_comes_from_leader, current_node_is_leader);
         }
