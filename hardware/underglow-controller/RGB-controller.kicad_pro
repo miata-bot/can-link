@@ -452,7 +452,7 @@
     "page_layout_descr_file": ""
   },
   "schematic": {
-    "annotate_start_num": 600,
+    "annotate_start_num": 500,
     "drawing": {
       "default_line_thickness": 6.0,
       "default_text_size": 50.0,
@@ -517,10 +517,6 @@
     [
       "757733fb-8fb0-4a42-ae57-238e8944cf64",
       "External-IO"
-    ],
-    [
-      "5e5537b0-5c16-4f8b-aed2-0a461f40803a",
-      "USB-UART"
     ]
   ],
   "text_variables": {
