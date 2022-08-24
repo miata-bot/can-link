@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <esp_log.h>
+#include <inttypes.h>
 
 #include "spect-config.h"
 
@@ -28,7 +29,7 @@ esp_err_t spect_set_state(spect_config_context_t* ctx)
   switch(ctx->config->state->mode) {
     case SPECT_MODE_RADIO:
     case SPECT_MODE_EFFECT_SOLID: {
-      ESP_LOGI(TAG, "saving solid effect state %d, %d", ctx->config->state->data.solid.channel0, ctx->config->state->data.solid.channel1);
+      ESP_LOGI(TAG, "saving solid effect state %lu, %lu", ctx->config->state->data.solid.channel0, ctx->config->state->data.solid.channel1);
       rc = sqlite3_prepare_v2(ctx->db, "UPDATE state SET mode_solid_channel0 = ?1, mode_solid_channel1 = ?2;", -1, &res, 0);
       if(rc != ESP_OK) return ESP_ERR_INVALID_STATE;
       
@@ -39,7 +40,7 @@ esp_err_t spect_set_state(spect_config_context_t* ctx)
       if(rc != ESP_OK) return ESP_ERR_INVALID_STATE;
     } break;
     case SPECT_MODE_EFFECT_RAINBOW: {
-      ESP_LOGI(TAG, "saving rainbow effect state %d, %d", ctx->config->state->data.rainbow.length, ctx->config->state->data.rainbow.delay_time);
+      ESP_LOGI(TAG, "saving rainbow effect state %lu, %lu", ctx->config->state->data.rainbow.length, ctx->config->state->data.rainbow.delay_time);
       rc = sqlite3_prepare_v2(ctx->db, "UPDATE state SET mode_rainbow_length = ?1, mode_rainbow_delay_time = ?2;", -1, &res, 0);
       if(rc != ESP_OK) return ESP_ERR_INVALID_STATE;
       
@@ -50,7 +51,7 @@ esp_err_t spect_set_state(spect_config_context_t* ctx)
       if(rc != ESP_OK) return ESP_ERR_INVALID_STATE;
     } break;
     case SPECT_MODE_EFFECT_PULSE: {
-      ESP_LOGI(TAG, "saving pulse effect state %d, %d", ctx->config->state->data.pulse.channel0, ctx->config->state->data.pulse.channel1);
+      ESP_LOGI(TAG, "saving pulse effect state %lu, %lu", ctx->config->state->data.pulse.channel0, ctx->config->state->data.pulse.channel1);
       rc = sqlite3_prepare_v2(ctx->db, "UPDATE state SET mode_solid_channel0 = ?1, mode_solid_channel1 = ?2;", -1, &res, 0);
       if(rc != ESP_OK) return ESP_ERR_INVALID_STATE;
       
@@ -61,7 +62,7 @@ esp_err_t spect_set_state(spect_config_context_t* ctx)
       if(rc != ESP_OK) return ESP_ERR_INVALID_STATE;
     } break;
     case SPECT_MODE_EFFECT_CHASE: {
-      ESP_LOGI(TAG, "saving solid effect state %d, %d", ctx->config->state->data.chase.channel0, ctx->config->state->data.chase.channel1);
+      ESP_LOGI(TAG, "saving solid effect state %lu, %lu", ctx->config->state->data.chase.channel0, ctx->config->state->data.chase.channel1);
       rc = sqlite3_prepare_v2(ctx->db, "UPDATE state SET mode_solid_channel0 = ?1, mode_solid_channel1 = ?2;", -1, &res, 0);
       if(rc != ESP_OK) return ESP_ERR_INVALID_STATE;
       

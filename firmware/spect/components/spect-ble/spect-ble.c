@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <inttypes.h>
 #include "esp_log.h"
 
 /* BLE */

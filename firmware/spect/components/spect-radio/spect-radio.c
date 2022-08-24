@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <inttypes.h>
 #include "esp_log.h"
 
 #include "spect-radio.h"
@@ -148,7 +149,7 @@ esp_err_t spect_radio_initialize(spect_config_context_t* config_ctx, SX1231_conf
   memset(packet->payload, 0, SPECT_RADIO_MAX_DATA_LENGTH);
   memset(&packet->data, 0, sizeof(spect_radio_packet_data_t));
   
-  ESP_LOGI("RADIO", "Initalized radio %d", sx1231_getFrequency(sx1231));
+  ESP_LOGI("RADIO", "Initalized radio %lu", sx1231_getFrequency(sx1231));
   return ESP_OK;
 }
 

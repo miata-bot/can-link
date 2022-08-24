@@ -1,5 +1,5 @@
 #include <stdio.h>
-
+#include <inttypes.h>
 #include "esp_log.h"
 
 #include "spect-rgb-channel.h"

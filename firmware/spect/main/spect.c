@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdbool.h>
+#include <inttypes.h>
 
 #include <freertos/FreeRTOS.h>
 #include <freertos/task.h>
@@ -252,7 +253,7 @@ static void usb_init()
 void app_main(void)
 {
   ESP_LOGI(TAG, "app boot");
-  ESP_LOGI(TAG, "free memory=%d", esp_get_minimum_free_heap_size());
+  ESP_LOGI(TAG, "free memory=%lu", esp_get_minimum_free_heap_size());
 
   /* Initialize NVS — it is used to store PHY calibration data */
   esp_err_t ret = nvs_flash_init();
@@ -310,7 +311,7 @@ void app_main(void)
   ESP_LOGI(TAG, "config load ok");
 
   ESP_LOGI(TAG, "loaded db");
-  ESP_LOGI(TAG, "free memory=%d", esp_get_minimum_free_heap_size());
+  ESP_LOGI(TAG, "free memory=%lu", esp_get_minimum_free_heap_size());
   ESP_LOGI(TAG, "mode=%d", config_ctx->config->state->mode);
 
   /* spawns a thread, consider putting this on a different core. */

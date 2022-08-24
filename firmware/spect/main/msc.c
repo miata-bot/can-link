@@ -1,6 +1,7 @@
 #include <stdint.h>
 #include <stdbool.h>
 #include <string.h>
+#include <inttypes.h>
 
 #include "esp_vfs_fat.h"
 #include "esp_log.h"
@@ -48,7 +49,7 @@ void tud_msc_capacity_cb(uint8_t lun, uint32_t *block_count, uint16_t *block_siz
     (void) lun;
     *block_count = wl_size(wl_handle) / wl_sector_size(wl_handle);
     *block_size  = wl_sector_size(wl_handle);
-    ESP_LOGD(TAG, "tud_msc_capacity_cb()  block_count=%d block_size=%d", *block_count, *block_size);
+    ESP_LOGD(TAG, "tud_msc_capacity_cb()  block_count=%lu block_size=%d", *block_count, *block_size);
 }
 
 // this isn't called when i think it should be.
@@ -92,7 +93,7 @@ bool tud_msc_start_stop_cb(uint8_t lun, uint8_t power_condition, bool start, boo
 
 int32_t tud_msc_read10_cb(uint8_t lun, uint32_t lba, uint32_t offset, void *buffer, uint32_t bufsize)
 {
-    ESP_LOGD(TAG, "tud_msc_read10_cb() invoked, lun=%d, lba=%d, offset=%d, bufsize=%d", lun, lba, offset, bufsize);
+    ESP_LOGD(TAG, "tud_msc_read10_cb() invoked, lun=%d, lba=%lu, offset=%lu, bufsize=%lu", lun, lba, offset, bufsize);
     esp_err_t err = wl_read(wl_handle, lba * wl_sector_size(wl_handle) + offset, buffer, bufsize);
     ESP_ERROR_CHECK(err);
     ESP_LOG_BUFFER_HEXDUMP("tud_msc_read10_cb", buffer, bufsize, ESP_LOG_DEBUG);
