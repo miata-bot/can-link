@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="ExDoc v0.28.5">
+    <meta name="project" content="spect v0.1.0">
+
+    <title>Spect.EffectSlot — spect v0.1.0</title>
+    <link rel="stylesheet" href="dist/elixir-64c5e2b63575bddb1c5b.css" />
+
+    <script src="dist/sidebar_items-5627c8cb3c.js"></script>
+
+      <script src="docs_config.js"></script>
+
+    <script async src="dist/app-b5f3440501744dc8be3d.js"></script>
+
+
+  </head>
+  <body data-type="modules">
+    <script>
+
+      try {
+        var settings = JSON.parse(localStorage.getItem('ex_doc:settings') || '{}');
+
+        if (settings.theme === 'dark' ||
+           ((settings.theme === 'system' || settings.theme == null) &&
+             window.matchMedia('(prefers-color-scheme: dark)').matches)
+           ) {
+          document.body.classList.add('dark')
+        }
+      } catch (error) { }
+    </script>
+
+<div class="main">
+
+
+<section class="sidebar">
+  <button class="sidebar-button sidebar-toggle" aria-label="toggle sidebar">
+    <i class="ri-menu-line ri-lg" title="Collapse/expand sidebar"></i>
+  </button>
+
+  <form class="sidebar-search" action="search.html">
+    <button type="submit" class="search-button" aria-label="Submit Search">
+      <i class="ri-search-2-line" aria-hidden="true" title="Submit search"></i>
+    </button>
+    <button type="button" tabindex="-1" class="search-close-button" aria-label="Cancel Search">
+      <i class="ri-close-line ri-lg" aria-hidden="true" title="Cancel search"></i>
+    </button>
+    <label class="search-label">
+      <p class="sr-only">Search</p>
+      <input name="q" type="text" class="search-input" placeholder="Search..." aria-label="Input your search terms" autocomplete="off" />
+    </label>
+  </form>
+
+  <div class="autocomplete">
+    <div class="autocomplete-results">
+    </div>
+  </div>
+
+  <div class="sidebar-header">
+
+    <div class="sidebar-projectDetails">
+      <a href="readme.html" class="sidebar-projectName" translate="no">
+spect
+      </a>
+      <strong class="sidebar-projectVersion" translate="no">
+        v0.1.0
+      </strong>
+    </div>
+    <ul class="sidebar-listNav">
+      <li><a id="extras-list-link" href="#full-list">Pages</a></li>
+
+        <li><a id="modules-list-link" href="#full-list">Modules</a></li>
+
+
+    </ul>
+  </div>
+
+  <div class="gradient"></div>
+  <ul id="full-list" class="sidebar-fullList"></ul>
+</section>
+
+<section class="content">
+  <output role="status" id="toast"></output>
+  <div class="content-outer">
+    <div id="content" class="content-inner">
+
+<h1>
+<button class="settings display-settings">
+  <i class="ri-settings-3-line"></i>
+  <span class="sr-only">Settings</span>
+</button>
+
+
+    <a href="https://github.com/miata-bot/can-link//blob/cb3bd8d/interface/spect/lib/spect/effect_slot.ex#L1" title="View Source" class="view-source" rel="help">
+      <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+      <span class="sr-only">View Source</span>
+    </a>
+
+  <span translate="no">Spect.EffectSlot</span> 
+  <small class="app-vsn" translate="no">(spect v0.1.0)</small>
+
+</h1>
+
+
+  <section id="moduledoc">
+<p>Represents an effect running the device.</p><ul><li>Effects are implemented as Lua scripts internally.</li><li>Mode is a bitfield described below</li><li>There are 8 effect slots total</li></ul><p>Each slot may use <em>up to</em> or <em>all of</em> the 8 <code class="inline">sections</code>
+on the device. See the <code class="inline">sections</code> document for a
+description of how that works.</p><h2 id="module-mode-bitfield" class="section-heading">
+  <a href="#module-mode-bitfield" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
+  <p class="sr-only">mode-bitfield</p>
+  </a>
+  Mode Bitfield
+</h2>
+<table><thead><tr><th style="text-align: left;">7</th><th style="text-align: left;">6</th><th style="text-align: left;">5</th><th style="text-align: left;">4</th><th style="text-align: left;">3</th><th style="text-align: left;">2</th><th style="text-align: left;">1</th><th style="text-align: left;">0</th></tr></thead><tbody><tr><td style="text-align: left;">effect enable</td><td style="text-align: left;">radio sync</td><td style="text-align: left;">can sync</td><td style="text-align: left;">-</td><td style="text-align: left;">-</td><td style="text-align: left;">-</td><td style="text-align: left;">-</td><td style="text-align: left;">-</td></tr></tbody></table><p>Bits 4-8 are reserved for future use</p><ul><li><code class="inline">effect_enalbe</code> - enable or disable this effect slot</li><li><code class="inline">radio_sync</code>    - enable or disable syncing of this slot on the network</li><li><code class="inline">can_sync</code>      - enable or disable syncing of this slot via CAN</li></ul>
+  </section>
+
+
+
+      <footer class="footer">
+
+        <p>
+          Built using
+          <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.28.5) for the
+
+            <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+
+        </p>
+      </footer>
+    </div>
+  </div>
+</section>
+</div>
+
+
+  </body>
+</html>
