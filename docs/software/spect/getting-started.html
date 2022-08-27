@@ -7,7 +7,7 @@
     <meta name="generator" content="ExDoc v0.28.5">
     <meta name="project" content="spect v0.1.0">
 
-    <title>API Reference — spect v0.1.0</title>
+    <title>Settingup a development environment — spect v0.1.0</title>
     <link rel="stylesheet" href="dist/elixir-64c5e2b63575bddb1c5b.css" />
 
     <script src="dist/sidebar_items-27a6e41762.js"></script>
@@ -94,129 +94,31 @@ spect
 </button>
 
 
-  <span>API Reference <small class="app-vsn">spect v0.1.0</small></span>
+    <a href="https://github.com/miata-bot/can-link//blob/4f57e51/interface/spect/docs/Getting-Started.md#L1" title="View Source" class="view-source" rel="help">
+      <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+      <span class="sr-only">View Source</span>
+    </a>
+
+  <span>Settingup a development environment</span>
 </h1>
 
-
-  <section class="details-list">
-    <h2 id="modules" class="section-heading">
-  <a href="#modules" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
-  <p class="sr-only">modules</p>
-  </a>
-  Modules
-</h2>
-
-    <div class="summary">
-<div class="summary-row">
-  <div class="summary-signature">
-    <a href="Spect.Config.html" translate="no">Spect.Config</a>
-
-  </div>
-
-    <div class="summary-synopsis"><p>Root level device configuration.
-Versioned for introspection in the future.</p></div>
-
-</div>
-<div class="summary-row">
-  <div class="summary-signature">
-    <a href="Spect.EffectSlot.html" translate="no">Spect.EffectSlot</a>
-
-  </div>
-
-    <div class="summary-synopsis"><p>Represents an effect running the device.</p></div>
-
-</div>
-<div class="summary-row">
-  <div class="summary-signature">
-    <a href="Spect.Network.html" translate="no">Spect.Network</a>
-
-  </div>
-
-    <div class="summary-synopsis"><p>Represents a radio network instance.
-A network is refered to by it's ID which
-is a 10 bit integer.</p></div>
-
-</div>
-<div class="summary-row">
-  <div class="summary-signature">
-    <a href="Spect.Network.Identity.html" translate="no">Spect.Network.Identity</a>
-
-  </div>
-
-    <div class="summary-synopsis"><p>Represents the current device's radio identity. This should be
-set once and never changed.</p></div>
-
-</div>
-<div class="summary-row">
-  <div class="summary-signature">
-    <a href="Spect.Network.Leader.html" translate="no">Spect.Network.Leader</a>
-
-  </div>
-
-    <div class="summary-synopsis"><p>Represents the current device's radio leader. Leaders can be changed
-at runtime.</p></div>
-
-</div>
-<div class="summary-row">
-  <div class="summary-signature">
-    <a href="Spect.Network.Node.html" translate="no">Spect.Network.Node</a>
-
-  </div>
-
-    <div class="summary-synopsis"><p>Radio node</p></div>
-
-</div>
-<div class="summary-row">
-  <div class="summary-signature">
-    <a href="Spect.NetworkNode.html" translate="no">Spect.NetworkNode</a>
-
-  </div>
-
-    <div class="summary-synopsis"><p>Join between Network and Node to allow for
-the same node database to be used for
-multiple networks. This table is populated
-with information about a node per this network</p></div>
-
-</div>
-<div class="summary-row">
-  <div class="summary-signature">
-    <a href="Spect.Section.html" translate="no">Spect.Section</a>
-
-  </div>
-
-    <div class="summary-synopsis"><p>Section of one entire strip
-There are 8 of these total that can be distributed
-into 8 different Effects and 4 different Triggers</p></div>
-
-</div>
-<div class="summary-row">
-  <div class="summary-signature">
-    <a href="Spect.SlotSection.html" translate="no">Spect.SlotSection</a>
-
-  </div>
-
-    <div class="summary-synopsis"><p>Join table between section and slot</p></div>
-
-</div>
-
-    </div>
-  </section>
-
-
+<p>This should be done on Linux. if you're not using Linux,
+get rekt i guess.</p><ul><li>clone this repo: <code class="inline">git clone git@github.com:miata-bot/can-link.git</code></li><li>clone submodules:  <code class="inline">git submodule --init --recursive</code></li><li>install <a href="https://docs.espressif.com/projects/esp-idf/en/v4.4.2/esp32s3/get-started/index.html">esp idf</a></li><li>apply patches to sqlite3: <code class="inline">cd firmware/spect/components/esp-idf-sqlite3 &amp;&amp; git patch am ../*.patch</code></li><li>install <a href="https://asdf-vm.com/">asdf</a></li><li>install erlang and elixir: <code class="inline">cd interface/spect &amp;&amp; asdf install</code></li><li>fetch dependencies: <code class="inline">cd interface/spect &amp;&amp; mix deps.get</code></li><li>run migrations: <code class="inline">cd interface/spect &amp;&amp; mix ecto.migrate</code></li><li>build firmware: <code class="inline">cd firmware/spect &amp;&amp; idf.py build</code></li></ul><p>If and only of these stepes succeed should you procede.
+Return to the <a href="readme.html">README</a></p>
 <div class="bottom-actions">
   <div class="bottom-actions-item">
 
-  </div>
-  <div class="bottom-actions-item">
-
-      <a href="readme.html" class="bottom-actions-button" rel="next">
+      <a href="can.html" class="bottom-actions-button" rel="prev">
         <span class="subheader">
-          Next Page →
+          ← Previous Page
         </span>
         <span class="title">
-Software Developer Documentation
+CAN Data Format
         </span>
       </a>
+
+  </div>
+  <div class="bottom-actions-item">
 
   </div>
 </div>

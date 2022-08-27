@@ -27,7 +27,7 @@ defmodule Spect.MixProject do
 
   defp docs do
     [
-      extras: ["README.md"],
+      extras: ["README.md"] ++ Path.wildcard("docs/*.md"),
       main: "readme",
       source_url: @source_url,
       source_url_pattern: "#{@source_url}/blob/#{get_commit_sha()}/interface/spect/%{path}#L%{line}"

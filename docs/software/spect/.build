@@ -9,6 +9,8 @@ Spect.NetworkNode.html
 Spect.Section.html
 Spect.SlotSection.html
 api-reference.html
+ble.html
+can.html
 dist/app-b5f3440501744dc8be3d.js
 dist/app-b5f3440501744dc8be3d.js.LICENSE.txt
 dist/elixir-64c5e2b63575bddb1c5b.css
@@ -17,8 +19,9 @@ dist/html/fonts/remixicon.svg
 dist/html/fonts/remixicon.ttf
 dist/html/fonts/remixicon.woff
 dist/html/fonts/remixicon.woff2
-dist/search_items-d1e4e7213b.js
-dist/sidebar_items-a9f0ade90c.js
+dist/search_items-f113214398.js
+dist/sidebar_items-27a6e41762.js
+getting-started.html
 index.html
 readme.html
 search.html
