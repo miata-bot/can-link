@@ -10,7 +10,7 @@
     <title>Spect.Config — spect v0.1.0</title>
     <link rel="stylesheet" href="dist/elixir-64c5e2b63575bddb1c5b.css" />
 
-    <script src="dist/sidebar_items-5627c8cb3c.js"></script>
+    <script src="dist/sidebar_items-70786be3bf.js"></script>
 
       <script src="docs_config.js"></script>
 
@@ -94,7 +94,7 @@ spect
 </button>
 
 
-    <a href="https://github.com/miata-bot/can-link//blob/cb3bd8d/interface/spect/lib/spect/config.ex#L1" title="View Source" class="view-source" rel="help">
+    <a href="https://github.com/miata-bot/can-link//blob/9ab3799/interface/spect/lib/spect/config.ex#L1" title="View Source" class="view-source" rel="help">
       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
       <span class="sr-only">View Source</span>
     </a>
@@ -112,6 +112,161 @@ See the network document for more information.</p>
   </section>
 
 
+  <section id="summary" class="details-list">
+    <h1 class="section-heading">
+      <a class="hover-link" href="#summary">
+        <i class="ri-link-m" aria-hidden="true"></i>
+        <span class="sr-only">Link to this section</span>
+      </a>
+      Summary
+    </h1>
+
+  <div class="summary-types summary">
+    <h2>
+      <a href="#types">Types</a>
+    </h2>
+
+      <div class="summary-row">
+        <div class="summary-signature">
+          <a href="#t:config_id/0" translate="no">config_id()</a>
+
+        </div>
+
+          <div class="summary-synopsis"><p>Config.id will always be zero</p></div>
+
+      </div>
+
+      <div class="summary-row">
+        <div class="summary-signature">
+          <a href="#t:t/0" translate="no">t()</a>
+
+        </div>
+
+          <div class="summary-synopsis"><p>Root level device configuration. Mostly a container for other records.</p></div>
+
+      </div>
+
+      <div class="summary-row">
+        <div class="summary-signature">
+          <a href="#t:version/0" translate="no">version()</a>
+
+        </div>
+
+          <div class="summary-synopsis"><p>Current config version. Currently unused</p></div>
+
+      </div>
+
+  </div>
+
+  </section>
+
+
+  <section id="types" class="details-list">
+    <h1 class="section-heading">
+      <a class="hover-link" href="#types">
+        <i class="ri-link-m" aria-hidden="true"></i>
+        <span class="sr-only">Link to this section</span>
+      </a>
+Types
+    </h1>
+    <div class="types-list">
+<section class="detail" id="t:config_id/0">
+
+  <div class="detail-header">
+    <a href="#t:config_id/0" class="detail-link" title="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this type</span>
+    </a>
+    <h1 class="signature" translate="no">config_id()</h1>
+
+      <a href="https://github.com/miata-bot/can-link//blob/9ab3799/interface/spect/lib/spect/config.ex#L15" class="view-source" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> config_id() :: 0</pre>
+
+      </div>
+
+<p>Config.id will always be zero</p>
+  </section>
+</section>
+<section class="detail" id="t:t/0">
+
+  <div class="detail-header">
+    <a href="#t:t/0" class="detail-link" title="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this type</span>
+    </a>
+    <h1 class="signature" translate="no">t()</h1>
+
+      <a href="https://github.com/miata-bot/can-link//blob/9ab3799/interface/spect/lib/spect/config.ex#L18" class="view-source" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> t() :: %Spect.Config{
+  __meta__: <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">term</a>(),
+  id: <a href="#t:config_id/0">config_id</a>(),
+  network: <a href="Spect.Network.html#t:t/0">Spect.Network.t</a>(),
+  network_id: <a href="Spect.Network.html#t:network_id/0">Spect.Network.network_id</a>(),
+  network_identity: <a href="Spect.Network.Identity.html#t:t/0">Spect.Network.Identity.t</a>(),
+  network_identity_id: <a href="Spect.Network.Identity.html#t:network_identity_id/0">Spect.Network.Identity.network_identity_id</a>(),
+  network_leader: <a href="Spect.Network.Leader.html#t:t/0">Spect.Network.Leader.t</a>(),
+  network_leader_id: <a href="Spect.Network.Leader.html#t:network_leader_id/0">Spect.Network.Leader.network_leader_id</a>(),
+  version: <a href="#t:version/0">version</a>()
+}</pre>
+
+      </div>
+
+<p>Root level device configuration. Mostly a container for other records.</p>
+  </section>
+</section>
+<section class="detail" id="t:version/0">
+
+  <div class="detail-header">
+    <a href="#t:version/0" class="detail-link" title="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this type</span>
+    </a>
+    <h1 class="signature" translate="no">version()</h1>
+
+      <a href="https://github.com/miata-bot/can-link//blob/9ab3799/interface/spect/lib/spect/config.ex#L12" class="view-source" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> version() :: <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">non_neg_integer</a>()</pre>
+
+      </div>
+
+<p>Current config version. Currently unused</p>
+  </section>
+</section>
+
+    </div>
+  </section>
 
       <footer class="footer">
 

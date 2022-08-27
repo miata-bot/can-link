@@ -10,7 +10,7 @@
     <title>Spect.Network — spect v0.1.0</title>
     <link rel="stylesheet" href="dist/elixir-64c5e2b63575bddb1c5b.css" />
 
-    <script src="dist/sidebar_items-5627c8cb3c.js"></script>
+    <script src="dist/sidebar_items-70786be3bf.js"></script>
 
       <script src="docs_config.js"></script>
 
@@ -94,7 +94,7 @@ spect
 </button>
 
 
-    <a href="https://github.com/miata-bot/can-link//blob/cb3bd8d/interface/spect/lib/spect/network.ex#L1" title="View Source" class="view-source" rel="help">
+    <a href="https://github.com/miata-bot/can-link//blob/9ab3799/interface/spect/lib/spect/network.ex#L1" title="View Source" class="view-source" rel="help">
       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
       <span class="sr-only">View Source</span>
     </a>
@@ -105,7 +105,178 @@ spect
 </h1>
 
 
+  <section id="moduledoc">
+<p>Represents a radio network instance.
+A network is refered to by it's ID which
+is a 10 bit integer.</p><h2 id="module-encryption" class="section-heading">
+  <a href="#module-encryption" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
+  <p class="sr-only">encryption</p>
+  </a>
+  Encryption
+</h2>
+<p>A network can be encrypted at the radio level. This is enabled
+by having the <code class="inline">key</code> set. Packets are encrypted entirely, and the
+<code class="inline">network</code> concept is implemented on top of that, so if a packet
+is encrypted such that it changes the <code class="inline">network id</code> bits, packets
+will not be routed to the correct network, and also contain nonsense.</p>
+  </section>
 
+
+  <section id="summary" class="details-list">
+    <h1 class="section-heading">
+      <a class="hover-link" href="#summary">
+        <i class="ri-link-m" aria-hidden="true"></i>
+        <span class="sr-only">Link to this section</span>
+      </a>
+      Summary
+    </h1>
+
+  <div class="summary-types summary">
+    <h2>
+      <a href="#types">Types</a>
+    </h2>
+
+      <div class="summary-row">
+        <div class="summary-signature">
+          <a href="#t:key/0" translate="no">key()</a>
+
+        </div>
+
+          <div class="summary-synopsis"><p>Encryption key. If set, all packets received on this network
+will be encrypted/decryped by this key. Must be <strong>EXACTLY</strong> 16 bytes
+if set.</p></div>
+
+      </div>
+
+      <div class="summary-row">
+        <div class="summary-signature">
+          <a href="#t:network_id/0" translate="no">network_id()</a>
+
+        </div>
+
+          <div class="summary-synopsis"><p>network's ID number. 10 bit integer ranging from 1..1023</p></div>
+
+      </div>
+
+      <div class="summary-row">
+        <div class="summary-signature">
+          <a href="#t:t/0" translate="no">t()</a>
+
+        </div>
+
+      </div>
+
+  </div>
+
+  </section>
+
+
+  <section id="types" class="details-list">
+    <h1 class="section-heading">
+      <a class="hover-link" href="#types">
+        <i class="ri-link-m" aria-hidden="true"></i>
+        <span class="sr-only">Link to this section</span>
+      </a>
+Types
+    </h1>
+    <div class="types-list">
+<section class="detail" id="t:key/0">
+
+  <div class="detail-header">
+    <a href="#t:key/0" class="detail-link" title="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this type</span>
+    </a>
+    <h1 class="signature" translate="no">key()</h1>
+
+      <a href="https://github.com/miata-bot/can-link//blob/9ab3799/interface/spect/lib/spect/network.ex#L25" class="view-source" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> key() :: <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">binary</a>() | nil</pre>
+
+      </div>
+
+<p>Encryption key. If set, all packets received on this network
+will be encrypted/decryped by this key. Must be <strong>EXACTLY</strong> 16 bytes
+if set.</p>
+  </section>
+</section>
+<section class="detail" id="t:network_id/0">
+
+  <div class="detail-header">
+    <a href="#t:network_id/0" class="detail-link" title="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this type</span>
+    </a>
+    <h1 class="signature" translate="no">network_id()</h1>
+
+      <a href="https://github.com/miata-bot/can-link//blob/9ab3799/interface/spect/lib/spect/network.ex#L18" class="view-source" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> network_id() :: 1..1023</pre>
+
+      </div>
+
+<p>network's ID number. 10 bit integer ranging from 1..1023</p>
+  </section>
+</section>
+<section class="detail" id="t:t/0">
+
+  <div class="detail-header">
+    <a href="#t:t/0" class="detail-link" title="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this type</span>
+    </a>
+    <h1 class="signature" translate="no">t()</h1>
+
+      <a href="https://github.com/miata-bot/can-link//blob/9ab3799/interface/spect/lib/spect/network.ex#L27" class="view-source" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> t() :: %Spect.Network{
+  __meta__: <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">term</a>(),
+  id: <a href="#t:network_id/0">network_id</a>(),
+  key: <a href="#t:key/0">key</a>(),
+  network_identity: <a href="Spect.Network.Identity.html#t:t/0">Spect.Network.Identity.t</a>(),
+  network_leader: <a href="Spect.Network.Leader.html#t:t/0">Spect.Network.Leader.t</a>(),
+  network_nodes: [Spect.NetworkNode.t()],
+  nodes: [Spect.Network.Node.t()]
+}</pre>
+
+      </div>
+
+
+  </section>
+</section>
+
+    </div>
+  </section>
 
       <footer class="footer">
 

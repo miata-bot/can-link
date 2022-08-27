@@ -9,8 +9,12 @@ defmodule Spect.EffectSlot do
   Each slot may use *up to* or *all of* the 8 `sections`
   on the device. See the `sections` document for a
   description of how that works.
+  """
+  use Ecto.Schema
 
-  ## Mode Bitfield
+  @typedoc """
+  Mode is a bitfield struct
+
   | 7             | 6          | 5         | 4 | 3 | 2 | 1 | 0 |
   | ------------- | ---------- | --------- | - | - | - | - | - |
   | effect enable | radio sync | can sync  | - | - | - | - | - |
@@ -21,7 +25,18 @@ defmodule Spect.EffectSlot do
   * `radio_sync`    - enable or disable syncing of this slot on the network
   * `can_sync`      - enable or disable syncing of this slot via CAN
   """
-  use Ecto.Schema
+  @type mode :: non_neg_integer()
+
+  @typedoc """
+  Represents a slot for a potentially running effect
+
+  * `mode` is a bitfield described above
+  * `script_name` is the name of the lua script that should be running
+  """
+  @type t() :: %__MODULE__{
+    mode: mode,
+    script_name: String.t() | nil
+  }
 
   schema "effect_slots" do
     field :mode, :integer
