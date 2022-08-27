@@ -10,7 +10,7 @@
     <title>Spect.Network.Node — spect v0.1.0</title>
     <link rel="stylesheet" href="dist/elixir-64c5e2b63575bddb1c5b.css" />
 
-    <script src="dist/sidebar_items-70786be3bf.js"></script>
+    <script src="dist/sidebar_items-a9f0ade90c.js"></script>
 
       <script src="docs_config.js"></script>
 
@@ -94,7 +94,7 @@ spect
 </button>
 
 
-    <a href="https://github.com/miata-bot/can-link//blob/9ab3799/interface/spect/lib/spect/network/node.ex#L1" title="View Source" class="view-source" rel="help">
+    <a href="https://github.com/miata-bot/can-link//blob/d0fdca4/interface/spect/lib/spect/network/node.ex#L1" title="View Source" class="view-source" rel="help">
       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
       <span class="sr-only">View Source</span>
     </a>
@@ -105,7 +105,207 @@ spect
 </h1>
 
 
+  <section id="moduledoc">
+<p>Radio node</p>
+  </section>
 
+
+  <section id="summary" class="details-list">
+    <h1 class="section-heading">
+      <a class="hover-link" href="#summary">
+        <i class="ri-link-m" aria-hidden="true"></i>
+        <span class="sr-only">Link to this section</span>
+      </a>
+      Summary
+    </h1>
+
+  <div class="summary-types summary">
+    <h2>
+      <a href="#types">Types</a>
+    </h2>
+
+      <div class="summary-row">
+        <div class="summary-signature">
+          <a href="#t:last_seen/0" translate="no">last_seen()</a>
+
+        </div>
+
+          <div class="summary-synopsis"><p>unsigned 64 bit int</p></div>
+
+      </div>
+
+      <div class="summary-row">
+        <div class="summary-signature">
+          <a href="#t:node_id/0" translate="no">node_id()</a>
+
+        </div>
+
+          <div class="summary-synopsis"><p>10 bit node id</p></div>
+
+      </div>
+
+      <div class="summary-row">
+        <div class="summary-signature">
+          <a href="#t:rssi/0" translate="no">rssi()</a>
+
+        </div>
+
+          <div class="summary-synopsis"><p>16 bit signed int</p></div>
+
+      </div>
+
+      <div class="summary-row">
+        <div class="summary-signature">
+          <a href="#t:t/0" translate="no">t()</a>
+
+        </div>
+
+          <div class="summary-synopsis"><p>Represents a node on the network. Node Info is unknown by
+default, it must be gathered at runtime. Each network
+may have 1023 nodes technically, but one node
+is indistinguishable from another without knowing
+what the currently configured network is.</p></div>
+
+      </div>
+
+  </div>
+
+  </section>
+
+
+  <section id="types" class="details-list">
+    <h1 class="section-heading">
+      <a class="hover-link" href="#types">
+        <i class="ri-link-m" aria-hidden="true"></i>
+        <span class="sr-only">Link to this section</span>
+      </a>
+Types
+    </h1>
+    <div class="types-list">
+<section class="detail" id="t:last_seen/0">
+
+  <div class="detail-header">
+    <a href="#t:last_seen/0" class="detail-link" title="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this type</span>
+    </a>
+    <h1 class="signature" translate="no">last_seen()</h1>
+
+      <a href="https://github.com/miata-bot/can-link//blob/d0fdca4/interface/spect/lib/spect/network/node.ex#L9" class="view-source" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> last_seen() :: 0..4_294_967_295</pre>
+
+      </div>
+
+<p>unsigned 64 bit int</p>
+  </section>
+</section>
+<section class="detail" id="t:node_id/0">
+
+  <div class="detail-header">
+    <a href="#t:node_id/0" class="detail-link" title="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this type</span>
+    </a>
+    <h1 class="signature" translate="no">node_id()</h1>
+
+      <a href="https://github.com/miata-bot/can-link//blob/d0fdca4/interface/spect/lib/spect/network/node.ex#L6" class="view-source" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> node_id() :: 1..1023</pre>
+
+      </div>
+
+<p>10 bit node id</p>
+  </section>
+</section>
+<section class="detail" id="t:rssi/0">
+
+  <div class="detail-header">
+    <a href="#t:rssi/0" class="detail-link" title="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this type</span>
+    </a>
+    <h1 class="signature" translate="no">rssi()</h1>
+
+      <a href="https://github.com/miata-bot/can-link//blob/d0fdca4/interface/spect/lib/spect/network/node.ex#L12" class="view-source" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> rssi() :: -65534..65534</pre>
+
+      </div>
+
+<p>16 bit signed int</p>
+  </section>
+</section>
+<section class="detail" id="t:t/0">
+
+  <div class="detail-header">
+    <a href="#t:t/0" class="detail-link" title="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this type</span>
+    </a>
+    <h1 class="signature" translate="no">t()</h1>
+
+      <a href="https://github.com/miata-bot/can-link//blob/d0fdca4/interface/spect/lib/spect/network/node.ex#L21" class="view-source" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> t() :: %Spect.Network.Node{
+  __meta__: <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">term</a>(),
+  id: <a href="#t:node_id/0">node_id</a>(),
+  last_seen: <a href="#t:last_seen/0">last_seen</a>(),
+  rssi: <a href="#t:rssi/0">rssi</a>()
+}</pre>
+
+      </div>
+
+<p>Represents a node on the network. Node Info is unknown by
+default, it must be gathered at runtime. Each network
+may have 1023 nodes technically, but one node
+is indistinguishable from another without knowing
+what the currently configured network is.</p>
+  </section>
+</section>
+
+    </div>
+  </section>
 
       <footer class="footer">
 

@@ -12,6 +12,8 @@ defmodule Spect.EffectSlot do
   """
   use Ecto.Schema
 
+  @type slot_id() :: non_neg_integer()
+
   @typedoc """
   Mode is a bitfield struct
 
@@ -34,6 +36,7 @@ defmodule Spect.EffectSlot do
   * `script_name` is the name of the lua script that should be running
   """
   @type t() :: %__MODULE__{
+    id: slot_id(),
     mode: mode,
     script_name: String.t() | nil
   }

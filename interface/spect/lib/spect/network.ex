@@ -24,6 +24,7 @@ defmodule Spect.Network do
   """
   @type key :: binary() | nil
 
+  @typedoc "Current network configuration"
   @type t() :: %__MODULE__{
     id: network_id,
     key: key,

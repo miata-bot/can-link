@@ -10,7 +10,7 @@
     <title>Spect.EffectSlot — spect v0.1.0</title>
     <link rel="stylesheet" href="dist/elixir-64c5e2b63575bddb1c5b.css" />
 
-    <script src="dist/sidebar_items-70786be3bf.js"></script>
+    <script src="dist/sidebar_items-a9f0ade90c.js"></script>
 
       <script src="docs_config.js"></script>
 
@@ -94,7 +94,7 @@ spect
 </button>
 
 
-    <a href="https://github.com/miata-bot/can-link//blob/9ab3799/interface/spect/lib/spect/effect_slot.ex#L1" title="View Source" class="view-source" rel="help">
+    <a href="https://github.com/miata-bot/can-link//blob/d0fdca4/interface/spect/lib/spect/effect_slot.ex#L1" title="View Source" class="view-source" rel="help">
       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
       <span class="sr-only">View Source</span>
     </a>
@@ -138,6 +138,14 @@ description of how that works.</p>
 
       <div class="summary-row">
         <div class="summary-signature">
+          <a href="#t:slot_id/0" translate="no">slot_id()</a>
+
+        </div>
+
+      </div>
+
+      <div class="summary-row">
+        <div class="summary-signature">
           <a href="#t:t/0" translate="no">t()</a>
 
         </div>
@@ -169,7 +177,7 @@ Types
     </a>
     <h1 class="signature" translate="no">mode()</h1>
 
-      <a href="https://github.com/miata-bot/can-link//blob/9ab3799/interface/spect/lib/spect/effect_slot.ex#L28" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/miata-bot/can-link//blob/d0fdca4/interface/spect/lib/spect/effect_slot.ex#L30" class="view-source" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -188,6 +196,34 @@ Types
 <p>Mode is a bitfield struct</p><table><thead><tr><th style="text-align: left;">7</th><th style="text-align: left;">6</th><th style="text-align: left;">5</th><th style="text-align: left;">4</th><th style="text-align: left;">3</th><th style="text-align: left;">2</th><th style="text-align: left;">1</th><th style="text-align: left;">0</th></tr></thead><tbody><tr><td style="text-align: left;">effect enable</td><td style="text-align: left;">radio sync</td><td style="text-align: left;">can sync</td><td style="text-align: left;">-</td><td style="text-align: left;">-</td><td style="text-align: left;">-</td><td style="text-align: left;">-</td><td style="text-align: left;">-</td></tr></tbody></table><p>Bits 4-8 are reserved for future use</p><ul><li><code class="inline">effect_enalbe</code> - enable or disable this effect slot</li><li><code class="inline">radio_sync</code>    - enable or disable syncing of this slot on the network</li><li><code class="inline">can_sync</code>      - enable or disable syncing of this slot via CAN</li></ul>
   </section>
 </section>
+<section class="detail" id="t:slot_id/0">
+
+  <div class="detail-header">
+    <a href="#t:slot_id/0" class="detail-link" title="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this type</span>
+    </a>
+    <h1 class="signature" translate="no">slot_id()</h1>
+
+      <a href="https://github.com/miata-bot/can-link//blob/d0fdca4/interface/spect/lib/spect/effect_slot.ex#L15" class="view-source" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> slot_id() :: <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">non_neg_integer</a>()</pre>
+
+      </div>
+
+
+  </section>
+</section>
 <section class="detail" id="t:t/0">
 
   <div class="detail-header">
@@ -197,7 +233,7 @@ Types
     </a>
     <h1 class="signature" translate="no">t()</h1>
 
-      <a href="https://github.com/miata-bot/can-link//blob/9ab3799/interface/spect/lib/spect/effect_slot.ex#L36" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/miata-bot/can-link//blob/d0fdca4/interface/spect/lib/spect/effect_slot.ex#L38" class="view-source" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -211,7 +247,7 @@ Types
 
           <pre translate="no"><span class="attribute">@type</span> t() :: %Spect.EffectSlot{
   __meta__: <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">term</a>(),
-  id: <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">term</a>(),
+  id: <a href="#t:slot_id/0">slot_id</a>(),
   mode: <a href="#t:mode/0">mode</a>(),
   script_name: <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>() | nil
 }</pre>

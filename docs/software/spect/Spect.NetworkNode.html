@@ -10,7 +10,7 @@
     <title>Spect.NetworkNode — spect v0.1.0</title>
     <link rel="stylesheet" href="dist/elixir-64c5e2b63575bddb1c5b.css" />
 
-    <script src="dist/sidebar_items-70786be3bf.js"></script>
+    <script src="dist/sidebar_items-a9f0ade90c.js"></script>
 
       <script src="docs_config.js"></script>
 
@@ -94,7 +94,7 @@ spect
 </button>
 
 
-    <a href="https://github.com/miata-bot/can-link//blob/9ab3799/interface/spect/lib/spect/network_node.ex#L1" title="View Source" class="view-source" rel="help">
+    <a href="https://github.com/miata-bot/can-link//blob/d0fdca4/interface/spect/lib/spect/network_node.ex#L1" title="View Source" class="view-source" rel="help">
       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
       <span class="sr-only">View Source</span>
     </a>
@@ -105,7 +105,129 @@ spect
 </h1>
 
 
+  <section id="moduledoc">
+<p>Join between Network and Node to allow for
+the same node database to be used for
+multiple networks. This table is populated
+with information about a node per this network</p>
+  </section>
 
+
+  <section id="summary" class="details-list">
+    <h1 class="section-heading">
+      <a class="hover-link" href="#summary">
+        <i class="ri-link-m" aria-hidden="true"></i>
+        <span class="sr-only">Link to this section</span>
+      </a>
+      Summary
+    </h1>
+
+  <div class="summary-types summary">
+    <h2>
+      <a href="#types">Types</a>
+    </h2>
+
+      <div class="summary-row">
+        <div class="summary-signature">
+          <a href="#t:node_name/0" translate="no">node_name()</a>
+
+        </div>
+
+          <div class="summary-synopsis"><p>Name of the node on this network</p></div>
+
+      </div>
+
+      <div class="summary-row">
+        <div class="summary-signature">
+          <a href="#t:t/0" translate="no">t()</a>
+
+        </div>
+
+          <div class="summary-synopsis"><p>join of network and node</p></div>
+
+      </div>
+
+  </div>
+
+  </section>
+
+
+  <section id="types" class="details-list">
+    <h1 class="section-heading">
+      <a class="hover-link" href="#types">
+        <i class="ri-link-m" aria-hidden="true"></i>
+        <span class="sr-only">Link to this section</span>
+      </a>
+Types
+    </h1>
+    <div class="types-list">
+<section class="detail" id="t:node_name/0">
+
+  <div class="detail-header">
+    <a href="#t:node_name/0" class="detail-link" title="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this type</span>
+    </a>
+    <h1 class="signature" translate="no">node_name()</h1>
+
+      <a href="https://github.com/miata-bot/can-link//blob/d0fdca4/interface/spect/lib/spect/network_node.ex#L12" class="view-source" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> node_name() :: <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>() | nil</pre>
+
+      </div>
+
+<p>Name of the node on this network</p>
+  </section>
+</section>
+<section class="detail" id="t:t/0">
+
+  <div class="detail-header">
+    <a href="#t:t/0" class="detail-link" title="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this type</span>
+    </a>
+    <h1 class="signature" translate="no">t()</h1>
+
+      <a href="https://github.com/miata-bot/can-link//blob/d0fdca4/interface/spect/lib/spect/network_node.ex#L15" class="view-source" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> t() :: %Spect.NetworkNode{
+  __meta__: <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">term</a>(),
+  id: <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">term</a>(),
+  name: <a href="#t:node_name/0">node_name</a>(),
+  network: <a href="Spect.Network.html#t:t/0">Spect.Network.t</a>(),
+  network_id: <a href="Spect.Network.html#t:network_id/0">Spect.Network.network_id</a>(),
+  node: <a href="Spect.Network.Node.html#t:t/0">Spect.Network.Node.t</a>(),
+  node_id: <a href="Spect.Network.html#t:network_id/0">Spect.Network.network_id</a>()
+}</pre>
+
+      </div>
+
+<p>join of network and node</p>
+  </section>
+</section>
+
+    </div>
+  </section>
 
       <footer class="footer">
 

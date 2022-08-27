@@ -2,6 +2,15 @@ defmodule Spect.Network.Node do
   @moduledoc "Radio node"
   use Ecto.Schema
 
+  @typedoc "10 bit node id"
+  @type node_id() :: 1..1023
+
+  @typedoc "unsigned 64 bit int"
+  @type last_seen() :: 0..0xffffffff
+
+  @typedoc "16 bit signed int"
+  @type rssi() :: -0xfffe..0xfffe
+
   @typedoc """
   Represents a node on the network. Node Info is unknown by
   default, it must be gathered at runtime. Each network
