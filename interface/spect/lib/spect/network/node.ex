@@ -6,10 +6,10 @@ defmodule Spect.Network.Node do
   @type node_id() :: 1..1023
 
   @typedoc "unsigned 64 bit int"
-  @type last_seen() :: 0..0xffffffff
+  @type last_seen() :: 0..0xFFFFFFFF
 
   @typedoc "16 bit signed int"
-  @type rssi() :: -0xfffe..0xfffe
+  @type rssi() :: -0xFFFE..0xFFFE
 
   @typedoc """
   Represents a node on the network. Node Info is unknown by
@@ -19,10 +19,10 @@ defmodule Spect.Network.Node do
   what the currently configured network is.
   """
   @type t() :: %__MODULE__{
-    id: node_id(),
-    rssi: rssi(),
-    last_seen: last_seen()
-  }
+          id: node_id(),
+          rssi: rssi(),
+          last_seen: last_seen()
+        }
 
   schema "nodes" do
     field :rssi, :integer

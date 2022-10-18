@@ -9,12 +9,12 @@ defmodule Spect.SlotSection do
 
   @typedoc "join table on section and slot"
   @type t() :: %__MODULE__{
-    id: slot_section_id(),
-    section: Spect.Section.t(),
-    section_id: Spect.Section.section_id(),
-    slot: Spect.EffectSlot.t(),
-    slot_id: Spect.EffectSlot.slot_id()
-  }
+          id: slot_section_id(),
+          section: Spect.Section.t(),
+          section_id: Spect.Section.section_id(),
+          slot: Spect.EffectSlot.t(),
+          slot_id: Spect.EffectSlot.slot_id()
+        }
 
   schema "slot_sections" do
     belongs_to :section, Spect.Section

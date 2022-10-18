@@ -13,12 +13,12 @@ defmodule Spect.NetworkNode do
 
   @typedoc "join of network and node"
   @type t() :: %__MODULE__{
-    network_id: Spect.Network.network_id(),
-    network: Spect.Network.t(),
-    node_id: Spect.Network.network_id(),
-    node: Spect.Network.Node.t(),
-    name: node_name()
-  }
+          network_id: Spect.Network.network_id(),
+          network: Spect.Network.t(),
+          node_id: Spect.Network.network_id(),
+          node: Spect.Network.Node.t(),
+          name: node_name()
+        }
 
   schema "network_nodes" do
     belongs_to :network, Spect.Network

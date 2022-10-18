@@ -12,10 +12,10 @@ defmodule Spect.Section do
 
   @typedoc "start/end of a section of the entire buffer"
   @type t() :: %__MODULE__{
-    id: section_id(),
-    start: non_neg_integer(),
-    end: non_neg_integer()
-  }
+          id: section_id(),
+          start: non_neg_integer(),
+          end: non_neg_integer()
+        }
 
   schema "sections" do
     field :start, :integer

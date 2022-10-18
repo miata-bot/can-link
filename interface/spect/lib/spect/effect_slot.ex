@@ -36,10 +36,10 @@ defmodule Spect.EffectSlot do
   * `script_name` is the name of the lua script that should be running
   """
   @type t() :: %__MODULE__{
-    id: slot_id(),
-    mode: mode,
-    script_name: String.t() | nil
-  }
+          id: slot_id(),
+          mode: mode,
+          script_name: String.t() | nil
+        }
 
   schema "effect_slots" do
     field :mode, :integer

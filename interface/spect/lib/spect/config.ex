@@ -16,15 +16,15 @@ defmodule Spect.Config do
 
   @typedoc "Root level device configuration. Mostly a container for other records."
   @type t() :: %__MODULE__{
-    id: config_id,
-    version: version(),
-    network: Spect.Network.t(),
-    network_id: Spect.Network.network_id(),
-    network_identity: Spect.Network.Identity.t(),
-    network_identity_id: Spect.Network.Identity.network_identity_id(),
-    network_leader: Spect.Network.Leader.t(),
-    network_leader_id: Spect.Network.Leader.network_leader_id()
-  }
+          id: config_id,
+          version: version(),
+          network: Spect.Network.t(),
+          network_id: Spect.Network.network_id(),
+          network_identity: Spect.Network.Identity.t(),
+          network_identity_id: Spect.Network.Identity.network_identity_id(),
+          network_leader: Spect.Network.Leader.t(),
+          network_leader_id: Spect.Network.Leader.network_leader_id()
+        }
 
   schema "config" do
     field :version, :integer, default: 1

@@ -7,7 +7,7 @@
     <meta name="generator" content="ExDoc v0.28.5">
     <meta name="project" content="spect v0.1.0">
 
-    <title>Spect.SlotSection — spect v0.1.0</title>
+    <title>Spect.HardwareTrigger — spect v0.1.0</title>
     <link rel="stylesheet" href="dist/elixir-64c5e2b63575bddb1c5b.css" />
 
     <script src="dist/sidebar_items-73f1dade32.js"></script>
@@ -94,19 +94,20 @@ spect
 </button>
 
 
-    <a href="https://github.com/miata-bot/can-link//blob/465520c/interface/spect/lib/spect/slot_section.ex#L1" title="View Source" class="view-source" rel="help">
+    <a href="https://github.com/miata-bot/can-link//blob/465520c/interface/spect/lib/spect/hardware/hardware_trigger.ex#L1" title="View Source" class="view-source" rel="help">
       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
       <span class="sr-only">View Source</span>
     </a>
 
-  <span translate="no">Spect.SlotSection</span> 
+  <span translate="no">Spect.HardwareTrigger</span> 
   <small class="app-vsn" translate="no">(spect v0.1.0)</small>
 
 </h1>
 
 
   <section id="moduledoc">
-<p>Join table between section and slot</p>
+<p>Descirbes one of the 4 available input chcannels.
+There will always be 4 channels, no more no less.</p>
   </section>
 
 
@@ -126,9 +127,11 @@ spect
 
       <div class="summary-row">
         <div class="summary-signature">
-          <a href="#t:slot_section_id/0" translate="no">slot_section_id()</a>
+          <a href="#t:hardware_trigger_id/0" translate="no">hardware_trigger_id()</a>
 
         </div>
+
+          <div class="summary-synopsis"><p>which id a trigger is assosiated with. 1-4</p></div>
 
       </div>
 
@@ -138,7 +141,7 @@ spect
 
         </div>
 
-          <div class="summary-synopsis"><p>join table on section and slot</p></div>
+          <div class="summary-synopsis"><p>describes the configuration of one of the 4 hardware inputs</p></div>
 
       </div>
 
@@ -156,16 +159,16 @@ spect
 Types
     </h1>
     <div class="types-list">
-<section class="detail" id="t:slot_section_id/0">
+<section class="detail" id="t:hardware_trigger_id/0">
 
   <div class="detail-header">
-    <a href="#t:slot_section_id/0" class="detail-link" title="Link to this type">
+    <a href="#t:hardware_trigger_id/0" class="detail-link" title="Link to this type">
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this type</span>
     </a>
-    <h1 class="signature" translate="no">slot_section_id()</h1>
+    <h1 class="signature" translate="no">hardware_trigger_id()</h1>
 
-      <a href="https://github.com/miata-bot/can-link//blob/465520c/interface/spect/lib/spect/slot_section.ex#L8" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/miata-bot/can-link//blob/465520c/interface/spect/lib/spect/hardware/hardware_trigger.ex#L10" class="view-source" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -177,11 +180,11 @@ Types
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">@type</span> slot_section_id() :: <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">non_neg_integer</a>()</pre>
+          <pre translate="no"><span class="attribute">@type</span> hardware_trigger_id() :: 1 | 2 | 3 | 4</pre>
 
       </div>
 
-
+<p>which id a trigger is assosiated with. 1-4</p>
   </section>
 </section>
 <section class="detail" id="t:t/0">
@@ -193,7 +196,7 @@ Types
     </a>
     <h1 class="signature" translate="no">t()</h1>
 
-      <a href="https://github.com/miata-bot/can-link//blob/465520c/interface/spect/lib/spect/slot_section.ex#L11" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/miata-bot/can-link//blob/465520c/interface/spect/lib/spect/hardware/hardware_trigger.ex#L13" class="view-source" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -205,18 +208,16 @@ Types
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">@type</span> t() :: %Spect.SlotSection{
+          <pre translate="no"><span class="attribute">@type</span> t() :: %Spect.HardwareTrigger{
   __meta__: <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">term</a>(),
-  id: <a href="#t:slot_section_id/0">slot_section_id</a>(),
-  section: <a href="Spect.Section.html#t:t/0">Spect.Section.t</a>(),
-  section_id: <a href="Spect.Section.html#t:section_id/0">Spect.Section.section_id</a>(),
-  slot: <a href="Spect.EffectSlot.html#t:t/0">Spect.EffectSlot.t</a>(),
-  slot_id: <a href="Spect.EffectSlot.html#t:slot_id/0">Spect.EffectSlot.slot_id</a>()
+  enable: <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">boolean</a>(),
+  friendly_name: <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>(),
+  id: <a href="#t:hardware_trigger_id/0">hardware_trigger_id</a>()
 }</pre>
 
       </div>
 
-<p>join table on section and slot</p>
+<p>describes the configuration of one of the 4 hardware inputs</p>
   </section>
 </section>
 

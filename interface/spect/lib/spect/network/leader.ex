@@ -16,12 +16,12 @@ defmodule Spect.Network.Leader do
   protocol acts.
   """
   @type t() :: %__MODULE__{
-    id: network_leader_id(),
-    network: Spect.Network.t(),
-    network_id: Spect.Network.network_id(),
-    node: Spect.Network.Node.t(),
-    node_id: Spect.Network.Node.node_id()
-  }
+          id: network_leader_id(),
+          network: Spect.Network.t(),
+          network_id: Spect.Network.network_id(),
+          node: Spect.Network.Node.t(),
+          node_id: Spect.Network.Node.node_id()
+        }
 
   schema "network_leader" do
     belongs_to :network, Spect.Network, foreign_key: :network_id

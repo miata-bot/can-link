@@ -26,13 +26,13 @@ defmodule Spect.Network do
 
   @typedoc "Current network configuration"
   @type t() :: %__MODULE__{
-    id: network_id,
-    key: key,
-    nodes: [Spect.Network.Node.t()],
-    network_nodes: [Spect.NetworkNode.t()],
-    network_identity: Spect.Network.Identity.t(),
-    network_leader: Spect.Network.Leader.t(),
-  }
+          id: network_id,
+          key: key,
+          nodes: [Spect.Network.Node.t()],
+          network_nodes: [Spect.NetworkNode.t()],
+          network_identity: Spect.Network.Identity.t(),
+          network_leader: Spect.Network.Leader.t()
+        }
 
   schema "networks" do
     field :key, :string

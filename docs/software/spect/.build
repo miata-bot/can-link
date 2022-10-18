@@ -1,6 +1,9 @@
 404.html
 Spect.Config.html
 Spect.EffectSlot.html
+Spect.Hardware.html
+Spect.HardwareChannel.html
+Spect.HardwareTrigger.html
 Spect.Network.Identity.html
 Spect.Network.Leader.html
 Spect.Network.Node.html
@@ -19,8 +22,8 @@ dist/html/fonts/remixicon.svg
 dist/html/fonts/remixicon.ttf
 dist/html/fonts/remixicon.woff
 dist/html/fonts/remixicon.woff2
-dist/search_items-f113214398.js
-dist/sidebar_items-27a6e41762.js
+dist/search_items-8d0333ddb5.js
+dist/sidebar_items-73f1dade32.js
 getting-started.html
 index.html
 readme.html

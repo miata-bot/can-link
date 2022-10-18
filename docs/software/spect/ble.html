@@ -7,10 +7,10 @@
     <meta name="generator" content="ExDoc v0.28.5">
     <meta name="project" content="spect v0.1.0">
 
-    <title>BLE — spect v0.1.0</title>
+    <title>BLE Characteristics and Services — spect v0.1.0</title>
     <link rel="stylesheet" href="dist/elixir-64c5e2b63575bddb1c5b.css" />
 
-    <script src="dist/sidebar_items-27a6e41762.js"></script>
+    <script src="dist/sidebar_items-73f1dade32.js"></script>
 
       <script src="docs_config.js"></script>
 
@@ -94,15 +94,40 @@ spect
 </button>
 
 
-    <a href="https://github.com/miata-bot/can-link//blob/4f57e51/interface/spect/docs/BLE.md#L1" title="View Source" class="view-source" rel="help">
+    <a href="https://github.com/miata-bot/can-link//blob/465520c/interface/spect/docs/BLE.md#L1" title="View Source" class="view-source" rel="help">
       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
       <span class="sr-only">View Source</span>
     </a>
 
-  <span>BLE</span>
+  <span>BLE Characteristics and Services</span>
 </h1>
 
-
+<h2 id="effect-slot" class="section-heading">
+  <a href="#effect-slot" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
+  <p class="sr-only">effect-slot</p>
+  </a>
+  Effect Slot
+</h2>
+<h2 id="slot" class="section-heading">
+  <a href="#slot" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
+  <p class="sr-only">slot</p>
+  </a>
+  Slot
+</h2>
+<h2 id="nodeinfo" class="section-heading">
+  <a href="#nodeinfo" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
+  <p class="sr-only">nodeinfo</p>
+  </a>
+  NodeInfo
+</h2>
+<p>Service UUID: <code class="inline">| characteristic | name | description | | - | - | - | |</code> | node list | subscribe then write anything to get a list of nodes |</p><h3 id="node-list" class="section-heading">
+  <a href="#node-list" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
+  <p class="sr-only">node-list</p>
+  </a>
+  Node List
+</h3>
+<p>when subscribed to this characteristic, the following payload will be
+delievered per each node this device knows about:</p><table><tbody><tr><td style="text-align: left;">0..11</td><td style="text-align: left;">11..15</td><td style="text-align: left;">15-31</td></tr><tr><td style="text-align: left;">node id</td><td style="text-align: left;">reserved</td><td style="text-align: left;">network id</td></tr></tbody></table>
 <div class="bottom-actions">
   <div class="bottom-actions-item">
 
