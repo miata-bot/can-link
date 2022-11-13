@@ -25,8 +25,7 @@ struct Spect::HardwareTrigger* hardware_triggers = NULL;
 struct Spect::EffectSlot* effect_slots = NULL;
 struct Spect::Section* sections = NULL;
 
-struct Spect::Script* scripts = NULL;
-int script_count = 0;
+struct Spect::ScriptList* script_list = NULL;
 
 struct NodeWindowState {
   bool selected;
@@ -43,10 +42,11 @@ struct EffectSlotWindowState {
 } effect_slot_window_state;
 
 struct ScriptEditorWindowState {
-  bool selected;
-  TextEditor* editor;
-  std::string** editor_buffers;
-  int selected_id;
+  bool                          selected;
+  int                           selected_id;
+  TextEditor*                   editor;
+  std::string*                  editor_buffer;
+  struct Spect::ScriptListNode* script_node;
 } script_editor_window_state;
 
 static int friendly_name_input_callback(ImGuiInputTextCallbackData* data)
@@ -96,44 +96,40 @@ void script_editor_window_state_init(void)
   memset(&script_editor_window_state, 0, sizeof(struct ScriptEditorWindowState)); 
   script_editor_window_state.selected = true;
   script_editor_window_state.editor = new TextEditor();
+  script_editor_window_state.script_node = NULL;
 	auto lang = TextEditor::LanguageDefinition::Lua();
-  static const char* ppnames[] = {};
-  static const char* ppvalues[] = { };
-  for (int i = 0; i < sizeof(ppnames) / sizeof(ppnames[0]); ++i)
-  {
-		TextEditor::Identifier id;
-		id.mDeclaration = ppvalues[i];
-		lang.mPreprocIdentifiers.insert(std::make_pair(std::string(ppnames[i]), id));
-	}
-  static const char* identifiers[] = {};
-  static const char* idecls[] = {};
-	for (int i = 0; i < sizeof(identifiers) / sizeof(identifiers[0]); ++i)
-	{
-		TextEditor::Identifier id;
-		id.mDeclaration = std::string(idecls[i]);
-		lang.mIdentifiers.insert(std::make_pair(std::string(identifiers[i]), id));
-	}
 	script_editor_window_state.editor->SetLanguageDefinition(lang);
-  script_editor_window_state.editor_buffers = (std::string**)malloc(script_count * sizeof(std::string*));
-  assert(script_editor_window_state.editor_buffers);
-  for(int i = 0; i < script_count; i++) {
-    script_editor_window_state.editor_buffers[i] = new std::string(scripts[i].content);
-  }
-  script_editor_window_state.selected_id = 0;
-  script_editor_window_state.editor->SetText(*script_editor_window_state.editor_buffers[0]);
+  script_editor_window_state.editor_buffer = new std::string();
+  script_editor_window_state.selected_id = -1;
 }
 
 void script_editor_window_state_deinit(void)
 {
-  delete script_editor_window_state.editor;
+  if(script_editor_window_state.editor) delete script_editor_window_state.editor;
   script_editor_window_state.editor = NULL;
-  for(int i = 0; i < script_count; i++) {
-    delete script_editor_window_state.editor_buffers[i];
-  }
-  free(script_editor_window_state.editor_buffers);
-  script_editor_window_state.editor_buffers = NULL;
-  memset(&script_editor_window_state, 0, sizeof(struct ScriptEditorWindowState));
+  if(script_editor_window_state.editor_buffer) delete script_editor_window_state.editor_buffer;
+  script_editor_window_state.editor_buffer = NULL;
+  script_editor_window_state.script_node = NULL; // dont free this, it's a ref
+  script_editor_window_state.selected = false;
+
+  if(script_list == NULL) return; // probably not correct...
+  assert(script_list && "Script List must be valid to deinit script_editor");
 }
+
+// Saves a new script into the script linked list
+void script_editor_save_script(
+	struct Spect::ScriptList* script_list,
+	struct ScriptEditorWindowState* script_editor_window_state,
+	char*  script_name,
+	char*  script_description
+);
+
+// handles populating the buffer of the script editor
+void script_editor_handle_tab(
+	struct Spect::ScriptListNode* node,
+	struct ScriptEditorWindowState* script_editor_window_state,
+	int old_id, int id
+);
 
 void db_open(void)
 {
@@ -156,7 +152,7 @@ void db_open(void)
       fprintf(stderr, "Failed to load hardware triggers\n");
     }
 
-    if(!Spect::scripts_load(conn, &scripts, &script_count)) {
+    if(!Spect::script_list_load(conn, &script_list)) {
       fprintf(stderr, "Failed to load scripts\n");
     }
 
@@ -182,6 +178,11 @@ void db_open(void)
 // unload in the opposite order of load
 void db_close(void)
 {
+  script_editor_window_state_deinit();
+  effect_slot_window_state_deinit();
+  hardware_window_state_deinit();
+  node_window_state_deinit();
+
 #if 0
   if(sections) {
     Spect::section_unload(sections);
@@ -194,10 +195,9 @@ void db_close(void)
     effect_slots = NULL;
   }
 
-  if(scripts) {
-    Spect::scripts_unload(scripts, script_count);
-    scripts = NULL;
-    script_count = 0;
+  if(script_list) {
+    Spect::script_list_unload(script_list);
+    script_list = NULL;
   }
 
   if(hardware_triggers) {
@@ -230,17 +230,22 @@ void db_close(void)
     path_free(config_file_path);
     config_file_path = NULL;
   }
-
-  fprintf(stderr, "Unloaded DB\n");
-  hardware_window_state_deinit();
-  node_window_state_deinit();
-  effect_slot_window_state_deinit();
-  script_editor_window_state_deinit();
 }
 
 void db_save()
 {
   Spect::config_save(conn, config);
+  if(script_editor_window_state.script_node) {
+    assert(script_editor_window_state.script_node->script);
+    assert(script_editor_window_state.script_node->script->content);
+    memset(script_editor_window_state.script_node->script->content, 0, 32000 * sizeof(char));
+    memcpy(
+      script_editor_window_state.script_node->script->content,
+      script_editor_window_state.editor->GetText().c_str(),
+      script_editor_window_state.editor->GetText().length()
+    );
+  }
+  Spect::script_list_save(conn, script_list);
   edits_pending = false;
   fprintf(stderr, "Saved DB\n");
 }
@@ -496,25 +501,44 @@ void RenderScriptEditor()
     ImGuiTabBarFlags tab_bar_flags = ImGuiTabBarFlags_None;
     ImGui::BeginTabBar("text editor", tab_bar_flags);
     int old_id = script_editor_window_state.selected_id;
-    for(int i = 0; i < script_count; i++) {
-      snprintf(buffer, 120, "%s", scripts[i].name);
+    int i = 0;
+    Spect::ScriptListNode* node = NULL;
+    assert(script_list);
+    node = script_list->start;
+    do {
+      assert(node);
+      assert(node->script);
+      assert(node->script->name);
+      snprintf(buffer, 120, "%s", node->script->name);
       if(ImGui::BeginTabItem(buffer, &script_editor_window_state.selected, tab_bar_flags)) {
-        ImGui::Text(scripts[i].description);
-        if(old_id != i) {
-          delete script_editor_window_state.editor_buffers[old_id];
-          script_editor_window_state.editor_buffers[old_id] = new std::string(script_editor_window_state.editor->GetText());
-
-          script_editor_window_state.selected_id = i;
-          script_editor_window_state.editor->SetText(*script_editor_window_state.editor_buffers[i]);
-          ImGui::SetWindowFocus("ScriptEditor");
-        }
+        ImGui::Text(node->script->description);
+        script_editor_handle_tab(node, &script_editor_window_state, old_id, i);
         script_editor_window_state.editor->Render("ScriptEditor");
         ImGui::EndTabItem();
       }
-    }
-    if(ImGui::BeginTabItem("Add", NULL, ImGuiTabItemFlags_Trailing)) {
 
-      ImGui::Text("AAAAAAA");
+      i++;
+      node = node->next;
+    } while(node && i < script_list->count);
+
+    if(ImGui::BeginTabItem("Add", NULL, ImGuiTabItemFlags_Trailing)) {
+      static char script_name[MAX_EFFECT_SLOT_NAME_STR_LEN];
+      static char script_description[MAX_EFFECT_SLOT_NAME_STR_LEN];
+      ImGui::Text("Add New Script");
+      ImGui::Separator();
+
+      ImGui::InputText("Name", script_name, MAX_EFFECT_SLOT_NAME_STR_LEN);
+      ImGui::InputTextMultiline("Description", script_description, MAX_EFFECT_SLOT_NAME_STR_LEN);
+
+      ImGui::Separator();
+
+      if(ImGui::Button("Save")) {
+        script_editor_save_script(script_list, 
+          &script_editor_window_state, 
+          script_name, 
+          script_description
+        );
+      }
       ImGui::EndTabItem();
     }
     ImGui::EndTabBar();

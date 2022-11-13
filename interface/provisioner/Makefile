@@ -41,6 +41,7 @@ SOURCES += $(SQLITE_DIR)/build/sqlite3.c
 # App code Source
 SOURCES += src/provision.cpp
 SOURCES += src/file_dialog.cpp
+SOURCES += src/script_editor.cpp
 SOURCES += src/spect.cpp
 SOURCES += src/spect_config.cpp
 SOURCES += src/spect_hardware_channels.cpp
@@ -165,3 +166,6 @@ run: $(EXE)
 
 valgrind: $(EXE)
 	valgrind ./$(EXE) --leak-check=yes
+
+gdb: $(EXE)
+	gdb ./$(EXE)

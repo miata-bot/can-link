@@ -1,36 +1,99 @@
+#include <assert.h>
+#include <stdlib.h>
+#include <string.h>
+
 #include "imgui.h"
-#include "ImGuiColorTextEdit/TextEditor.h"
+#include "TextEditor.h"
 
 #include "provision.h"
+#include "spect.h"
 
-TextEditor editor;
+struct ScriptEditorWindowState {
+  bool                          selected;
+  int                           selected_id;
+  TextEditor*                   editor;
+  std::string*                  editor_buffer;
+  struct Spect::ScriptListNode* script_node;
+};
 
-void RenderScriptEditor()
+void script_editor_handle_tab(
+	struct Spect::ScriptListNode* node,
+	struct ScriptEditorWindowState* script_editor_window_state,
+	int old_id, int id
+)
 {
-	auto lang = TextEditor::LanguageDefinition::Lua();
-  static const char* ppnames[] = {};
-  static const char* ppvalues[] = { };
-  for (int i = 0; i < sizeof(ppnames) / sizeof(ppnames[0]); ++i)
-  {
-		TextEditor::Identifier id;
-		id.mDeclaration = ppvalues[i];
-		lang.mPreprocIdentifiers.insert(std::make_pair(std::string(ppnames[i]), id));
-	}
-  static const char* identifiers[] = {};
-  static const char* idecls[] = {};
-	for (int i = 0; i < sizeof(identifiers) / sizeof(identifiers[0]); ++i)
-	{
-		TextEditor::Identifier id;
-		id.mDeclaration = std::string(idecls[i]);
-		lang.mIdentifiers.insert(std::make_pair(std::string(identifiers[i]), id));
-	}
-	editor.SetLanguageDefinition(lang);
+	if(old_id == -1) {
+		assert(script_editor_window_state->script_node == NULL);
+		if(script_editor_window_state->editor_buffer) delete script_editor_window_state->editor_buffer;
+		script_editor_window_state->editor_buffer = new std::string(node->script->content);
+		script_editor_window_state->editor->SetText(*script_editor_window_state->editor_buffer);
+		if(node->script->action == Spect::DatabaseAction::SPECT_NONE) node->script->action = Spect::DatabaseAction::SPECT_UPDATE;
+		script_editor_window_state->script_node = node;
+		script_editor_window_state->selected_id = id;
+	} else if(old_id != id) {
+		assert(script_editor_window_state->script_node);
+		memset(script_editor_window_state->script_node->script->content, 0, 32000 * sizeof(char));
+		memcpy(
+			script_editor_window_state->script_node->script->content,
+			script_editor_window_state->editor->GetText().c_str(),
+			script_editor_window_state->editor->GetText().length()
+		);
+		delete script_editor_window_state->editor_buffer;
+		script_editor_window_state->editor_buffer = new std::string(node->script->content);
+		script_editor_window_state->editor->SetText(*script_editor_window_state->editor_buffer);
+		if(node->script->action == Spect::DatabaseAction::SPECT_NONE) node->script->action = Spect::DatabaseAction::SPECT_UPDATE;
+		script_editor_window_state->script_node = node;
+		script_editor_window_state->selected_id = id;
+	} else {/* nothing to see here? */}
+}
 
-	// TextEditor::ErrorMarkers markers;
-	// markers.insert(std::make_pair<int, std::string>(6, "Example error here:\nInclude file not found: \"TextEditor.h\""));
-	// markers.insert(std::make_pair<int, std::string>(41, "Another example error"));
-	// editor.SetErrorMarkers(markers);
-  ImGui::Begin("TextEdit");
-  editor.Render("TextEditor");
-  ImGui::End();
+void script_editor_save_script(
+	struct Spect::ScriptList* script_list,
+	struct ScriptEditorWindowState* script_editor_window_state,
+	char*  script_name,
+	char*  script_description
+) 
+{
+	struct Spect::ScriptListNode* node = NULL;
+	node = script_list->start;
+	Spect::ScriptListNode* last = NULL;
+	while(node) { last = node; node = node->next; }
+	node = last;
+	assert(node);
+	node->next = (struct Spect::ScriptListNode*) malloc(sizeof(struct Spect::ScriptListNode));
+	assert(node->next);
+	memset(node->next, 0, sizeof(struct Spect::ScriptListNode));
+
+	node = node->next;
+	node->script = (struct Spect::Script*) malloc(sizeof(struct Spect::Script));
+	assert(node->script);
+	memset(node->script, 0, sizeof(struct Spect::Script));
+	node->script->name = (char*) malloc(MAX_EFFECT_SLOT_NAME_STR_LEN * sizeof(char));
+	assert(node->script->name);
+	memset(node->script->name, 0, MAX_EFFECT_SLOT_NAME_STR_LEN * sizeof(char));
+	memcpy(node->script->name, script_name, strnlen(script_name, MAX_EFFECT_SLOT_NAME_STR_LEN));
+	memset(script_name, 0, MAX_EFFECT_SLOT_NAME_STR_LEN * sizeof(char));
+	node->script->description = (char*) malloc(MAX_EFFECT_SLOT_NAME_STR_LEN * sizeof(char));
+	assert(node->script->description);
+	memset(node->script->description, 0, MAX_EFFECT_SLOT_NAME_STR_LEN * sizeof(char));
+	memcpy(node->script->description, script_description, strnlen(script_description, MAX_EFFECT_SLOT_NAME_STR_LEN));
+	memset(script_description, 0, MAX_EFFECT_SLOT_NAME_STR_LEN * sizeof(char));
+	node->script->content = (char*) malloc(32000 * sizeof(char));
+	assert(node->script->content);
+	memset(node->script->content, 0, 32000 * sizeof(char));
+	node->script->action = Spect::DatabaseAction::SPECT_INSERT;
+	
+	script_list->count++;
+	assert(script_editor_window_state->script_node);
+	memset(script_editor_window_state->script_node->script->content, 0, 32000 * sizeof(char));
+	memcpy(
+		script_editor_window_state->script_node->script->content,
+		script_editor_window_state->editor->GetText().c_str(),
+		script_editor_window_state->editor->GetText().length()
+	);
+	delete script_editor_window_state->editor_buffer;
+	script_editor_window_state->editor_buffer = new std::string(node->script->content);
+	script_editor_window_state->editor->SetText(*script_editor_window_state->editor_buffer);
+	script_editor_window_state->script_node = node;
+	script_editor_window_state->selected_id = script_list->count;
 }
