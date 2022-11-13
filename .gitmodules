@@ -16,3 +16,15 @@
 [submodule "firmware/spect/esp-idf-lib"]
 	path = firmware/spect/esp-idf-lib
 	url = git@github.com:UncleRus/esp-idf-lib.git
+[submodule "interface/provisioner/lib/imgui"]
+	path = interface/provisioner/lib/imgui
+	url = git@github.com:ocornut/imgui.git
+[submodule "interface/provisioner/lib/sqlite"]
+	path = interface/provisioner/lib/sqlite
+	url = git@github.com:sqlite/sqlite.git
+[submodule "interface/provisioner/lib/nativefiledialog"]
+	path = interface/provisioner/lib/nativefiledialog
+	url = git@github.com:btzy/nativefiledialog-extended.git
+[submodule "interface/provisioner/lib/ImGuiColorTextEdit"]
+	path = interface/provisioner/lib/ImGuiColorTextEdit
+	url = git@github.com:BalazsJako/ImGuiColorTextEdit.git

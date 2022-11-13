@@ -7,7 +7,6 @@ defmodule Spect.Repo.Migrations.AddEffectSlotsTable do
     # active/inactive is controlled by the mode bitfield
     create table(:effect_slots) do
       add :mode, :integer, default: 0
-      add :script_name, :string
     end
 
     # mode must be a 8 bit integer

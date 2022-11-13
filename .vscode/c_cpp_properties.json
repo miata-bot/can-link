@@ -1,0 +1,21 @@
+{
+    "configurations": [
+        {
+            "name": "Linux",
+            "includePath": [
+                "${workspaceFolder}/**",
+                "/usr/include/SDL",
+                "${workspaceFolder}/interface/provisioner/include",
+                "/usr/include/gtk-3.0",
+                "/usr/include/glib-2.0",
+                "${workspaceFolder}/interface/provisioner/lib/nativefiledialog/src/include"
+            ],
+            "defines": [],
+            "compilerPath": "/usr/bin/clang",
+            "cStandard": "c17",
+            "cppStandard": "c++14",
+            "intelliSenseMode": "linux-clang-x64"
+        }
+    ],
+    "version": 4
+}

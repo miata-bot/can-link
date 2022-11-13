@@ -2,9 +2,9 @@ defmodule Spect.Repo.Migrations.AddConfigTable do
   use Ecto.Migration
 
   def change do
-    execute """
-    PRAGMA journal_mode = 'DELETE';
-    """
+    # execute """
+    # PRAGMA journal_mode = 'DELETE';
+    # """
 
     create table(:config, primary_key: false) do
       add :id, :tinyint, null: false, default: 0, primary_key: true

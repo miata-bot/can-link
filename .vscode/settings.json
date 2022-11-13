@@ -6,6 +6,7 @@
     "string_view": "c",
     "argebee.h": "c",
     "time.h": "c",
-    "unistd.h": "c"
+    "unistd.h": "c",
+    "iostream": "cpp"
   }
 }

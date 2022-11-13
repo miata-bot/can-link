@@ -23,7 +23,7 @@ defmodule Spect.EffectSlot do
 
   Bits 4-8 are reserved for future use
 
-  * `effect_enalbe` - enable or disable this effect slot
+  * `effect_enable` - enable or disable this effect slot
   * `radio_sync`    - enable or disable syncing of this slot on the network
   * `can_sync`      - enable or disable syncing of this slot via CAN
   """

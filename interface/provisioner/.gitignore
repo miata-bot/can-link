@@ -1,0 +1,14 @@
+# object  files output from C/C++ compiler
+*.o
+
+# SQLite database
+*.db
+
+# sqlite amalagation build dir
+lib/sqlite/build
+
+# imgui layouot file
+imgui.ini 
+
+# compiled exe for linux and mac
+provision
