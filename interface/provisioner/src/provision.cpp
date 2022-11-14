@@ -2,16 +2,26 @@
 #include <stdio.h>
 
 #include "imgui.h"
+#include "imgui_utils.h"
 #include "TextEditor.h"
 #include "nfd.h"
 
+#include "gitparams.h"
 #include "provision.h"
 #include "file_dialog.h"
 #include "spect.h"
 
+// modal states
 bool show_save_modal = false;
+bool show_about_modal = false;
+bool show_license_modal = false;
+
+// window states
 bool show_demo_window = false;
+
+// global state
 bool edits_pending = false;
+
 char* config_file_path = NULL;
 struct Spect::Connection* conn = NULL;
 struct Spect::Config* config = NULL;
@@ -267,13 +277,6 @@ void RenderEditModal() {
     ImGui::Text("Edits still pending");
     ImGui::Separator();
 
-#if 0
-    static bool dont_ask_me_next_time = false;
-    ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(0, 0));
-    ImGui::Checkbox("Don't ask me next time", &dont_ask_me_next_time);
-    ImGui::PopStyleVar();
-#endif
-
     if (ImGui::Button("Save", ImVec2(120, 0))) { 
       db_save();
       db_close();
@@ -290,36 +293,10 @@ void RenderEditModal() {
     }
     ImGui::EndPopup();
   }
-#if 0
-  if(edits_pending) {
-  ImGui::OpenPopup("Edits Pending");
-
-  ImVec2 center = ImGui::GetMainViewport()->GetCenter();
-  ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
-
-  if (ImGui::BeginPopupModal("Edits Pending", NULL, ImGuiWindowFlags_AlwaysAutoResize)) {
-    ImGui::Text("Edits are not saved!");
-    ImGui::Separator();
-
-    static bool dont_ask_me_next_time = false;
-    ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(0, 0));
-    ImGui::Checkbox("Don't ask me next time", &dont_ask_me_next_time);
-    ImGui::PopStyleVar();
-
-    if (ImGui::Button("Discard Changes", ImVec2(120, 0))) {
-      db_close();
-      ImGui::CloseCurrentPopup(); 
-    }
-    ImGui::SetItemDefaultFocus();
-    ImGui::SameLine();
-    if (ImGui::Button("Continue Editing", ImVec2(120, 0))) { ImGui::CloseCurrentPopup(); }
-    ImGui::EndPopup();
-  }
-} else {
-  db_close();
 }
-#endif
-}
+
+void RenderAboutModal(struct Spect::Config*, bool*);
+void RenderLicenseModal(bool*);
 
 void RenderMainMenuBar(bool* requestDone)
 {
@@ -374,6 +351,13 @@ void RenderMainMenuBar(bool* requestDone)
         (hardware_channels != NULL) &&
         (hardware_triggers != NULL)
       ));
+      ImGui::EndMenu();
+    }
+
+    if(ImGui::BeginMenu("Help"))
+    {
+      if(ImGui::MenuItem("3rd Party Licenses")) show_license_modal = true;
+      if(ImGui::MenuItem("About")) show_about_modal = true;
       ImGui::EndMenu();
     }
 
@@ -636,6 +620,8 @@ void Provision::Render(bool* requestDone)
 
   if(show_demo_window) ImGui::ShowDemoWindow(&show_demo_window);
   if(show_save_modal) ImGui::OpenPopup("Edits Pending");
+  if(show_about_modal) ImGui::OpenPopup("About");
+  if(show_license_modal) ImGui::OpenPopup("3rd Party Licenses");
 
   RenderMainMenuBar(requestDone);
   RenderNavigationWindow();
@@ -666,11 +652,17 @@ void Provision::Render(bool* requestDone)
 
     ImGui::End();
   }
+  
+  // Render Windows
   RenderHardwareChannelsWindow();
   RenderHardwareTriggersWindow();
   RenderEffectSlotsWindow();
   RenderScriptEditor();
+
+  // Render Modals
   RenderEditModal();
+  RenderAboutModal(config, &show_about_modal);
+  RenderLicenseModal(&show_license_modal);
 }
 
 void Provision::Shutdown(void)

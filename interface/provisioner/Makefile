@@ -25,7 +25,8 @@ SQLITE_BUILD_DIR = $(SQLITE_DIR)/build
 # NFD
 NFD_DIR          = lib/nativefiledialog
 
-SOURCES = src/main.cpp
+SOURCES =  src/gitparams.cpp
+SOURCES += src/main.cpp
 SOURCES += $(IMGUI_DIR)/imgui.cpp
 SOURCES += $(IMGUI_DIR)/imgui_demo.cpp
 SOURCES += $(IMGUI_DIR)/imgui_draw.cpp
@@ -49,6 +50,7 @@ SOURCES += src/spect_hardware_triggers.cpp
 SOURCES += src/spect_network_nodes.cpp
 SOURCES += src/spect_effect_slots.cpp
 SOURCES += src/spect_script.cpp
+SOURCES += src/help_modals.cpp
 
 UNAME_S := $(shell uname -s)
 
@@ -117,7 +119,27 @@ endif
 ## BUILD RULES
 ##---------------------------------------------------------------------
 
+.DEFAULT_GOAL := all
+.PHONY: all run gdb valgrind clean dirclean
+
 OBJS = $(addsuffix .o, $(basename $(notdir $(SOURCES))))
+
+all: $(EXE)
+	@echo Build complete for $(ECHO_MESSAGE)
+
+# this file makes this project a non-reproducable build
+# if this bothers you, please open an issue and it
+# will be addressed.
+include/gitparams_.h:
+	echo -n "#define GIT_DESCRIBE " > include/gitparams_.h
+	git describe --tags --dirty --match="provisioner-*" >> include/gitparams_.h
+	echo -n "#define GIT_COMMIT " >> include/gitparams_.h
+	git rev-parse --verify HEAD >> include/gitparams_.h
+	echo -n "#define BUILD_EPOCH " >> include/gitparams_.h
+	date >> include/gitparams_.h
+
+gitparams.o: src/gitparams.cpp include/gitparams_.h
+	$(CXX) $(CFLAGS) $(CXXFLAGS) -c -o $@ src/gitparams.cpp
 
 %.o:src/%.cpp
 	$(CXX) $(CFLAGS) $(CXXFLAGS) -c -o $@ $<
@@ -130,9 +152,6 @@ OBJS = $(addsuffix .o, $(basename $(notdir $(SOURCES))))
 
 %.o:$(IMGUI_DIR)/backends/%.cpp
 	$(CXX) $(CFLAGS) $(CXXFLAGS) -c -o $@ $<
-
-all: $(EXE)
-	@echo Build complete for $(ECHO_MESSAGE)
 
 $(EXE): $(OBJS)
 	$(CXX) -o $@ $^ $(CFLAGS) $(CXXFLAGS) $(LDFLAGS)
@@ -155,7 +174,7 @@ $(SQLITE_BUILD_DIR)/sqlite3.c:
 	$(CXX) $(CFLAGS) $(CXXFLAGS) -c -o $@ $<
 
 clean:
-	rm -f $(EXE) $(OBJS)
+	rm -f $(EXE) $(OBJS) include/gitparams_.h
 
 # clean libs as well as normal clean
 dirclean: clean

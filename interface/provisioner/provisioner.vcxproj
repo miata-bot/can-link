@@ -118,6 +118,10 @@ xcopy /y "$(ProjectDir)LICENSE.txt" "$(OutDir)"</Command>
     <PreBuildEvent>
       <Command>echo | set /p dummyName=#define GIT_DESCRIBE &gt;  include/gitparams_.h
 git describe --tags --dirty --match="provisioner-*" &gt;&gt;  include/gitparams_.h
+echo | set /p dummyName=#define GIT_COMMIT &gt;&gt;  include/gitparams_.h
+git rev-parse --verify HEAD &gt;&gt; include/gitparams_.h
+echo | set /p dummyName=#define BUILD_EPOCH &gt;&gt;  include/gitparams_.h
+date /t &gt;&gt; include/gitparams_.h
 </Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
@@ -153,6 +157,10 @@ xcopy /y "$(ProjectDir)LICENSE.txt" "$(OutDir)"</Command>
     <PreBuildEvent>
       <Command>echo | set /p dummyName=#define GIT_DESCRIBE &gt;  include/gitparams_.h
 git describe --tags --dirty --match="provisioner-*" &gt;&gt;  include/gitparams_.h
+echo | set /p dummyName=#define GIT_COMMIT &gt;&gt;  include/gitparams_.h
+git rev-parse --verify HEAD &gt;&gt; include/gitparams_.h
+echo | set /p dummyName=#define BUILD_EPOCH &gt;&gt;  include/gitparams_.h
+date /t &gt;&gt; include/gitparams_.h
 </Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
@@ -184,6 +192,10 @@ xcopy /y "$(ProjectDir)LICENSE.txt" "$(OutDir)"</Command>
     <PreBuildEvent>
       <Command>echo | set /p dummyName=#define GIT_DESCRIBE &gt;  include/gitparams_.h
 git describe --tags --dirty --match="provisioner-*" &gt;&gt;  include/gitparams_.h
+echo | set /p dummyName=#define GIT_COMMIT &gt;&gt;  include/gitparams_.h
+git rev-parse --verify HEAD &gt;&gt; include/gitparams_.h
+echo | set /p dummyName=#define BUILD_EPOCH &gt;&gt;  include/gitparams_.h
+date /t &gt;&gt; include/gitparams_.h
 </Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
@@ -219,6 +231,10 @@ xcopy /y "$(ProjectDir)LICENSE.txt" "$(OutDir)"</Command>
     <PreBuildEvent>
       <Command>echo | set /p dummyName=#define GIT_DESCRIBE &gt;  include/gitparams_.h
 git describe --tags --dirty --match="provisioner-*" &gt;&gt;  include/gitparams_.h
+echo | set /p dummyName=#define GIT_COMMIT &gt;&gt;  include/gitparams_.h
+git rev-parse --verify HEAD &gt;&gt; include/gitparams_.h
+echo | set /p dummyName=#define BUILD_EPOCH &gt;&gt;  include/gitparams_.h
+date /t &gt;&gt; include/gitparams_.h
 </Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
@@ -228,6 +244,7 @@ git describe --tags --dirty --match="provisioner-*" &gt;&gt;  include/gitparams_
     <ClInclude Include="include\gitparams_.h" />
     <ClInclude Include="include\provision.h" />
     <ClInclude Include="include\spect.h" />
+    <ClInclude Include="include\imgui_helpers.h" />
     <ClInclude Include="lib\ImGuiColorTextEdit\TextEditor.h" />
     <ClInclude Include="lib\imgui\backends\imgui_impl_opengl3.h" />
     <ClInclude Include="lib\imgui\backends\imgui_impl_opengl3_loader.h" />
@@ -266,6 +283,7 @@ git describe --tags --dirty --match="provisioner-*" &gt;&gt;  include/gitparams_
     <ClCompile Include="src\spect_hardware_triggers.cpp" />
     <ClCompile Include="src\spect_network_nodes.cpp" />
     <ClCompile Include="src\spect_script.cpp" />
+    <ClCompile Include="src\help_modals.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
