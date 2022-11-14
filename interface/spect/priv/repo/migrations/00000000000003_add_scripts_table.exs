@@ -9,9 +9,5 @@ defmodule Spect.Repo.Migrations.AddScriptsTable do
     end
 
     create index(:scripts, :name)
-
-    alter table(:effect_slots) do
-      add :script_id, references(:scripts)
-    end
   end
 end

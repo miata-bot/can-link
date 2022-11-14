@@ -4,6 +4,7 @@
 [submodule "interface/provisioner/lib/sqlite"]
 	path = interface/provisioner/lib/sqlite
 	url = git@github.com:sqlite/sqlite.git
+	ignore = dirty
 [submodule "interface/provisioner/lib/nativefiledialog"]
 	path = interface/provisioner/lib/nativefiledialog
 	url = git@github.com:btzy/nativefiledialog-extended.git

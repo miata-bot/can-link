@@ -5,10 +5,11 @@
             "includePath": [
                 "${workspaceFolder}/**",
                 "/usr/include/SDL",
-                "${workspaceFolder}/interface/provisioner/include",
                 "/usr/include/gtk-3.0",
                 "/usr/include/glib-2.0",
-                "${workspaceFolder}/interface/provisioner/lib/nativefiledialog/src/include"
+                "${workspaceFolder}/interface/provisioner/lib/nativefiledialog/src/include",
+                "${workspaceFolder}/interface/spect/include",
+                "${workspaceFolder}/interface/provisioner/include"
             ],
             "defines": [],
             "compilerPath": "/usr/bin/clang",

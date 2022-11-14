@@ -29,3 +29,5 @@ spect-*.tar
 sqlite
 database
 sqlite3todot
+test_shell
+*.o
