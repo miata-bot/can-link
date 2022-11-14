@@ -16,6 +16,18 @@ struct ScriptEditorWindowState {
   struct Spect::ScriptListNode* script_node;
 };
 
+void script_editor_write_buffer(struct ScriptEditorWindowState* script_editor_window_state)
+{
+  assert(script_editor_window_state->script_node->script);
+  assert(script_editor_window_state->script_node->script->content);
+  memset(script_editor_window_state->script_node->script->content, 0, 32000 * sizeof(char));
+  memcpy(
+    script_editor_window_state->script_node->script->content,
+    script_editor_window_state->editor->GetText().c_str(),
+    script_editor_window_state->editor->GetText().length()
+  );
+}
+
 void script_editor_handle_tab(
 	struct Spect::ScriptListNode* node,
 	struct ScriptEditorWindowState* script_editor_window_state,
@@ -27,17 +39,10 @@ void script_editor_handle_tab(
 		if(script_editor_window_state->editor_buffer) delete script_editor_window_state->editor_buffer;
 		script_editor_window_state->editor_buffer = new std::string(node->script->content);
 		script_editor_window_state->editor->SetText(*script_editor_window_state->editor_buffer);
-		if(node->script->action == Spect::DatabaseAction::SPECT_NONE) node->script->action = Spect::DatabaseAction::SPECT_UPDATE;
 		script_editor_window_state->script_node = node;
 		script_editor_window_state->selected_id = id;
 	} else if(old_id != id) {
-		assert(script_editor_window_state->script_node);
-		memset(script_editor_window_state->script_node->script->content, 0, 32000 * sizeof(char));
-		memcpy(
-			script_editor_window_state->script_node->script->content,
-			script_editor_window_state->editor->GetText().c_str(),
-			script_editor_window_state->editor->GetText().length()
-		);
+		script_editor_write_buffer(script_editor_window_state);
 		delete script_editor_window_state->editor_buffer;
 		script_editor_window_state->editor_buffer = new std::string(node->script->content);
 		script_editor_window_state->editor->SetText(*script_editor_window_state->editor_buffer);

@@ -9,6 +9,7 @@
 #include "file_dialog.h"
 #include "spect.h"
 
+bool show_save_modal = false;
 bool show_demo_window = false;
 bool edits_pending = false;
 char* config_file_path = NULL;
@@ -115,6 +116,11 @@ void script_editor_window_state_deinit(void)
   if(script_list == NULL) return; // probably not correct...
   assert(script_list && "Script List must be valid to deinit script_editor");
 }
+
+// Save the current buffer into the current node
+void script_editor_write_buffer(
+  struct ScriptEditorWindowState* script_editor_window_state
+);
 
 // Saves a new script into the script linked list
 void script_editor_save_script(
@@ -235,18 +241,10 @@ void db_close(void)
 void db_save()
 {
   Spect::config_save(conn, config);
-  if(script_editor_window_state.script_node) {
-    assert(script_editor_window_state.script_node->script);
-    assert(script_editor_window_state.script_node->script->content);
-    memset(script_editor_window_state.script_node->script->content, 0, 32000 * sizeof(char));
-    memcpy(
-      script_editor_window_state.script_node->script->content,
-      script_editor_window_state.editor->GetText().c_str(),
-      script_editor_window_state.editor->GetText().length()
-    );
-  }
+  if(script_editor_window_state.script_node) script_editor_write_buffer(&script_editor_window_state);
   Spect::script_list_save(conn, script_list);
   edits_pending = false;
+  show_save_modal = false;
   fprintf(stderr, "Saved DB\n");
 }
 
@@ -257,6 +255,70 @@ void Provision::Init(int argc, char** argv)
   (void)argv;
   // TODO: check result
   NFD_Init();
+}
+
+void RenderEditModal() {
+  // Always center this window when appearing
+  ImVec2 center = ImGui::GetMainViewport()->GetCenter();
+  ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
+
+  if (ImGui::BeginPopupModal("Edits Pending", NULL, ImGuiWindowFlags_AlwaysAutoResize))
+  {
+    ImGui::Text("Edits still pending");
+    ImGui::Separator();
+
+#if 0
+    static bool dont_ask_me_next_time = false;
+    ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(0, 0));
+    ImGui::Checkbox("Don't ask me next time", &dont_ask_me_next_time);
+    ImGui::PopStyleVar();
+#endif
+
+    if (ImGui::Button("Save", ImVec2(120, 0))) { 
+      db_save();
+      db_close();
+      show_save_modal = false;
+      ImGui::CloseCurrentPopup(); 
+    }
+    ImGui::SetItemDefaultFocus();
+    ImGui::SameLine();
+    if (ImGui::Button("Discard Edits", ImVec2(120, 0))) {
+      db_close();
+      show_save_modal = false;
+      edits_pending = false;
+      ImGui::CloseCurrentPopup(); 
+    }
+    ImGui::EndPopup();
+  }
+#if 0
+  if(edits_pending) {
+  ImGui::OpenPopup("Edits Pending");
+
+  ImVec2 center = ImGui::GetMainViewport()->GetCenter();
+  ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
+
+  if (ImGui::BeginPopupModal("Edits Pending", NULL, ImGuiWindowFlags_AlwaysAutoResize)) {
+    ImGui::Text("Edits are not saved!");
+    ImGui::Separator();
+
+    static bool dont_ask_me_next_time = false;
+    ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(0, 0));
+    ImGui::Checkbox("Don't ask me next time", &dont_ask_me_next_time);
+    ImGui::PopStyleVar();
+
+    if (ImGui::Button("Discard Changes", ImVec2(120, 0))) {
+      db_close();
+      ImGui::CloseCurrentPopup(); 
+    }
+    ImGui::SetItemDefaultFocus();
+    ImGui::SameLine();
+    if (ImGui::Button("Continue Editing", ImVec2(120, 0))) { ImGui::CloseCurrentPopup(); }
+    ImGui::EndPopup();
+  }
+} else {
+  db_close();
+}
+#endif
 }
 
 void RenderMainMenuBar(bool* requestDone)
@@ -273,15 +335,14 @@ void RenderMainMenuBar(bool* requestDone)
         }
       // otherwise show the `Close` dialog
       } else {
-        if(ImGui::MenuItem("Save Config File")) {
-          db_save();
-        }
+        if(ImGui::MenuItem("Save Config File")) db_save();
         ImGui::Separator();
-        if(ImGui::MenuItem("Close Config File", NULL, false, edits_pending == false)) {
+        if(ImGui::MenuItem("Close Config File")) {
           if(edits_pending) {
-            ImGui::BeginPopup("Save");
-            ImGui::Text("edits still pending");
-            ImGui::EndPopup();
+            show_save_modal = true;
+            ImGui::EndMenu();
+            ImGui::EndMainMenuBar();
+            return;
           }
           db_close();
         }
@@ -289,9 +350,20 @@ void RenderMainMenuBar(bool* requestDone)
 
       ImGui::Separator();
 #ifdef DEBUG
+      ImGui::MenuItem("Debug Options", NULL, false, false);
       ImGui::MenuItem("Show ImGui Demo", NULL, &show_demo_window);
+      if(ImGui::MenuItem("Show Save Modal"))  show_save_modal = true;
+      ImGui::Separator();
 #endif
-      ImGui::MenuItem("Quit", NULL, requestDone);
+      if(ImGui::MenuItem("Quit", NULL)) {
+        if(edits_pending) {
+          show_save_modal = true;
+          ImGui::EndMenu();
+          ImGui::EndMainMenuBar();
+          return;
+        }
+        *requestDone = true;
+      }
 
       ImGui::EndMenu();
     }
@@ -509,11 +581,20 @@ void RenderScriptEditor()
       assert(node);
       assert(node->script);
       assert(node->script->name);
+      if(
+        node->script->action == Spect::DatabaseAction::SPECT_INSERT  ||
+        node->script->action == Spect::DatabaseAction::SPECT_UPDATE
+      ) tab_bar_flags |= ImGuiTabItemFlags_UnsavedDocument;
+      else {tab_bar_flags = ImGuiTabBarFlags_None;}
       snprintf(buffer, 120, "%s", node->script->name);
       if(ImGui::BeginTabItem(buffer, &script_editor_window_state.selected, tab_bar_flags)) {
         ImGui::Text(node->script->description);
         script_editor_handle_tab(node, &script_editor_window_state, old_id, i);
         script_editor_window_state.editor->Render("ScriptEditor");
+        if(script_editor_window_state.editor->IsTextChanged()) {
+          edits_pending = true;
+          script_editor_window_state.script_node->script->action = Spect::DatabaseAction::SPECT_UPDATE;
+        }
         ImGui::EndTabItem();
       }
 
@@ -554,6 +635,8 @@ void Provision::Render(bool* requestDone)
   ImGui::SetNextWindowSize(ImVec2(550, 680), ImGuiCond_FirstUseEver);
 
   if(show_demo_window) ImGui::ShowDemoWindow(&show_demo_window);
+  if(show_save_modal) ImGui::OpenPopup("Edits Pending");
+
   RenderMainMenuBar(requestDone);
   RenderNavigationWindow();
   static char buffer[120];
@@ -587,6 +670,7 @@ void Provision::Render(bool* requestDone)
   RenderHardwareTriggersWindow();
   RenderEffectSlotsWindow();
   RenderScriptEditor();
+  RenderEditModal();
 }
 
 void Provision::Shutdown(void)

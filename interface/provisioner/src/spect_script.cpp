@@ -218,7 +218,7 @@ bool Spect::script_list_save(struct Spect::Connection* conn, Spect::ScriptList* 
     }
     
     rc = sqlite3_step(stmt);
-    fprintf(stderr, "[Spect] script %s\n", sqlite3_errstr(rc));
+    if(rc == SQLITE_DONE) node->script->action = Spect::DatabaseAction::SPECT_NONE;
 
     sqlite3_finalize(stmt);
     stmt = NULL;
