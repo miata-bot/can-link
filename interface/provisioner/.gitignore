@@ -21,3 +21,4 @@ provision
 .vs
 
 /lib/sdl/SDL*
+/include/gitparams_.h

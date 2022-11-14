@@ -75,6 +75,21 @@
     <ClInclude Include="lib\sqlite\sqlite-amalgamation-3390400\sqlite3ext.h">
       <Filter>Header Files\SQLite</Filter>
     </ClInclude>
+    <ClInclude Include="include\file_dialog.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\gitparams.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\provision.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\spect.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\gitparams_.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\file_dialog.cpp">
@@ -139,6 +154,9 @@
     </ClCompile>
     <ClCompile Include="lib\sqlite\sqlite-amalgamation-3390400\sqlite3.c">
       <Filter>Source Files\SQLite</Filter>
+    </ClCompile>
+    <ClCompile Include="src\gitparams.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
