@@ -10,14 +10,16 @@ include($ENV{IDF_PATH}/tools/cmake/project.cmake)
 project(spect)
 fatfs_create_spiflash_image(storage flash_image FLASH_IN_PROJECT)
 
-if(${IDF_VERSION_MAJOR} EQUAL 4 AND ${IDF_VERSION_MINOR} EQUAL 3)
-    # add_library("tinyusb") was used instead of idf_component_register so "__idf_" wasn't added to the name
-    set(tinyusb_name "tinyusb")
-else()
-    set(tinyusb_name "__idf_tinyusb")
-endif()
+# if(${IDF_VERSION_MAJOR} EQUAL 4 AND ${IDF_VERSION_MINOR} EQUAL 3)
+#     # add_library("tinyusb") was used instead of idf_component_register so "__idf_" wasn't added to the name
+#     set(tinyusb_name "tinyusb")
+# else()
+#     set(tinyusb_name "__idf_tinyusb")
+# endif()
+# set(tinyusb_name "tinyusb")
 
-# Workaround for Vendor class. ESP-IDF v4.3 doesn't support it directly through its tinyusb "additions" layer.
-target_compile_definitions(${tinyusb_name} PUBLIC CFG_TUD_VENDOR=1)
-target_compile_definitions(${tinyusb_name} PUBLIC CFG_TUD_VENDOR_RX_BUFSIZE=64)
-target_compile_definitions(${tinyusb_name} PUBLIC CFG_TUD_VENDOR_TX_BUFSIZE=64)
+# # Workaround for Vendor class. ESP-IDF v4.3 doesn't support it directly through its tinyusb "additions" layer.
+# target_compile_definitions(${tinyusb_name} PUBLIC CFG_TUD_VENDOR=1)
+# target_compile_definitions(${tinyusb_name} PUBLIC CFG_TUD_VENDOR_RX_BUFSIZE=64)
+# target_compile_definitions(${tinyusb_name} PUBLIC CFG_TUD_VENDOR_TX_BUFSIZE=64)
+idf_build_set_property(COMPILE_OPTIONS "-Wno-error=format" APPEND)
