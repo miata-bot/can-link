@@ -14,6 +14,7 @@ provision
 # Windows build output
 /Debug
 /x64
+/Release
 
 # library zips
 *.zip
