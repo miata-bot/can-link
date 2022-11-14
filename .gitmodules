@@ -1,21 +1,3 @@
-[submodule "firmware/esp_fw/components/esp-idf-lua"]
-	path = firmware/esp_fw/components/esp-idf-lua
-	url = https://github.com/UncleRus/esp-idf-lua.git
-[submodule "firmware/neopixel-test/esp-idf-lib"]
-	path = firmware/neopixel-test/esp-idf-lib
-	url = git@github.com:UncleRus/esp-idf-lib.git
-[submodule "firmware/bleprph/esp-idf-lib"]
-	path = firmware/bleprph/esp-idf-lib
-	url = git@github.com:UncleRus/esp-idf-lib.git
-[submodule "firmware/spect/components/esp-idf-lua"]
-	path = firmware/spect/components/esp-idf-lua
-	url = https://github.com/UncleRus/esp-idf-lua.git
-[submodule "firmware/spect/components/esp-idf-sqlite3"]
-	path = firmware/spect/components/esp-idf-sqlite3
-	url = git@github.com:siara-cc/esp32-idf-sqlite3.git
-[submodule "firmware/spect/esp-idf-lib"]
-	path = firmware/spect/esp-idf-lib
-	url = git@github.com:UncleRus/esp-idf-lib.git
 [submodule "interface/provisioner/lib/imgui"]
 	path = interface/provisioner/lib/imgui
 	url = git@github.com:ocornut/imgui.git
