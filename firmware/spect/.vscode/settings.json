@@ -1,9 +1,0 @@
-{
-  "idf.adapterTargetName": "esp32s3",
-  "files.associations": {
-    "*.lua": "lua",
-    "ratio": "c",
-    "compare": "c",
-    "unordered_map": "c"
-  }
-}
