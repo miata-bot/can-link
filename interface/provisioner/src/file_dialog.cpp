@@ -6,11 +6,16 @@
 #include "nfd.h"
 #include "file_dialog.h"
 
+#ifndef __EMSCRIPTEN__
 // PATH_MAX
 const size_t max_path_length = 4096;
+#endif
 
 char* path_open_for_write()
 {
+#ifdef __EMSCRIPTEN__
+  return "/config.db";
+#else
   nfdchar_t *outPath;
   nfdfilteritem_t filterItem[] = { { "ConeRGB Config File", "db" } };
   nfdresult_t result = NFD_OpenDialog(&outPath, filterItem, 1, NULL /* "../spect" */);
@@ -34,9 +39,14 @@ char* path_open_for_write()
     fprintf(stderr, "Error opening file: %s\n", NFD_GetError());
     return NULL;
   }
+#endif
 }
 
 void path_free(char* path)
 {
+#ifdef __EMSCRIPTEN__
+  // no need to free the path since it's const here
+  return;
+#endif
   if(path) free(path);
 }

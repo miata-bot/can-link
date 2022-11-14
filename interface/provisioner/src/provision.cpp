@@ -263,8 +263,10 @@ void Provision::Init(int argc, char** argv)
   // TODO: allow passing db file on the cmdline
   (void)argc;
   (void)argv;
+#ifndef __EMSCRIPTEN__
   // TODO: check result
   NFD_Init();
+#endif
 }
 
 void RenderEditModal() {

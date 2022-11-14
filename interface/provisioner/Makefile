@@ -11,10 +11,24 @@
 #   pacman -S mingw-w64-i686-SDL2
 #
 
+ifeq ($(TARGET), emscripten)
+CC = emcc
+CXX = em++
+EMSCRIPTEN_DIR = emscripten
+WEB_DIR = web
+EXE = $(WEB_DIR)/index.html
+EMS =
+EMS += -s USE_SDL=2
+EMS += -s DISABLE_EXCEPTION_CATCHING=1
+LDFLAGS += -s WASM=1 -s ALLOW_MEMORY_GROWTH=1 -s NO_EXIT_RUNTIME=0 -s ASSERTIONS=1
+
+else
+EXE = provision
+endif
+
 #CXX = g++
 #CXX = clang++
 
-EXE = provision
 IMGUI_DIR = lib/imgui
 IMGUI_COLOR_TEXT_EDIT_DIR = lib/ImGuiColorTextEdit
 
@@ -68,6 +82,26 @@ CFLAGS  += -g -DDEBUG
 CXXFLAGS = -std=c++11 
 LDFLAGS ?=
 
+ifeq ($(TARGET), emscripten)
+# Emscripten allows preloading a file or folder to be accessible at runtime.
+# The Makefile for this example project suggests embedding the misc/fonts/ folder into our application, it will then be accessible as "/fonts"
+# See documentation for more details: https://emscripten.org/docs/porting/files/packaging_files.html
+# (Default value is 0. Set to 1 to enable file-system and include the misc/fonts/ folder as part of the build.)
+USE_FILE_SYSTEM ?= 1
+ifeq ($(USE_FILE_SYSTEM), 0)
+LDFLAGS += -s NO_FILESYSTEM=1
+CPPFLAGS += -DIMGUI_DISABLE_FILE_FUNCTIONS
+endif
+ifeq ($(USE_FILE_SYSTEM), 1)
+LDFLAGS += --no-heap-copy --preload-file imgui.ini@/imgui.ini
+LDFLAGS += --no-heap-copy --preload-file config.db@/config.db
+endif
+
+CFLAGS +=  -Os $(EMS)
+LDFLAGS += --shell-file $(EMSCRIPTEN_DIR)/shell_minimal.html $(EMS)
+ECHO_MESSAGE = "Emscripten"
+else
+
 ##---------------------------------------------------------------------
 ## OPENGL ES
 ##---------------------------------------------------------------------
@@ -114,6 +148,7 @@ ifeq ($(OS), Windows_NT)
 
     CFLAGS += `pkg-config --cflags sdl2`
 endif
+endif
 
 ##---------------------------------------------------------------------
 ## BUILD RULES
@@ -124,7 +159,7 @@ endif
 
 OBJS = $(addsuffix .o, $(basename $(notdir $(SOURCES))))
 
-all: $(EXE)
+all: $(WEB_DIR) $(EXE) 
 	@echo Build complete for $(ECHO_MESSAGE)
 
 # this file makes this project a non-reproducable build
@@ -174,7 +209,7 @@ $(SQLITE_BUILD_DIR)/sqlite3.c:
 	$(CXX) $(CFLAGS) $(CXXFLAGS) -c -o $@ $<
 
 clean:
-	rm -f $(EXE) $(OBJS) include/gitparams_.h
+	rm -rf $(EXE) $(OBJS) $(WEB_DIR) include/gitparams_.h
 
 # clean libs as well as normal clean
 dirclean: clean
@@ -188,3 +223,11 @@ valgrind: $(EXE)
 
 gdb: $(EXE)
 	gdb ./$(EXE)
+
+ifeq ($(TARGET), emscripten)
+$(WEB_DIR):
+	mkdir $@
+
+serve: all
+	python3 -m http.server -d $(WEB_DIR)
+endif

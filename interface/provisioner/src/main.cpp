@@ -7,6 +7,11 @@
 #include "imgui_impl_sdl.h"
 #include "imgui_impl_opengl3.h"
 #include <stdio.h>
+
+#ifdef __EMSCRIPTEN__
+#include <emscripten.h>
+#endif
+
 #include <SDL.h>
 #if defined(IMGUI_IMPL_OPENGL_ES2)
 #include <SDL_opengles2.h>
@@ -17,13 +22,18 @@
 #include "provision.h"
 #include "gitparams.h"
 
+SDL_Window*     g_Window = NULL;
+SDL_GLContext   g_GLContext = NULL;
+
+static void main_loop(void* arg);
+
 // Main code
 int main(int argc, char** argv)
 {
     // Setup SDL
     // (Some versions of SDL before <2.0.10 appears to have performance/stalling issues on a minority of Windows systems,
     // depending on whether SDL_INIT_GAMECONTROLLER is enabled or disabled.. updating to the latest version of SDL is recommended!)
-    if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER | SDL_INIT_GAMECONTROLLER) != 0)
+    if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER) != 0)
     {
         printf("Error: %s\n", SDL_GetError());
         return -1;
@@ -44,6 +54,23 @@ int main(int argc, char** argv)
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 2);
+#elif defined(__EMSCRIPTEN__)
+    // For the browser using Emscripten, we are going to use WebGL1 with GL ES2. See the Makefile. for requirement details.
+    // It is very likely the generated file won't work in many browsers. Firefox is the only sure bet, but I have successfully
+    // run this code on Chrome for Android for example.
+    const char* glsl_version = "#version 100";
+    //const char* glsl_version = "#version 300 es";
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, 0);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_ES);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0);
+
+    // Create window with graphics context
+    SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+    SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
+    SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8);
+    SDL_DisplayMode current;
+    SDL_GetCurrentDisplayMode(0, &current);
 #else
     // GL 3.0 + GLSL 130
     const char* glsl_version = "#version 130";
@@ -60,9 +87,15 @@ int main(int argc, char** argv)
     SDL_WindowFlags window_flags = (SDL_WindowFlags)(SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE | SDL_WINDOW_ALLOW_HIGHDPI);
     static char buffer[255] = { 0 };
     snprintf(buffer, 255, "ConeRGB Configurator %s", git_describe());
-    SDL_Window* window = SDL_CreateWindow(buffer, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1280, 720, window_flags);
-    SDL_GLContext gl_context = SDL_GL_CreateContext(window);
-    SDL_GL_MakeCurrent(window, gl_context);
+    g_Window = SDL_CreateWindow(buffer, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1280, 720, window_flags);
+    g_GLContext = SDL_GL_CreateContext(g_Window);
+    if (!g_GLContext)
+    {
+        fprintf(stderr, "Failed to initialize GL context!\n");
+        return 1;
+    }
+
+    SDL_GL_MakeCurrent(g_Window, g_GLContext);
     SDL_GL_SetSwapInterval(1); // Enable vsync
 
     // Setup Dear ImGui context
@@ -91,7 +124,7 @@ int main(int argc, char** argv)
     }
 
     // Setup Platform/Renderer backends
-    ImGui_ImplSDL2_InitForOpenGL(window, gl_context);
+    ImGui_ImplSDL2_InitForOpenGL(g_Window, g_GLContext);
     ImGui_ImplOpenGL3_Init(glsl_version);
 
     // Load Fonts
@@ -110,14 +143,36 @@ int main(int argc, char** argv)
     //ImFont* font = io.Fonts->AddFontFromFileTTF("c:\\Windows\\Fonts\\ArialUni.ttf", 18.0f, NULL, io.Fonts->GetGlyphRangesJapanese());
     //IM_ASSERT(font != NULL);
 
-    // Our state
-    ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
-
     Provision::Init(argc, argv);
+#ifdef __EMSCRIPTEN__
+    // This function call won't return, and will engage in an infinite loop, processing events from the browser, and dispatching them.
+    emscripten_set_main_loop_arg(main_loop, NULL, 0, true);
+    fprintf(stderr, "emscripten_set_main_loop_arg return\n");
+#else
+    main_loop(NULL);
+    // Cleanup
+    Provision::Shutdown();
+    ImGui_ImplOpenGL3_Shutdown();
+    ImGui_ImplSDL2_Shutdown();
+    ImGui::DestroyContext();
+
+    SDL_GL_DeleteContext(g_GLContext);
+    SDL_DestroyWindow(g_Window);
+    SDL_Quit();
+    return 0;
+#endif
+}
+
+static void main_loop(void* arg)
+{
+    ImGuiIO& io = ImGui::GetIO();
+    ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 
     // Main loop
     bool done = false;
+#ifndef __EMSCRIPTEN__
     while (!done)
+#endif
     {
         // Poll and handle events (inputs, window resize, etc.)
         // You can read the io.WantCaptureMouse, io.WantCaptureKeyboard flags to tell if dear imgui wants to use your inputs.
@@ -130,12 +185,16 @@ int main(int argc, char** argv)
             ImGui_ImplSDL2_ProcessEvent(&event);
             if (event.type == SDL_QUIT)
                 done = true;
-            if (event.type == SDL_WINDOWEVENT && event.window.event == SDL_WINDOWEVENT_CLOSE && event.window.windowID == SDL_GetWindowID(window))
+            if (event.type == SDL_WINDOWEVENT && event.window.event == SDL_WINDOWEVENT_CLOSE && event.window.windowID == SDL_GetWindowID(g_Window))
                 done = true;
         }
 
         // Start the Dear ImGui frame
         ImGui_ImplOpenGL3_NewFrame();
+#ifdef __EMSCRIPTEN__ 
+        if (io.DeltaTime == 0.f || io.DeltaTime == 0.1f)
+            io.DeltaTime = 1.f / 60.f;
+#endif        
         ImGui_ImplSDL2_NewFrame();
         ImGui::NewFrame();
 
@@ -147,6 +206,7 @@ int main(int argc, char** argv)
         // Rendering
         Provision::Render(&done);
         ImGui::Render();
+        SDL_GL_MakeCurrent(g_Window, g_GLContext);
         glViewport(0, 0, (int)io.DisplaySize.x, (int)io.DisplaySize.y);
         glClearColor(clear_color.x * clear_color.w, clear_color.y * clear_color.w, clear_color.z * clear_color.w, clear_color.w);
         glClear(GL_COLOR_BUFFER_BIT);
@@ -164,18 +224,6 @@ int main(int argc, char** argv)
             SDL_GL_MakeCurrent(backup_current_window, backup_current_context);
         }
 
-        SDL_GL_SwapWindow(window);
+        SDL_GL_SwapWindow(g_Window);
     }
-
-    // Cleanup
-    Provision::Shutdown();
-    ImGui_ImplOpenGL3_Shutdown();
-    ImGui_ImplSDL2_Shutdown();
-    ImGui::DestroyContext();
-
-    SDL_GL_DeleteContext(gl_context);
-    SDL_DestroyWindow(window);
-    SDL_Quit();
-
-    return 0;
 }

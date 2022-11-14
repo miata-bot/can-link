@@ -23,3 +23,6 @@ provision
 
 /lib/sdl/SDL*
 /include/gitparams_.h
+
+# emscripten artifacts
+/web
