@@ -1,0 +1,44 @@
+name: build
+
+on:
+  push:
+    #
+
+jobs:
+  Windows:
+    runs-on: windows-latest
+    defaults:
+      run:
+        shell: powershell
+        working-directory: interface\provisioner
+    steps:
+      - uses: microsoft/setup-msbuild@v1.1
+
+      - uses: actions/checkout@v2
+        with:
+          submodules: 'recursive'
+
+      - name: Fetch SDL
+        run: |
+          Invoke-WebRequest -Uri 'https://github.com/libsdl-org/SDL/releases/download/release-2.24.2/SDL2-devel-2.24.2-VC.zip' -OutFile 'SDL2-devel-2.24.2-VC.zip'
+          Expand-Archive -Path 'SDL2-devel-2.24.2-VC.zip' -DestinationPath 'lib/sdl'
+
+      - name: Fetch SQLite
+        run: |
+          Invoke-WebRequest -Uri 'https://www.sqlite.org/2022/sqlite-amalgamation-3390400.zip' -OutFile 'sqlite-amalgamation-3390400.zip'
+          Expand-Archive -Path 'sqlite-amalgamation-3390400.zip' -DestinationPath 'lib/sqlite/'
+        
+      - name: Build ConeRGB Configurator Debug
+        run: msbuild provisioner.sln /p:Configuration="Debug" /p:PlatformTarget=x86 /p:Platform=x86
+
+      - uses: actions/upload-artifact@v3
+        with:
+          name: ConeRGB-Win32-Debug
+          path: |
+            interface\provisioner\Debug\provisioner.exe
+            interface\provisioner\Debug\README.txt
+            interface\provisioner\Debug\LICENSE
+            interface\provisioner\Debug\SDL2.dll
+            interface\provisioner\Debug\README-SDL.txt
+            interface\provisioner\Debug\imgui.ini
+            interface\provisioner\Debug\config.db

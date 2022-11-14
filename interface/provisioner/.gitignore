@@ -3,12 +3,21 @@
 
 # SQLite database
 *.db
+!config.db
 
 # sqlite amalagation build dir
 lib/sqlite/build
 
-# imgui layouot file
-imgui.ini 
-
 # compiled exe for linux and mac
 provision
+
+# Windows build output
+/Debug
+/x64
+
+# library zips
+*.zip
+
+.vs
+
+/lib/sdl/SDL*

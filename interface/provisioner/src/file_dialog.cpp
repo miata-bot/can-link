@@ -13,7 +13,7 @@ char* path_open_for_write()
 {
   nfdchar_t *outPath;
   nfdfilteritem_t filterItem[] = { { "ConeRGB Config File", "db" } };
-  nfdresult_t result = NFD_OpenDialog(&outPath, filterItem, 1, "../spect");
+  nfdresult_t result = NFD_OpenDialog(&outPath, filterItem, 1, NULL /* "../spect" */);
   size_t length = max_path_length;
   char* path = NULL;
   if(result == NFD_OKAY) {
@@ -23,10 +23,9 @@ char* path_open_for_write()
       assert(path);
       memset(path, 0, sizeof(char) * length + 1);
       memcpy(path, outPath, sizeof(char) * length);
-      // fprintf(stderr, "path=%s\n", path);
     }
     NFD_FreePath(outPath);
-    fprintf(stderr, "opened %s[%ld]\n", path, length);
+    fprintf(stderr, "opened %s\n", path);
     return path;
   } else if(result == NFD_CANCEL) {
     fprintf(stderr, "Error opening file: user canceled\n");
