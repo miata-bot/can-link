@@ -1972,7 +1972,7 @@
     (property "Datasheet" "~" (id 3) (at 157.48 29.21 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (property "MPN" "PESD2CANFD24V-T" (id 4) (at 161.29 29.21 0)
+    (property "Digikey" "PESD2CANFD24V-T" (id 4) (at 161.29 29.21 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Description" "TVS DIODE 24VWM 42VC TO236AB" (id 5) (at 161.29 29.21 0)
