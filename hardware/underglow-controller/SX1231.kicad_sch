@@ -1290,7 +1290,7 @@
     (property "Datasheet" "https://cdn.sparkfun.com/datasheets/Wireless/General/RFM69HCW-V1.1.pdf" (id 3) (at 57.15 52.07 0)
       (effects (font (size 1.27 1.27)) (justify left bottom) hide)
     )
-    (property "MANUFACTURER" "SparkFun Electronics" (id 4) (at 57.15 52.07 0)
+    (property "MANUFACTURER" "" (id 4) (at 57.15 52.07 0)
       (effects (font (size 1.27 1.27)) (justify left bottom) hide)
     )
     (property "MPN" "COM-13909" (id 5) (at 57.15 34.29 0))

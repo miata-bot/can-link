@@ -499,7 +499,7 @@
   )
 
   (symbol (lib_id "Interface_CAN_LIN:SN65HVD230") (at 86.36 66.04 0) (mirror y) (unit 1)
-    (in_bom no) (on_board yes) (fields_autoplaced)
+    (in_bom yes) (on_board yes) (fields_autoplaced)
     (uuid c0401dc9-adc2-4186-8fc3-73c84498c57c)
     (property "Reference" "U401" (id 0) (at 86.8806 55.88 0)
       (effects (font (size 1.27 1.27)) (justify right))
@@ -517,9 +517,6 @@
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Description" "CAN Interface IC STANDBY MODE " (id 6) (at 86.36 66.04 0)
-      (effects (font (size 1.27 1.27)) hide)
-    )
-    (property "LCSC" "C12084" (id 7) (at 86.36 66.04 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (pin "1" (uuid 3ef16f2f-0610-461a-8fd7-071fdbf0f61b))
