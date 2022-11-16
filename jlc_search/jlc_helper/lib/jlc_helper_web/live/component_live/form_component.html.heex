@@ -1,0 +1,64 @@
+<div>
+  <h2><%= @title %></h2>
+
+  <.form
+    let={f}
+    for={@changeset}
+    id="component-form"
+    phx-target={@myself}
+    phx-change="validate"
+    phx-submit="save">
+  
+    <%= label f, :part %>
+    <%= text_input f, :part %>
+    <%= error_tag f, :part %>
+  
+    <%= label f, :category1 %>
+    <%= text_input f, :category1 %>
+    <%= error_tag f, :category1 %>
+  
+    <%= label f, :category2 %>
+    <%= text_input f, :category2 %>
+    <%= error_tag f, :category2 %>
+  
+    <%= label f, :mpn %>
+    <%= text_input f, :mpn %>
+    <%= error_tag f, :mpn %>
+  
+    <%= label f, :package %>
+    <%= text_input f, :package %>
+    <%= error_tag f, :package %>
+  
+    <%= label f, :joins %>
+    <%= number_input f, :joins %>
+    <%= error_tag f, :joins %>
+  
+    <%= label f, :manufacturer %>
+    <%= text_input f, :manufacturer %>
+    <%= error_tag f, :manufacturer %>
+  
+    <%= label f, :library_type %>
+    <%= text_input f, :library_type %>
+    <%= error_tag f, :library_type %>
+  
+    <%= label f, :description %>
+    <%= text_input f, :description %>
+    <%= error_tag f, :description %>
+  
+    <%= label f, :datasheet %>
+    <%= text_input f, :datasheet %>
+    <%= error_tag f, :datasheet %>
+  
+    <%= label f, :price %>
+    <%= number_input f, :price, step: "any" %>
+    <%= error_tag f, :price %>
+  
+    <%= label f, :stock %>
+    <%= number_input f, :stock %>
+    <%= error_tag f, :stock %>
+  
+    <div>
+      <%= submit "Save", phx_disable_with: "Saving..." %>
+    </div>
+  </.form>
+</div>

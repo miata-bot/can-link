@@ -1,0 +1,81 @@
+<h1>Show Component</h1>
+
+<%= if @live_action in [:edit] do %>
+  <.modal return_to={Routes.component_show_path(@socket, :show, @component)}>
+    <.live_component
+      module={JlcHelperWeb.ComponentLive.FormComponent}
+      id={@component.id}
+      title={@page_title}
+      action={@live_action}
+      component={@component}
+      return_to={Routes.component_show_path(@socket, :show, @component)}
+    />
+  </.modal>
+<% end %>
+
+<ul>
+
+  <li>
+    <strong>Part:</strong>
+    <%= @component.part %>
+  </li>
+
+  <li>
+    <strong>Category1:</strong>
+    <%= @component.category1 %>
+  </li>
+
+  <li>
+    <strong>Category2:</strong>
+    <%= @component.category2 %>
+  </li>
+
+  <li>
+    <strong>Mpn:</strong>
+    <%= @component.mpn %>
+  </li>
+
+  <li>
+    <strong>Package:</strong>
+    <%= @component.package %>
+  </li>
+
+  <li>
+    <strong>Joins:</strong>
+    <%= @component.joins %>
+  </li>
+
+  <li>
+    <strong>Manufacturer:</strong>
+    <%= @component.manufacturer %>
+  </li>
+
+  <li>
+    <strong>Library type:</strong>
+    <%= @component.library_type %>
+  </li>
+
+  <li>
+    <strong>Description:</strong>
+    <%= @component.description %>
+  </li>
+
+  <li>
+    <strong>Datasheet:</strong>
+    <%= @component.datasheet %>
+  </li>
+
+  <li>
+    <strong>Price:</strong>
+    <%= @component.price %>
+  </li>
+
+  <li>
+    <strong>Stock:</strong>
+    <%= @component.stock %>
+  </li>
+
+</ul>
+
+<span><%= live_patch "Edit", to: Routes.component_show_path(@socket, :edit, @component), class: "button" %></span> |
+<span><%= live_redirect "Back", to: Routes.component_index_path(@socket, :index) %></span>

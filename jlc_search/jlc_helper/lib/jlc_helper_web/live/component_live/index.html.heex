@@ -1,0 +1,61 @@
+<h1>Listing Componens</h1>
+
+<%= if @live_action in [:new, :edit] do %>
+  <.modal return_to={Routes.component_index_path(@socket, :index)}>
+    <.live_component
+      module={JlcHelperWeb.ComponentLive.FormComponent}
+      id={@component.id || :new}
+      title={@page_title}
+      action={@live_action}
+      component={@component}
+      return_to={Routes.component_index_path(@socket, :index)}
+    />
+  </.modal>
+<% end %>
+
+<table>
+  <thead>
+    <tr>
+      <th>Part</th>
+      <th>Category1</th>
+      <th>Category2</th>
+      <th>Mpn</th>
+      <th>Package</th>
+      <th>Joins</th>
+      <th>Manufacturer</th>
+      <th>Library type</th>
+      <th>Description</th>
+      <th>Datasheet</th>
+      <th>Price</th>
+      <th>Stock</th>
+
+      <th></th>
+    </tr>
+  </thead>
+  <tbody id="componens">
+    <%= for component <- @componens do %>
+      <tr id={"component-#{component.id}"}>
+        <td><%= component.part %></td>
+        <td><%= component.category1 %></td>
+        <td><%= component.category2 %></td>
+        <td><%= component.mpn %></td>
+        <td><%= component.package %></td>
+        <td><%= component.joins %></td>
+        <td><%= component.manufacturer %></td>
+        <td><%= component.library_type %></td>
+        <td><%= component.description %></td>
+        <td><%= component.datasheet %></td>
+        <td><%= component.price %></td>
+        <td><%= component.stock %></td>
+
+        <td>
+          <span><%= live_redirect "Show", to: Routes.component_show_path(@socket, :show, component) %></span>
+          <span><%= live_patch "Edit", to: Routes.component_index_path(@socket, :edit, component) %></span>
+          <span><%= link "Delete", to: "#", phx_click: "delete", phx_value_id: component.id, data: [confirm: "Are you sure?"] %></span>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<span><%= live_patch "New Component", to: Routes.component_index_path(@socket, :new) %></span>
