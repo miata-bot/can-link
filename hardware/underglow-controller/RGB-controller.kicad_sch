@@ -1655,10 +1655,10 @@
       (reference "D610") (unit 1) (value "ACDBA340-HF") (footprint "Diode_SMD:D_SMA")
     )
     (path "/e9e6f5bb-a41c-4501-b501-81730dc832f7/80cc83db-7321-4cd5-ac69-dfb0826f760d"
-      (reference "H201") (unit 1) (value "MountingHole_Pad") (footprint "MountingHole:MountingHole_2.2mm_M2")
+      (reference "H201") (unit 1) (value "MountingHole_Pad") (footprint "MountingHole:MountingHole_2.7mm_M2.5")
     )
     (path "/e9e6f5bb-a41c-4501-b501-81730dc832f7/28833a3e-2dcf-4c50-9db5-46bc42302ffc"
-      (reference "H202") (unit 1) (value "MountingHole_Pad") (footprint "MountingHole:MountingHole_2.2mm_M2")
+      (reference "H202") (unit 1) (value "MountingHole_Pad") (footprint "MountingHole:MountingHole_2.7mm_M2.5")
     )
     (path "/22209dda-b41a-469a-b12c-6db64ed64364/7ed1f2fb-bebc-481d-9e5e-9f9dd7af96f0"
       (reference "J101") (unit 1) (value "JTAG") (footprint "Connector:Tag-Connect_TC2050-IDC-FP_2x05_P1.27mm_Vertical")
