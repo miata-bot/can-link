@@ -4151,7 +4151,7 @@
     (effects (font (size 1.27 1.27)) (justify left bottom))
     (uuid ee126ce7-bea4-417a-b341-0256e2fc814d)
   )
-  (text "Should C109 and C107 be 1uF 0805?" (at 187.96 30.48 0)
+  (text "Should C109 and C107 be 1uF 0805?" (at 165.1 20.32 0)
     (effects (font (size 1 1)) (justify left bottom))
     (uuid fc16863c-1fe0-4ff8-9148-bb1af375e27a)
   )

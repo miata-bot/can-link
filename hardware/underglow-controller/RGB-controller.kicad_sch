@@ -1613,7 +1613,7 @@
       (reference "D301") (unit 1) (value "RB496EA") (footprint "Package_TO_SOT_SMD:SOT-23-5")
     )
     (path "/f5becad4-435f-4c1a-8fa2-8b2b4ba75dd3/a9081c6f-8992-4989-a383-308e70575eab"
-      (reference "D302") (unit 1) (value "45V 1A") (footprint "Diode_SMD:D_SMA")
+      (reference "D302") (unit 1) (value "BYS10-45HE3_A/H") (footprint "Diode_SMD:D_SMA")
     )
     (path "/f5becad4-435f-4c1a-8fa2-8b2b4ba75dd3/81b86889-88ee-47b1-b9b7-fb59eb647133"
       (reference "D303") (unit 1) (value "GRN") (footprint "LED_SMD:LED_0603_1608Metric")
@@ -1622,37 +1622,37 @@
       (reference "D304") (unit 1) (value "RB496EA") (footprint "Package_TO_SOT_SMD:SOT-23-5")
     )
     (path "/f5becad4-435f-4c1a-8fa2-8b2b4ba75dd3/769d63ec-f257-49c3-a03b-cce2d81fce9a"
-      (reference "D305") (unit 1) (value "45V 1A") (footprint "Diode_SMD:D_SMA")
+      (reference "D305") (unit 1) (value "BYS10-45HE3_A/H") (footprint "Diode_SMD:D_SMA")
     )
     (path "/757733fb-8fb0-4a42-ae57-238e8944cf64/7a07ccbd-a3f2-49e0-885a-798b1e9d7243"
-      (reference "D601") (unit 1) (value "3v3") (footprint "Diode_SMD:D_SOD-123F")
+      (reference "D601") (unit 1) (value "BZT52HC3V3WF-7") (footprint "Diode_SMD:D_SOD-123F")
     )
     (path "/757733fb-8fb0-4a42-ae57-238e8944cf64/2c96ce05-1448-4772-bb3c-d5adc6f9d465"
-      (reference "D602") (unit 1) (value "3v3") (footprint "Diode_SMD:D_SOD-123F")
+      (reference "D602") (unit 1) (value "BZT52HC3V3WF-7") (footprint "Diode_SMD:D_SOD-123F")
     )
     (path "/757733fb-8fb0-4a42-ae57-238e8944cf64/141201e6-9049-4cda-b078-676f969f773d"
-      (reference "D603") (unit 1) (value "D_Schottky") (footprint "Diode_SMD:D_SMA")
+      (reference "D603") (unit 1) (value "ACDBA340-HF") (footprint "Diode_SMD:D_SMA")
     )
     (path "/757733fb-8fb0-4a42-ae57-238e8944cf64/d81b4f01-3f64-4187-a075-cac0de16bfe4"
-      (reference "D604") (unit 1) (value "D_Schottky") (footprint "Diode_SMD:D_SMA")
+      (reference "D604") (unit 1) (value "ACDBA340-HF") (footprint "Diode_SMD:D_SMA")
     )
     (path "/757733fb-8fb0-4a42-ae57-238e8944cf64/e1d673cf-b32b-49a2-b4a0-ce5261cde41d"
-      (reference "D605") (unit 1) (value "D_Schottky") (footprint "Diode_SMD:D_SMA")
+      (reference "D605") (unit 1) (value "ACDBA340-HF") (footprint "Diode_SMD:D_SMA")
     )
     (path "/757733fb-8fb0-4a42-ae57-238e8944cf64/c0c90f09-6ca6-47c7-8729-bc40d843b59d"
-      (reference "D606") (unit 1) (value "D_Schottky") (footprint "Diode_SMD:D_SMA")
+      (reference "D606") (unit 1) (value "ACDBA340-HF") (footprint "Diode_SMD:D_SMA")
     )
     (path "/757733fb-8fb0-4a42-ae57-238e8944cf64/20018231-3582-4032-a2d0-eb686aaf9e71"
-      (reference "D607") (unit 1) (value "D_Schottky") (footprint "Diode_SMD:D_SMA")
+      (reference "D607") (unit 1) (value "ACDBA340-HF") (footprint "Diode_SMD:D_SMA")
     )
     (path "/757733fb-8fb0-4a42-ae57-238e8944cf64/0d991337-7212-44b6-ab81-6315877b0070"
-      (reference "D608") (unit 1) (value "D_Schottky") (footprint "Diode_SMD:D_SMA")
+      (reference "D608") (unit 1) (value "ACDBA340-HF") (footprint "Diode_SMD:D_SMA")
     )
     (path "/757733fb-8fb0-4a42-ae57-238e8944cf64/e545b452-fc8e-487c-9299-5fc451110af6"
-      (reference "D609") (unit 1) (value "D_Schottky") (footprint "Diode_SMD:D_SMA")
+      (reference "D609") (unit 1) (value "ACDBA340-HF") (footprint "Diode_SMD:D_SMA")
     )
     (path "/757733fb-8fb0-4a42-ae57-238e8944cf64/60c7bf4d-4db2-46c2-967a-896f73ee7e0e"
-      (reference "D610") (unit 1) (value "D_Schottky") (footprint "Diode_SMD:D_SMA")
+      (reference "D610") (unit 1) (value "ACDBA340-HF") (footprint "Diode_SMD:D_SMA")
     )
     (path "/e9e6f5bb-a41c-4501-b501-81730dc832f7/80cc83db-7321-4cd5-ac69-dfb0826f760d"
       (reference "H201") (unit 1) (value "MountingHole_Pad") (footprint "MountingHole:MountingHole_2.2mm_M2")

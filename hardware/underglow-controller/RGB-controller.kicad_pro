@@ -443,11 +443,11 @@
   "pcbnew": {
     "last_paths": {
       "gencad": "",
-      "idf": "",
+      "idf": "RGB-controller.emn",
       "netlist": "../../../../../",
       "specctra_dsn": "",
       "step": "CONEPROJ.step",
-      "vrml": ""
+      "vrml": "RGB-controller.wrl"
     },
     "page_layout_descr_file": ""
   },
