@@ -5549,10 +5549,10 @@
   )
 
   (symbol (lib_id "Device:R_Small") (at 45.72 83.82 90) (unit 1)
-    (in_bom yes) (on_board yes) (fields_autoplaced)
+    (in_bom yes) (on_board yes)
     (uuid a54c97de-16fb-4073-ba87-a46565461760)
-    (property "Reference" "R102" (id 0) (at 45.72 87.63 90))
-    (property "Value" "499R" (id 1) (at 45.72 90.17 90))
+    (property "Reference" "R102" (id 0) (at 45.72 77.47 90))
+    (property "Value" "499R" (id 1) (at 45.72 80.01 90))
     (property "Footprint" "Resistor_SMD:R_0402_1005Metric" (id 2) (at 45.72 83.82 0)
       (effects (font (size 1.27 1.27)) hide)
     )

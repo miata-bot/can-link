@@ -1489,6 +1489,12 @@
     (path "/757733fb-8fb0-4a42-ae57-238e8944cf64/279b8c31-4e23-4011-a6aa-0e87b9e8bf6a"
       (reference "#PWR0608") (unit 1) (value "GND") (footprint "")
     )
+    (path "/e9e6f5bb-a41c-4501-b501-81730dc832f7/30cf77e9-8534-4bbc-9f5a-2c17d031eef6"
+      (reference "#SYM501") (unit 1) (value "Enclosure_Top") (footprint "ConeCodes:Enclosure_Top")
+    )
+    (path "/e9e6f5bb-a41c-4501-b501-81730dc832f7/9471bd8c-053a-43ff-9309-36ff8ec496e3"
+      (reference "#SYM502") (unit 1) (value "Enclosure_Bottom") (footprint "ConeCodes:Enclosure_Bottom")
+    )
     (path "/9fec575d-5caa-48b8-a384-a8b5485b21d3/4f9f49a9-0c30-4c9b-8492-85ee4b2dab13"
       (reference "AE501") (unit 1) (value "7488910915") (footprint "ConeCodes:7488910915")
     )
